@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}价格管理 - 2020软件报价单处理系统{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-dollar-sign me-2"></i>OCCW价格表管理
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form id="occwPriceForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="occwPriceFile" class="form-label">选择OCCW价格表文件</label>
+                                <input type="file" class="form-control" id="occwPriceFile" name="file" accept=".xlsx" required>
+                                <div class="form-text">仅支持Excel(.xlsx)格式，第一行为表头，第一列为SKU，第二列为销售价格</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-1"></i>上传OCCW价格表
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>使用说明：</strong><br>
+                            1. 上传Excel格式的OCCW价格表<br>
+                            2. 第一行为表头，第一列为SKU，第二列为销售价格<br>
+                            3. 系统会自动替换现有的价格表数据<br>
+                            4. 价格表上传后，在报价单解析时会自动匹配价格
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4" id="priceStats" style="display: none;">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        当前已加载 <strong id="priceCount">0</strong> 条OCCW价格记录
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-search me-2"></i>价格查询
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchSku" placeholder="输入SKU进行查询">
+                            <button class="btn btn-outline-primary" type="button" onclick="searchPrice()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="searchResult" class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>请输入SKU进行价格查询
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // 加载当前价格数量
+    loadPriceStats();
+    
+    // OCCW价格表上传处理
+    $('#occwPriceForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const fileInput = $('#occwPriceFile')[0];
+        
+        if (!fileInput.files[0]) {
+            showAlert('请选择OCCW价格表文件', 'warning');
+            return;
+        }
+        
+        // 显示上传中状态
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>上传中...').prop('disabled', true);
+        
+        $.ajax({
+            url: '/upload_occw_prices',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    $('#occwPriceFile').val('');
+                    loadPriceStats(); // 重新加载统计信息
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+                showAlert(response ? response.error : 'OCCW价格表上传失败，请重试', 'danger');
+            },
+            complete: function() {
+                submitBtn.html(originalText).prop('disabled', false);
+            }
+        });
+    });
+    
+    // 搜索框回车事件
+    $('#searchSku').on('keypress', function(e) {
+        if (e.which === 13) {
+            searchPrice();
+        }
+    });
+});
+
+function loadPriceStats() {
+    $.ajax({
+        url: '/get_occw_stats',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                $('#priceCount').text(response.count);
+                $('#priceStats').show();
+            }
+        },
+        error: function() {
+            console.log('获取价格统计失败');
+        }
+    });
+}
+
+function searchPrice() {
+    const sku = $('#searchSku').val().trim();
+    if (!sku) {
+        showAlert('请输入SKU', 'warning');
+        return;
+    }
+    
+    $('#searchResult').html('<i class="fas fa-spinner fa-spin me-1"></i>查询中...');
+    
+    $.ajax({
+        url: '/get_occw_price',
+        type: 'GET',
+        data: { sku: sku },
+        success: function(response) {
+            if (response.success && response.price > 0) {
+                $('#searchResult').html(`
+                    <div class="text-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        SKU: <code>${sku}</code> 价格: <strong>$${parseFloat(response.price).toFixed(2)}</strong>
+                    </div>
+                `);
+            } else {
+                $('#searchResult').html(`
+                    <div class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        未找到SKU: <code>${sku}</code> 的价格
+                    </div>
+                `);
+            }
+        },
+        error: function() {
+            $('#searchResult').html(`
+                <div class="text-danger">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    查询失败，请重试
+                </div>
+            `);
+        }
+    });
+}
+
+function showAlert(message, type) {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    $('main').prepend(alertHtml);
+    
+    // 自动隐藏警告和成功消息
+    if (type === 'warning' || type === 'success' || type === 'info') {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+    }
+}
+</script>
+{% endblock %} 

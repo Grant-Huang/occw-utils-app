@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}管理员登录 - 2020软件报价单转换系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-lock me-2 text-primary"></i>管理员登录
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+                </div>
+                {% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-key me-1"></i>管理员密码
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="请输入管理员密码" required autofocus>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-1"></i>登录
+                        </button>
+                        <a href="/" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>返回主页
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted text-center">
+                <small>
+                    <i class="fas fa-info-circle me-1"></i>
+                    管理员权限用于访问价格管理、配置和SKU映射功能
+                </small>
+            </div>
+        </div>
+        
+        <!-- 权限说明 -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>权限说明
+                </h6>
+            </div>
+            <div class="card-body">
+                <h6 class="text-success">普通用户可使用：</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>上传和解析PDF报价单</li>
+                    <li><i class="fas fa-check text-success me-2"></i>查看和导出报价单结果</li>
+                    <li><i class="fas fa-check text-success me-2"></i>查看帮助文档</li>
+                </ul>
+                
+                <h6 class="text-warning mt-3">管理员专用功能：</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-lock text-warning me-2"></i>OCCW价格表管理</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>SKU生成规则配置</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>SKU映射关系管理</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>系统配置修改</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border-bottom: none;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-1px);
+}
+</style>
+{% endblock %} 

@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+
+{% block title %}SKU映射管理 - 2020软件报价单处理系统{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-exchange-alt me-2"></i>SKU映射管理
+            </h2>
+            <div>
+                <button class="btn btn-danger" onclick="clearAllMappings()" id="clearAllBtn" style="display: none;">
+                    <i class="fas fa-trash me-1"></i>清空所有映射
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list me-2"></i>映射关系列表
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="loading" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-2 text-muted">正在加载映射数据...</p>
+                </div>
+                
+                <div id="noMappings" class="text-center py-5" style="display: none;">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">暂无SKU映射关系</h5>
+                    <p class="text-muted">当您在主页处理报价单时，系统会自动保存SKU映射关系。</p>
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-upload me-1"></i>去上传报价单
+                    </a>
+                </div>
+                
+                <div id="mappingsTable" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th width="5%">序号</th>
+                                    <th width="25%">原始SKU</th>
+                                    <th width="25%">映射SKU</th>
+                                    <th width="15%">OCCW价格</th>
+                                    <th width="15%">最后更新</th>
+                                    <th width="15%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mappingsTableBody">
+                                <!-- 动态加载内容 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑映射模态框 -->
+<div class="modal fade" id="editMappingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>编辑SKU映射
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editMappingForm">
+                    <div class="mb-3">
+                        <label for="editOriginalSku" class="form-label">原始SKU</label>
+                        <input type="text" class="form-control" id="editOriginalSku" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editMappedSku" class="form-label">映射SKU</label>
+                        <select class="form-select" id="editMappedSku">
+                            <option value="">选择OCCW SKU...</option>
+                        </select>
+                        <div class="form-text">也可以直接输入SKU</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editMappedSkuInput" class="form-label">或手动输入SKU</label>
+                        <input type="text" class="form-control" id="editMappedSkuInput" placeholder="输入完整的OCCW SKU">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveEditedMapping()">
+                    <i class="fas fa-save me-1"></i>保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 确认删除模态框 -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>确认删除
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除以下SKU映射关系吗？</p>
+                <div class="alert alert-light">
+                    <strong>原始SKU:</strong> <span id="deleteOriginalSku"></span><br>
+                    <strong>映射SKU:</strong> <span id="deleteMappedSku"></span>
+                </div>
+                <p class="text-muted">此操作不可撤销。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteMapping()">
+                    <i class="fas fa-trash me-1"></i>确认删除
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentEditingSku = '';
+let currentDeletingSku = '';
+let occwSkuOptions = [];
+
+$(document).ready(function() {
+    loadMappingsData();
+    loadOCCWSkus();
+});
+
+function loadMappingsData() {
+    $.ajax({
+        url: '/get_sku_mappings',
+        type: 'GET',
+        success: function(response) {
+            $('#loading').hide();
+            
+            if (response.success && Object.keys(response.mappings).length > 0) {
+                $('#noMappings').hide();
+                $('#mappingsTable').show();
+                $('#clearAllBtn').show();
+                populateMappingsTable(response.mappings);
+            } else {
+                $('#mappingsTable').hide();
+                $('#clearAllBtn').hide();
+                $('#noMappings').show();
+            }
+        },
+        error: function() {
+            $('#loading').hide();
+            showAlert('加载映射数据失败', 'danger');
+        }
+    });
+}
+
+function loadOCCWSkus() {
+    $.ajax({
+        url: '/get_occw_skus',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                occwSkuOptions = response.skus;
+            }
+        }
+    });
+}
+
+function populateMappingsTable(mappings) {
+    const tbody = $('#mappingsTableBody');
+    tbody.empty();
+    
+    let index = 1;
+    for (const [originalSku, mappedSku] of Object.entries(mappings)) {
+        const row = createMappingRow(index, originalSku, mappedSku);
+        tbody.append(row);
+        
+        // 异步获取价格信息
+        getPriceForRow(index, mappedSku);
+        index++;
+    }
+}
+
+function createMappingRow(index, originalSku, mappedSku) {
+    return `
+        <tr id="row-${index}">
+            <td>${index}</td>
+            <td><code class="text-primary">${originalSku}</code></td>
+            <td><code class="text-success">${mappedSku}</code></td>
+            <td id="price-${index}">
+                <span class="text-muted">加载中...</span>
+            </td>
+            <td id="updated-${index}">
+                <span class="text-muted">刚刚</span>
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" onclick="editMapping('${originalSku}', '${mappedSku}')" title="编辑">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="deleteMapping('${originalSku}', '${mappedSku}')" title="删除">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+}
+
+function getPriceForRow(rowIndex, sku) {
+    $.ajax({
+        url: '/get_occw_price',
+        type: 'GET',
+        data: { sku: sku },
+        success: function(response) {
+            const priceCell = $(`#price-${rowIndex}`);
+            if (response.success && response.price > 0) {
+                priceCell.html(`<span class="text-success fw-bold">$${response.price.toFixed(2)}</span>`);
+            } else {
+                priceCell.html(`<span class="text-danger">$0.00</span>`);
+            }
+        },
+        error: function() {
+            $(`#price-${rowIndex}`).html(`<span class="text-muted">获取失败</span>`);
+        }
+    });
+}
+
+function editMapping(originalSku, mappedSku) {
+    currentEditingSku = originalSku;
+    
+    $('#editOriginalSku').val(originalSku);
+    $('#editMappedSku').empty().append('<option value="">选择OCCW SKU...</option>');
+    $('#editMappedSkuInput').val('');
+    
+    // 填充OCCW SKU选项
+    occwSkuOptions.forEach(sku => {
+        const selected = sku === mappedSku ? 'selected' : '';
+        $('#editMappedSku').append(`<option value="${sku}" ${selected}>${sku}</option>`);
+    });
+    
+    // 如果当前映射的SKU不在选项中，设置到输入框
+    if (!occwSkuOptions.includes(mappedSku)) {
+        $('#editMappedSkuInput').val(mappedSku);
+    }
+    
+    $('#editMappingModal').modal('show');
+}
+
+function saveEditedMapping() {
+    const originalSku = $('#editOriginalSku').val();
+    let mappedSku = $('#editMappedSku').val();
+    
+    // 如果选择框为空，使用输入框的值
+    if (!mappedSku) {
+        mappedSku = $('#editMappedSkuInput').val().trim();
+    }
+    
+    if (!mappedSku) {
+        showAlert('请选择或输入映射SKU', 'warning');
+        return;
+    }
+    
+    $.ajax({
+        url: '/save_sku_mapping',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            original_sku: originalSku,
+            mapped_sku: mappedSku
+        }),
+        success: function(response) {
+            if (response.success) {
+                $('#editMappingModal').modal('hide');
+                showAlert('SKU映射更新成功', 'success');
+                loadMappingsData(); // 重新加载数据
+            } else {
+                showAlert(response.error || '更新失败', 'danger');
+            }
+        },
+        error: function() {
+            showAlert('更新SKU映射失败', 'danger');
+        }
+    });
+}
+
+function deleteMapping(originalSku, mappedSku) {
+    currentDeletingSku = originalSku;
+    $('#deleteOriginalSku').text(originalSku);
+    $('#deleteMappedSku').text(mappedSku);
+    $('#confirmDeleteModal').modal('show');
+}
+
+function confirmDeleteMapping() {
+    $.ajax({
+        url: '/delete_sku_mapping',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            original_sku: currentDeletingSku
+        }),
+        success: function(response) {
+            if (response.success) {
+                $('#confirmDeleteModal').modal('hide');
+                showAlert('SKU映射删除成功', 'success');
+                loadMappingsData(); // 重新加载数据
+            } else {
+                showAlert(response.error || '删除失败', 'danger');
+            }
+        },
+        error: function() {
+            showAlert('删除SKU映射失败', 'danger');
+        }
+    });
+}
+
+function clearAllMappings() {
+    if (confirm('确定要清空所有SKU映射关系吗？此操作不可撤销。')) {
+        // 这里可以添加清空所有映射的API调用
+        showAlert('功能开发中...', 'info');
+    }
+}
+
+function showAlert(message, type) {
+    const alertClass = `alert-${type}`;
+    const alertHtml = `
+        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    // 在页面顶部显示警告
+    if ($('#alertContainer').length === 0) {
+        $('main.container').prepend('<div id="alertContainer"></div>');
+    }
+    
+    $('#alertContainer').html(alertHtml);
+    
+    // 3秒后自动消失
+    setTimeout(() => {
+        $('.alert').alert('close');
+    }, 3000);
+}
+
+// 处理选择框和输入框的互动
+$('#editMappedSku').change(function() {
+    if ($(this).val()) {
+        $('#editMappedSkuInput').val('');
+    }
+});
+
+$('#editMappedSkuInput').on('input', function() {
+    if ($(this).val()) {
+        $('#editMappedSku').val('');
+    }
+});
+</script>
+
+{% endblock %} 

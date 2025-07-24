@@ -1,0 +1,643 @@
+{% extends "base.html" %}
+
+{% block title %}主页 - 2020软件报价单处理系统{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-upload me-2"></i>上传报价单PDF
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="quotationForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="quotationFile" class="form-label">选择PDF文件</label>
+                        <input type="file" class="form-control" id="quotationFile" name="file" accept=".pdf" required>
+                        <div class="form-text">请选择2020软件的报价单PDF文件</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload me-1"></i>上传并解析
+                    </button>
+                </form>
+                <div id="uploadProgress" class="mt-3" style="display: none;">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <small class="text-muted">正在处理PDF文件...</small>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<div id="quotationResult" class="mt-4" style="display: none;">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>报价单结果
+            </h5>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportQuotation('excel')">
+                    <i class="fas fa-file-excel me-1"></i>Excel
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportQuotation('csv')">
+                    <i class="fas fa-file-csv me-1"></i>CSV
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportQuotation('pdf')">
+                    <i class="fas fa-file-pdf me-1"></i>PDF
+                </button>
+                <button type="button" class="btn btn-outline-success btn-sm" onclick="exportOCCWQuotation()">
+                    <i class="fas fa-file-excel me-1"></i>OCCW Excel
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="showPdfText()">
+                    <i class="fas fa-eye me-1"></i>PDF文本
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" id="quotationTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>序号</th>
+                            <th>Code</th>
+                            <th>数量</th>
+                            <th>花色</th>
+                            <th>2020单价</th>
+                            <th>2020总价</th>
+                            <th>OCCW SKU</th>
+                            <th>OCCW单价</th>
+                            <th>OCCW总价</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quotationTableBody">
+                    </tbody>
+                    <tfoot class="table-info">
+                        <tr>
+                            <td colspan="5" class="text-end"><strong>2020合计：</strong></td>
+                            <td id="total2020Price"><strong>$0.00</strong></td>
+                            <td class="text-end"><strong>OCCW合计：</strong></td>
+                            <td colspan="2" id="totalOCCWPrice"><strong>$0.00</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentProducts = [];
+
+$(document).ready(function() {
+    // 报价单上传处理
+    $('#quotationForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const fileInput = $('#quotationFile')[0];
+        
+        if (!fileInput.files[0]) {
+            showAlert('请选择PDF文件', 'warning');
+            return;
+        }
+        
+        $('#uploadProgress').show();
+        
+        $.ajax({
+            url: '/upload_quotation',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#uploadProgress').hide();
+                if (response.success) {
+                    currentProducts = response.products;
+                    // 清除旧的比对结果
+                    $('#quotationResult .alert').remove();
+                    displayQuotation(response.products, response.total_price, response.compare_message, response.compare_result);
+                    
+                    // 保存原始PDF文本供后续使用
+                    window.currentPdfText = response.raw_text;
+                    
+                    // 显示成功消息并提示可以查看PDF文本
+                    showAlert('报价单解析成功！点击"PDF文本"按钮可查看原始PDF内容', 'success');
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function(xhr) {
+                $('#uploadProgress').hide();
+                const response = xhr.responseJSON;
+                showAlert(response ? response.error : '上传失败，请重试', 'danger');
+            }
+        });
+    });
+});
+
+function displayQuotation(products, totalPrice, compareMessage, compareResult) {
+    const tbody = $('#quotationTableBody');
+    tbody.empty();
+    
+    let total2020 = 0;
+    let totalOCCW = 0;
+    
+    products.forEach(function(product) {
+        const row = $('<tr>');
+        const qty = parseInt(product.qty);
+        const unitPrice2020 = parseFloat(product.unit_price);
+        const totalPrice2020 = unitPrice2020 * qty;
+        
+        total2020 += totalPrice2020;
+        
+        // 基本列
+        row.append(`<td>${product.seq_num}</td>`);
+        row.append(`<td><code>${product.manuf_code}</code></td>`);
+        row.append(`<td>${product.qty}</td>`);
+        row.append(`<td>${product.door_color}</td>`);
+        row.append(`<td>$${unitPrice2020.toFixed(2)}</td>`);
+        row.append(`<td>$${totalPrice2020.toFixed(2)}</td>`);
+        
+        // OCCW SKU列 - 先添加占位符，后续会根据匹配情况决定显示方式
+        const skuCellId = `sku-cell-${product.seq_num}`;
+        row.append(`<td id="${skuCellId}" data-original-sku="${product.sku}" data-seq="${product.seq_num}" data-user-code="${product.user_code}">
+                        <span class="text-muted">检查中...</span>
+                    </td>`);
+        
+        // OCCW单价和总价列 - 先用0填充，后面会通过AJAX获取
+        const occwPriceId = `occw-price-${product.seq_num}`;
+        const occwTotalId = `occw-total-${product.seq_num}`;
+        row.append(`<td id="${occwPriceId}">$0.00</td>`);
+        row.append(`<td id="${occwTotalId}">$0.00</td>`);
+        
+        tbody.append(row);
+    });
+    
+    $('#total2020Price').html(`<strong>$${total2020.toFixed(2)}</strong>`);
+    $('#totalOCCWPrice').html(`<strong>$${totalOCCW.toFixed(2)}</strong>`);
+    
+    // 检查SKU匹配情况并创建相应的显示元素
+    checkAndCreateSKUElements();
+    // 比对结果显示
+    let compareHtml = '';
+    if (compareMessage) {
+        let alertType = 'info';
+        if (compareResult === true) alertType = 'success';
+        else if (compareResult === false) alertType = 'danger';
+        compareHtml = `<div class="alert alert-${alertType} mb-2" role="alert">${compareMessage}</div>`;
+    }
+    $('#quotationResult .card-header').after(compareHtml);
+    $('#quotationResult').show();
+}
+
+function exportQuotation(format) {
+    if (currentProducts.length === 0) {
+        showAlert('没有可导出的数据', 'warning');
+        return;
+    }
+    
+    const params = new URLSearchParams({
+        products: JSON.stringify(currentProducts)
+    });
+    
+    window.open(`/export/${format}?${params.toString()}`, '_blank');
+}
+
+function exportOCCWQuotation() {
+    if (currentProducts.length === 0) {
+        showAlert('没有可导出的数据', 'warning');
+        return;
+    }
+    
+    // 收集OCCW报价数据
+    const occwData = [];
+    currentProducts.forEach(function(product) {
+        const seqNum = product.seq_num;
+        const skuCell = $(`#sku-cell-${seqNum}`);
+        const priceCell = $(`#occw-price-${seqNum}`);
+        const totalCell = $(`#occw-total-${seqNum}`);
+        
+        // 获取当前显示的OCCW SKU
+        let occwSku = product.sku; // 默认使用原始SKU
+        const selectElement = skuCell.find('.sku-select');
+        const inputElement = skuCell.find('input[type="text"]');
+        
+        if (selectElement.length > 0) {
+            occwSku = selectElement.val();
+        } else if (inputElement.length > 0) {
+            occwSku = inputElement.val();
+        } else if (skuCell.find('code').length > 0) {
+            occwSku = skuCell.find('code').text();
+        }
+        
+        // 获取价格（去除$符号）
+        const unitPrice = parseFloat(priceCell.text().replace('$', '')) || 0;
+        const totalPrice = parseFloat(totalCell.text().replace('$', '')) || 0;
+        
+        occwData.push({
+            seq_num: product.seq_num,
+            occw_sku: occwSku,
+            qty: product.qty,
+            unit_price: unitPrice,
+            total_price: totalPrice
+        });
+    });
+    
+    const params = new URLSearchParams({
+        occw_data: JSON.stringify(occwData)
+    });
+    
+    window.open(`/export/occw_excel?${params.toString()}`, '_blank');
+}
+
+function showAlert(message, type) {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    $('main').prepend(alertHtml);
+    
+    // 自动隐藏警告和成功消息
+    if (type === 'warning' || type === 'success') {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+    }
+}
+
+function showPdfText() {
+    // 优先使用已保存的原始PDF文本
+    if (window.currentPdfText) {
+        showPdfTextModal(window.currentPdfText);
+        return;
+    }
+    
+    // 如果没有保存的文本，则从服务器获取
+    const fileInput = $('#quotationFile')[0];
+    if (!fileInput.files[0]) {
+        showAlert('请先上传PDF文件', 'warning');
+        return;
+    }
+    
+    const filename = fileInput.files[0].name;
+    
+    // 显示加载状态
+    showAlert('正在获取PDF文本...', 'info');
+    
+    $.ajax({
+        url: '/get_pdf_text',
+        type: 'GET',
+        data: { filename: filename },
+        success: function(response) {
+            if (response.success) {
+                showPdfTextModal(response.text);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function(xhr) {
+            const response = xhr.responseJSON;
+            showAlert(response ? response.error : '获取PDF文本失败', 'danger');
+        }
+    });
+}
+
+function showPdfTextModal(text) {
+    // 创建模态框显示PDF文本
+    const modalHtml = `
+        <div class="modal fade" id="pdfTextModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">PDF原始文本（未处理）</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            这是从PDF中直接提取的原始文本，未进行任何处理。您可以查看文本结构，了解PDF解析的原始内容。
+                        </div>
+                        <pre style="max-height: 500px; overflow-y: auto; white-space: pre-wrap; font-size: 12px; background-color: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">${text}</pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="copyPdfText()">复制文本</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 移除旧的模态框（如果存在）
+    $('#pdfTextModal').remove();
+    
+    // 添加新的模态框并显示
+    $('body').append(modalHtml);
+    new bootstrap.Modal(document.getElementById('pdfTextModal')).show();
+}
+
+function copyPdfText() {
+    const textElement = document.querySelector('#pdfTextModal pre');
+    const text = textElement.textContent;
+    
+    navigator.clipboard.writeText(text).then(function() {
+        showAlert('PDF文本已复制到剪贴板', 'success');
+    }).catch(function() {
+        showAlert('复制失败，请手动选择文本复制', 'warning');
+    });
+}
+
+
+
+function saveSkuMapping(originalSku, mappedSku, seqNum) {
+    $.ajax({
+        url: '/save_sku_mapping',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            original_sku: originalSku,
+            mapped_sku: mappedSku
+        }),
+        success: function(response) {
+            if (response.success) {
+                // 获取对应产品的数量
+                const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
+                const qty = parseInt(qtyCell.text()) || 1;
+                
+                const unitPrice = response.occw_price;
+                const totalPrice = unitPrice * qty;
+                
+                // 更新价格显示
+                updatePriceDisplay(seqNum, unitPrice);
+                
+                // 更新SKU单元格显示为映射后的SKU
+                const cell = $(`#sku-cell-${seqNum}`);
+                cell.html(`<code class="text-primary">${mappedSku}</code> <small class="text-muted">(已映射)</small>`);
+                
+                updateOCCWTotal();
+                showAlert('SKU映射已保存', 'success');
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('保存SKU映射失败', 'danger');
+        }
+    });
+}
+
+function updateOCCWTotal() {
+    let totalOCCW = 0;
+    $('[id^="occw-total-"]').each(function() {
+        const priceText = $(this).text().replace('$', '');
+        totalOCCW += parseFloat(priceText) || 0;
+    });
+    $('#totalOCCWPrice').html(`<strong>$${totalOCCW.toFixed(2)}</strong>`);
+}
+
+function checkAndCreateSKUElements() {
+    // 防止重复调用
+    if (window.checkingSKUs) {
+        return;
+    }
+    window.checkingSKUs = true;
+    
+    let pendingChecks = 0;
+    
+    $('[id^="sku-cell-"]').each(function() {
+        const cell = $(this);
+        const originalSku = cell.data('original-sku');
+        const seqNum = cell.data('seq');
+        const userCode = cell.data('user-code');
+        
+        pendingChecks++;
+        
+        // 首先检查原始SKU是否存在于OCCW价格表中
+        $.ajax({
+            url: '/get_occw_price',
+            type: 'GET',
+            data: { sku: originalSku },
+            success: function(response) {
+                if (response.success && response.price > 0) {
+                    // SKU精确匹配，直接显示
+                    cell.html(`<code class="text-success">${originalSku}</code>`);
+                    updatePriceDisplay(seqNum, response.price);
+                } else {
+                    // SKU不匹配，创建下拉框或输入框供用户选择
+                    createSKUDropdown(cell, originalSku, seqNum, userCode);
+                }
+            },
+            error: function() {
+                // 出错时也创建下拉框
+                createSKUDropdown(cell, originalSku, seqNum, userCode);
+            },
+            complete: function() {
+                pendingChecks--;
+                if (pendingChecks === 0) {
+                    updateOCCWTotal();
+                    window.checkingSKUs = false;
+                }
+            }
+        });
+    });
+    
+    // 如果没有需要检查的项目，立即解锁
+    if (pendingChecks === 0) {
+        window.checkingSKUs = false;
+    }
+}
+
+function createSKUDropdown(cell, originalSku, seqNum, userCode) {
+    // 获取包含userCode的SKU列表
+    $.ajax({
+        url: '/get_occw_skus',
+        type: 'GET',
+        data: { filter_user_code: userCode },
+        success: function(response) {
+            if (response.success && response.skus.length > 0) {
+                // 有匹配的SKU，创建下拉框
+                const selectId = `sku-select-${seqNum}`;
+                let selectHtml = `<select class="form-select form-select-sm sku-select" id="${selectId}" data-original-sku="${originalSku}" data-seq="${seqNum}">`;
+                selectHtml += `<option value="${originalSku}">${originalSku} (原始)</option>`;
+                
+                response.skus.forEach(function(sku) {
+                    if (sku !== originalSku) {
+                        selectHtml += `<option value="${sku}">${sku}</option>`;
+                    }
+                });
+                
+                selectHtml += '</select>';
+                cell.html(selectHtml);
+                
+                // 绑定变更事件
+                $(`#${selectId}`).on('change', function() {
+                    const selectedSku = $(this).val();
+                    const originalSku = $(this).data('original-sku');
+                    const seqNum = $(this).data('seq');
+                    
+                    if (selectedSku !== originalSku) {
+                        saveSkuMapping(originalSku, selectedSku, seqNum);
+                    } else {
+                        // 选择了原始SKU，清除映射并更新价格
+                        updatePriceForSKU(seqNum, selectedSku);
+                    }
+                });
+                
+                // 检查是否有现有映射关系
+                checkExistingMapping(originalSku, selectId, seqNum);
+            } else {
+                // 没有匹配的SKU，提供输入框
+                createSKUInput(cell, originalSku, seqNum);
+            }
+        },
+        error: function() {
+            // 出错时也提供输入框
+            createSKUInput(cell, originalSku, seqNum);
+        }
+    });
+}
+
+function createSKUInput(cell, originalSku, seqNum) {
+    const inputId = `sku-input-${seqNum}`;
+    const inputHtml = `
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="${inputId}" 
+                   data-original-sku="${originalSku}" data-seq="${seqNum}"
+                   placeholder="输入OCCW SKU" value="${originalSku}">
+            <button class="btn btn-outline-primary" type="button" onclick="confirmSKUInput('${seqNum}')">
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+    `;
+    cell.html(inputHtml);
+    
+    // 绑定回车键事件
+    $(`#${inputId}`).on('keypress', function(e) {
+        if (e.which === 13) { // Enter键
+            confirmSKUInput(seqNum);
+        }
+    });
+    
+    // 检查是否有现有映射关系
+    checkExistingMappingForInput(originalSku, inputId, seqNum);
+}
+
+function confirmSKUInput(seqNum) {
+    const input = $(`#sku-input-${seqNum}`);
+    const newSku = input.val().trim();
+    const originalSku = input.data('original-sku');
+    
+    if (!newSku) {
+        showAlert('请输入有效的SKU', 'warning');
+        return;
+    }
+    
+    if (newSku !== originalSku) {
+        saveSkuMapping(originalSku, newSku, seqNum);
+    } else {
+        updatePriceForSKU(seqNum, newSku);
+    }
+}
+
+function checkExistingMapping(originalSku, selectId, seqNum) {
+    // 从映射关系中查找是否已有映射
+    $.ajax({
+        url: '/get_sku_mappings',
+        type: 'GET',
+        success: function(response) {
+            if (response.success && response.mappings[originalSku]) {
+                const mappedSku = response.mappings[originalSku];
+                $(`#${selectId}`).val(mappedSku);
+                updatePriceForSKU(seqNum, mappedSku);
+                
+                // 如果有映射关系，替换单元格内容为固定的映射SKU显示
+                const cell = $(`#sku-cell-${seqNum}`);
+                cell.html(`<code class="text-primary">${mappedSku}</code> <small class="text-muted">(已映射)</small>`);
+            } else {
+                updatePriceForSKU(seqNum, originalSku);
+            }
+        },
+        error: function() {
+            updatePriceForSKU(seqNum, originalSku);
+        }
+    });
+}
+
+function checkExistingMappingForInput(originalSku, inputId, seqNum) {
+    // 从映射关系中查找是否已有映射
+    $.ajax({
+        url: '/get_sku_mappings',
+        type: 'GET',
+        success: function(response) {
+            if (response.success && response.mappings[originalSku]) {
+                const mappedSku = response.mappings[originalSku];
+                $(`#${inputId}`).val(mappedSku);
+                updatePriceForSKU(seqNum, mappedSku);
+                
+                // 如果有映射关系，替换单元格内容为固定的映射SKU显示
+                const cell = $(`#sku-cell-${seqNum}`);
+                cell.html(`<code class="text-primary">${mappedSku}</code> <small class="text-muted">(已映射)</small>`);
+            } else {
+                updatePriceForSKU(seqNum, originalSku);
+            }
+        },
+        error: function() {
+            updatePriceForSKU(seqNum, originalSku);
+        }
+    });
+}
+
+function updatePriceForSKU(seqNum, sku) {
+    $.ajax({
+        url: '/get_occw_price',
+        type: 'GET',
+        data: { sku: sku },
+        success: function(response) {
+            if (response.success) {
+                updatePriceDisplay(seqNum, response.price);
+            } else {
+                updatePriceDisplay(seqNum, 0);
+            }
+        },
+        error: function() {
+            updatePriceDisplay(seqNum, 0);
+        }
+    });
+}
+
+function updatePriceDisplay(seqNum, unitPrice) {
+    // 获取数量
+    const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
+    const qty = parseInt(qtyCell.text()) || 1;
+    const totalPrice = unitPrice * qty;
+    
+    const priceCell = $(`#occw-price-${seqNum}`);
+    const totalCell = $(`#occw-total-${seqNum}`);
+    
+    priceCell.html(`$${parseFloat(unitPrice).toFixed(2)}`);
+    totalCell.html(`$${totalPrice.toFixed(2)}`);
+    
+    // 如果价格为0，添加浅红色背景
+    if (unitPrice <= 0) {
+        priceCell.addClass('table-danger');
+        totalCell.addClass('table-danger');
+    } else {
+        priceCell.removeClass('table-danger');
+        totalCell.removeClass('table-danger');
+    }
+}
+</script>
+{% endblock %} 
