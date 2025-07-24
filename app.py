@@ -979,4 +979,11 @@ if __name__ == '__main__':
     load_occw_prices()
     load_sku_mappings()
     load_sku_rules()
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    print(f"已加载 {len(occw_prices)} 个OCCW价格")
+    print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
+    
+    # 生产环境配置
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    
+    app.run(host='0.0.0.0', port=port, debug=debug) 
