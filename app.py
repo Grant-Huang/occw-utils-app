@@ -1148,6 +1148,12 @@ def get_pdf_text():
     except Exception as e:
         return jsonify({'error': f'读取PDF失败: {str(e)}'}), 500
 
+# 确保目录存在
+for directory in ['uploads', 'data']:
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+        print(f"创建目录: {directory}")
+
 # 初始化数据（无论如何都要加载）
 load_standard_prices()
 load_occw_prices()
