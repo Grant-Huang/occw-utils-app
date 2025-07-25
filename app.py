@@ -11,6 +11,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 from functools import wraps
+from version import VERSION, VERSION_NAME, COMPANY_NAME_ZH, COMPANY_NAME_EN, SYSTEM_NAME_ZH, SYSTEM_NAME_EN, SYSTEM_NAME_FR
+from translations import TRANSLATIONS, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, get_text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
@@ -23,6 +25,35 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # 管理员配置
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')  # 支持环境变量
 ADMIN_SESSION_KEY = "is_admin"
+
+# 语言支持
+def get_current_language():
+    """获取当前语言"""
+    return session.get('language', DEFAULT_LANGUAGE)
+
+def set_language(lang):
+    """设置语言"""
+    if lang in SUPPORTED_LANGUAGES:
+        session['language'] = lang
+        return True
+    return False
+
+@app.context_processor
+def inject_globals():
+    """向模板注入全局变量"""
+    current_lang = get_current_language()
+    return {
+        'current_language': current_lang,
+        'supported_languages': SUPPORTED_LANGUAGES,
+        'version': VERSION,
+        'version_name': VERSION_NAME,
+        'company_name_zh': COMPANY_NAME_ZH,
+        'company_name_en': COMPANY_NAME_EN,
+        'system_name_zh': SYSTEM_NAME_ZH,
+        'system_name_en': SYSTEM_NAME_EN,
+        'system_name_fr': SYSTEM_NAME_FR,
+        't': lambda key: get_text(key, current_lang)
+    }
 
 def admin_required(f):
     """管理员权限装饰器"""
@@ -1121,6 +1152,14 @@ def admin_logout():
     """管理员登出"""
     session.pop(ADMIN_SESSION_KEY, None)
     return redirect(url_for('index'))
+
+@app.route('/set_language/<lang>')
+def set_language_route(lang):
+    """设置语言"""
+    if set_language(lang):
+        return jsonify({'success': True, 'language': lang})
+    else:
+        return jsonify({'success': False, 'error': 'Unsupported language'}), 400
 
 @app.route('/save_config', methods=['POST'])
 @admin_required
