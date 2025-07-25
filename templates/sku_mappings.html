@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}SKU映射管理 - 2020软件报价单处理系统{% endblock %}
+{% block title %}{{ t('sku_mapping_title') }} - {{ t('system_name') }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>
-                <i class="fas fa-exchange-alt me-2"></i>SKU映射管理
+                <i class="fas fa-exchange-alt me-2"></i>{{ t('sku_mapping_title') }}
             </h2>
             <div>
                 <button class="btn btn-danger" onclick="clearAllMappings()" id="clearAllBtn" style="display: none;">
-                    <i class="fas fa-trash me-1"></i>清空所有映射
+                    <i class="fas fa-trash me-1"></i>{{ t('clear_all_mappings') }}
                 </button>
             </div>
         </div>
@@ -23,23 +23,23 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">
-                    <i class="fas fa-list me-2"></i>映射关系列表
+                    <i class="fas fa-list me-2"></i>{{ t('mapping_list') }}
                 </h5>
             </div>
             <div class="card-body">
                 <div id="loading" class="text-center py-4">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">加载中...</span>
+                        <span class="visually-hidden">{{ t('loading') }}</span>
                     </div>
-                    <p class="mt-2 text-muted">正在加载映射数据...</p>
+                    <p class="mt-2 text-muted">{{ t('loading_data') }}</p>
                 </div>
                 
                 <div id="noMappings" class="text-center py-5" style="display: none;">
                     <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">暂无SKU映射关系</h5>
-                    <p class="text-muted">当您在主页处理报价单时，系统会自动保存SKU映射关系。</p>
+                    <h5 class="text-muted">{{ t('no_mappings_found') }}</h5>
+                    <p class="text-muted">{{ t('no_mappings_desc') }}</p>
                     <a href="/" class="btn btn-primary">
-                        <i class="fas fa-upload me-1"></i>去上传报价单
+                        <i class="fas fa-upload me-1"></i>{{ t('go_upload_quote') }}
                     </a>
                 </div>
                 
@@ -48,12 +48,12 @@
                         <table class="table table-hover">
                             <thead class="table-dark">
                                 <tr>
-                                    <th width="5%">序号</th>
-                                    <th width="25%">原始SKU</th>
-                                    <th width="25%">映射SKU</th>
-                                    <th width="15%">OCCW价格</th>
-                                    <th width="15%">最后更新</th>
-                                    <th width="15%">操作</th>
+                                    <th width="5%">{{ t('sequence_number') }}</th>
+                                    <th width="25%">{{ t('original_sku') }}</th>
+                                    <th width="25%">{{ t('mapped_sku') }}</th>
+                                    <th width="15%">{{ t('price') }}</th>
+                                    <th width="15%">{{ t('last_updated') }}</th>
+                                    <th width="15%">{{ t('actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="mappingsTableBody">
@@ -138,6 +138,18 @@
 let currentEditingSku = '';
 let currentDeletingSku = '';
 let occwSkuOptions = [];
+
+// 多语言文本
+const translations = {
+    loading: '{{ t("getting_price") }}',
+    priceError: '{{ t("price_error") }}',
+    justNow: '{{ t("just_now") }}',
+    editMapping: '{{ t("edit_mapping") }}',
+    deleteMapping: '{{ t("delete_mapping") }}',
+    updateSuccess: '{{ t("update_success") }}',
+    deleteSuccess: '{{ t("delete_success") }}',
+    clearAllSuccess: '{{ t("clear_all_success") }}'
+};
 
 $(document).ready(function() {
     loadMappingsData();
@@ -283,14 +295,14 @@ function createMappingRow(index, originalSku, mappedSku) {
                 <span class="text-muted">加载中...</span>
             </td>
             <td id="updated-${index}">
-                <span class="text-muted">刚刚</span>
+                <span class="text-muted">${translations.justNow}</span>
             </td>
             <td>
                 <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" onclick="editMapping('${originalSku}', '${mappedSku}')" title="编辑">
+                    <button class="btn btn-outline-primary" onclick="editMapping('${originalSku}', '${mappedSku}')" title="${translations.editMapping}">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-outline-danger" onclick="deleteMapping('${originalSku}', '${mappedSku}')" title="删除">
+                    <button class="btn btn-outline-danger" onclick="deleteMapping('${originalSku}', '${mappedSku}')" title="${translations.deleteMapping}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -320,7 +332,7 @@ function getPriceForRow(rowIndex, sku, callback) {
         },
         error: function(xhr, status, error) {
             console.error('获取价格失败:', error);
-            $(`#price-${rowIndex}`).html(`<span class="text-muted">获取失败</span>`);
+            $(`#price-${rowIndex}`).html(`<span class="text-muted">${translations.priceError}</span>`);
             
             // 即使出错也要执行回调
             if (callback && typeof callback === 'function') {
@@ -377,7 +389,7 @@ function saveEditedMapping() {
         success: function(response) {
             if (response.success) {
                 $('#editMappingModal').modal('hide');
-                showAlert('SKU映射更新成功', 'success');
+                showAlert(translations.updateSuccess, 'success');
                 loadMappingsData(); // 重新加载数据
             } else {
                 showAlert(response.error || '更新失败', 'danger');
@@ -416,7 +428,7 @@ function confirmDeleteMapping() {
         success: function(response) {
             if (response.success) {
                 $('#confirmDeleteModal').modal('hide');
-                showAlert('SKU映射删除成功', 'success');
+                showAlert(translations.deleteSuccess, 'success');
                 loadMappingsData(); // 重新加载数据
             } else {
                 showAlert(response.error || '删除失败', 'danger');

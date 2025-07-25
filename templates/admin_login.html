@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}管理员登录 - 2020软件报价单转换系统{% endblock %}
+{% block title %}{{ t('admin_login_title') }} - {{ t('system_name') }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header text-center">
                 <h4 class="mb-0">
-                    <i class="fas fa-lock me-2 text-primary"></i>管理员登录
+                    <i class="fas fa-lock me-2 text-primary"></i>{{ t('admin_login_title') }}
                 </h4>
             </div>
             <div class="card-body">
@@ -21,18 +21,18 @@
                 <form method="POST">
                     <div class="mb-3">
                         <label for="password" class="form-label">
-                            <i class="fas fa-key me-1"></i>管理员密码
+                            <i class="fas fa-key me-1"></i>{{ t('admin_password') }}
                         </label>
                         <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="请输入管理员密码" required autofocus>
+                               placeholder="{{ t('admin_password_placeholder') }}" required autofocus>
                     </div>
                     
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt me-1"></i>登录
+                            <i class="fas fa-sign-in-alt me-1"></i>{{ t('admin_login_button') }}
                         </button>
                         <a href="/" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>返回主页
+                            <i class="fas fa-arrow-left me-1"></i>{{ t('return_home') }}
                         </a>
                     </div>
                 </form>
@@ -40,7 +40,7 @@
             <div class="card-footer text-muted text-center">
                 <small>
                     <i class="fas fa-info-circle me-1"></i>
-                    管理员权限用于访问价格管理、配置和SKU映射功能
+                    {{ t('admin_login_desc') }}
                 </small>
             </div>
         </div>
@@ -49,23 +49,23 @@
         <div class="card mt-4">
             <div class="card-header">
                 <h6 class="mb-0">
-                    <i class="fas fa-shield-alt me-2"></i>权限说明
+                    <i class="fas fa-shield-alt me-2"></i>{{ t('help_permissions') }}
                 </h6>
             </div>
             <div class="card-body">
-                <h6 class="text-success">普通用户可使用：</h6>
+                <h6 class="text-success">{{ t('normal_user_can_use') }}：</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-check text-success me-2"></i>上传和解析PDF报价单</li>
-                    <li><i class="fas fa-check text-success me-2"></i>查看和导出报价单结果</li>
-                    <li><i class="fas fa-check text-success me-2"></i>查看帮助文档</li>
+                    <li><i class="fas fa-check text-success me-2"></i>{{ t('upload_parse_pdf') }}</li>
+                    <li><i class="fas fa-check text-success me-2"></i>{{ t('view_export_results') }}</li>
+                    <li><i class="fas fa-check text-success me-2"></i>{{ t('view_help_docs') }}</li>
                 </ul>
                 
-                <h6 class="text-warning mt-3">管理员专用功能：</h6>
+                <h6 class="text-warning mt-3">{{ t('admin_only_features') }}：</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-lock text-warning me-2"></i>OCCW价格表管理</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>SKU生成规则配置</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>SKU映射关系管理</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>系统配置修改</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('occw_price_management') }}</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('sku_rule_config') }}</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('sku_mapping_management') }}</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('system_config_modify') }}</li>
                 </ul>
             </div>
         </div>
