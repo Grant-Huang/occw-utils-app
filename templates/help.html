@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}帮助文档 - 2020 OCCW 报价单转换器{% endblock %}
+{% block title %}{{ t('help_title') }} - {{ t('system_name') }}{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -10,8 +10,8 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-question-circle fa-2x text-primary me-3"></i>
                 <div>
-                    <h2 class="mb-0">帮助文档</h2>
-                    <p class="text-muted mb-0">2020 OCCW 报价单转换器 使用指南</p>
+                    <h2 class="mb-0">{{ t('help_title') }}</h2>
+                    <p class="text-muted mb-0">{{ t('system_name') }} {{ t('help_usage_guide') }}</p>
                 </div>
             </div>
         </div>
@@ -22,28 +22,28 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-map me-2"></i>快速导航</h5>
+                    <h5 class="mb-0"><i class="fas fa-map me-2"></i>{{ t('help_usage_guide') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
                             <a href="#overview" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-info-circle me-1"></i>系统概述
+                                <i class="fas fa-info-circle me-1"></i>{{ t('help_system_intro') }}
                             </a>
                         </div>
                         <div class="col-md-3">
                             <a href="#workflow" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-flow-chart me-1"></i>使用流程
+                                <i class="fas fa-flow-chart me-1"></i>{{ t('help_usage_guide') }}
                             </a>
                         </div>
                         <div class="col-md-3">
                             <a href="#features" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-cogs me-1"></i>功能详解
+                                <i class="fas fa-cogs me-1"></i>{{ t('help_main_features') }}
                             </a>
                         </div>
                         <div class="col-md-3">
                             <a href="#troubleshooting" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-tools me-1"></i>问题解决
+                                <i class="fas fa-tools me-1"></i>{{ t('help_technical_support') }}
                             </a>
                         </div>
                     </div>
@@ -57,16 +57,16 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>系统概述</h5>
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>{{ t('help_system_intro') }}</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-primary">系统简介</h6>
-                    <p>2020 OCCW 报价单转换器是一个专门用于处理2020软件生成的报价单PDF文件的Web应用程序。系统能够自动解析PDF内容，生成标准化的报价单表格，并支持与OCCW价格体系的对接。</p>
+                    <h6 class="text-primary">{{ t('help_system_intro') }}</h6>
+                    <p>{{ t('help_system_intro_desc') }}</p>
                     
                     <div class="alert alert-info">
-                        <h6 class="alert-heading"><i class="fas fa-shield-alt me-2"></i>权限说明</h6>
-                        <p class="mb-2"><strong>普通用户</strong>：无需注册和登录，可直接使用PDF上传、解析和导出功能。</p>
-                        <p class="mb-0"><strong>管理员</strong>：需要登录后才能访问价格管理、配置和SKU映射功能。</p>
+                        <h6 class="alert-heading"><i class="fas fa-shield-alt me-2"></i>{{ t('help_permissions') }}</h6>
+                        <p class="mb-2"><strong>{{ t('help_normal_users') }}</strong>：{{ t('help_normal_users_desc') }}</p>
+                        <p class="mb-0"><strong>{{ t('help_admin_users') }}</strong>：{{ t('help_admin_users_desc') }}</p>
                     </div>
                     
                     <h6 class="text-primary mt-4">主要特点</h6>
@@ -98,7 +98,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-flow-chart me-2"></i>使用流程</h5>
+                    <h5 class="mb-0"><i class="fas fa-flow-chart me-2"></i>{{ t('help_usage_guide') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -107,36 +107,32 @@
                                 <div class="timeline-item">
                                     <div class="timeline-marker bg-primary">1</div>
                                     <div class="timeline-content">
-                                        <h6 class="text-primary">准备价格表</h6>
-                                        <p>在"价格管理"页面上传OCCW价格表Excel文件。文件应包含SKU和单价两列数据。</p>
-                                        <small class="text-muted">建议：定期更新价格表以确保数据准确性</small>
+                                        <h6 class="text-primary">{{ t('help_step1') }}</h6>
+                                        <p>{{ t('help_step1_desc') }}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="timeline-item">
                                     <div class="timeline-marker bg-info">2</div>
                                     <div class="timeline-content">
-                                        <h6 class="text-info">上传PDF报价单</h6>
-                                        <p>在主页上传2020软件生成的报价单PDF文件。系统将自动解析产品信息、数量、价格等数据。</p>
-                                        <small class="text-muted">支持格式：PDF文件，文件大小不超过10MB</small>
+                                        <h6 class="text-info">{{ t('help_step2') }}</h6>
+                                        <p>{{ t('help_step2_desc') }}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="timeline-item">
                                     <div class="timeline-marker bg-warning">3</div>
                                     <div class="timeline-content">
-                                        <h6 class="text-warning">确认SKU映射</h6>
-                                        <p>系统自动生成SKU后，检查OCCW价格匹配情况。对于未匹配的SKU，可以手动选择或输入正确的OCCW SKU。</p>
-                                        <small class="text-muted">提示：红色背景行表示价格为0，需要特别注意</small>
+                                        <h6 class="text-warning">{{ t('help_step3') }}</h6>
+                                        <p>{{ t('help_step3_desc') }}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="timeline-item">
                                     <div class="timeline-marker bg-success">4</div>
                                     <div class="timeline-content">
-                                        <h6 class="text-success">导出报价单</h6>
-                                        <p>确认所有数据无误后，可以导出为Excel、CSV或PDF格式。支持2020格式和OCCW格式两种导出方式。</p>
-                                        <small class="text-muted">导出文件将包含完整的价格对比和总计信息</small>
+                                        <h6 class="text-success">{{ t('help_step4') }}</h6>
+                                        <p>{{ t('help_step4_desc') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +148,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>功能详解</h5>
+                    <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>{{ t('help_main_features') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="accordion" id="featuresAccordion">
@@ -160,7 +156,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="pdfParsing">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePdfParsing">
-                                    <i class="fas fa-file-pdf me-2"></i>PDF解析功能
+                                    <i class="fas fa-file-pdf me-2"></i>{{ t('help_pdf_upload') }}
                                 </button>
                             </h2>
                             <div id="collapsePdfParsing" class="accordion-collapse collapse show" data-bs-parent="#featuresAccordion">
@@ -451,30 +447,39 @@
         <div class="col-12">
             <div class="card border-primary">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i>技术支持</h5>
+                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i>{{ t('help_technical_support') }}</h5>
                 </div>
                 <div class="card-body">
-                    <p>如果您在使用过程中遇到问题，请通过以下方式获取帮助：</p>
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary">{{ t('help_contact_info') }}</h6>
+                            <p>{{ t('help_company_full') }}</p>
+                        </div>
+                    </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="text-center">
                                 <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
-                                <h6>邮件支持</h6>
-                                <p class="text-muted">发送问题描述和截图到<br><code>support@example.com</code></p>
+                                <h6>{{ t('help_email_support') }}</h6>
+                                <p class="text-muted"><code>info@oppeincabinet.ca</code></p>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="text-center">
                                 <i class="fas fa-phone fa-2x text-success mb-2"></i>
-                                <h6>电话支持</h6>
-                                <p class="text-muted">工作日 9:00-18:00<br><code>400-123-4567</code></p>
+                                <h6>{{ t('help_phone_support') }}</h6>
+                                <p class="text-muted"><code>+1 (778) 532-6233</code></p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="text-center">
-                                <i class="fas fa-comments fa-2x text-info mb-2"></i>
-                                <h6>在线客服</h6>
-                                <p class="text-muted">实时在线支持<br><code>QQ: 123456789</code></p>
+                    </div>
+                    
+                    <!-- 版本信息 -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="alert alert-light">
+                                <h6 class="alert-heading">{{ t('help_version_info') }}</h6>
+                                <p class="mb-0">{{ t('help_current_version') }}: <strong>{{ version }}</strong></p>
+                                <small class="text-muted">{{ t('help_company_name') }} - {{ t('company_full_name') }}</small>
                             </div>
                         </div>
                     </div>
