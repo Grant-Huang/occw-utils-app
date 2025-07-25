@@ -974,14 +974,15 @@ def get_pdf_text():
     except Exception as e:
         return jsonify({'error': f'读取PDF失败: {str(e)}'}), 500
 
+# 初始化数据（无论如何都要加载）
+load_standard_prices()
+load_occw_prices()
+load_sku_mappings()
+load_sku_rules()
+print(f"已加载 {len(occw_prices)} 个OCCW价格")
+print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
+
 if __name__ == '__main__':
-    load_standard_prices()
-    load_occw_prices()
-    load_sku_mappings()
-    load_sku_rules()
-    print(f"已加载 {len(occw_prices)} 个OCCW价格")
-    print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
-    
     # 生产环境配置
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_ENV') == 'development'
