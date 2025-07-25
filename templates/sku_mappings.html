@@ -160,11 +160,14 @@ function loadMappingsData() {
                 $('#noMappings').hide();
                 $('#mappingsTable').show();
                 $('#clearAllBtn').show();
+                
+                console.log(`开始渲染 ${Object.keys(response.mappings).length} 个映射关系`);
                 populateMappingsTable(response.mappings);
             } else {
                 $('#mappingsTable').hide();
                 $('#clearAllBtn').hide();
                 $('#noMappings').show();
+                console.log('没有找到映射关系');
             }
         },
         error: function(xhr, status, error) {
@@ -248,11 +251,26 @@ function populateMappingsTable(mappings) {
     for (const [originalSku, mappedSku] of Object.entries(mappings)) {
         const row = createMappingRow(index, originalSku, mappedSku);
         tbody.append(row);
-        
-        // 异步获取价格信息
-        getPriceForRow(index, mappedSku);
         index++;
     }
+    
+    // 批量获取价格信息（延迟执行，避免同时发起太多请求）
+    const mappingEntries = Object.entries(mappings);
+    let currentIndex = 1;
+    
+    function loadNextPrice() {
+        if (currentIndex <= mappingEntries.length) {
+            const [originalSku, mappedSku] = mappingEntries[currentIndex - 1];
+            getPriceForRow(currentIndex, mappedSku, () => {
+                currentIndex++;
+                // 延迟200ms再加载下一个，避免请求过于频繁
+                setTimeout(loadNextPrice, 200);
+            });
+        }
+    }
+    
+    // 开始加载第一个价格
+    setTimeout(loadNextPrice, 100);
 }
 
 function createMappingRow(index, originalSku, mappedSku) {
@@ -281,7 +299,7 @@ function createMappingRow(index, originalSku, mappedSku) {
     `;
 }
 
-function getPriceForRow(rowIndex, sku) {
+function getPriceForRow(rowIndex, sku, callback) {
     $.ajax({
         url: '/get_occw_price',
         type: 'GET',
@@ -294,10 +312,20 @@ function getPriceForRow(rowIndex, sku) {
             } else {
                 priceCell.html(`<span class="text-danger">$0.00</span>`);
             }
+            
+            // 执行回调
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
         },
         error: function(xhr, status, error) {
             console.error('获取价格失败:', error);
             $(`#price-${rowIndex}`).html(`<span class="text-muted">获取失败</span>`);
+            
+            // 即使出错也要执行回调
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
         }
     });
 }
