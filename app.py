@@ -13,7 +13,7 @@ from reportlab.lib import colors
 from functools import wraps
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
@@ -21,7 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # 管理员配置
-ADMIN_PASSWORD = "admin123"  # 可以通过环境变量设置
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')  # 支持环境变量
 ADMIN_SESSION_KEY = "is_admin"
 
 def admin_required(f):
