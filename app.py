@@ -30,14 +30,24 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if not session.get(ADMIN_SESSION_KEY):
             # 检查是否是Ajax请求
-            if request.headers.get('Content-Type') == 'application/json' or \
-               request.headers.get('X-Requested-With') == 'XMLHttpRequest' or \
-               'application/json' in request.headers.get('Accept', ''):
+            is_ajax = (
+                request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+                request.headers.get('Content-Type', '').startswith('application/json') or
+                request.is_json or
+                (request.method in ['POST', 'PUT', 'DELETE'] and 
+                 request.content_type and 'json' in request.content_type) or
+                # 检查Accept头部是否主要接受JSON
+                ('application/json' in request.headers.get('Accept', '') and 
+                 'text/html' not in request.headers.get('Accept', ''))
+            )
+            
+            if is_ajax:
                 # 对Ajax请求返回401状态码
                 return jsonify({'error': '需要管理员权限', 'redirect': '/admin_login'}), 401
             else:
                 # 对普通请求进行重定向
-                return redirect(url_for('admin_login'))
+                next_page = request.url if request.method == 'GET' else None
+                return redirect(url_for('admin_login', next=next_page))
         return f(*args, **kwargs)
     return decorated_function
 

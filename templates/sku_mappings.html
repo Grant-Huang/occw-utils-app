@@ -150,6 +150,7 @@ function loadMappingsData() {
     $.ajax({
         url: '/get_sku_mappings',
         type: 'GET',
+        dataType: 'json',
         timeout: 10000, // 10秒超时
         success: function(response) {
             console.log('API响应成功:', response);
@@ -193,7 +194,15 @@ function loadMappingsData() {
             // 其他错误显示错误信息
             let errorMsg = '加载映射数据失败';
             try {
-                const errorResponse = JSON.parse(xhr.responseText);
+                let errorResponse;
+                if (xhr.responseJSON) {
+                    // 如果jQuery已经解析了JSON
+                    errorResponse = xhr.responseJSON;
+                } else {
+                    // 手动解析JSON
+                    errorResponse = JSON.parse(xhr.responseText);
+                }
+                
                 if (errorResponse.error) {
                     errorMsg = errorResponse.error;
                 }
@@ -204,6 +213,7 @@ function loadMappingsData() {
                 }
             } catch (e) {
                 console.error('解析错误响应失败:', e);
+                console.error('原始响应文本:', xhr.responseText);
                 // 解析失败，使用默认错误信息
             }
             
@@ -218,10 +228,14 @@ function loadOCCWSkus() {
     $.ajax({
         url: '/get_occw_skus',
         type: 'GET',
+        dataType: 'json',
         success: function(response) {
             if (response.success) {
                 occwSkuOptions = response.skus;
             }
+        },
+        error: function(xhr, status, error) {
+            console.error('加载OCCW SKU选项失败:', error);
         }
     });
 }
@@ -271,6 +285,7 @@ function getPriceForRow(rowIndex, sku) {
     $.ajax({
         url: '/get_occw_price',
         type: 'GET',
+        dataType: 'json',
         data: { sku: sku },
         success: function(response) {
             const priceCell = $(`#price-${rowIndex}`);
@@ -280,7 +295,8 @@ function getPriceForRow(rowIndex, sku) {
                 priceCell.html(`<span class="text-danger">$0.00</span>`);
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('获取价格失败:', error);
             $(`#price-${rowIndex}`).html(`<span class="text-muted">获取失败</span>`);
         }
     });
@@ -324,6 +340,7 @@ function saveEditedMapping() {
     $.ajax({
         url: '/save_sku_mapping',
         type: 'POST',
+        dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify({
             original_sku: originalSku,
@@ -338,7 +355,15 @@ function saveEditedMapping() {
                 showAlert(response.error || '更新失败', 'danger');
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('保存映射失败:', error);
+            
+            // 检查是否是权限问题
+            if (xhr.status === 401) {
+                window.location.href = '/admin_login?next=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+            
             showAlert('更新SKU映射失败', 'danger');
         }
     });
@@ -355,6 +380,7 @@ function confirmDeleteMapping() {
     $.ajax({
         url: '/delete_sku_mapping',
         type: 'POST',
+        dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify({
             original_sku: currentDeletingSku
@@ -368,7 +394,8 @@ function confirmDeleteMapping() {
                 showAlert(response.error || '删除失败', 'danger');
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('删除映射失败:', error);
             showAlert('删除SKU映射失败', 'danger');
         }
     });
