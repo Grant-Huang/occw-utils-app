@@ -29,7 +29,15 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get(ADMIN_SESSION_KEY):
-            return redirect(url_for('admin_login'))
+            # 检查是否是Ajax请求
+            if request.headers.get('Content-Type') == 'application/json' or \
+               request.headers.get('X-Requested-With') == 'XMLHttpRequest' or \
+               'application/json' in request.headers.get('Accept', ''):
+                # 对Ajax请求返回401状态码
+                return jsonify({'error': '需要管理员权限', 'redirect': '/admin_login'}), 401
+            else:
+                # 对普通请求进行重定向
+                return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -165,9 +173,11 @@ def parse_quotation_pdf(pdf_content):
     
     lines = pdf_content.split('\n')
     
-    for line in lines:
-        line = line.strip()
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
         if not line:
+            i += 1
             continue
         
         # 识别PDF合计金额
@@ -182,20 +192,33 @@ def parse_quotation_pdf(pdf_content):
             if door_match:
                 current_door_color = door_match.group(1)
         
-        # 查找产品行
+        # 检测多行产品格式（如 WF330 FOR）
+        if (len(line) < 30 and 
+            re.search(r'[A-Z]+\d+\s+FOR|WF330\s+FOR', line) and 
+            not re.search(r'\d+\.\d{2}', line)):
+            
+            # 尝试合并接下来的行形成完整的产品信息
+            multiline_result = parse_multiline_product_sequence(lines, i, current_door_color)
+            if multiline_result:
+                products.append(multiline_result['product'])
+                i = multiline_result['next_index']
+                continue
+        
+        # 查找单行产品
         if re.match(r'^[A-Z0-9]', line) and re.search(r'\d+\.\d{2}', line):
             if (line.startswith('Style') or line.startswith('Door') or 
                 line.startswith('Cabinet') or line.startswith('Cabinets') or 
                 line.startswith('Print') or line.startswith('Volume')):
+                i += 1
                 continue
             parts = line.split()
             if len(parts) >= 5:
                 manuf_code = parts[0]
                 seq_num = parts[1]
                 price_index = -1
-                for i, part in enumerate(parts):
+                for j, part in enumerate(parts):
                     if re.match(r'^\d+,?\d*\.\d{2}$', part):
-                        price_index = i
+                        price_index = j
                         break
                 if price_index > 0:
                     description = ' '.join(parts[2:price_index])
@@ -208,38 +231,30 @@ def parse_quotation_pdf(pdf_content):
                     # 根据Manuf. code是否以数字开头来解析数量和user code
                     if re.match(r'^\d', manuf_code):
                         # 情况1: Manuf. code以数字开头（如3DB30）
-                        # user_code = manuf_code，然后从last_col中移除user_code得到数量
-                        # 例如：3DB30 27 ... 758.00 13DB30 → last_col='13DB30', user_code='3DB30', qty='1'
                         user_code_final = manuf_code
                         if last_col.endswith(user_code_final):
-                            # 从合并列末尾移除user_code，剩下的就是数量
                             qty_part = last_col[:-len(user_code_final)]
-                            # 验证剩余部分是否为纯数字
                             if qty_part and qty_part.isdigit():
                                 qty = qty_part
                             else:
-                                qty = '1'  # 默认数量为1
+                                qty = '1'
                         else:
-                            qty = '1'  # 如果格式不匹配，默认数量为1
+                            qty = '1'
                     else:
                         # 情况2: Manuf. code不以数字开头（如B30）
-                        # last_col中前面的数字都是数量，后面是user_code
-                        # 例如：B30 34 ... 549.00 1B30 → qty=1, user_code=B30
                         qty_match = re.match(r'^(\d+)(.*)$', last_col)
                         if qty_match:
                             qty = qty_match.group(1)
                             remaining_part = qty_match.group(2)
-                            # 如果剩余部分非空且包含字母数字，则作为user_code，否则使用manuf_code
                             if remaining_part and re.match(r'^[A-Z0-9-]+$', remaining_part):
                                 user_code_final = remaining_part
                             else:
                                 user_code_final = manuf_code
                         else:
-                            # 如果last_col不符合数字+字母的格式，默认处理
                             qty = '1'
                             user_code_final = manuf_code
-                    # 生成SKU
-                    sku = generate_sku(user_code_final, description, current_door_color)
+                    # 生成SKU（包含映射处理）
+                    sku = generate_final_sku(user_code_final, description, current_door_color)
                     # 获取标准价格并计算单价
                     try:
                         total_price_float = float(price.replace(',', ''))
@@ -260,6 +275,8 @@ def parse_quotation_pdf(pdf_content):
                         'description': description
                     }
                     products.append(product)
+        
+        i += 1
     # 计算解析产品的总价
     # 现在unit_price是真正的单价，所以需要乘以数量
     calc_total = 0
@@ -288,6 +305,145 @@ def parse_quotation_pdf(pdf_content):
     products.sort(key=lambda x: extract_seq_num(x['seq_num']))
     return products, compare_result, compare_message
 
+def parse_multiline_product_sequence(lines, start_index, current_door_color):
+    """解析多行产品序列，返回合并后的产品信息"""
+    
+    # 收集候选行
+    candidate_lines = []
+    i = start_index
+    
+    # 最多向前看3行
+    while i < len(lines) and i < start_index + 3:
+        line = lines[i].strip()
+        if line:
+            candidate_lines.append(line)
+            
+            # 如果这一行包含价格，可能是完整的产品信息
+            if re.search(r'\d+\.\d{2}', line):
+                merged_text = ' '.join(candidate_lines)
+                parsed = parse_multiline_product_correctly(merged_text, current_door_color)
+                
+                if parsed:
+                    return {
+                        'product': parsed,
+                        'next_index': i + 1
+                    }
+        i += 1
+    
+    return None
+
+def parse_multiline_product_correctly(merged_text, current_door_color):
+    """正确解析多行产品格式"""
+    
+    parts = merged_text.split()
+    if len(parts) < 6:
+        return None
+    
+    # 找到价格位置
+    price_index = -1
+    for i, part in enumerate(parts):
+        if re.match(r'^\d+\.\d{2}$', part):
+            price_index = i
+            break
+    
+    if price_index == -1:
+        return None
+    
+    price = parts[price_index]
+    
+    # 价格后面：数量 + 制造编码
+    after_price = parts[price_index + 1:]
+    if not after_price:
+        return None
+    
+    qty_match = re.match(r'^(\d+)', after_price[0])
+    if not qty_match:
+        return None
+    
+    qty = qty_match.group(1)
+    
+    # 制造编码
+    remaining_after_qty = after_price[0][len(qty):]
+    if remaining_after_qty:
+        manuf_code_parts = [remaining_after_qty] + after_price[1:]
+    else:
+        manuf_code_parts = after_price[1:]
+    
+    manuf_code = ' '.join(manuf_code_parts)
+    
+    # 价格前面的部分：用户编码 + 序号+描述
+    before_price = parts[:price_index]
+    
+    # 关键修复：正确识别序号
+    user_code_parts = []
+    seq_num = None
+    description_parts = []
+    
+    # 从后往前找包含数字的部分（这是序号+描述的开始）
+    for i in range(len(before_price) - 1, -1, -1):
+        part = before_price[i]
+        
+        # 如果这个部分包含数字，且符合BASExx格式
+        if re.search(r'BASE\d+|[A-Z]+\d+', part):
+            # 提取序号
+            seq_match = re.search(r'(\d+)', part)
+            if seq_match:
+                seq_num = seq_match.group(1)
+                
+                # 分离序号前后的部分
+                before_seq_match = re.search(r'^(.*)(\d+)(.*)$', part)
+                if before_seq_match:
+                    before_seq = before_seq_match.group(1)  # "BASE"
+                    after_seq = before_seq_match.group(3)   # ""
+                    
+                    # 用户编码是序号前面的所有部分
+                    user_code_parts = before_price[:i]
+                    if before_seq and before_seq != 'BASE':
+                        # 如果序号前有非BASE内容，添加到描述中
+                        description_parts = [before_seq]
+                    if after_seq:
+                        description_parts.append(after_seq)
+                    
+                    # 序号后面的部分是描述
+                    description_parts.extend(before_price[i+1:])
+                    
+                    break
+    
+    if not seq_num:
+        return None
+    
+    # 用户编码：制造编码去掉最后的"BASE"部分
+    user_code_match = re.match(r'^(.+?)\s*BASE?$', manuf_code)
+    if user_code_match:
+        user_code = user_code_match.group(1)
+    else:
+        user_code = ' '.join(user_code_parts) if user_code_parts else manuf_code
+    
+    # 描述：去掉"BASE"，保留描述性词汇
+    description = ' '.join([d for d in description_parts if d != 'BASE']).strip()
+    if not description:
+        description = 'Base Accessory'  # 默认描述
+    
+    # 生成SKU（包含映射处理）
+    sku = generate_final_sku(user_code, description, current_door_color)
+    
+    # 获取价格（使用PDF中的价格作为unit_price）
+    try:
+        unit_price = float(price.replace(',', ''))
+    except ValueError:
+        unit_price = 0.0
+    
+    return {
+        'seq_num': seq_num,
+        'manuf_code': manuf_code,
+        'sku': sku,
+        'qty': qty,
+        'door_color': current_door_color or 'N/A',
+        'unit_price': unit_price,
+        'user_code': user_code,
+        'description': description
+    }
+
 def parse_single_product(user_code, seq_num, description, price, qty_user, current_door_color, products):
     """解析单个产品信息"""
     # 处理*号：如果序号包含*号，将其移到描述前面
@@ -299,8 +455,8 @@ def parse_single_product(user_code, seq_num, description, price, qty_user, curre
     qty_match = re.match(r'^(\d+)', qty_user)
     qty = qty_match.group(1) if qty_match else '1'
     
-    # 生成SKU
-    sku = generate_sku(user_code, description.strip(), current_door_color)
+    # 生成SKU（包含映射处理）
+    sku = generate_final_sku(user_code, description.strip(), current_door_color)
     
     # 获取标准价格
     try:
@@ -359,8 +515,8 @@ def parse_product_line(line, current_door_color, products):
             if not qty.isdigit():
                 qty = '1'
             
-            # 生成SKU
-            sku = generate_sku(user_code, description, current_door_color)
+            # 生成SKU（包含映射处理）
+            sku = generate_final_sku(user_code, description, current_door_color)
             
             # 获取标准价格
             try:
@@ -435,8 +591,8 @@ def parse_product_segment(segment, current_door_color, products):
                             qty_match = re.match(r'^(\d+)', qty_user)
                             qty = qty_match.group(1) if qty_match else '1'
                             
-                            # 生成SKU
-                            sku = generate_sku(user_code, description.strip(), current_door_color)
+                            # 生成SKU（包含映射处理）
+                            sku = generate_final_sku(user_code, description.strip(), current_door_color)
                             
                             # 获取标准价格
                             try:
@@ -473,8 +629,8 @@ def parse_product_segment(segment, current_door_color, products):
         qty_match = re.match(r'^(\d+)', qty_user)
         qty = qty_match.group(1) if qty_match else '1'
         
-        # 生成SKU
-        sku = generate_sku(user_code, description.strip(), current_door_color)
+        # 生成SKU（包含映射处理）
+        sku = generate_final_sku(user_code, description.strip(), current_door_color)
         
         # 获取标准价格
         try:
@@ -518,6 +674,21 @@ def generate_sku(user_code, description, door_color):
     # 规则4.4: 其他情形
     else:
         return f"{door_color}-{user_code}"
+
+def apply_sku_mapping(original_sku):
+    """应用SKU映射关系，返回映射后的SKU"""
+    global sku_mappings
+    return sku_mappings.get(original_sku, original_sku)
+
+def generate_final_sku(user_code, description, door_color):
+    """生成最终的SKU（包含映射处理）"""
+    # 先生成原始SKU
+    original_sku = generate_sku(user_code, description, door_color)
+    
+    # 应用映射关系
+    final_sku = apply_sku_mapping(original_sku)
+    
+    return final_sku
 
 @app.route('/')
 def index():

@@ -145,10 +145,14 @@ $(document).ready(function() {
 });
 
 function loadMappingsData() {
+    console.log('开始加载映射数据...');
+    
     $.ajax({
         url: '/get_sku_mappings',
         type: 'GET',
+        timeout: 10000, // 10秒超时
         success: function(response) {
+            console.log('API响应成功:', response);
             $('#loading').hide();
             
             if (response.success && Object.keys(response.mappings).length > 0) {
@@ -163,10 +167,25 @@ function loadMappingsData() {
             }
         },
         error: function(xhr, status, error) {
+            console.error('API请求失败:', {
+                status: xhr.status,
+                statusText: xhr.statusText,
+                responseText: xhr.responseText,
+                error: error
+            });
+            
             $('#loading').hide();
             
             // 如果是401错误（未授权），重定向到登录页面
-            if (xhr.status === 401 || xhr.status === 302) {
+            if (xhr.status === 401) {
+                console.log('未授权访问，重定向到登录页面');
+                window.location.href = '/admin_login?next=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+            
+            // 如果是302错误（重定向），也重定向到登录页面
+            if (xhr.status === 302) {
+                console.log('服务器重定向，跳转到登录页面');
                 window.location.href = '/admin_login?next=' + encodeURIComponent(window.location.pathname);
                 return;
             }
@@ -178,10 +197,17 @@ function loadMappingsData() {
                 if (errorResponse.error) {
                     errorMsg = errorResponse.error;
                 }
+                if (errorResponse.redirect) {
+                    console.log('服务器建议重定向到:', errorResponse.redirect);
+                    window.location.href = errorResponse.redirect + '?next=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
             } catch (e) {
+                console.error('解析错误响应失败:', e);
                 // 解析失败，使用默认错误信息
             }
             
+            console.error('显示错误信息:', errorMsg);
             showAlert(errorMsg, 'danger');
             $('#noMappings').show();
         }
