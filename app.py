@@ -687,6 +687,7 @@ def get_occw_skus():
         return jsonify({'error': f'获取SKU列表失败: {str(e)}'}), 500
 
 @app.route('/save_sku_mapping', methods=['POST'])
+@admin_required
 def save_sku_mapping():
     """保存SKU映射关系"""
     try:
@@ -736,6 +737,7 @@ def get_occw_price():
         return jsonify({'error': f'获取价格失败: {str(e)}'}), 500
 
 @app.route('/get_occw_stats', methods=['GET'])
+@admin_required
 def get_occw_stats():
     """获取OCCW价格表统计信息"""
     try:
@@ -747,6 +749,7 @@ def get_occw_stats():
         return jsonify({'error': f'获取统计信息失败: {str(e)}'}), 500
 
 @app.route('/get_sku_mappings', methods=['GET'])
+@admin_required
 def get_sku_mappings():
     """获取所有SKU映射关系"""
     try:

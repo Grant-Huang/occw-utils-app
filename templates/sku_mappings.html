@@ -162,9 +162,28 @@ function loadMappingsData() {
                 $('#noMappings').show();
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
             $('#loading').hide();
-            showAlert('加载映射数据失败', 'danger');
+            
+            // 如果是401错误（未授权），重定向到登录页面
+            if (xhr.status === 401 || xhr.status === 302) {
+                window.location.href = '/admin_login?next=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+            
+            // 其他错误显示错误信息
+            let errorMsg = '加载映射数据失败';
+            try {
+                const errorResponse = JSON.parse(xhr.responseText);
+                if (errorResponse.error) {
+                    errorMsg = errorResponse.error;
+                }
+            } catch (e) {
+                // 解析失败，使用默认错误信息
+            }
+            
+            showAlert(errorMsg, 'danger');
+            $('#noMappings').show();
         }
     });
 }
