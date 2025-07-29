@@ -1712,11 +1712,7 @@ def export_quotation(format):
     
     return jsonify({'error': get_text('unsupported_export_format')}), 400
 
-@app.route('/config')
-@admin_required
-def config():
-    """配置页面"""
-    return render_template('config.html', sku_rules=sku_rules)
+
 
 @app.route('/help')
 def help():
@@ -1750,14 +1746,7 @@ def set_language_route(lang):
     else:
         return jsonify({'success': False, 'error': 'Unsupported language'}), 400
 
-@app.route('/save_config', methods=['POST'])
-@admin_required
-def save_config():
-    """保存配置"""
-    global sku_rules
-    sku_rules = request.json
-    save_sku_rules()
-    return jsonify({'success': True, 'message': get_text('config_save_success')})
+
 
 @app.route('/rules')
 @admin_required

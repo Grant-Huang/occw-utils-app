@@ -47,13 +47,13 @@
             <div class="col-md-8">
                 <h1 class="page-title">
                     <i class="fas fa-cogs me-3 page-icon"></i>
-                    {{ t('sku_rules_management') }}
+                    {{ t('settings_title') }}
                 </h1>
-                <p class="page-subtitle">{{ t('sku_rules_desc') }}</p>
+                <p class="page-subtitle">{{ t('settings_subtitle') }}</p>
             </div>
             <div class="col-md-4 text-end">
                 <div class="status-indicator">
-                    <i class="fas fa-cog me-2"></i>{{ t('rules_configuration') }}
+                    <i class="fas fa-cog me-2"></i>{{ t('settings_status') }}
                 </div>
             </div>
         </div>
@@ -82,17 +82,17 @@
         <ul class="nav nav-tabs mb-4" id="rulesTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-rules" type="button" role="tab">
-                    <i class="fas fa-file-pdf me-1"></i>{{ t('pdf_parsing_rules') }}
+                    <i class="fas fa-file-pdf me-1"></i>{{ t('pdf_parsing_rules_2020') }}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="occw-tab" data-bs-toggle="tab" data-bs-target="#occw-rules" type="button" role="tab">
-                    <i class="fas fa-file-import me-1"></i>{{ t('occw_import_rules') }}
+                    <i class="fas fa-file-import me-1"></i>{{ t('oddo_price_table_import_rules') }}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-rules" type="button" role="tab">
-                    <i class="fas fa-edit me-1"></i>{{ t('manual_create_rules') }}
+                    <i class="fas fa-edit me-1"></i>{{ t('manual_quote_sku_rules') }}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -108,11 +108,11 @@
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-file-pdf me-2"></i>{{ t('pdf_parsing_rules_desc') }}
+                            <i class="fas fa-file-pdf me-2"></i>{{ t('pdf_parsing_rules_2020_desc') }}
                         </h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">用于从2020软件导出的PDF中识别和生成SKU</p>
+                        <p class="text-muted">{{ t('pdf_parsing_rules_2020_desc_text') }}</p>
                         <div id="pdf-rules-container">
                             <!-- 动态加载规则 -->
                         </div>
@@ -128,11 +128,11 @@
                 <div class="card">
                     <div class="card-header bg-success text-white">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-file-import me-2"></i>OCCW价格表导入规则
+                            <i class="fas fa-file-import me-2"></i>{{ t('oddo_price_table_import_rules_title') }}
                         </h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">用于解析OCCW Excel价格表并生成SKU</p>
+                        <p class="text-muted">{{ t('oddo_price_table_import_rules_desc_text') }}</p>
                         
                                         <!-- 变体提取规则 -->
                 <h6 class="text-primary"><i class="fas fa-cog me-1"></i>{{ t('variant_extraction_rules') }}</h6>
@@ -159,11 +159,11 @@
                 <div class="card">
                     <div class="card-header bg-warning text-dark">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-edit me-2"></i>手动创建报价单SKU规则
+                            <i class="fas fa-edit me-2"></i>{{ t('manual_quote_sku_rules_title') }}
                         </h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">用于手动创建报价单时的SKU生成和价格查询</p>
+                        <p class="text-muted">{{ t('manual_quote_sku_rules_desc_text') }}</p>
                         <div id="manual-rules-container">
                             <!-- 动态加载手动创建规则 -->
                         </div>

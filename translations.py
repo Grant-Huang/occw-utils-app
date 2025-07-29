@@ -626,6 +626,21 @@ TRANSLATIONS = {
         'config_status': '配置管理',
         'sku_mapping_desc': '管理SKU映射关系，优化价格匹配',
         
+        # 设置页面相关
+        'nav_settings': '设置',
+        'settings_title': '系统设置',
+        'settings_subtitle': 'SKU规则配置与系统参数',
+        'settings_status': '设置管理',
+        'pdf_parsing_rules_2020': '2020 PDF解析规则',
+        'pdf_parsing_rules_2020_desc': '2020 PDF解析规则配置',
+        'pdf_parsing_rules_2020_desc_text': '用于从2020软件导出的PDF中识别和生成SKU',
+        'oddo_price_table_import_rules': 'Oddo价格表导入规则',
+        'oddo_price_table_import_rules_title': 'Oddo价格表导入规则',
+        'oddo_price_table_import_rules_desc_text': '用于解析Oddo Excel价格表并生成SKU',
+        'manual_quote_sku_rules': '手动创建报价单SKU规则',
+        'manual_quote_sku_rules_title': '手动创建报价单SKU规则',
+        'manual_quote_sku_rules_desc_text': '用于手动创建报价单时的SKU生成和价格查询',
+        
         # 文件输入组件
         'browse_files': '浏览文件',
         'drag_drop_files': '拖拽文件到此处或点击浏览',
@@ -1068,6 +1083,21 @@ TRANSLATIONS = {
         'config_subtitle': 'SKU Generation Rules and System Settings',
         'config_status': 'Configuration Management',
         'sku_mapping_desc': 'Manage SKU mapping relationships, optimize price matching',
+        
+        # Settings Page Related
+        'nav_settings': 'Settings',
+        'settings_title': 'System Settings',
+        'settings_subtitle': 'SKU Rules Configuration and System Parameters',
+        'settings_status': 'Settings Management',
+        'pdf_parsing_rules_2020': '2020 PDF Parsing Rules',
+        'pdf_parsing_rules_2020_desc': '2020 PDF Parsing Rules Configuration',
+        'pdf_parsing_rules_2020_desc_text': 'Used to identify and generate SKUs from PDFs exported by 2020 software',
+        'oddo_price_table_import_rules': 'Oddo Price Table Import Rules',
+        'oddo_price_table_import_rules_title': 'Oddo Price Table Import Rules',
+        'oddo_price_table_import_rules_desc_text': 'Used to parse Oddo Excel price tables and generate SKUs',
+        'manual_quote_sku_rules': 'Manual Quote SKU Rules',
+        'manual_quote_sku_rules_title': 'Manual Quote SKU Rules',
+        'manual_quote_sku_rules_desc_text': 'Used for SKU generation and price queries when manually creating quotes',
         
         # File Input Component
         'browse_files': 'Browse Files',
@@ -1635,6 +1665,21 @@ TRANSLATIONS = {
         'config_subtitle': 'Règles de Génération SKU et Paramètres Système',
         'config_status': 'Gestion de Configuration',
         'sku_mapping_desc': 'Gérer les relations de mappage SKU, optimiser la correspondance des prix',
+        
+        # Page des Paramètres
+        'nav_settings': 'Paramètres',
+        'settings_title': 'Paramètres du Système',
+        'settings_subtitle': 'Configuration des Règles SKU et Paramètres Système',
+        'settings_status': 'Gestion des Paramètres',
+        'pdf_parsing_rules_2020': 'Règles d\'Analyse PDF 2020',
+        'pdf_parsing_rules_2020_desc': 'Configuration des Règles d\'Analyse PDF 2020',
+        'pdf_parsing_rules_2020_desc_text': 'Utilisé pour identifier et générer des SKUs à partir de PDFs exportés par le logiciel 2020',
+        'oddo_price_table_import_rules': 'Règles d\'Import de Tableau de Prix Oddo',
+        'oddo_price_table_import_rules_title': 'Règles d\'Import de Tableau de Prix Oddo',
+        'oddo_price_table_import_rules_desc_text': 'Utilisé pour analyser les tableaux de prix Excel Oddo et générer des SKUs',
+        'manual_quote_sku_rules': 'Règles SKU de Devis Manuel',
+        'manual_quote_sku_rules_title': 'Règles SKU de Devis Manuel',
+        'manual_quote_sku_rules_desc_text': 'Utilisé pour la génération SKU et les requêtes de prix lors de la création manuelle de devis',
         
         # Composant de Saisie de Fichier
         'browse_files': 'Parcourir les Fichiers',
