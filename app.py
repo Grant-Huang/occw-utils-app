@@ -9,8 +9,8 @@ import os
 
 # 临时重定向到数据处理测试应用
 if __name__ == '__main__':
-    print("重定向到Excel处理测试应用...")
-    os.system('python test-excel-processing.py')
+    print("重定向到版本测试应用...")
+    os.system('python test-simple-with-version.py')
     sys.exit(0)
 
 # 原始应用代码（暂时注释掉）
