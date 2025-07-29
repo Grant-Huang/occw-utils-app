@@ -3,8 +3,8 @@
 版本信息配置
 """
 
-VERSION = "2.0"
-VERSION_NAME = "OCCW报价系统 v2.0"
+VERSION = "2.1"
+VERSION_NAME = "OCCW报价系统 v2.1"
 COMPANY_NAME_ZH = "加西欧派"
 COMPANY_NAME_EN = "Oppein Cabinet Canada West Ltd."
 SYSTEM_NAME_ZH = "OCCW报价系统"
@@ -13,6 +13,22 @@ SYSTEM_NAME_FR = "Système de Devis OCCW"
 
 # 版本历史
 VERSION_HISTORY = {
+    "2.1": {
+        "date": "2025-01-26",
+        "features": [
+            "🔧 价格导入名称过滤：只接受英文字母或数字开头的产品名称",
+            "✨ 配件类别产品支持：为Filler、Toe Kick等类别提供默认产品选项",
+            "🔄 类别名称统一：统一使用大写格式（ENDING PANEL、MOLDING等）",
+            "🎯 前端类别匹配优化：修复类别选择后产品下拉框为空的问题",
+            "📋 完善错误提示：提供更详细的导入错误信息"
+        ],
+        "changes": [
+            "transform_single_row添加名称格式验证",
+            "get_products_by_category为配件类别提供默认产品",
+            "统一类别名称格式，更新前端匹配逻辑",
+            "优化用户体验，解决配件类别产品选择问题"
+        ]
+    },
     "2.0": {
         "date": "2025-01-26",
         "features": [

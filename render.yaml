@@ -1,21 +1,14 @@
 services:
   - type: web
-    name: occw-quote-system
+    name: 2020-occw-convertor
     env: python
-    region: oregon
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT app:app"
     plan: free
-    buildCommand: "pip install --upgrade pip setuptools wheel && pip install --only-binary=all Flask==2.3.3 pandas==2.0.3 numpy==1.24.3 PyPDF2==3.0.1 openpyxl==3.1.2"
-    startCommand: "python app-basic.py"
     envVars:
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
         generateValue: true
       - key: ADMIN_PASSWORD
-        value: admin123
-      - key: PYTHONPATH
-        value: "."
-      - key: WEB_CONCURRENCY
-        value: "1"
-      - key: FORCE_REBUILD
-        value: "true" 
+        value: admin123 
