@@ -1,1 +1,1 @@
-web: python simple-test.py 
+web: python test-data-processing.py 

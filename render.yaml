@@ -4,8 +4,8 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: "pip install Flask==2.3.3"
-    startCommand: "python simple-test.py"
+    buildCommand: "pip install Flask==2.3.3 pandas==2.0.3 numpy==1.24.3"
+    startCommand: "python test-data-processing.py"
     envVars:
       - key: FLASK_ENV
         value: production
