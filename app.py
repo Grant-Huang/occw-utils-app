@@ -1589,11 +1589,7 @@ def export_sku_mappings():
     except Exception as e:
         return jsonify({'error': f'{get_text("export_mapping_failed")}: {str(e)}'}), 500
 
-@app.route('/sku_mappings')
-@admin_required
-def sku_mappings_page():
-    """SKU映射管理页面"""
-    return render_template('sku_mappings.html')
+
 
 @app.route('/export/occw_excel')
 def export_occw_excel():
@@ -1794,11 +1790,7 @@ def reset_sku_rules():
     except Exception as e:
         return jsonify({'success': False, 'message': f'恢复失败: {str(e)}'}), 500
 
-@app.route('/prices')
-@admin_required
-def prices():
-    """价格管理页面"""
-    return render_template('prices.html', prices=standard_prices)
+
 
 @app.route('/get_pdf_text')
 def get_pdf_text():
