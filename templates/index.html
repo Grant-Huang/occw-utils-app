@@ -414,8 +414,8 @@ function showPdfTextModal(text) {
                         <pre style="max-height: 500px; overflow-y: auto; white-space: pre-wrap; font-size: 12px; background-color: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">${text}</pre>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" onclick="copyPdfText()">复制文本</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" onclick="copyPdfText()">{{ t('copy_text') }}</button>
                     </div>
                 </div>
             </div>
