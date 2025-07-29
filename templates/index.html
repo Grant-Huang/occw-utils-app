@@ -1,40 +1,118 @@
 {% extends "base.html" %}
 
-{% block title %}{{ t('home_title') }} - {{ t('system_name') }}{% endblock %}
+{% block title %}{{ t('home_title') }}{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-upload me-2"></i>{{ t('upload_pdf_title') }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <form id="quotationForm" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="quotationFile" class="form-label">{{ t('select_file') }}</label>
-                        <input type="file" class="form-control" id="quotationFile" name="file" accept=".pdf" required>
-                        <div class="form-text">{{ t('upload_pdf_desc') }}</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-upload me-1"></i>{{ t('upload_button') }}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <!-- 标签页导航 -->
+            <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pdf-import-tab" data-bs-toggle="tab" data-bs-target="#pdf-import" type="button" role="tab">
+                        <i class="fas fa-file-pdf me-2"></i>PDF导入报价单
                     </button>
-                </form>
-                <div id="uploadProgress" class="mt-3" style="display: none;">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="manual-create-tab" data-bs-toggle="tab" data-bs-target="#manual-create" type="button" role="tab">
+                        <i class="fas fa-edit me-2"></i>手动创建报价单
+                    </button>
+                </li>
+            </ul>
+
+            <!-- 标签页内容 -->
+            <div class="tab-content" id="mainTabsContent">
+                <!-- PDF导入标签页 -->
+                <div class="tab-pane fade show active" id="pdf-import" role="tabpanel">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-file-pdf me-2"></i>{{ t('upload_pdf_quote') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="quotationForm" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="quotationFile" class="form-label">{{ t('select_file') }}</label>
+                                    <input type="file" class="form-control" id="quotationFile" name="file" accept=".pdf" required>
+                                    <div class="form-text">{{ t('upload_pdf_desc') }}</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-upload me-1"></i>{{ t('upload_button') }}
+                                </button>
+                            </form>
+                            <div id="uploadProgress" class="mt-3" style="display: none;">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                                </div>
+                                <small class="text-muted">正在处理PDF文件...</small>
+                            </div>
+                        </div>
                     </div>
-                    <small class="text-muted">正在处理PDF文件...</small>
+
+
+                </div>
+
+                <!-- 手动创建报价单标签页 -->
+                <div class="tab-pane fade" id="manual-create" role="tabpanel">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-edit me-2"></i>手动创建报价单
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 添加产品按钮 -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary" onclick="addManualProduct()">
+                                    <i class="fas fa-plus me-1"></i>添加产品
+                                </button>
+                                <button type="button" class="btn btn-secondary ms-2" onclick="clearManualQuotation()">
+                                    <i class="fas fa-trash me-1"></i>清空列表
+                                </button>
+                            </div>
+
+                            <!-- 产品列表表格 -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="manualProductsTable">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th style="width: 8%;">序号</th>
+                                            <th style="width: 15%;">类型</th>
+                                            <th style="width: 15%;">产品名称</th>
+                                            <th style="width: 12%;">柜身变体</th>
+                                            <th style="width: 12%;">门板变体</th>
+                                            <th style="width: 15%;">SKU</th>
+                                            <th style="width: 10%;">单价</th>
+                                            <th style="width: 8%;">数量</th>
+                                            <th style="width: 5%;">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="manualProductsTableBody">
+                                        <!-- 动态添加的产品行将在这里显示 -->
+                                    </tbody>
+                                    <tfoot class="table-info">
+                                        <tr>
+                                            <td colspan="6" class="text-end"><strong>合计价格：</strong></td>
+                                            <td id="manualTotalPrice" class="fw-bold">$0.00</td>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <!-- 导出按钮 -->
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-success" onclick="exportManualQuotation()" id="exportManualBtn" disabled>
+                                    <i class="fas fa-download me-1"></i>导出报价单
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
-
-
 </div>
 
 <div id="quotationResult" class="mt-4" style="display: none;">
@@ -143,6 +221,9 @@ $(document).ready(function() {
             }
         });
     });
+
+    // 手动创建报价单处理已整合到下方的专门函数中
+
 });
 
 function displayQuotation(products, totalPrice, compareMessage, compareResult) {
@@ -638,6 +719,332 @@ function updatePriceDisplay(seqNum, unitPrice) {
         priceCell.removeClass('table-danger');
         totalCell.removeClass('table-danger');
     }
+}
+
+// ===== 手动创建报价单相关函数 =====
+
+let manualProductCounter = 1;
+let manualProducts = [];
+
+function addManualProduct() {
+    // 添加手动产品行
+    const tbody = document.getElementById('manualProductsTableBody');
+    const rowId = `manual-row-${manualProductCounter}`;
+    
+    const row = document.createElement('tr');
+    row.id = rowId;
+    row.innerHTML = `
+        <td>${manualProductCounter}</td>
+        <td>
+            <select class="form-select form-select-sm" onchange="onCategoryChange(${manualProductCounter})" id="category-${manualProductCounter}">
+                <option value="">选择类型...</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select form-select-sm" onchange="onProductChange(${manualProductCounter})" id="product-${manualProductCounter}" disabled>
+                <option value="">选择产品...</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select form-select-sm" onchange="onVariantChange(${manualProductCounter})" id="box-variant-${manualProductCounter}" disabled>
+                <option value="">选择柜身变体...</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select form-select-sm" onchange="onVariantChange(${manualProductCounter})" id="door-variant-${manualProductCounter}" disabled>
+                <option value="">选择门板变体...</option>
+            </select>
+        </td>
+        <td>
+            <span id="sku-${manualProductCounter}" class="badge bg-secondary">未选择</span>
+        </td>
+        <td>
+            <span id="price-${manualProductCounter}">$0.00</span>
+        </td>
+        <td>
+            <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateManualTotal()" id="qty-${manualProductCounter}">
+        </td>
+        <td>
+            <button class="btn btn-sm btn-danger" onclick="removeManualProduct(${manualProductCounter})">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    `;
+    
+    tbody.appendChild(row);
+    
+    // 加载产品类别
+    loadProductCategories(manualProductCounter);
+    
+    manualProductCounter++;
+    updateExportButton();
+}
+
+function loadProductCategories(rowNum) {
+    // 加载产品类别
+    $.ajax({
+        url: '/get_product_categories',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                const select = document.getElementById(`category-${rowNum}`);
+                response.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    select.appendChild(option);
+                });
+            }
+        },
+        error: function() {
+            showAlert('加载产品类别失败', 'warning');
+        }
+    });
+}
+
+function onCategoryChange(rowNum) {
+    // 类型选择改变时的处理
+    const category = document.getElementById(`category-${rowNum}`).value;
+    const productSelect = document.getElementById(`product-${rowNum}`);
+    const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
+    const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
+    
+    // 清空后续选择
+    productSelect.innerHTML = '<option value="">选择产品...</option>';
+    boxVariantSelect.innerHTML = '<option value="">选择柜身变体...</option>';
+    doorVariantSelect.innerHTML = '<option value="">选择门板变体...</option>';
+    
+    // 重置SKU和价格
+    document.getElementById(`sku-${rowNum}`).textContent = '未选择';
+    document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
+    document.getElementById(`price-${rowNum}`).textContent = '$0.00';
+    
+    if (category) {
+        productSelect.disabled = false;
+        
+        // 根据类型启用/禁用变体选择
+        if (category === 'BOX') {
+            boxVariantSelect.disabled = false;
+            doorVariantSelect.disabled = false;
+        } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
+            boxVariantSelect.disabled = true;
+            doorVariantSelect.disabled = false;
+        } else if (category === 'Assm.组合件') {
+            boxVariantSelect.disabled = false;
+            doorVariantSelect.disabled = false;
+        } else if (category === 'HARDWARE') {
+            boxVariantSelect.disabled = true;
+            doorVariantSelect.disabled = true;
+        }
+        
+        // 加载产品列表
+        loadProductsByCategory(category, rowNum);
+    } else {
+        productSelect.disabled = true;
+        boxVariantSelect.disabled = true;
+        doorVariantSelect.disabled = true;
+    }
+}
+
+function loadProductsByCategory(category, rowNum) {
+    // 根据类别加载产品列表
+    $.ajax({
+        url: '/get_products_by_category',
+        type: 'GET',
+        data: { category: category },
+        success: function(response) {
+            if (response.success) {
+                const productSelect = document.getElementById(`product-${rowNum}`);
+                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
+                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
+                
+                // 填充产品选择
+                response.products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product;
+                    option.textContent = product;
+                    productSelect.appendChild(option);
+                });
+                
+                // 填充柜身变体选择
+                response.box_variants.forEach(variant => {
+                    const option = document.createElement('option');
+                    option.value = variant;
+                    option.textContent = variant;
+                    boxVariantSelect.appendChild(option);
+                });
+                
+                // 填充门板变体选择
+                response.door_variants.forEach(variant => {
+                    const option = document.createElement('option');
+                    option.value = variant;
+                    option.textContent = variant;
+                    doorVariantSelect.appendChild(option);
+                });
+            }
+        },
+        error: function() {
+            showAlert('加载产品列表失败', 'warning');
+        }
+    });
+}
+
+function onProductChange(rowNum) {
+    // 产品选择改变时的处理
+    searchSkuAndPrice(rowNum);
+}
+
+function onVariantChange(rowNum) {
+    // 变体选择改变时的处理
+    searchSkuAndPrice(rowNum);
+}
+
+function searchSkuAndPrice(rowNum) {
+    // 搜索SKU和价格
+    const category = document.getElementById(`category-${rowNum}`).value;
+    const product = document.getElementById(`product-${rowNum}`).value;
+    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
+    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
+    
+    if (!category || !product) {
+        return;
+    }
+    
+    $.ajax({
+        url: '/search_sku_price',
+        type: 'GET',
+        data: {
+            category: category,
+            product: product,
+            box_variant: boxVariant,
+            door_variant: doorVariant
+        },
+        success: function(response) {
+            if (response.success) {
+                const skuElement = document.getElementById(`sku-${rowNum}`);
+                const priceElement = document.getElementById(`price-${rowNum}`);
+                
+                if (response.found) {
+                    skuElement.textContent = response.sku;
+                    skuElement.className = 'badge bg-success';
+                    priceElement.textContent = `$${response.price.toFixed(2)}`;
+                } else {
+                    skuElement.textContent = '未找到';
+                    skuElement.className = 'badge bg-danger';
+                    priceElement.textContent = '$0.00';
+                }
+                
+                updateManualTotal();
+            }
+        },
+        error: function() {
+            showAlert('搜索SKU失败', 'warning');
+        }
+    });
+}
+
+function removeManualProduct(rowNum) {
+    // 删除产品行
+    const row = document.getElementById(`manual-row-${rowNum}`);
+    if (row) {
+        row.remove();
+        updateManualTotal();
+        updateExportButton();
+    }
+}
+
+function updateManualTotal() {
+    // 更新合计价格
+    let total = 0;
+    const tbody = document.getElementById('manualProductsTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const priceText = row.cells[6].textContent;
+        const qtyInput = row.cells[7].querySelector('input');
+        
+        if (priceText && qtyInput) {
+            const price = parseFloat(priceText.replace('$', '')) || 0;
+            const qty = parseInt(qtyInput.value) || 0;
+            total += price * qty;
+        }
+    }
+    
+    document.getElementById('manualTotalPrice').textContent = `$${total.toFixed(2)}`;
+}
+
+function clearManualQuotation() {
+    // 清空手动报价单
+    if (confirm('确定要清空所有产品吗？')) {
+        document.getElementById('manualProductsTableBody').innerHTML = '';
+        manualProductCounter = 1;
+        updateManualTotal();
+        updateExportButton();
+    }
+}
+
+function updateExportButton() {
+    // 更新导出按钮状态
+    const tbody = document.getElementById('manualProductsTableBody');
+    const exportBtn = document.getElementById('exportManualBtn');
+    
+    if (tbody.children.length > 0) {
+        exportBtn.disabled = false;
+    } else {
+        exportBtn.disabled = true;
+    }
+}
+
+function exportManualQuotation() {
+    // 导出手动创建的报价单
+    const tbody = document.getElementById('manualProductsTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    if (rows.length === 0) {
+        showAlert('没有产品可导出', 'warning');
+        return;
+    }
+    
+    // 收集产品数据
+    const products = [];
+    for (let row of rows) {
+        const rowData = {
+            seq_num: row.cells[0].textContent,
+            category: row.cells[1].querySelector('select').value,
+            product: row.cells[2].querySelector('select').value,
+            box_variant: row.cells[3].querySelector('select').value,
+            door_variant: row.cells[4].querySelector('select').value,
+            sku: row.cells[5].textContent,
+            price: row.cells[6].textContent,
+            qty: row.cells[7].querySelector('input').value
+        };
+        products.push(rowData);
+    }
+    
+    // 创建Excel文件并下载
+    createExcelFromManualData(products);
+}
+
+function createExcelFromManualData(products) {
+    // 从手动数据创建Excel文件
+    // 这里可以使用SheetJS或其他库来创建Excel文件
+    // 暂时使用简单的CSV格式
+    let csvContent = "序号,类型,产品名称,柜身变体,门板变体,SKU,单价,数量,小计\n";
+    
+    products.forEach(product => {
+        const price = parseFloat(product.price.replace('$', '')) || 0;
+        const qty = parseInt(product.qty) || 0;
+        const subtotal = price * qty;
+        
+        csvContent += `${product.seq_num},${product.category},${product.product},${product.box_variant},${product.door_variant},${product.sku},${product.price},${product.qty},$${subtotal.toFixed(2)}\n`;
+    });
+    
+    // 创建下载链接
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `manual_quotation_${new Date().getTime()}.csv`;
+    link.click();
 }
 </script>
 {% endblock %} 

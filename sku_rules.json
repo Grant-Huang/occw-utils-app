@@ -1,0 +1,164 @@
+{
+  "version": "1.0",
+  "last_updated": "2024-01-01",
+  "description": "SKU生成和识别规则配置",
+  
+  "pdf_parsing_rules": {
+    "description": "PDF解析时的SKU生成规则",
+    "rules": [
+      {
+        "id": "cabinet_rule",
+        "name": "Cabinet规则",
+        "condition": "description包含'Cabinet'",
+        "pattern": "CABINET",
+        "format": "{occw_code}-PLY-{door_color}",
+        "preprocessing": "去掉user_code中的-L和-R后缀",
+        "enabled": true
+      },
+      {
+        "id": "hardware_rule", 
+        "name": "Hardware规则",
+        "condition": "description包含'Hardware'",
+        "pattern": "HARDWARE",
+        "format": "HW-{user_code}",
+        "preprocessing": "",
+        "enabled": true
+      },
+      {
+        "id": "accessory_rule",
+        "name": "Accessory规则", 
+        "condition": "description包含'Accessory'",
+        "pattern": "ACCESSORY",
+        "format": "{door_color}-{user_code}",
+        "preprocessing": "",
+        "enabled": true
+      },
+      {
+        "id": "default_rule",
+        "name": "默认规则",
+        "condition": "其他情况",
+        "pattern": "*",
+        "format": "{door_color}-{user_code}",
+        "preprocessing": "",
+        "enabled": true
+      }
+    ]
+  },
+
+  "occw_import_rules": {
+    "description": "OCCW价格表导入时的SKU生成规则",
+    "variant_extraction": {
+      "door_variant": {
+        "pattern": "门板: {variant}",
+        "variant_length": [2, 3],
+        "enabled": true
+      },
+      "box_variant": {
+        "pattern": "柜身: {variant}",  
+        "variant_length": [2, 3],
+        "enabled": true
+      }
+    },
+    "category_rules": [
+      {
+        "id": "assembly_rule",
+        "category": ["RTA ASSM.组合件", "ASSM.组合件", "组合件"],
+        "sku_format": "{product_name}-{box_variant}-{door_variant}",
+        "enabled": true
+      },
+      {
+        "id": "door_rule",
+        "category": ["DOOR", "门板"],
+        "sku_format": "{door_variant}-{product_name}-Door",
+        "enabled": true
+      },
+      {
+        "id": "box_standard_rule",
+        "category": ["BOX", "柜体"],
+        "condition": "有柜身变体",
+        "sku_format": "{box_variant}-{product_name}-BOX",
+        "enabled": true
+      },
+      {
+        "id": "box_open_rule", 
+        "category": ["BOX", "柜体"],
+        "condition": "有门板变体但无柜身变体",
+        "sku_format": "{door_variant}-{product_name}-OPEN",
+        "special_handling": "如果product_name已含-OPEN则不重复添加",
+        "enabled": true
+      },
+      {
+        "id": "hardware_rule",
+        "category": ["ENDING PANEL", "MOLDING", "TOE KICK", "FILLER"],
+        "sku_format": "HW-{product_name}",
+        "enabled": true
+      }
+    ]
+  },
+
+  "manual_quote_rules": {
+    "description": "手动创建报价单时的SKU生成规则",
+    "rules": [
+      {
+        "id": "assembly_manual",
+        "category": "Assm.组合件",
+        "condition": "product && box_variant && door_variant",
+        "sku_format": "{product}-{box_variant}-{door_variant}",
+        "enabled": true
+      },
+      {
+        "id": "door_manual",
+        "category": "Door", 
+        "condition": "product && door_variant",
+        "sku_format": "{door_variant}-{product}-Door",
+        "enabled": true
+      },
+      {
+        "id": "box_standard_manual",
+        "category": "BOX",
+        "condition": "box_variant",
+        "sku_format": "{box_variant}-{product}-BOX", 
+        "enabled": true
+      },
+      {
+        "id": "box_open_manual",
+        "category": "BOX",
+        "condition": "door_variant && !box_variant",
+        "sku_format": "{door_variant}-{product}-OPEN",
+        "special_handling": "如果product已含-OPEN则不重复添加",
+        "enabled": true
+      },
+      {
+        "id": "hardware_manual",
+        "category": "HARDWARE",
+        "condition": "product",
+        "sku_format": "HW-{product}",
+        "enabled": true
+      },
+      {
+        "id": "other_manual",
+        "category": "OTHER",
+        "condition": "product",
+        "sku_format": "{product}",
+        "fallback": "{product}-{door_variant}",
+        "enabled": true
+      }
+    ]
+  },
+
+  "common_variants": {
+    "door_variants": [
+      {"code": "BSS", "name": "巧克力色"},
+      {"code": "GSS", "name": "灰色"},
+      {"code": "MNW", "name": "自然色"},
+      {"code": "MWM", "name": "白色哑光"},
+      {"code": "PGW", "name": "纯白色"},
+      {"code": "SSW", "name": "软白色"},
+      {"code": "WSS", "name": "白色"}
+    ],
+    "box_variants": [
+      {"code": "PLY", "name": "胶合板"},
+      {"code": "PB", "name": "刨花板"}
+    ]
+  }
+} 

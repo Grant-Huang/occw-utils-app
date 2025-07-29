@@ -13,6 +13,7 @@ from reportlab.lib import colors
 from functools import wraps
 from version import VERSION, VERSION_NAME, COMPANY_NAME_ZH, COMPANY_NAME_EN, SYSTEM_NAME_ZH, SYSTEM_NAME_EN, SYSTEM_NAME_FR
 from translations import TRANSLATIONS, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, get_text
+from typing import Dict, List, Tuple, Any
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
@@ -92,12 +93,7 @@ os.makedirs('data', exist_ok=True)
 standard_prices = {}
 occw_prices = {}  # OCCW价格表
 sku_mappings = {}  # SKU映射关系：{原SKU: 用户选择的SKU}
-sku_rules = {
-    'cabinet_rule': 'OCCW编码去掉"-L"和"-R"，SKU=OCCW编码&"-PLY-"&花色',
-    'hardware_rule': 'SKU="HW-"&User Code',
-    'accessory_rule': 'SKU=花色&"-"&User Code',
-    'default_rule': 'SKU=花色&"-"&User Code'
-}
+sku_rules = {}  # SKU生成规则配置
 
 def load_standard_prices():
     """加载标准价格表"""
@@ -166,19 +162,42 @@ def load_sku_rules():
     """加载SKU规则配置"""
     global sku_rules
     try:
+        # 确保data目录存在
+        os.makedirs('data', exist_ok=True)
+        
         if os.path.exists('data/sku_rules.json'):
             with open('data/sku_rules.json', 'r', encoding='utf-8') as f:
                 sku_rules = json.load(f)
+                print(f"已加载SKU规则配置")
+        else:
+            # 如果没有配置文件，复制默认配置
+            default_config_path = os.path.join(os.path.dirname(__file__), 'sku_rules.json')
+            if os.path.exists(default_config_path):
+                with open(default_config_path, 'r', encoding='utf-8') as f:
+                    sku_rules = json.load(f)
+                save_sku_rules()  # 保存到data目录
+                print(f"已复制默认SKU规则配置")
+            elif os.path.exists('sku_rules.json'):
+                with open('sku_rules.json', 'r', encoding='utf-8') as f:
+                    sku_rules = json.load(f)
+                save_sku_rules()  # 保存到data目录
+                print(f"已复制默认SKU规则配置")
+            else:
+                sku_rules = {}
+                print("警告: 未找到默认SKU规则配置文件")
     except Exception as e:
         print(f"加载SKU规则失败: {e}")
+        sku_rules = {}
 
 def save_sku_rules():
     """保存SKU规则配置"""
     try:
         with open('data/sku_rules.json', 'w', encoding='utf-8') as f:
             json.dump(sku_rules, f, ensure_ascii=False, indent=2)
+        return True
     except Exception as e:
         print(f"保存SKU规则失败: {e}")
+        return False
 
 def extract_pdf_content(pdf_path, add_page_markers=True, force_line_split=True):
     """提取PDF文件内容，支持强制将页脚和表头分行"""
@@ -345,6 +364,277 @@ def parse_quotation_pdf(pdf_content):
             return 0
     products.sort(key=lambda x: extract_seq_num(x['seq_num']))
     return products, compare_result, compare_message
+
+
+class OCCWPriceTransformer:
+    """OCCW价格表转换器 - 完全重写版本"""
+    
+    def __init__(self):
+        self.errors = []
+        self.warnings = []
+    
+    def transform_excel_file(self, file_path: str) -> Tuple[List[Dict], List[str]]:
+        """
+        转换Excel文件
+        返回: (转换后的数据列表, 错误信息列表)
+        """
+        self.errors = []
+        self.warnings = []
+        
+        try:
+            # 读取Excel文件，第一行为表头
+            df = pd.read_excel(file_path, header=0)
+            print(f"读取Excel文件成功，共 {len(df)} 行数据")
+            print(f"检测到的列名: {list(df.columns)}")
+            
+            # 检查必需的列
+            required_columns = ['内部参考号', '销售价', '变体值', '名称', '产品类别/名称']
+            missing_columns = [col for col in required_columns if col not in df.columns]
+            
+            if missing_columns:
+                error_msg = f"Excel文件缺少必需的列: {', '.join(missing_columns)}"
+                print(f"错误: {error_msg}")
+                self.errors.append(error_msg)
+                return [], self.errors
+            
+            transformed_data = []
+            
+            # 逐行转换
+            for index, row in df.iterrows():
+                row_number = index + 2  # Excel行号（第1行是表头）
+                
+                try:
+                    transformed_row = self.transform_single_row(row, row_number)
+                    if transformed_row:
+                        transformed_data.append(transformed_row)
+                except Exception as e:
+                    error_msg = f"第{row_number}行转换失败: {str(e)}"
+                    print(f"错误: {error_msg}")
+                    self.errors.append(error_msg)
+            
+            print(f"转换完成: 成功 {len(transformed_data)} 条，错误 {len(self.errors)} 个")
+            return transformed_data, self.errors
+            
+        except Exception as e:
+            error_msg = f"文件读取失败: {str(e)}"
+            print(f"错误: {error_msg}")
+            self.errors.append(error_msg)
+            return [], self.errors
+    
+    def transform_single_row(self, row: pd.Series, row_number: int) -> Dict[str, Any]:
+        """转换单行数据"""
+        
+        # 提取原始数据
+        internal_ref = str(row.get('内部参考号', '')).strip()
+        unit_price = row.get('销售价', 0)
+        variant_value = str(row.get('变体值', '')).strip()
+        name = str(row.get('名称', '')).strip()
+        category = str(row.get('产品类别/名称', '')).strip()
+        
+        # 处理pandas的NaN值
+        if internal_ref == 'nan':
+            internal_ref = ''
+        if variant_value == 'nan':
+            variant_value = ''
+        if name == 'nan':
+            name = ''
+        if category == 'nan':
+            category = ''
+        
+        # 验证必需字段
+        if not internal_ref:
+            self.errors.append(f"第{row_number}行：内部参考号不能为空")
+            return None
+        
+        if not name:
+            self.errors.append(f"第{row_number}行：名称不能为空")
+            return None
+        
+        if not category:
+            self.errors.append(f"第{row_number}行：产品类别/名称不能为空")
+            return None
+        
+        # 验证名称格式：必须以英文字母或数字开头
+        if not re.match(r'^[A-Za-z0-9]', name):
+            self.errors.append(f"第{row_number}行：名称 '{name}' 必须以英文字母或数字开头")
+            return None
+        
+        # 标准化类别名称（转换为大写并去除空格）
+        category = category.upper().strip()
+        
+        # 初始化输出变量
+        door_variant = ""
+        box_variant = ""
+        product_name = ""
+        output_category = ""
+        
+        try:
+            # 根据产品类别应用转换规则
+            if category in ["RTA ASSM.组合件", "ASSM.组合件", "组合件"]:
+                door_variant = self._extract_door_variant(variant_value, row_number)
+                box_variant, product_name = self._split_name_for_assm(name, row_number)
+                output_category = "Assm.组合件"
+                
+            elif category in ["DOOR", "门板"]:
+                door_variant = self._extract_door_variant(variant_value, row_number)
+                box_variant = ""
+                product_name = self._extract_product_name_for_door(name, row_number)
+                output_category = "Door"
+                
+            elif category in ["BOX", "柜体"] or "BOX" in category:
+                if "OPEN" in name.upper():
+                    # 开放柜体
+                    door_variant = self._extract_door_variant(variant_value, row_number)
+                    box_variant = ""
+                    product_name = self._extract_product_name_for_open_box(name, row_number)
+                    output_category = "BOX"
+                else:
+                    # 标准柜体
+                    door_variant = ""
+                    box_variant = self._extract_box_variant(variant_value, row_number)
+                    product_name = self._extract_product_name_for_standard_box(name, row_number)
+                    output_category = "BOX"
+                    
+            elif category in ["ENDING PANEL", "MOLDING", "TOE KICK", "FILLER"]:
+                door_variant = self._extract_door_variant(variant_value, row_number)
+                box_variant = ""
+                product_name = name  # 保持原名称
+                output_category = category
+                
+            else:
+                # 其他情况归类为五金件
+                door_variant = ""
+                box_variant = ""
+                product_name = self._extract_hardware_product_name(name, row_number)
+                output_category = "HARDWARE"
+            
+            return {
+                'SKU': internal_ref,
+                'product_name': product_name,
+                'door_variant': door_variant,
+                'box_variant': box_variant,
+                'category': output_category,
+                'unit_price': float(unit_price) if unit_price else 0.0,
+                'original_row': row_number
+            }
+            
+        except Exception as e:
+            self.errors.append(f"第{row_number}行：数据处理错误 - {str(e)}")
+            return None
+    
+    def _extract_assm_variants(self, variant_value: str, row_number: int) -> tuple:
+        """提取组合件的门板和柜身变体"""
+        if not variant_value:
+            self.errors.append(f"第{row_number}行：组合件的变体值不能为空")
+            return "", ""
+        
+        door_variant = ""
+        box_variant = ""
+        
+        # 解析格式：'门板: XXX 柜身: YYY'
+        parts = variant_value.split()
+        
+        for i, part in enumerate(parts):
+            if part == "门板:" and i + 1 < len(parts):
+                door_variant = parts[i + 1]
+            elif part == "柜身:" and i + 1 < len(parts):
+                box_variant = parts[i + 1]
+        
+        # 验证门板变体
+        if not door_variant:
+            self.errors.append(f"第{row_number}行：组合件变体值中缺少门板变体，实际值为'{variant_value}'")
+        elif len(door_variant) < 2 or len(door_variant) > 3:
+            self.errors.append(f"第{row_number}行：门板变体应为2-3个字符，实际为{len(door_variant)}个字符（'{door_variant}'）")
+        
+        # 验证柜身变体
+        if not box_variant:
+            self.errors.append(f"第{row_number}行：组合件变体值中缺少柜身变体，实际值为'{variant_value}'")
+        elif len(box_variant) < 2 or len(box_variant) > 3:
+            self.errors.append(f"第{row_number}行：柜身变体应为2-3个字符，实际为{len(box_variant)}个字符（'{box_variant}'）")
+        
+        return door_variant, box_variant
+    
+    def _extract_door_variant(self, variant_value: str, row_number: int) -> str:
+        """提取门板变体"""
+        if not variant_value:
+            return ""
+        
+        if not variant_value.startswith("门板: "):
+            self.errors.append(f"第{row_number}行：变体值格式错误，应以'门板: '开头，实际值为'{variant_value}'")
+            return ""
+        
+        variant = variant_value.replace("门板: ", "")
+        if len(variant) < 2 or len(variant) > 3:
+            self.errors.append(f"第{row_number}行：门板变体应为2-3个字符，实际为{len(variant)}个字符（'{variant}'）")
+        
+        return variant
+    
+    def _extract_box_variant(self, variant_value: str, row_number: int) -> str:
+        """提取柜身变体"""
+        if not variant_value:
+            self.errors.append(f"第{row_number}行：标准BOX柜体的变体值不能为空")
+            return ""
+        
+        if not variant_value.startswith("柜身: "):
+            self.errors.append(f"第{row_number}行：变体值格式错误，应以'柜身: '开头，实际值为'{variant_value}'")
+            return ""
+        
+        variant = variant_value.replace("柜身: ", "")
+        if len(variant) < 2 or len(variant) > 3:
+            self.errors.append(f"第{row_number}行：柜身变体应为2-3个字符，实际为{len(variant)}个字符（'{variant}'）")
+        
+        return variant
+    
+    def _split_name_for_assm(self, name: str, row_number: int) -> Tuple[str, str]:
+        """为RTA组合件拆分名称：返回(柜身变体, 产品名称)"""
+        if "-" not in name:
+            # 如果没有分隔符，产品名称=名称，柜身变体为空
+            return "", name
+        
+        parts = name.split("-", 1)  # 只分割第一个"-"
+        box_variant = parts[0]      # "-"前面的部分作为柜身变体
+        product_name = parts[1]     # "-"后面的部分作为产品名称
+        
+        return box_variant, product_name
+    
+    def _extract_product_name_for_door(self, name: str, row_number: int) -> str:
+        """为Door产品提取产品名称："-"前面的部分"""
+        if "-" not in name:
+            return name
+        
+        parts = name.split("-")
+        return parts[0]
+    
+    def _extract_product_name_for_open_box(self, name: str, row_number: int) -> str:
+        """为开放BOX产品提取产品名称："-"前面的部分"""
+        if "-" not in name:
+            return name
+        
+        parts = name.split("-")
+        return parts[0]
+    
+    def _extract_product_name_for_standard_box(self, name: str, row_number: int) -> str:
+        """为标准BOX产品提取产品名称："-"前面的部分"""
+        if "-" not in name:
+            return name
+        
+        parts = name.split("-")
+        return parts[0]
+    
+    def _extract_hardware_product_name(self, name: str, row_number: int) -> str:
+        """为五金件产品提取产品名称：去掉"HW-"前缀"""
+        if name.upper().startswith("HW-"):
+            return name[3:]
+        return name
+    
+    def get_error_summary(self) -> Dict[str, Any]:
+        """获取错误摘要"""
+        return {
+            'total_errors': len(self.errors),
+            'error_details': self.errors,
+            'has_errors': len(self.errors) > 0
+        }
+
 
 def parse_multiline_product_sequence(lines, start_index, current_door_color):
     """解析多行产品序列，返回合并后的产品信息"""
@@ -595,7 +885,6 @@ def parse_product_segment(segment, current_door_color, products):
         # 尝试查找所有可能的产品模式
         # 支持多种格式：用户编码 序号 描述 价格 数量用户编码
         loose_patterns = [
-            r'([A-Z0-9]+)\s+(\*?\d+)\s+([^0-9]+?)\s+(\d+,?\d*\.\d{2})\s+(\d+[A-Z0-9]+)',
             r'([A-Z0-9]+)\s+(\*?\d+)\s+([^0-9]+?)\s+(\d+,?\d*\.\d{2})\s+(\d+)',
             r'([A-Z0-9]+)\s+(\*?\d+)\s+([^0-9]+?)\s+(\d+,?\d*\.\d{2})',
         ]
@@ -694,27 +983,143 @@ def parse_product_segment(segment, current_door_color, products):
         print(f"解析产品: {product}")
 
 def generate_sku(user_code, description, door_color):
-    """根据规则生成SKU"""
+    """根据配置的规则生成SKU"""
+    global sku_rules
+    
     description_upper = description.upper()
     door_color = door_color or 'N/A'
     
-    # 规则4.1: 包含"Cabinet"
+    # 使用配置的规则
+    if 'pdf_parsing_rules' in sku_rules and 'rules' in sku_rules['pdf_parsing_rules']:
+        for rule in sku_rules['pdf_parsing_rules']['rules']:
+            if not rule.get('enabled', True):
+                continue
+                
+            pattern = rule.get('pattern', '')
+            if pattern == '*' or pattern.upper() in description_upper:
+                # 应用规则
+                format_str = rule.get('format', '')
+                preprocessing = rule.get('preprocessing', '')
+                
+                # 预处理
+                processed_user_code = user_code
+                if preprocessing and 'L和-R后缀' in preprocessing:
+                    processed_user_code = user_code.replace('-L', '').replace('-R', '')
+                
+                # 生成SKU
+                sku = format_str.replace('{user_code}', processed_user_code)\
+                                .replace('{occw_code}', processed_user_code)\
+                                .replace('{door_color}', door_color)
+                return sku
+    
+    # 回退到硬编码规则
     if 'CABINET' in description_upper:
-        # 从用户编码中提取OCCW编码（去掉-L和-R后缀）
         occw_code = user_code.replace('-L', '').replace('-R', '')
         return f"{occw_code}-PLY-{door_color}"
-    
-    # 规则4.2: 包含"Hardware"
     elif 'HARDWARE' in description_upper:
         return f"HW-{user_code}"
-    
-    # 规则4.3: 包含"Accessory"
     elif 'ACCESSORY' in description_upper:
         return f"{door_color}-{user_code}"
-    
-    # 规则4.4: 其他情形
     else:
         return f"{door_color}-{user_code}"
+
+def generate_sku_by_rules(category, product, box_variant, door_variant):
+    """根据配置的规则生成SKU列表"""
+    global sku_rules
+    possible_skus = []
+    
+    # 使用配置的手动创建规则
+    if 'manual_quote_rules' in sku_rules and 'rules' in sku_rules['manual_quote_rules']:
+        for rule in sku_rules['manual_quote_rules']['rules']:
+            if not rule.get('enabled', True):
+                continue
+                
+            rule_category = rule.get('category', '')
+            condition = rule.get('condition', '')
+            
+            # 检查类别匹配
+            if rule_category == category:
+                # 检查条件
+                if evaluate_sku_condition(condition, product, box_variant, door_variant):
+                    sku_format = rule.get('sku_format', '')
+                    special_handling = rule.get('special_handling', '')
+                    
+                    # 生成SKU
+                    sku = apply_sku_format(sku_format, product, box_variant, door_variant, special_handling)
+                    if sku:
+                        possible_skus.append(sku)
+                        
+                    # 检查是否有备用格式
+                    fallback = rule.get('fallback', '')
+                    if fallback and not sku:
+                        fallback_sku = apply_sku_format(fallback, product, box_variant, door_variant, special_handling)
+                        if fallback_sku:
+                            possible_skus.append(fallback_sku)
+    
+    # 回退到硬编码规则
+    if not possible_skus:
+        if category == "Assm.组合件":
+            if product and box_variant and door_variant:
+                possible_skus.append(f"{product}-{box_variant}-{door_variant}")
+        elif category == "Door":
+            if product and door_variant:
+                possible_skus.append(f"{door_variant}-{product}-Door")
+        elif category == "BOX":
+            if door_variant and not box_variant:
+                if product.upper().endswith("-OPEN"):
+                    possible_skus.append(f"{door_variant}-{product}")
+                else:
+                    possible_skus.append(f"{door_variant}-{product}-OPEN")
+            elif box_variant:
+                possible_skus.append(f"{box_variant}-{product}-BOX")
+        elif category == "HARDWARE":
+            possible_skus.append(f"HW-{product}")
+        else:
+            possible_skus.append(product)
+            if door_variant:
+                possible_skus.append(f"{product}-{door_variant}")
+    
+    return possible_skus
+
+def evaluate_sku_condition(condition, product, box_variant, door_variant):
+    """评估SKU生成条件"""
+    if not condition:
+        return True
+        
+    # 简单的条件评估
+    condition = condition.replace('product', str(bool(product)))
+    condition = condition.replace('box_variant', str(bool(box_variant)))
+    condition = condition.replace('door_variant', str(bool(door_variant)))
+    condition = condition.replace('&&', ' and ')
+    condition = condition.replace('!', ' not ')
+    
+    try:
+        return eval(condition)
+    except:
+        return True
+
+def apply_sku_format(format_str, product, box_variant, door_variant, special_handling=""):
+    """应用SKU格式模板"""
+    if not format_str or not product:
+        return None
+        
+    # 处理特殊情况
+    if special_handling and "不重复添加" in special_handling and "OPEN" in special_handling:
+        if product.upper().endswith("-OPEN") and format_str.endswith("-OPEN"):
+            # 移除格式中的-OPEN后缀
+            format_str = format_str.replace("-OPEN", "")
+    
+    # 替换变量
+    sku = format_str.replace('{product}', product)\
+                    .replace('{product_name}', product)\
+                    .replace('{box_variant}', box_variant or '')\
+                    .replace('{door_variant}', door_variant or '')
+    
+    # 清理空的连字符
+    sku = re.sub(r'-+', '-', sku)  # 多个连字符合并为一个
+    sku = sku.strip('-')  # 去掉首尾的连字符
+    
+    return sku if sku else None
 
 def apply_sku_mapping(original_sku):
     """应用SKU映射关系，返回映射后的SKU"""
@@ -816,47 +1221,151 @@ def upload_prices():
         return jsonify({'error': f'文件处理失败: {str(e)}'}), 400
 
 @app.route('/upload_occw_prices', methods=['POST'])
-@admin_required
+@admin_required 
 def upload_occw_prices():
-    """上传OCCW价格表"""
-    if 'file' not in request.files:
-        return jsonify({'error': '没有选择文件'}), 400
-    
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': '没有选择文件'}), 400
+    """上传OCCW价格表 - 完全重写版本"""
+    print("=" * 50)
+    print("开始处理OCCW价格表上传...")
     
     try:
-        if not file.filename.endswith('.xlsx'):
-            return jsonify({'error': '请上传Excel文件(.xlsx)'}), 400
+        # 1. 验证文件
+        if 'file' not in request.files:
+            error_msg = '没有选择文件'
+            print(f"错误: {error_msg}")
+            return jsonify({'success': False, 'error': error_msg}), 400
         
-        df = pd.read_excel(file)
+        file = request.files['file']
+        if file.filename == '':
+            error_msg = '没有选择文件'
+            print(f"错误: {error_msg}")
+            return jsonify({'success': False, 'error': error_msg}), 400
         
-        # 跳过表头行，假设第一列是SKU，第二列是销售价格
-        global occw_prices
-        occw_prices.clear()
+        if not file.filename.lower().endswith(('.xlsx', '.xls')):
+            error_msg = '文件格式不支持，请选择Excel文件(.xlsx或.xls)'
+            print(f"错误: {error_msg}")
+            return jsonify({'success': False, 'error': error_msg}), 400
         
-        for i, row in df.iterrows():
-            if i == 0:  # 跳过表头行
-                continue
-            try:
-                sku = str(row.iloc[0]).strip()
-                price = float(row.iloc[1])
-                if sku and sku != 'nan':  # 过滤空值
-                    occw_prices[sku] = price
-            except (ValueError, IndexError):
-                continue  # 跳过无效行
+        print(f"接收到文件: {file.filename}")
         
-        if save_occw_prices():
-            return jsonify({
-                'success': True,
-                'message': f'成功导入 {len(occw_prices)} 条OCCW价格记录'
-            })
-        else:
-            return jsonify({'error': '保存OCCW价格表失败'}), 500
+        # 2. 获取导入模式
+        import_mode = request.form.get('import_mode', 'create')
+        clear_existing = import_mode == 'create'
+        print(f"导入模式: {import_mode} ({'清空现有数据' if clear_existing else '追加模式'})")
         
+        # 3. 保存临时文件
+        filename = secure_filename(file.filename)
+        temp_path = os.path.join(tempfile.gettempdir(), f"occw_upload_{filename}")
+        file.save(temp_path)
+        print(f"临时文件保存到: {temp_path}")
+        
+        try:
+            # 4. 使用转换器处理Excel文件
+            print("开始转换Excel文件...")
+            transformer = OCCWPriceTransformer()
+            transformed_data, errors = transformer.transform_excel_file(temp_path)
+            
+            print(f"转换完成: 成功 {len(transformed_data)} 条，错误 {len(errors)} 个")
+            
+            # 5. 如果没有有效数据（全部行都解析失败）
+            if not transformed_data:
+                if errors:
+                    error_msg = f'所有数据行解析失败，发现 {len(errors)} 个错误'
+                else:
+                    error_msg = '没有有效的价格数据'
+                print(f"错误: {error_msg}")
+                return jsonify({
+                    'success': False, 
+                    'error': error_msg,
+                    'has_errors': True,
+                    'error_details': errors,
+                    'data_count': 0,
+                    'error_count': len(errors)
+                }), 400
+            
+            # 7. 更新价格数据
+            global occw_prices
+            original_count = len(occw_prices)
+            added_count = 0
+            updated_count = 0
+            
+            print(f"开始更新价格数据，原有记录: {original_count}")
+            
+            if clear_existing:
+                occw_prices.clear()
+                print("已清空现有价格数据")
+            
+            # 处理转换后的数据
+            for item in transformed_data:
+                sku = item['SKU']
+                
+                if clear_existing or sku not in occw_prices:
+                    added_count += 1
+                else:
+                    updated_count += 1
+                
+                # 保存完整的产品信息
+                occw_prices[sku] = {
+                    'product_name': item['product_name'],
+                    'door_variant': item['door_variant'],
+                    'box_variant': item['box_variant'],
+                    'category': item['category'],
+                    'unit_price': item['unit_price'],
+                    'updated_at': datetime.now().isoformat()
+                }
+            
+            final_count = len(occw_prices)
+            print(f"价格数据更新完成: 新增 {added_count} 条，更新 {updated_count} 条，总计 {final_count} 条")
+            
+            # 8. 保存到文件
+            if save_occw_prices():
+                print("价格数据保存成功")
+                
+                # 构建成功消息
+                if clear_existing:
+                    if errors:
+                        message = f'成功导入 {len(transformed_data)} 条OCCW价格记录，{len(errors)} 行解析失败（创建模式：已清空原有数据）'
+                    else:
+                        message = f'成功导入 {len(transformed_data)} 条OCCW价格记录（创建模式：已清空原有数据）'
+                else:
+                    if errors:
+                        message = f'成功处理 {len(transformed_data)} 条记录（追加模式：新增 {added_count} 条，更新 {updated_count} 条），{len(errors)} 行解析失败，总计 {final_count} 条价格记录'
+                    else:
+                        message = f'成功处理 {len(transformed_data)} 条记录（追加模式：新增 {added_count} 条，更新 {updated_count} 条），总计 {final_count} 条价格记录'
+                
+                return jsonify({
+                    'success': True,
+                    'message': message,
+                    'data_count': len(transformed_data),
+                    'error_count': len(errors),
+                    'has_errors': len(errors) > 0,
+                    'error_details': errors if errors else [],
+                    'total_count': final_count,
+                    'added_count': added_count,
+                    'updated_count': updated_count,
+                    'mode': 'create' if clear_existing else 'append',
+                    'original_count': original_count
+                })
+            else:
+                error_msg = '保存价格数据失败'
+                print(f"错误: {error_msg}")
+                return jsonify({'success': False, 'error': error_msg}), 500
+                
+        finally:
+            # 9. 清理临时文件
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+                print(f"已删除临时文件: {temp_path}")
+                
     except Exception as e:
-        return jsonify({'error': f'文件处理失败: {str(e)}'}), 400
+        error_msg = f'处理文件时发生错误: {str(e)}'
+        print(f"异常错误: {error_msg}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': error_msg}), 500
+    
+    finally:
+        print("OCCW价格表上传处理完成")
+        print("=" * 50)
 
 @app.route('/get_occw_skus', methods=['GET'])
 def get_occw_skus():
@@ -937,12 +1446,29 @@ def get_occw_price():
         
         # 首先检查是否有映射关系
         mapped_sku = sku_mappings.get(sku, sku)
-        price = occw_prices.get(mapped_sku, 0.0)
+        price_data = occw_prices.get(mapped_sku, 0.0)
+        
+        # 处理新旧数据格式兼容性
+        if isinstance(price_data, dict):
+            # 新格式：完整产品信息
+            price = price_data.get('unit_price', 0.0)
+            product_info = {
+                'product_name': price_data.get('product_name', ''),
+                'door_variant': price_data.get('door_variant', ''),
+                'box_variant': price_data.get('box_variant', ''),
+                'category': price_data.get('category', ''),
+                'updated_at': price_data.get('updated_at', '')
+            }
+        else:
+            # 旧格式：只有价格
+            price = price_data
+            product_info = {}
         
         return jsonify({
             'success': True,
             'price': price,
-            'mapped_sku': mapped_sku if mapped_sku != sku else None
+            'mapped_sku': mapped_sku if mapped_sku != sku else None,
+            'product_info': product_info
         })
         
     except Exception as e:
@@ -999,6 +1525,40 @@ def delete_sku_mapping():
             
     except Exception as e:
         return jsonify({'error': f'删除映射关系失败: {str(e)}'}), 500
+
+@app.route('/clear_all_sku_mappings', methods=['POST'])
+@admin_required
+def clear_all_sku_mappings():
+    """清空所有SKU映射关系"""
+    try:
+        global sku_mappings
+        original_count = len(sku_mappings)
+        sku_mappings.clear()
+        
+        if save_sku_mappings():
+            return jsonify({
+                'success': True,
+                'message': f'已清空 {original_count} 个SKU映射关系'
+            })
+        else:
+            return jsonify({'error': '保存映射关系失败'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': f'清空映射关系失败: {str(e)}'}), 500
+
+@app.route('/export_sku_mappings', methods=['GET'])
+@admin_required
+def export_sku_mappings():
+    """导出SKU映射关系为JSON格式"""
+    try:
+        return jsonify({
+            'success': True,
+            'mappings': sku_mappings,
+            'count': len(sku_mappings),
+            'export_time': datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({'error': f'导出映射关系失败: {str(e)}'}), 500
 
 @app.route('/sku_mappings')
 @admin_required
@@ -1170,6 +1730,52 @@ def save_config():
     save_sku_rules()
     return jsonify({'success': True, 'message': '配置保存成功'})
 
+@app.route('/rules')
+@admin_required
+def rules_page():
+    """SKU规则配置页面"""
+    return render_template('rules.html')
+
+@app.route('/get_sku_rules', methods=['GET'])
+@admin_required  
+def get_sku_rules():
+    """获取SKU规则配置"""
+    return jsonify(sku_rules)
+
+@app.route('/save_sku_rules', methods=['POST'])
+@admin_required
+def save_sku_rules_api():
+    """保存SKU规则配置"""
+    try:
+        global sku_rules
+        sku_rules = request.json
+        success = save_sku_rules()
+        if success:
+            return jsonify({'success': True, 'message': 'SKU规则保存成功'})
+        else:
+            return jsonify({'success': False, 'message': '保存失败'}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'保存失败: {str(e)}'}), 500
+
+@app.route('/reset_sku_rules', methods=['POST'])
+@admin_required
+def reset_sku_rules():
+    """重置SKU规则到默认配置"""
+    try:
+        global sku_rules
+        if os.path.exists('sku_rules.json'):
+            with open('sku_rules.json', 'r', encoding='utf-8') as f:
+                sku_rules = json.load(f)
+            success = save_sku_rules()
+            if success:
+                return jsonify({'success': True, 'message': '已恢复默认配置'})
+            else:
+                return jsonify({'success': False, 'message': '恢复失败'}), 500
+        else:
+            return jsonify({'success': False, 'message': '默认配置文件不存在'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'恢复失败: {str(e)}'}), 500
+
 @app.route('/prices')
 @admin_required
 def prices():
@@ -1196,6 +1802,308 @@ def get_pdf_text():
         })
     except Exception as e:
         return jsonify({'error': f'读取PDF失败: {str(e)}'}), 500
+
+@app.route('/get_product_categories', methods=['GET'])
+def get_product_categories():
+    """获取产品类别列表"""
+    try:
+        categories = set()
+        for item in occw_prices.keys():
+            # 从现有的OCCW价格表中提取类别信息
+            # 这里需要根据实际的数据结构来分析
+            pass
+        
+        # 暂时返回预定义的类别
+        default_categories = [
+            "Assm.组合件",
+            "Door", 
+            "BOX",
+            "ENDING PANEL",
+            "MOLDING", 
+            "TOE KICK",
+            "FILLER",
+            "HARDWARE"
+        ]
+        
+        return jsonify({
+            'success': True,
+            'categories': default_categories
+        })
+    except Exception as e:
+        return jsonify({'error': f'获取产品类别失败: {str(e)}'}), 500
+
+@app.route('/get_products_by_category', methods=['GET'])
+def get_products_by_category():
+    """根据类别获取产品列表 - 使用结构化数据"""
+    try:
+        category = request.args.get('category')
+        if not category:
+            return jsonify({'error': '缺少category参数'}), 400
+        
+        products = set()
+        box_variants = set()
+        door_variants = set()
+        
+        # 从OCCW价格表中提取结构化数据
+        for sku, price_data in occw_prices.items():
+            if not isinstance(price_data, dict):
+                continue  # 跳过旧格式数据
+            
+            # 获取产品信息
+            product_category = price_data.get('category', '').strip()
+            product_name = price_data.get('product_name', '').strip()
+            door_variant = price_data.get('door_variant', '').strip()
+            box_variant = price_data.get('box_variant', '').strip()
+            
+            # 只处理匹配类别的产品
+            if product_category == category:
+                if product_name:
+                    products.add(product_name)
+                if door_variant:
+                    door_variants.add(door_variant)
+                if box_variant:
+                    box_variants.add(box_variant)
+        
+        # 如果请求的类别在价格表中没有数据，提供默认选项
+        if not products and not door_variants and not box_variants:
+            # 根据类别提供默认的变体选项
+            if category in ["Door", "Assm.组合件", "BOX", "ENDING PANEL", "MOLDING", "TOE KICK", "FILLER"]:
+                door_variants = {'BSS', 'GSS', 'MNW', 'MWM', 'PGW', 'SSW', 'WSS'}
+            
+            if category in ["Assm.组合件", "BOX"]:
+                box_variants = {'PLY', 'PB'}
+            
+            # 为某些类别提供默认产品选项
+            if category == "ENDING PANEL":
+                products = {'PANEL-24', 'PANEL-36', 'PANEL-48'}
+            elif category == "MOLDING":
+                products = {'CROWN-M', 'LIGHT-RAIL', 'SCRIBE-M'}
+            elif category == "TOE KICK":
+                products = {'TOE-4.5', 'TOE-6', 'TOE-8'}
+            elif category == "FILLER":
+                products = {'FILLER-3', 'FILLER-6', 'FILLER-9'}
+        
+        # 根据类别调整返回的变体选项
+        if category == "Door":
+            # 门板产品不需要柜身变体
+            box_variants = set()
+        elif category == "HARDWARE":
+            # 五金件不需要变体
+            door_variants = set()
+            box_variants = set()
+        elif category in ["ENDING PANEL", "MOLDING", "TOE KICK", "FILLER"]:
+            # 配件只需要门板变体
+            box_variants = set()
+        
+        return jsonify({
+            'success': True,
+            'products': sorted(list(products)),
+            'box_variants': sorted(list(box_variants)),
+            'door_variants': sorted(list(door_variants))
+        })
+    except Exception as e:
+        return jsonify({'error': f'获取产品列表失败: {str(e)}'}), 500
+
+@app.route('/search_sku_price', methods=['GET'])
+def search_sku_price():
+    """根据产品信息搜索SKU和价格"""
+    try:
+        category = request.args.get('category', '')
+        product = request.args.get('product', '')
+        box_variant = request.args.get('box_variant', '')
+        door_variant = request.args.get('door_variant', '')
+        
+        # 根据配置的规则生成可能的SKU
+        possible_skus = generate_sku_by_rules(category, product, box_variant, door_variant)
+        
+        # 在OCCW价格表中查找匹配的SKU和价格
+        found_sku = None
+        found_price = 0.0
+        
+        # 精确匹配
+        for sku in possible_skus:
+            if sku in occw_prices:
+                found_sku = sku
+                # 处理新旧数据格式兼容性
+                price_data = occw_prices[sku]
+                if isinstance(price_data, dict):
+                    found_price = price_data.get('unit_price', 0)
+                else:
+                    found_price = price_data
+                break
+        
+        # 如果没有找到精确匹配，尝试模糊匹配
+        if not found_sku and product:
+            for sku in occw_prices.keys():
+                # 检查产品名是否在SKU中
+                if product in sku:
+                    # 进一步检查门板变体（如果指定了的话）
+                    if door_variant and door_variant in sku:
+                        found_sku = sku
+                        # 处理新旧数据格式兼容性
+                        price_data = occw_prices[sku]
+                        if isinstance(price_data, dict):
+                            found_price = price_data.get('unit_price', 0)
+                        else:
+                            found_price = price_data
+                        break
+                    elif not door_variant:
+                        found_sku = sku
+                        # 处理新旧数据格式兼容性
+                        price_data = occw_prices[sku]
+                        if isinstance(price_data, dict):
+                            found_price = price_data.get('unit_price', 0)
+                        else:
+                            found_price = price_data
+                        break
+        
+        return jsonify({
+            'success': True,
+            'sku': found_sku,
+            'price': found_price,
+            'found': found_sku is not None,
+            'possible_skus': possible_skus  # 调试信息
+        })
+    except Exception as e:
+        return jsonify({'error': f'搜索SKU失败: {str(e)}'}), 500
+
+@app.route('/get_occw_price_table', methods=['GET'])
+@admin_required
+def get_occw_price_table():
+    """获取OCCW价格表内容 - 支持多种过滤条件"""
+    try:
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 50))
+        
+        # 获取过滤条件
+        search_sku = request.args.get('search_sku', '').strip()
+        door_variant = request.args.get('door_variant', '').strip()
+        box_variant = request.args.get('box_variant', '').strip()
+        category = request.args.get('category', '').strip()
+        
+        # 兼容老版本的通用搜索
+        search = request.args.get('search', '').strip()
+        
+        # 获取所有价格数据
+        all_prices = []
+        for sku, price_data in occw_prices.items():
+            # 应用过滤条件
+            should_include = True
+            
+            if isinstance(price_data, dict):
+                product_data = {
+                    'sku': sku.upper(),
+                    'product_name': price_data.get('product_name', '').upper(),
+                    'category': price_data.get('category', '').upper(),
+                    'door_variant': price_data.get('door_variant', '').upper(),
+                    'box_variant': price_data.get('box_variant', '').upper()
+                }
+            else:
+                product_data = {
+                    'sku': sku.upper(),
+                    'product_name': '',
+                    'category': '',
+                    'door_variant': '',
+                    'box_variant': ''
+                }
+            
+            # SKU搜索过滤
+            if search_sku and search_sku.upper() not in product_data['sku']:
+                should_include = False
+            
+            # 门板变体过滤
+            if door_variant and door_variant.upper() != product_data['door_variant']:
+                should_include = False
+            
+            # 柜身变体过滤
+            if box_variant and box_variant.upper() != product_data['box_variant']:
+                should_include = False
+            
+            # 类别过滤
+            if category and category.upper() != product_data['category']:
+                should_include = False
+            
+            # 兼容通用搜索（在所有字段中搜索）
+            if search and not any(search.upper() in field for field in product_data.values()):
+                should_include = False
+            
+            if not should_include:
+                continue
+            
+            # 处理新旧数据格式兼容性
+            if isinstance(price_data, dict):
+                # 新格式：完整产品信息
+                all_prices.append({
+                    'sku': sku,
+                    'product_name': price_data.get('product_name', ''),
+                    'door_variant': price_data.get('door_variant', ''),
+                    'box_variant': price_data.get('box_variant', ''),
+                    'category': price_data.get('category', ''),
+                    'price': price_data.get('unit_price', 0)
+                })
+            else:
+                # 旧格式：只有价格
+                all_prices.append({
+                    'sku': sku,
+                    'product_name': '',
+                    'door_variant': '',
+                    'box_variant': '',
+                    'category': '',
+                    'price': price_data
+                })
+        
+        # 排序
+        all_prices.sort(key=lambda x: x['sku'])
+        
+        # 分页
+        total = len(all_prices)
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_prices = all_prices[start:end]
+        
+        return jsonify({
+            'success': True,
+            'data': paginated_prices,
+            'total': total,
+            'page': page,
+            'per_page': per_page,
+            'total_pages': (total + per_page - 1) // per_page
+        })
+    except Exception as e:
+        return jsonify({'error': f'获取价格表失败: {str(e)}'}), 500
+
+@app.route('/get_price_filter_options', methods=['GET'])
+@admin_required
+def get_price_filter_options():
+    """获取价格表过滤选项"""
+    try:
+        door_variants = set()
+        box_variants = set()
+        categories = set()
+        
+        for sku, price_data in occw_prices.items():
+            if isinstance(price_data, dict):
+                door_variant = price_data.get('door_variant', '').strip()
+                box_variant = price_data.get('box_variant', '').strip()
+                category = price_data.get('category', '').strip()
+                
+                if door_variant:
+                    door_variants.add(door_variant)
+                if box_variant:
+                    box_variants.add(box_variant)
+                if category:
+                    categories.add(category)
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'door_variants': sorted(list(door_variants)),
+                'box_variants': sorted(list(box_variants)),
+                'categories': sorted(list(categories))
+            }
+        })
+    except Exception as e:
+        return jsonify({'error': f'获取过滤选项失败: {str(e)}'}), 500
 
 # 确保目录存在
 for directory in ['uploads', 'data']:
