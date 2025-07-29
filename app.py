@@ -36,6 +36,8 @@ def set_language(lang):
     """设置语言"""
     if lang in SUPPORTED_LANGUAGES:
         session['language'] = lang
+        # 清除自动检测标记，表示用户已手动设置语言
+        session.pop('auto_detected', None)
         return True
     return False
 
@@ -1139,7 +1141,11 @@ def detect_user_language():
     if 'language' in session:
         return session['language']
     
-    # 2. 检查请求头中的Accept-Language
+    # 2. 检查是否已经自动检测过语言，避免重复检测
+    if 'auto_detected' in session:
+        return session.get('language', 'zh')
+    
+    # 3. 检查请求头中的Accept-Language
     accept_language = request.headers.get('Accept-Language', '')
     if accept_language:
         # 解析Accept-Language头，获取首选语言
@@ -1147,13 +1153,21 @@ def detect_user_language():
         for lang in languages:
             lang_code = lang.split(';')[0].strip().lower()
             if lang_code.startswith('zh'):
+                session['language'] = 'zh'
+                session['auto_detected'] = True
                 return 'zh'
             elif lang_code.startswith('en'):
+                session['language'] = 'en'
+                session['auto_detected'] = True
                 return 'en'
             elif lang_code.startswith('fr'):
+                session['language'] = 'fr'
+                session['auto_detected'] = True
                 return 'fr'
     
-    # 3. 默认返回中文
+    # 4. 默认返回中文
+    session['language'] = 'zh'
+    session['auto_detected'] = True
     return 'zh'
 
 # 修改上传接口，返回比对结果

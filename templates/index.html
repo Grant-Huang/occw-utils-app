@@ -224,6 +224,11 @@ let currentProducts = [];
 
 // 自动语言检测函数
 function autoDetectLanguage() {
+    // 检查是否已经设置过语言，避免无限循环
+    if (sessionStorage.getItem('language_set')) {
+        return;
+    }
+    
     // 1. 检查服务器是否已经检测到语言
     const serverDetectedLanguage = '{{ detected_language if detected_language else "" }}';
     if (serverDetectedLanguage && serverDetectedLanguage !== 'zh') {
@@ -251,10 +256,16 @@ function autoDetectLanguage() {
             }
         }
     }
+    
+    // 如果没有检测到需要切换的语言，标记为已处理
+    sessionStorage.setItem('language_set', 'true');
 }
 
 // 设置语言函数
 function setLanguage(langCode) {
+    // 标记语言已设置，避免无限循环
+    sessionStorage.setItem('language_set', 'true');
+    
     // 发送请求到服务器设置语言
     fetch(`/set_language/${langCode}`)
         .then(response => {
