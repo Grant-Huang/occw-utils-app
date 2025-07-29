@@ -4,8 +4,8 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: "pip install Flask==2.3.3 pandas==2.0.3 numpy==1.24.3 PyPDF2==3.0.1 openpyxl==3.1.2"
-    startCommand: "python test-packages-step3.py"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app-full.py"
     envVars:
       - key: FLASK_ENV
         value: production

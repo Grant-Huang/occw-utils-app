@@ -1,1 +1,1 @@
-web: python test-packages-step3.py 
+web: python app-full.py 
