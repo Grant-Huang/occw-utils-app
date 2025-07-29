@@ -172,11 +172,106 @@
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+.custom-file-input-container {
+    position: relative;
+}
+
+.custom-file-input {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-input:hover {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+}
+
+.custom-file-input.dragover {
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.file-input-placeholder, .file-input-selected {
+    width: 100%;
+}
+
+.file-input-selected {
+    color: #007bff;
+}
+
+.custom-file-input.has-file {
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+</style>
+{% endblock %}
+
 {% block extra_js %}
 <script>
 let currentProducts = [];
 
+// 自动语言检测函数
+function autoDetectLanguage() {
+    // 1. 检查服务器是否已经检测到语言
+    const serverDetectedLanguage = '{{ detected_language if detected_language else "" }}';
+    if (serverDetectedLanguage && serverDetectedLanguage !== 'zh') {
+        setLanguage(serverDetectedLanguage);
+        return;
+    }
+    
+    // 2. 检查浏览器语言
+    const browserLanguage = navigator.language || navigator.userLanguage;
+    if (browserLanguage) {
+        const langCode = browserLanguage.toLowerCase().split('-')[0];
+        if (langCode === 'en' || langCode === 'fr') {
+            setLanguage(langCode);
+            return;
+        }
+    }
+    
+    // 3. 检查系统语言（通过navigator.languages）
+    if (navigator.languages && navigator.languages.length > 0) {
+        for (let lang of navigator.languages) {
+            const langCode = lang.toLowerCase().split('-')[0];
+            if (langCode === 'en' || langCode === 'fr') {
+                setLanguage(langCode);
+                return;
+            }
+        }
+    }
+}
+
+// 设置语言函数
+function setLanguage(langCode) {
+    // 发送请求到服务器设置语言
+    fetch(`/set_language/${langCode}`)
+        .then(response => {
+            if (response.ok) {
+                // 重新加载页面以应用新语言
+                window.location.reload();
+            }
+        })
+        .catch(error => {
+            console.log('Language detection failed:', error);
+        });
+}
+
 $(document).ready(function() {
+    // 自动语言检测和设置
+    autoDetectLanguage();
+    
     // 报价单上传处理
     $('#quotationForm').on('submit', function(e) {
         e.preventDefault();

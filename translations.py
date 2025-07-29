@@ -479,6 +479,17 @@ TRANSLATIONS = {
         'support_chinese_filename': '支持中文文件名',
         'common_problem_solving': '常见问题解决',
         'performance_optimization': '性能优化建议',
+        
+        # 文件输入组件
+        'browse_files': '浏览文件',
+        'drag_drop_files': '拖拽文件到此处或点击浏览',
+        'file_selected': '已选择文件',
+        'no_file_selected': '未选择任何文件',
+        'file_size_limit': '文件大小限制',
+        'file_type_not_supported': '不支持的文件类型',
+        'file_upload_success': '文件上传成功',
+        'file_upload_failed': '文件上传失败',
+        'file_processing': '文件处理中...',
     },
     
     'en': {
@@ -730,6 +741,17 @@ TRANSLATIONS = {
         'support_chinese_filename': 'Support Chinese filenames',
         'common_problem_solving': 'Common Problem Solving',
         'performance_optimization': 'Performance Optimization Suggestions',
+        
+        # File Input Component
+        'browse_files': 'Browse Files',
+        'drag_drop_files': 'Drag and drop files here or click to browse',
+        'file_selected': 'File Selected',
+        'no_file_selected': 'No file selected',
+        'file_size_limit': 'File size limit',
+        'file_type_not_supported': 'File type not supported',
+        'file_upload_success': 'File upload successful',
+        'file_upload_failed': 'File upload failed',
+        'file_processing': 'File processing...',
         
         # Help Page
         'help_title': 'Help Documentation',
@@ -1105,6 +1127,17 @@ TRANSLATIONS = {
         'support_chinese_filename': 'Supporter les noms de fichiers chinois',
         'common_problem_solving': 'Résolution de Problèmes Courants',
         'performance_optimization': 'Suggestions d\'Optimisation des Performances',
+        
+        # Composant de Saisie de Fichier
+        'browse_files': 'Parcourir les Fichiers',
+        'drag_drop_files': 'Glissez et déposez les fichiers ici ou cliquez pour parcourir',
+        'file_selected': 'Fichier Sélectionné',
+        'no_file_selected': 'Aucun fichier sélectionné',
+        'file_size_limit': 'Limite de taille de fichier',
+        'file_type_not_supported': 'Type de fichier non supporté',
+        'file_upload_success': 'Téléchargement de fichier réussi',
+        'file_upload_failed': 'Échec du téléchargement de fichier',
+        'file_processing': 'Traitement de fichier...',
         
         # Page d'aide
         'help_title': 'Documentation d\'Aide',

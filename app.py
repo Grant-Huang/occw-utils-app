@@ -1129,7 +1129,32 @@ def generate_final_sku(user_code, description, door_color):
 @app.route('/')
 def index():
     """主页"""
-    return render_template('index.html')
+    # 自动检测用户语言偏好
+    user_language = detect_user_language()
+    return render_template('index.html', detected_language=user_language)
+
+def detect_user_language():
+    """自动检测用户语言偏好"""
+    # 1. 首先检查用户是否已经设置过语言偏好
+    if 'language' in session:
+        return session['language']
+    
+    # 2. 检查请求头中的Accept-Language
+    accept_language = request.headers.get('Accept-Language', '')
+    if accept_language:
+        # 解析Accept-Language头，获取首选语言
+        languages = accept_language.split(',')
+        for lang in languages:
+            lang_code = lang.split(';')[0].strip().lower()
+            if lang_code.startswith('zh'):
+                return 'zh'
+            elif lang_code.startswith('en'):
+                return 'en'
+            elif lang_code.startswith('fr'):
+                return 'fr'
+    
+    # 3. 默认返回中文
+    return 'zh'
 
 # 修改上传接口，返回比对结果
 @app.route('/upload_quotation', methods=['POST'])
