@@ -21,7 +21,7 @@ Branch: main
 Root Directory: (留空)
 Runtime: Python 3
 Build Command: pip install Flask==2.3.3
-Start Command: python test-minimal.py
+Start Command: python simple-test.py
 ```
 
 ### 4. 环境变量
