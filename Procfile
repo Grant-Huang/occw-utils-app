@@ -1,1 +1,1 @@
-web: python test-simple-with-version.py 
+web: python start-diagnostic.py 
