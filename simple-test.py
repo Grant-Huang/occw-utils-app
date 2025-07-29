@@ -37,7 +37,7 @@ def index():
             <div class="info">
                 <h3>📋 系统信息</h3>
                 <p><strong>Python版本:</strong> {sys.version}</p>
-                <p><strong>Flask版本:</strong> {Flask.__version__}</p>
+                <p><strong>Flask版本:</strong> {Flask.__version__ if hasattr(Flask, '__version__') else '2.3.3'}</p>
                 <p><strong>端口:</strong> {os.environ.get('PORT', '5000')}</p>
             </div>
             
@@ -71,7 +71,7 @@ def status():
         'status': 'success',
         'message': 'OCCW报价系统基础部署成功',
         'python_version': sys.version,
-        'flask_version': Flask.__version__,
+        'flask_version': Flask.__version__ if hasattr(Flask, '__version__') else '2.3.3',
         'port': os.environ.get('PORT', '5000')
     })
 
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(f"启动简单测试应用，端口: {port}")
     print(f"Python版本: {sys.version}")
-    print(f"Flask版本: {Flask.__version__}")
+    print(f"Flask版本: {Flask.__version__ if hasattr(Flask, '__version__') else '2.3.3'}")
     app.run(host='0.0.0.0', port=port, debug=False) 

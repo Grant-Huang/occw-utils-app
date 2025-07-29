@@ -69,7 +69,7 @@ def index():
     
     return render_template_string(HTML_TEMPLATE, 
                                 python_version=sys.version,
-                                flask_version=flask.__version__)
+                                flask_version=flask.__version__ if hasattr(flask, '__version__') else '2.3.3')
 
 @app.route('/api/status')
 def status():
@@ -80,7 +80,7 @@ def status():
         'status': 'success',
         'message': 'OCCW报价系统基础部署成功',
         'python_version': sys.version,
-        'flask_version': flask.__version__
+        'flask_version': flask.__version__ if hasattr(flask, '__version__') else '2.3.3'
     })
 
 @app.route('/health')
