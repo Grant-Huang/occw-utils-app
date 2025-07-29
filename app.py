@@ -9,8 +9,8 @@ import os
 
 # 临时重定向到数据处理测试应用
 if __name__ == '__main__':
-    print("重定向到数据处理测试应用...")
-    os.system('python test-data-processing.py')
+    print("重定向到PDF处理测试应用...")
+    os.system('python test-pdf-processing.py')
     sys.exit(0)
 
 # 原始应用代码（暂时注释掉）
