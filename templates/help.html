@@ -259,36 +259,36 @@
                                         <table class="table table-sm table-bordered">
                                             <thead class="table-light">
                                                 <tr>
-                                                    <th>列名</th>
-                                                    <th>数据类型</th>
-                                                    <th>说明</th>
+                                                    <th>{{ t('column_name') }}</th>
+                                                    <th>{{ t('data_type') }}</th>
+                                                    <th>{{ t('description') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>内部参考号</td>
-                                                    <td>文本</td>
-                                                    <td>系统SKU标识，不能为空</td>
+                                                    <td>{{ t('internal_reference_number') }}</td>
+                                                    <td>{{ t('text') }}</td>
+                                                    <td>{{ t('system_sku_identifier') }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>销售价</td>
-                                                    <td>数字</td>
-                                                    <td>产品价格，必须为正数</td>
+                                                    <td>{{ t('selling_price') }}</td>
+                                                    <td>{{ t('number') }}</td>
+                                                    <td>{{ t('product_price_must_be_positive') }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>变体值</td>
-                                                    <td>文本</td>
-                                                    <td>门板或柜身变体，可为空。格式：门板: XXX 或 柜身: XXX</td>
+                                                    <td>{{ t('variant_value') }}</td>
+                                                    <td>{{ t('text') }}</td>
+                                                    <td>{{ t('door_or_box_variant_format') }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>名称</td>
-                                                    <td>文本</td>
-                                                    <td>产品名称，不能为空</td>
+                                                    <td>{{ t('name') }}</td>
+                                                    <td>{{ t('text') }}</td>
+                                                    <td>{{ t('product_name_cannot_be_empty') }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>产品类别/名称</td>
-                                                    <td>文本</td>
-                                                    <td>产品分类，支持：RTA Assm.组合件、Door、BOX、Ending Panel、Molding、Toe Kick、Filler等</td>
+                                                    <td>{{ t('product_category_name') }}</td>
+                                                    <td>{{ t('text') }}</td>
+                                                    <td>{{ t('product_classification_support') }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -301,30 +301,30 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="skuMapping">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkuMapping">
-                                    <i class="fas fa-exchange-alt me-2"></i>SKU映射管理
+                                    <i class="fas fa-exchange-alt me-2"></i>{{ t('sku_mapping_management') }}
                                 </button>
                             </h2>
                             <div id="collapseSkuMapping" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
                                 <div class="accordion-body">
-                                    <h6>映射机制：</h6>
-                                    <p>当系统生成的SKU在OCCW价格表中找不到精确匹配时，会提供以下选项：</p>
+                                    <h6>{{ t('mapping_mechanism') }}：</h6>
+                                    <p>{{ t('when_system_generated_sku_not_found') }}</p>
                                     <ul>
-                                        <li><strong>下拉选择</strong>：显示包含用户编码的相关SKU列表</li>
-                                        <li><strong>手动输入</strong>：当没有相关SKU时，提供文本输入框</li>
-                                        <li><strong>映射保存</strong>：用户选择后自动保存映射关系，下次处理时自动应用</li>
+                                        <li><strong>{{ t('dropdown_selection') }}</strong>：{{ t('display_related_sku_list') }}</li>
+                                        <li><strong>{{ t('manual_input') }}</strong>：{{ t('provide_text_input_when_no_related_sku') }}</li>
+                                        <li><strong>{{ t('mapping_save') }}</strong>：{{ t('auto_save_mapping_relationship') }}</li>
                                     </ul>
                                     
-                                    <h6 class="mt-3">映射管理功能：</h6>
+                                    <h6 class="mt-3">{{ t('mapping_management_features') }}：</h6>
                                     <ul>
-                                        <li><strong>查看所有映射</strong>：在"SKU映射"页面查看所有保存的映射关系</li>
-                                        <li><strong>编辑映射</strong>：可以修改已有的映射关系</li>
-                                        <li><strong>删除映射</strong>：删除不再需要的映射关系</li>
-                                        <li><strong>批量管理</strong>：支持批量删除和修改操作</li>
+                                        <li><strong>{{ t('view_all_mappings') }}</strong>：{{ t('view_all_saved_mappings') }}</li>
+                                        <li><strong>{{ t('edit_mapping') }}</strong>：{{ t('modify_existing_mapping_relationship') }}</li>
+                                        <li><strong>{{ t('delete_mapping') }}</strong>：{{ t('delete_unnecessary_mapping_relationship') }}</li>
+                                        <li><strong>{{ t('batch_management') }}</strong>：{{ t('support_batch_delete_and_modify') }}</li>
                                     </ul>
                                     
                                     <div class="alert alert-warning mt-3">
                                         <i class="fas fa-exclamation-triangle me-2"></i>
-                                        <strong>提示：</strong>映射关系保存后，在表格中会显示映射后的SKU而不是原始生成的SKU。
+                                        <strong>{{ t('tip') }}：</strong>{{ t('mapping_relationship_display_note') }}
                                     </div>
                                 </div>
                             </div>
@@ -334,37 +334,37 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="exportFeatures">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExportFeatures">
-                                    <i class="fas fa-download me-2"></i>导出功能
+                                    <i class="fas fa-download me-2"></i>{{ t('export_features') }}
                                 </button>
                             </h2>
                             <div id="collapseExportFeatures" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
                                 <div class="accordion-body">
-                                    <h6>支持的导出格式：</h6>
+                                    <h6>{{ t('supported_export_formats') }}：</h6>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h6 class="text-primary">2020格式导出：</h6>
+                                            <h6 class="text-primary">{{ t('format_2020_export') }}：</h6>
                                             <ul>
-                                                <li><strong>Excel (.xlsx)</strong>：包含所有列信息</li>
-                                                <li><strong>CSV (.csv)</strong>：纯文本格式，便于其他系统导入</li>
-                                                <li><strong>PDF (.pdf)</strong>：专业的打印格式</li>
+                                                <li><strong>{{ t('excel_xlsx') }}</strong>：{{ t('contains_all_column_information') }}</li>
+                                                <li><strong>{{ t('csv_format') }}</strong>：{{ t('plain_text_format') }}</li>
+                                                <li><strong>{{ t('pdf_format') }}</strong>：{{ t('professional_print_format') }}</li>
                                             </ul>
-                                            <p><small class="text-muted">包含：序号、Code、数量、花色、2020单价、2020总价、OCCW SKU、OCCW单价、OCCW总价</small></p>
+                                            <p><small class="text-muted">{{ t('contains_sequence_code_quantity') }}</small></p>
                                         </div>
                                         <div class="col-md-6">
-                                            <h6 class="text-success">OCCW格式导出：</h6>
+                                            <h6 class="text-success">{{ t('occw_format_export') }}：</h6>
                                             <ul>
-                                                <li><strong>Excel (.xlsx)</strong>：专门的OCCW报价单格式</li>
+                                                <li><strong>{{ t('excel_xlsx') }}</strong>：{{ t('special_occw_quote_format') }}</li>
                                             </ul>
-                                            <p><small class="text-muted">包含：序号、OCCW SKU、数量、OCCW单价、OCCW总价</small></p>
+                                            <p><small class="text-muted">{{ t('contains_sequence_occw_sku') }}</small></p>
                                         </div>
                                     </div>
                                     
-                                    <h6 class="mt-3">导出特性：</h6>
+                                    <h6 class="mt-3">{{ t('export_features_title') }}：</h6>
                                     <ul>
-                                        <li>自动添加总计行和合计信息</li>
-                                        <li>保持数字格式和货币符号</li>
-                                        <li>支持中文文件名</li>
-                                        <li>文件大小优化，导出速度快</li>
+                                        <li>{{ t('auto_add_total_row') }}</li>
+                                        <li>{{ t('maintain_number_format') }}</li>
+                                        <li>{{ t('support_chinese_filename') }}</li>
+                                        <li>{{ t('file_size_optimization') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -380,76 +380,76 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>常见问题解决</h5>
+                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>{{ t('common_problem_solving_title') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-danger">PDF解析问题</h6>
+                            <h6 class="text-danger">{{ t('pdf_parsing_issues') }}</h6>
                             <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <h6 class="card-title">Q: PDF上传后无法解析或解析错误？</h6>
+                                    <h6 class="card-title">{{ t('pdf_upload_parse_error_question') }}</h6>
                                     <p class="card-text">
-                                        <strong>解决方案：</strong><br>
-                                        1. 确认PDF是由2020软件生成的标准报价单<br>
-                                        2. 检查PDF文件是否损坏<br>
-                                        3. 使用"显示原始PDF文本"按钮查看解析内容<br>
-                                        4. 确认PDF中包含完整的产品列表和价格信息
+                                        <strong>{{ t('solution') }}：</strong><br>
+                                        {{ t('confirm_pdf_from_2020') }}<br>
+                                        {{ t('check_pdf_corruption') }}<br>
+                                        {{ t('use_show_raw_text') }}<br>
+                                        {{ t('confirm_complete_product_list') }}
                                     </p>
                                 </div>
                             </div>
                             
                             <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <h6 class="card-title">Q: 产品数量或价格解析错误？</h6>
+                                    <h6 class="card-title">{{ t('product_quantity_price_error_question') }}</h6>
                                     <p class="card-text">
-                                        <strong>解决方案：</strong><br>
-                                        1. 检查PDF中的数量和价格格式是否标准<br>
-                                        2. 确认合并列的格式符合预期（数量+用户编码）<br>
-                                        3. 查看系统显示的总价对比信息<br>
-                                        4. 必要时手动修正数据
+                                        <strong>{{ t('solution') }}：</strong><br>
+                                        {{ t('check_pdf_format') }}<br>
+                                        {{ t('confirm_merged_column_format') }}<br>
+                                        {{ t('view_total_price_comparison') }}<br>
+                                        {{ t('manually_correct_data') }}
                                     </p>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-6">
-                            <h6 class="text-warning">SKU和价格问题</h6>
+                            <h6 class="text-warning">{{ t('sku_and_price_issues') }}</h6>
                             <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <h6 class="card-title">Q: OCCW价格显示为$0.00？</h6>
+                                    <h6 class="card-title">{{ t('occw_price_zero_question') }}</h6>
                                     <p class="card-text">
-                                        <strong>解决方案：</strong><br>
-                                        1. 检查OCCW价格表是否已正确导入<br>
-                                        2. 确认SKU映射是否正确<br>
-                                        3. 在"价格管理"页面手动添加缺失的SKU价格<br>
-                                        4. 检查SKU格式是否符合OCCW标准
+                                        <strong>{{ t('solution') }}：</strong><br>
+                                        {{ t('check_occw_price_table') }}<br>
+                                        {{ t('confirm_sku_mapping') }}<br>
+                                        {{ t('manually_add_missing_sku') }}<br>
+                                        {{ t('check_sku_format') }}
                                     </p>
                                 </div>
                             </div>
                             
                             <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <h6 class="card-title">Q: SKU无法找到匹配项？</h6>
+                                    <h6 class="card-title">{{ t('sku_no_match_question') }}</h6>
                                     <p class="card-text">
-                                        <strong>解决方案：</strong><br>
-                                        1. 使用下拉列表中的相似SKU<br>
-                                        2. 手动输入正确的OCCW SKU<br>
-                                        3. 在"配置"页面调整SKU生成规则<br>
-                                        4. 联系管理员更新价格表
+                                        <strong>{{ t('solution') }}：</strong><br>
+                                        {{ t('use_similar_sku_dropdown') }}<br>
+                                        {{ t('manually_input_correct_sku') }}<br>
+                                        {{ t('adjust_sku_generation_rules') }}<br>
+                                        {{ t('contact_admin_update_price') }}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <h6 class="text-info mt-4">性能优化建议</h6>
+                    <h6 class="text-info mt-4">{{ t('performance_optimization_title') }}</h6>
                     <div class="alert alert-info">
                         <ul class="mb-0">
-                            <li>定期清理不需要的SKU映射关系</li>
-                            <li>保持OCCW价格表更新，减少手动映射需求</li>
-                            <li>使用标准格式的PDF文件，提高解析准确度</li>
-                            <li>大文件处理时请耐心等待，避免重复操作</li>
+                            <li>{{ t('regularly_clean_sku_mappings') }}</li>
+                            <li>{{ t('keep_occw_price_table_updated') }}</li>
+                            <li>{{ t('use_standard_pdf_format') }}</li>
+                            <li>{{ t('large_file_processing_patience') }}</li>
                         </ul>
                     </div>
                 </div>
