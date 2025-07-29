@@ -57,14 +57,26 @@ git push origin main
 ### 备选构建方案
 如果主requirements.txt构建失败，可尝试：
 
-**方案A**: 修改构建命令使用保守版本
+**方案A**: 使用分步构建脚本（推荐）
 ```bash
-pip install --upgrade pip setuptools wheel && pip install --prefer-binary --no-cache-dir -r requirements-render.txt
+chmod +x build.sh && ./build.sh
 ```
 
-**方案B**: 强制使用二进制包
+**方案B**: 使用最保守版本
 ```bash
-pip install --upgrade pip setuptools wheel && pip install --only-binary=:all: --no-cache-dir -r requirements.txt
+pip install --upgrade pip setuptools wheel && pip install --prefer-binary --no-cache-dir -r requirements-basic.txt
+```
+
+**方案C**: 强制使用二进制包
+```bash
+pip install --upgrade pip setuptools wheel && pip install --only-binary=:all: --no-cache-dir -r requirements-minimal.txt
+```
+
+**方案D**: 手动分步安装
+```bash
+pip install --upgrade pip
+pip install --upgrade setuptools wheel
+pip install --prefer-binary --no-cache-dir -r requirements-basic.txt
 ```
 
 ### 环境变量设置

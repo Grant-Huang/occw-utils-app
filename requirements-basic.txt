@@ -1,0 +1,12 @@
+# 最基础的requirements - 只包含必需包
+setuptools>=65.0.0
+wheel>=0.40.0
+Flask==2.2.5
+Werkzeug==2.2.3
+PyPDF2==3.0.1
+pandas==1.2.4
+numpy==1.19.5
+openpyxl==3.0.10
+reportlab==3.6.12
+python-dotenv==1.0.0
+gunicorn==20.1.0 
