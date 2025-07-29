@@ -161,20 +161,20 @@
                             </h2>
                             <div id="collapsePdfParsing" class="accordion-collapse collapse show" data-bs-parent="#featuresAccordion">
                                 <div class="accordion-body">
-                                    <h6>解析内容：</h6>
+                                    <h6>{{ t('parse_content') }}：</h6>
                                     <ul>
-                                        <li><strong>产品信息</strong>：产品代码、描述、序号</li>
-                                        <li><strong>数量数据</strong>：从合并列中智能提取数量和用户编码</li>
-                                        <li><strong>价格信息</strong>：单价、总价（支持带逗号的金额格式）</li>
-                                        <li><strong>门板颜色</strong>：自动识别门板样式和颜色信息</li>
-                                        <li><strong>总价核算</strong>：与PDF中的总价进行对比验证</li>
+                                        <li><strong>{{ t('product_information') }}</strong>：{{ t('product_code_desc_seq') }}</li>
+                                        <li><strong>{{ t('quantity_data') }}</strong>：{{ t('smart_extract_qty_user') }}</li>
+                                        <li><strong>{{ t('price_information') }}</strong>：{{ t('unit_price_total_price') }}</li>
+                                        <li><strong>{{ t('door_color') }}</strong>：{{ t('auto_recognize_door_style') }}</li>
+                                        <li><strong>{{ t('total_price_verification') }}</strong>：{{ t('compare_with_pdf_total') }}</li>
                                     </ul>
                                     
-                                    <h6 class="mt-3">特殊处理：</h6>
+                                    <h6 class="mt-3">{{ t('special_processing') }}：</h6>
                                     <ul>
-                                        <li>智能区分以数字开头和字母开头的产品代码</li>
-                                        <li>自动处理页面分隔和格式变化</li>
-                                        <li>支持多页PDF文档的连续解析</li>
+                                        <li>{{ t('smart_distinguish_product_codes') }}</li>
+                                        <li>{{ t('auto_handle_page_separators') }}</li>
+                                        <li>{{ t('support_multi_page_pdf') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -184,7 +184,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="skuRules">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkuRules">
-                                    <i class="fas fa-code me-2"></i>SKU生成规则
+                                    <i class="fas fa-code me-2"></i>{{ t('sku_generation_rules') }}
                                 </button>
                             </h2>
                             <div id="collapseSkuRules" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
@@ -193,35 +193,35 @@
                                         <table class="table table-bordered">
                                             <thead class="table-dark">
                                                 <tr>
-                                                    <th>产品类型</th>
-                                                    <th>判断条件</th>
-                                                    <th>SKU生成规则</th>
-                                                    <th>示例</th>
+                                                    <th>{{ t('product_type') }}</th>
+                                                    <th>{{ t('judgment_condition') }}</th>
+                                                    <th>{{ t('sku_generation_rule') }}</th>
+                                                    <th>{{ t('example') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td><span class="badge bg-primary">Cabinet</span></td>
-                                                    <td>描述包含"Cabinet"</td>
-                                                    <td><code>OCCW编码 + "-PLY-" + 花色</code></td>
+                                                    <td><span class="badge bg-primary">{{ t('cabinet') }}</span></td>
+                                                    <td>{{ t('description_contains_cabinet') }}</td>
+                                                    <td><code>{{ t('occw_code_ply_color') }}</code></td>
                                                     <td><code>W3036-PLY-SSW</code></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="badge bg-info">Hardware</span></td>
-                                                    <td>描述包含"Hardware"</td>
-                                                    <td><code>"HW-" + 用户编码</code></td>
+                                                    <td><span class="badge bg-info">{{ t('hardware') }}</span></td>
+                                                    <td>{{ t('description_contains_hardware') }}</td>
+                                                    <td><code>{{ t('hw_user_code') }}</code></td>
                                                     <td><code>HW-H123</code></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="badge bg-warning">Accessory</span></td>
-                                                    <td>描述包含"Accessory"</td>
-                                                    <td><code>花色 + "-" + 用户编码</code></td>
+                                                    <td><span class="badge bg-warning">{{ t('accessory') }}</span></td>
+                                                    <td>{{ t('description_contains_accessory') }}</td>
+                                                    <td><code>{{ t('color_user_code') }}</code></td>
                                                     <td><code>SSW-ACC001</code></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="badge bg-secondary">其他</span></td>
-                                                    <td>不符合上述条件</td>
-                                                    <td><code>花色 + "-" + 用户编码</code></td>
+                                                    <td><span class="badge bg-secondary">{{ t('other') }}</span></td>
+                                                    <td>{{ t('not_meet_above_conditions') }}</td>
+                                                    <td><code>{{ t('color_user_code') }}</code></td>
                                                     <td><code>SSW-MISC001</code></td>
                                                 </tr>
                                             </tbody>
@@ -230,7 +230,7 @@
                                     
                                     <div class="alert alert-info mt-3">
                                         <i class="fas fa-info-circle me-2"></i>
-                                        <strong>注意：</strong>SKU生成规则可以在"配置"页面进行自定义修改。
+                                        <strong>{{ t('note') }}：</strong>{{ t('sku_rules_customizable') }}
                                     </div>
                                 </div>
                             </div>
@@ -240,21 +240,21 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="priceManagement">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePriceManagement">
-                                    <i class="fas fa-dollar-sign me-2"></i>价格管理
+                                    <i class="fas fa-dollar-sign me-2"></i>{{ t('price_management') }}
                                 </button>
                             </h2>
                             <div id="collapsePriceManagement" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
                                 <div class="accordion-body">
-                                    <h6>OCCW价格表管理：</h6>
+                                    <h6>{{ t('occw_price_table_management') }}：</h6>
                                     <ul>
-                                        <li><strong>批量导入</strong>：支持Excel文件批量导入价格数据</li>
-                                        <li><strong>手动添加</strong>：可以手动添加单个SKU的价格信息</li>
-                                        <li><strong>实时更新</strong>：修改价格后立即生效，无需重启系统</li>
-                                        <li><strong>数据导出</strong>：支持将价格表导出为Excel或CSV格式</li>
-                                        <li><strong>数据验证</strong>：自动检查重复SKU和无效价格</li>
+                                        <li><strong>{{ t('batch_import') }}</strong>：{{ t('support_excel_batch_import') }}</li>
+                                        <li><strong>{{ t('manual_add') }}</strong>：{{ t('manually_add_single_sku') }}</li>
+                                        <li><strong>{{ t('real_time_update') }}</strong>：{{ t('modify_price_immediately_effective') }}</li>
+                                        <li><strong>{{ t('data_export') }}</strong>：{{ t('export_price_table_excel_csv') }}</li>
+                                        <li><strong>{{ t('data_validation') }}</strong>：{{ t('auto_check_duplicate_sku') }}</li>
                                     </ul>
                                     
-                                    <h6 class="mt-3">Excel导入格式要求：</h6>
+                                    <h6 class="mt-3">{{ t('excel_import_format_requirements') }}：</h6>
                                     <div class="table-responsive">
                                         <table class="table table-sm table-bordered">
                                             <thead class="table-light">

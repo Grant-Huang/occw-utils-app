@@ -75,7 +75,7 @@ def admin_required(f):
             
             if is_ajax:
                 # 对Ajax请求返回401状态码
-                return jsonify({'error': '需要管理员权限', 'redirect': '/admin_login'}), 401
+                return jsonify({'error': get_text('admin_required'), 'redirect': '/admin_login'}), 401
             else:
                 # 对普通请求进行重定向
                 next_page = request.url if request.method == 'GET' else None
@@ -1161,11 +1161,11 @@ def detect_user_language():
 def upload_quotation():
     """上传报价单PDF"""
     if 'file' not in request.files:
-        return jsonify({'error': '没有选择文件'}), 400
+        return jsonify({'error': get_text('no_file_selected')}), 400
     
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': '没有选择文件'}), 400
+        return jsonify({'error': get_text('no_file_selected')}), 400
     
     if file and file.filename.endswith('.pdf'):
         filename = secure_filename(file.filename)
@@ -1199,17 +1199,17 @@ def upload_quotation():
             'compare_message': compare_message
         })
     
-    return jsonify({'error': '请上传PDF文件'}), 400
+    return jsonify({'error': get_text('upload_pdf_file')}), 400
 
 @app.route('/upload_prices', methods=['POST'])
 def upload_prices():
     """上传标准价格表"""
     if 'file' not in request.files:
-        return jsonify({'error': '没有选择文件'}), 400
+        return jsonify({'error': get_text('no_file_selected')}), 400
     
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': '没有选择文件'}), 400
+        return jsonify({'error': get_text('no_file_selected')}), 400
     
     try:
         if file.filename.endswith('.xlsx'):
@@ -1217,7 +1217,7 @@ def upload_prices():
         elif file.filename.endswith('.csv'):
             df = pd.read_csv(file)
         else:
-            return jsonify({'error': '请上传Excel或CSV文件'}), 400
+            return jsonify({'error': get_text('upload_excel_csv')}), 400
         
         # 假设第一列是SKU，第二列是价格
         for _, row in df.iterrows():
@@ -1233,7 +1233,7 @@ def upload_prices():
         })
         
     except Exception as e:
-        return jsonify({'error': f'文件处理失败: {str(e)}'}), 400
+        return jsonify({'error': f'{get_text("file_processing_failed")}: {str(e)}'}), 400
 
 @app.route('/upload_occw_prices', methods=['POST'])
 @admin_required 
@@ -1420,7 +1420,7 @@ def get_occw_skus():
                 'skus': sku_list
             })
     except Exception as e:
-        return jsonify({'error': f'获取SKU列表失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_sku_list_failed")}: {str(e)}'}), 500
 
 @app.route('/save_sku_mapping', methods=['POST'])
 @admin_required
@@ -1432,7 +1432,7 @@ def save_sku_mapping():
         mapped_sku = data.get('mapped_sku')
         
         if not original_sku or not mapped_sku:
-            return jsonify({'error': '缺少必要参数'}), 400
+            return jsonify({'error': get_text('missing_required_params')}), 400
         
         global sku_mappings
         sku_mappings[original_sku] = mapped_sku
@@ -1446,10 +1446,10 @@ def save_sku_mapping():
                 'occw_price': occw_price
             })
         else:
-            return jsonify({'error': '保存映射关系失败'}), 500
+            return jsonify({'error': get_text('save_mapping_failed')}), 500
             
     except Exception as e:
-        return jsonify({'error': f'保存映射关系失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("save_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_price', methods=['GET'])
 def get_occw_price():
@@ -1457,7 +1457,7 @@ def get_occw_price():
     try:
         sku = request.args.get('sku')
         if not sku:
-            return jsonify({'error': '缺少SKU参数'}), 400
+            return jsonify({'error': get_text('missing_sku_param')}), 400
         
         # 首先检查是否有映射关系
         mapped_sku = sku_mappings.get(sku, sku)
@@ -1487,7 +1487,7 @@ def get_occw_price():
         })
         
     except Exception as e:
-        return jsonify({'error': f'获取价格失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_price_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_stats', methods=['GET'])
 @admin_required
@@ -1499,7 +1499,7 @@ def get_occw_stats():
             'count': len(occw_prices)
         })
     except Exception as e:
-        return jsonify({'error': f'获取统计信息失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_stats_failed")}: {str(e)}'}), 500
 
 @app.route('/get_sku_mappings', methods=['GET'])
 @admin_required
@@ -1511,7 +1511,7 @@ def get_sku_mappings():
             'mappings': sku_mappings
         })
     except Exception as e:
-        return jsonify({'error': f'获取映射关系失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/delete_sku_mapping', methods=['POST'])
 @admin_required
@@ -1522,7 +1522,7 @@ def delete_sku_mapping():
         original_sku = data.get('original_sku')
         
         if not original_sku:
-            return jsonify({'error': '缺少原始SKU参数'}), 400
+            return jsonify({'error': get_text('missing_original_sku')}), 400
         
         global sku_mappings
         if original_sku in sku_mappings:
@@ -1536,10 +1536,10 @@ def delete_sku_mapping():
             else:
                 return jsonify({'error': '保存映射关系失败'}), 500
         else:
-            return jsonify({'error': '映射关系不存在'}), 404
+            return jsonify({'error': get_text('mapping_not_exists')}), 404
             
     except Exception as e:
-        return jsonify({'error': f'删除映射关系失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("delete_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/clear_all_sku_mappings', methods=['POST'])
 @admin_required
@@ -1559,7 +1559,7 @@ def clear_all_sku_mappings():
             return jsonify({'error': '保存映射关系失败'}), 500
             
     except Exception as e:
-        return jsonify({'error': f'清空映射关系失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("clear_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/export_sku_mappings', methods=['GET'])
 @admin_required
@@ -1573,7 +1573,7 @@ def export_sku_mappings():
             'export_time': datetime.now().isoformat()
         })
     except Exception as e:
-        return jsonify({'error': f'导出映射关系失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("export_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/sku_mappings')
 @admin_required
@@ -1696,7 +1696,7 @@ def export_quotation(format):
         
         return send_file(filepath, as_attachment=True, download_name=filename)
     
-    return jsonify({'error': '不支持的导出格式'}), 400
+    return jsonify({'error': get_text('unsupported_export_format')}), 400
 
 @app.route('/config')
 @admin_required
@@ -1743,7 +1743,7 @@ def save_config():
     global sku_rules
     sku_rules = request.json
     save_sku_rules()
-    return jsonify({'success': True, 'message': '配置保存成功'})
+    return jsonify({'success': True, 'message': get_text('config_save_success')})
 
 @app.route('/rules')
 @admin_required
@@ -1766,9 +1766,9 @@ def save_sku_rules_api():
         sku_rules = request.json
         success = save_sku_rules()
         if success:
-            return jsonify({'success': True, 'message': 'SKU规则保存成功'})
+            return jsonify({'success': True, 'message': get_text('sku_rules_save_success')})
         else:
-            return jsonify({'success': False, 'message': '保存失败'}), 500
+            return jsonify({'success': False, 'message': get_text('save_failed')}), 500
     except Exception as e:
         return jsonify({'success': False, 'message': f'保存失败: {str(e)}'}), 500
 
@@ -1783,11 +1783,11 @@ def reset_sku_rules():
                 sku_rules = json.load(f)
             success = save_sku_rules()
             if success:
-                return jsonify({'success': True, 'message': '已恢复默认配置'})
+                return jsonify({'success': True, 'message': get_text('reset_default_success')})
             else:
-                return jsonify({'success': False, 'message': '恢复失败'}), 500
+                return jsonify({'success': False, 'message': get_text('reset_failed')}), 500
         else:
-            return jsonify({'success': False, 'message': '默认配置文件不存在'}), 404
+            return jsonify({'success': False, 'message': get_text('default_config_not_exists')}), 404
     except Exception as e:
         return jsonify({'success': False, 'message': f'恢复失败: {str(e)}'}), 500
 
@@ -1802,11 +1802,11 @@ def get_pdf_text():
     """获取PDF识别的原始文本"""
     filename = request.args.get('filename')
     if not filename:
-        return jsonify({'error': '没有指定文件名'}), 400
+        return jsonify({'error': get_text('no_filename_specified')}), 400
     
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     if not os.path.exists(filepath):
-        return jsonify({'error': '文件不存在'}), 404
+        return jsonify({'error': get_text('file_not_exists')}), 404
     
     try:
         # 返回原始PDF文本（不添加页面分隔符）
@@ -1816,7 +1816,7 @@ def get_pdf_text():
             'text': pdf_content
         })
     except Exception as e:
-        return jsonify({'error': f'读取PDF失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("read_pdf_failed")}: {str(e)}'}), 500
 
 @app.route('/get_product_categories', methods=['GET'])
 def get_product_categories():
@@ -1845,7 +1845,7 @@ def get_product_categories():
             'categories': default_categories
         })
     except Exception as e:
-        return jsonify({'error': f'获取产品类别失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_categories_failed")}: {str(e)}'}), 500
 
 @app.route('/get_products_by_category', methods=['GET'])
 def get_products_by_category():
@@ -1853,7 +1853,7 @@ def get_products_by_category():
     try:
         category = request.args.get('category')
         if not category:
-            return jsonify({'error': '缺少category参数'}), 400
+            return jsonify({'error': get_text('missing_category_param')}), 400
         
         products = set()
         box_variants = set()
@@ -1917,7 +1917,7 @@ def get_products_by_category():
             'door_variants': sorted(list(door_variants))
         })
     except Exception as e:
-        return jsonify({'error': f'获取产品列表失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_products_failed")}: {str(e)}'}), 500
 
 @app.route('/search_sku_price', methods=['GET'])
 def search_sku_price():
@@ -1980,7 +1980,7 @@ def search_sku_price():
             'possible_skus': possible_skus  # 调试信息
         })
     except Exception as e:
-        return jsonify({'error': f'搜索SKU失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("search_sku_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_price_table', methods=['GET'])
 @admin_required
@@ -2085,7 +2085,7 @@ def get_occw_price_table():
             'total_pages': (total + per_page - 1) // per_page
         })
     except Exception as e:
-        return jsonify({'error': f'获取价格表失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_price_table_failed")}: {str(e)}'}), 500
 
 @app.route('/get_price_filter_options', methods=['GET'])
 @admin_required
@@ -2118,7 +2118,7 @@ def get_price_filter_options():
             }
         })
     except Exception as e:
-        return jsonify({'error': f'获取过滤选项失败: {str(e)}'}), 500
+        return jsonify({'error': f'{get_text("get_filter_options_failed")}: {str(e)}'}), 500
 
 # 确保目录存在
 for directory in ['uploads', 'data']:
