@@ -1,0 +1,18 @@
+# Render部署专用requirements
+# 使用稳定版本确保兼容性
+
+Flask==2.3.3
+PyPDF2==3.0.1
+pandas==1.5.3
+openpyxl==3.1.2
+reportlab==4.0.4
+Werkzeug==2.3.7
+python-dotenv==1.0.0
+gunicorn==21.2.0
+
+# 明确指定numpy版本，确保pandas兼容性
+numpy==1.24.4
+
+# 可选：如果仍有问题，可以尝试这些替代版本
+# pandas==1.4.4
+# numpy==1.23.5 
