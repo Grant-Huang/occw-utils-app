@@ -74,6 +74,8 @@ def index():
 @app.route('/api/status')
 def status():
     """状态API"""
+    import sys
+    import flask
     return jsonify({
         'status': 'success',
         'message': 'OCCW报价系统基础部署成功',
