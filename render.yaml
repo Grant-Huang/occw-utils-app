@@ -4,8 +4,8 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: "pip install --upgrade pip setuptools wheel && pip install --only-binary=all Flask==2.3.3 pandas==1.5.3 numpy==1.24.4 PyPDF2==3.0.1 openpyxl==3.1.2 reportlab==4.0.4 python-dotenv==1.0.0 gunicorn==21.2.0 Werkzeug==2.3.7"
-    startCommand: "python app-full.py"
+    buildCommand: "pip install --upgrade pip setuptools wheel && pip install --only-binary=all Flask==2.3.3 pandas==2.0.3 numpy==1.24.3 PyPDF2==3.0.1 openpyxl==3.1.2"
+    startCommand: "python app-basic.py"
     envVars:
       - key: FLASK_ENV
         value: production
