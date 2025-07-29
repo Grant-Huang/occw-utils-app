@@ -1,1 +1,1 @@
-web: python start-diagnostic.py 
+web: python test-packages-step1.py 
