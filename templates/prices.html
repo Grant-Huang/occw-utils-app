@@ -3,11 +3,31 @@
 {% block title %}{{ t('price_management_title') }} - {{ t('system_name') }}{% endblock %}
 
 {% block content %}
+<!-- 页面标题 -->
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="fas fa-database me-3 page-icon"></i>
+                    {{ t('price_management_title') }}
+                </h1>
+                <p class="page-subtitle">{{ t('occw_price_table_management') }}</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="status-indicator">
+                    <i class="fas fa-chart-line me-2"></i>{{ t('price_management_status') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header">
                     <h4 class="card-title mb-0">
                         <i class="fas fa-database me-2"></i>{{ t('occw_price_table_management') }}
                     </h4>
@@ -113,7 +133,7 @@
                                             </div>
                                         </div>
                                         
-                                        <button type="submit" class="btn btn-primary btn-lg w-100" id="uploadBtn">
+                                        <button type="submit" class="btn btn-purple btn-lg w-100" id="uploadBtn">
                                             <i class="fas fa-cloud-upload-alt me-2"></i>{{ t('upload_button') }}
                                         </button>
                                     </form>
@@ -181,7 +201,7 @@
                                                 </span>
                                                 <input type="text" class="form-control" id="skuSearch" 
                                                        placeholder="按SKU搜索..." onkeypress="handleSearchKeyPress(event)">
-                                                <button class="btn btn-primary" type="button" onclick="applyFilters()">
+                                                <button class="btn btn-purple" type="button" onclick="applyFilters()">
                                                     搜索
                                                 </button>
                                                 <button class="btn btn-outline-secondary" type="button" onclick="clearAllFilters()">

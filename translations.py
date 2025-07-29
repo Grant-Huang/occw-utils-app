@@ -614,6 +614,18 @@ TRANSLATIONS = {
         'use_standard_pdf_format': '使用标准格式的PDF文件，提高解析准确度',
         'large_file_processing_patience': '大文件处理时请耐心等待，避免重复操作',
         
+        # 页面标题和状态
+        'home_subtitle': 'OCCW报价系统 - 智能PDF解析与SKU生成',
+        'system_status_ready': '系统就绪',
+        'help_documentation': '帮助文档',
+        'price_management_status': '价格管理',
+        'rules_configuration': '规则配置',
+        'mapping_status': '映射状态',
+        'config_title': '系统配置',
+        'config_subtitle': 'SKU生成规则与系统设置',
+        'config_status': '配置管理',
+        'sku_mapping_desc': '管理SKU映射关系，优化价格匹配',
+        
         # 文件输入组件
         'browse_files': '浏览文件',
         'drag_drop_files': '拖拽文件到此处或点击浏览',
@@ -1044,6 +1056,18 @@ TRANSLATIONS = {
         'keep_occw_price_table_updated': 'Keep OCCW price table updated, reduce manual mapping requirements',
         'use_standard_pdf_format': 'Use standard format PDF files to improve parsing accuracy',
         'large_file_processing_patience': 'Please be patient when processing large files, avoid repeated operations',
+        
+        # Page Titles and Status
+        'home_subtitle': 'OCCW Quote System - Intelligent PDF Parsing and SKU Generation',
+        'system_status_ready': 'System Ready',
+        'help_documentation': 'Help Documentation',
+        'price_management_status': 'Price Management',
+        'rules_configuration': 'Rules Configuration',
+        'mapping_status': 'Mapping Status',
+        'config_title': 'System Configuration',
+        'config_subtitle': 'SKU Generation Rules and System Settings',
+        'config_status': 'Configuration Management',
+        'sku_mapping_desc': 'Manage SKU mapping relationships, optimize price matching',
         
         # File Input Component
         'browse_files': 'Browse Files',
@@ -1599,6 +1623,18 @@ TRANSLATIONS = {
         'keep_occw_price_table_updated': 'Maintenir la table de prix OCCW à jour, réduire les exigences de mappage manuel',
         'use_standard_pdf_format': 'Utiliser des fichiers PDF au format standard pour améliorer la précision d\'analyse',
         'large_file_processing_patience': 'Veuillez être patient lors du traitement de gros fichiers, éviter les opérations répétées',
+        
+        # Titres de Page et Statuts
+        'home_subtitle': 'Système de Devis OCCW - Analyse PDF Intelligente et Génération SKU',
+        'system_status_ready': 'Système Prêt',
+        'help_documentation': 'Documentation d\'Aide',
+        'price_management_status': 'Gestion des Prix',
+        'rules_configuration': 'Configuration des Règles',
+        'mapping_status': 'Statut de Mappage',
+        'config_title': 'Configuration du Système',
+        'config_subtitle': 'Règles de Génération SKU et Paramètres Système',
+        'config_status': 'Gestion de Configuration',
+        'sku_mapping_desc': 'Gérer les relations de mappage SKU, optimiser la correspondance des prix',
         
         # Composant de Saisie de Fichier
         'browse_files': 'Parcourir les Fichiers',
