@@ -1,0 +1,12 @@
+{
+  "pdf_parsing_rules": {
+    "rules": [
+      {
+        "id": "default_pdf_rule",
+        "pattern": "(\\w+)-(\\w+)",
+        "enabled": true,
+        "description": "默认PDF解析规则"
+      }
+    ]
+  }
+}

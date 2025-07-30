@@ -663,6 +663,15 @@ TRANSLATIONS = {
         'mapped_sku': '映射SKU',
         'clear_all': '清空全部',
         
+        # 两层标签页相关
+        'conversion_settings': '2020-Oddo报价单转换设置',
+        'manual_settings': '手动创建报价单设置',
+        'pdf_rules_2020': '1.1 2020 PDF解析规则',
+        'sku_mapping_2020_oddo': '1.2 2020-Oddo SKU映射',
+        'oddo_price_import_rules': '2.1 Oddo价格表导入规则',
+        'price_table': '2.2 价格表',
+        'quote_sku_rules': '2.3 报价单SKU规则',
+        
         # 文件输入组件
         'browse_files': '浏览文件',
         'drag_drop_files': '拖拽文件到此处或点击浏览',
@@ -1142,6 +1151,15 @@ TRANSLATIONS = {
         'original_sku': 'Original SKU',
         'mapped_sku': 'Mapped SKU',
         'clear_all': 'Clear All',
+        
+        # Two-level Tab Related
+        'conversion_settings': '2020-Oddo Quote Conversion Settings',
+        'manual_settings': 'Manual Quote Creation Settings',
+        'pdf_rules_2020': '1.1 2020 PDF Parsing Rules',
+        'sku_mapping_2020_oddo': '1.2 2020-Oddo SKU Mapping',
+        'oddo_price_import_rules': '2.1 Oddo Price Table Import Rules',
+        'price_table': '2.2 Price Table',
+        'quote_sku_rules': '2.3 Quote SKU Rules',
         
         # File Input Component
         'browse_files': 'Browse Files',
@@ -1746,6 +1764,15 @@ TRANSLATIONS = {
         'original_sku': 'SKU Original',
         'mapped_sku': 'SKU Mappé',
         'clear_all': 'Tout Effacer',
+        
+        # Onglets à Deux Niveaux
+        'conversion_settings': 'Paramètres de Conversion de Devis 2020-Oddo',
+        'manual_settings': 'Paramètres de Création Manuelle de Devis',
+        'pdf_rules_2020': '1.1 Règles d\'Analyse PDF 2020',
+        'sku_mapping_2020_oddo': '1.2 Mappage SKU 2020-Oddo',
+        'oddo_price_import_rules': '2.1 Règles d\'Import de Tableau de Prix Oddo',
+        'price_table': '2.2 Tableau de Prix',
+        'quote_sku_rules': '2.3 Règles SKU de Devis',
         
         # Composant de Saisie de Fichier
         'browse_files': 'Parcourir les Fichiers',
