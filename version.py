@@ -7,9 +7,9 @@ VERSION = "2.1"
 VERSION_NAME = "OCCW报价系统 v2.1"
 COMPANY_NAME_ZH = "加西欧派"
 COMPANY_NAME_EN = "Oppein Cabinet Canada West Ltd."
-SYSTEM_NAME_ZH = "OCCW报价系统"
-SYSTEM_NAME_EN = "OCCW Quote System"
-SYSTEM_NAME_FR = "Système de Devis OCCW"
+SYSTEM_NAME_ZH = "OCCW APP"
+SYSTEM_NAME_EN = "OCCW APP"
+SYSTEM_NAME_FR = "OCCW APP"
 
 # 版本历史
 VERSION_HISTORY = {

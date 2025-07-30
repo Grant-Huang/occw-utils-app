@@ -1,4 +1,4 @@
-# OCCW报价系统设计文档
+# OCCW APP设计文档
 
 ## 目录
 
@@ -18,7 +18,7 @@
 
 ### 1.1 项目背景
 
-OCCW（Olympic Cabinet & Countertop Wholesale）报价系统转换器是一个专门用于处理厨柜报价单的Web应用系统。该系统能够：
+OCCW APP（OCCW Application Platform）是一个专门用于处理厨柜报价单的Web应用平台。该系统能够：
 
 - 解析PDF格式的报价单文档
 - 自动识别和转换产品SKU

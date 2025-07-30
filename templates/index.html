@@ -26,29 +26,40 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12">
-            <!-- 标签页导航 -->
-            <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pdf-import-tab" data-bs-toggle="tab" data-bs-target="#pdf-import" type="button" role="tab">
-                        <i class="fas fa-file-pdf me-2"></i>{{ t('pdf_import_quote') }}
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="manual-create-tab" data-bs-toggle="tab" data-bs-target="#manual-create" type="button" role="tab">
-                        <i class="fas fa-edit me-2"></i>{{ t('manual_create_quote') }}
-                    </button>
-                </li>
-            </ul>
+            <!-- APP图标导航 -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="app-icon-card" onclick="showPdfImportApp()">
+                        <div class="app-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="app-title">{{ t('pdf_import_quote') }}</div>
+                        <div class="app-description">{{ t('pdf_import_desc') }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="app-icon-card" onclick="showManualCreateApp()">
+                        <div class="app-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="app-title">{{ t('manual_create_quote') }}</div>
+                        <div class="app-description">{{ t('manual_create_desc') }}</div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- 标签页内容 -->
-            <div class="tab-content" id="mainTabsContent">
-                <!-- PDF导入标签页 -->
-                <div class="tab-pane fade show active" id="pdf-import" role="tabpanel">
+            <!-- APP内容区域 -->
+            <div id="appContent">
+                <!-- PDF导入APP -->
+                <div id="pdf-import-app" class="app-content" style="display: none;">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="fas fa-file-pdf me-2"></i>{{ t('upload_pdf_quote') }}
                             </h5>
+                            <button type="button" class="btn btn-outline-light btn-sm" onclick="showHomePage()">
+                                <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_home') }}
+                            </button>
                         </div>
                         <div class="card-body">
                             <form id="quotationForm" enctype="multipart/form-data">
@@ -73,13 +84,16 @@
 
                 </div>
 
-                <!-- 手动创建报价单标签页 -->
-                <div class="tab-pane fade" id="manual-create" role="tabpanel">
+                <!-- 手动创建报价单APP -->
+                <div id="manual-create-app" class="app-content" style="display: none;">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-success text-white">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="fas fa-edit me-2"></i>{{ t('manual_create_quote') }}
                             </h5>
+                            <button type="button" class="btn btn-outline-light btn-sm" onclick="showHomePage()">
+                                <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_home') }}
+                            </button>
                         </div>
                         <div class="card-body">
                             <!-- 添加产品按钮 -->
@@ -194,6 +208,74 @@
 
 {% block extra_css %}
 <style>
+/* APP图标样式 */
+.app-icon-card {
+    background: linear-gradient(135deg, #714B67 0%, #8B5A8B 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(113, 75, 103, 0.3);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-icon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(113, 75, 103, 0.4);
+}
+
+.app-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.app-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.app-description {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.app-content {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 主页欢迎区域 */
+.home-welcome {
+    text-align: center;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.home-welcome h2 {
+    color: #714B67;
+    margin-bottom: 1rem;
+}
+
+.home-welcome p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
 .custom-file-input-container {
     position: relative;
 }
@@ -241,6 +323,34 @@
 {% block extra_js %}
 <script>
 let currentProducts = [];
+
+// APP导航函数
+function showPdfImportApp() {
+    $('.app-icon-card').hide();
+    $('#pdf-import-app').show();
+    $('#manual-create-app').hide();
+    $('#quotationResult').hide();
+}
+
+function showManualCreateApp() {
+    $('.app-icon-card').hide();
+    $('#pdf-import-app').hide();
+    $('#manual-create-app').show();
+    $('#quotationResult').hide();
+}
+
+function showHomePage() {
+    $('.app-icon-card').show();
+    $('#pdf-import-app').hide();
+    $('#manual-create-app').hide();
+    $('#quotationResult').hide();
+    
+    // 清空文件输入
+    $('#quotationFile').val('');
+    
+    // 隐藏上传进度
+    $('#uploadProgress').hide();
+}
 
 // 自动语言检测函数
 function autoDetectLanguage() {
@@ -333,6 +443,9 @@ $(document).ready(function() {
                     
                     // 保存原始PDF文本供后续使用
                     window.currentPdfText = response.raw_text;
+                    
+                    // 显示结果区域
+                    $('#quotationResult').show();
                     
                     // 显示成功消息并提示可以查看PDF文本
                     showAlert('报价单解析成功！点击"PDF文本"按钮可查看原始PDF内容', 'success');

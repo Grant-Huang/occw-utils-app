@@ -6,7 +6,7 @@
 TRANSLATIONS = {
     'zh': {
         # 系统基础
-        'system_name': 'OCCW报价系统',
+        'system_name': 'OCCW APP',
         'company_name': '加西欧派',
         'company_full_name': 'Oppein Cabinet Canada West Ltd.',
         'copyright': '© 2025 OCCW报价系统 - Oppein Cabinet Canada West Ltd.',
@@ -215,7 +215,10 @@ TRANSLATIONS = {
         
         # 主页标签页
         'pdf_import_quote': 'PDF导入报价单',
+        'pdf_import_desc': '上传2020报价单PDF文件，自动解析并生成OCCW格式报价单',
         'manual_create_quote': '手动创建报价单',
+        'manual_create_desc': '手动选择产品，创建自定义报价单',
+        'back_to_home': '返回主页',
         'upload_pdf_quote': '上传2020软件报价单PDF',
         'no_file_selected': '未选择任何文件',
         'processing_pdf': '正在处理PDF文件...',
@@ -615,7 +618,7 @@ TRANSLATIONS = {
         'large_file_processing_patience': '大文件处理时请耐心等待，避免重复操作',
         
         # 页面标题和状态
-        'home_subtitle': 'OCCW报价系统 - 智能PDF解析与SKU生成',
+        'home_subtitle': 'OCCW 报价平台',
         'system_status_ready': '系统就绪',
         'help_documentation': '帮助文档',
         'price_management_status': '价格管理',
@@ -786,7 +789,7 @@ TRANSLATIONS = {
     
     'en': {
         # System Basic
-        'system_name': 'OCCW Quote System',
+        'system_name': 'OCCW APP',
         'company_name': 'Oppein West',
         'company_full_name': 'Oppein Cabinet Canada West Ltd.',
         'copyright': '© 2025 OCCW Quote System - Oppein Cabinet Canada West Ltd.',
@@ -871,7 +874,10 @@ TRANSLATIONS = {
         
         # Home Page Tabs
         'pdf_import_quote': 'PDF Import Quote',
+        'pdf_import_desc': 'Upload 2020 quote PDF file, automatically parse and generate OCCW format quote',
         'manual_create_quote': 'Manual Create Quote',
+        'manual_create_desc': 'Manually select products to create custom quote',
+        'back_to_home': 'Back to Home',
         'upload_pdf_quote': 'Upload 2020 Software Quote PDF',
         'no_file_selected': 'No file selected',
         'processing_pdf': 'Processing PDF file...',
@@ -1169,7 +1175,7 @@ TRANSLATIONS = {
         'large_file_processing_patience': 'Please be patient when processing large files, avoid repeated operations',
         
         # Page Titles and Status
-        'home_subtitle': 'OCCW Quote System - Intelligent PDF Parsing and SKU Generation',
+        'home_subtitle': 'OCCW Quote Platform',
         'system_status_ready': 'System Ready',
         'help_documentation': 'Help Documentation',
         'price_management_status': 'Price Management',
@@ -1464,7 +1470,7 @@ TRANSLATIONS = {
     
     'fr': {
         # Système de base
-        'system_name': 'Système de Devis OCCW',
+        'system_name': 'OCCW APP',
         'company_name': 'Oppein Ouest',
         'company_full_name': 'Oppein Cabinet Canada West Ltd.',
         'copyright': '© 2025 Système de Devis OCCW - Oppein Cabinet Canada West Ltd.',
@@ -1549,7 +1555,10 @@ TRANSLATIONS = {
         
         # Page d'Accueil - Onglets
         'pdf_import_quote': 'Import PDF Devis',
+        'pdf_import_desc': 'Télécharger le fichier PDF de devis 2020, analyser automatiquement et générer le devis au format OCCW',
         'manual_create_quote': 'Créer Devis Manuel',
+        'manual_create_desc': 'Sélectionner manuellement les produits pour créer un devis personnalisé',
+        'back_to_home': 'Retour à l\'Accueil',
         'upload_pdf_quote': 'Télécharger Devis PDF Logiciel 2020',
         'no_file_selected': 'Aucun fichier sélectionné',
         'processing_pdf': 'Traitement du fichier PDF...',
@@ -1847,7 +1856,7 @@ TRANSLATIONS = {
         'large_file_processing_patience': 'Veuillez être patient lors du traitement de gros fichiers, éviter les opérations répétées',
         
         # Titres de Page et Statuts
-        'home_subtitle': 'Système de Devis OCCW - Analyse PDF Intelligente et Génération SKU',
+        'home_subtitle': 'Plateforme de Devis OCCW',
         'system_status_ready': 'Système Prêt',
         'help_documentation': 'Documentation d\'Aide',
         'price_management_status': 'Gestion des Prix',
