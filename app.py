@@ -945,46 +945,107 @@ def parse_product_segment(segment, current_door_color, products):
         print(f"解析产品: {product}")
 
 def generate_sku(user_code, description, door_color):
-    """根据配置的规则生成SKU"""
-    global sku_rules
-    
+    """根据产品描述生成SKU"""
     description_upper = description.upper()
     door_color = door_color or 'N/A'
     
-    # 使用配置的规则
-    if 'pdf_parsing_rules' in sku_rules and 'rules' in sku_rules['pdf_parsing_rules']:
-        for rule in sku_rules['pdf_parsing_rules']['rules']:
-            if not rule.get('enabled', True):
-                continue
-                
-            pattern = rule.get('pattern', '')
-            if pattern == '*' or pattern.upper() in description_upper:
-                # 应用规则
-                format_str = rule.get('format', '')
-                preprocessing = rule.get('preprocessing', '')
-                
-                # 预处理
-                processed_user_code = user_code
-                if preprocessing and 'L和-R后缀' in preprocessing:
-                    processed_user_code = user_code.replace('-L', '').replace('-R', '')
-                
-                # 生成SKU
-                sku = format_str.replace('{user_code}', processed_user_code)\
-                                .replace('{occw_code}', processed_user_code)\
-                                .replace('{door_color}', door_color)
-                return sku
+    # 处理用户代码，移除L和R后缀
+    processed_user_code = user_code.replace('-L', '').replace('-R', '')
     
-    # 回退到硬编码规则
-    if 'CABINET' in description_upper:
-        occw_code = user_code.replace('-L', '').replace('-R', '')
-        return f"{occw_code}-PLY-{door_color}"
-    elif 'HARDWARE' in description_upper:
+    # 根据产品类型生成SKU
+    if 'CABINET' in description_upper or 'BOX' in description_upper:
+        # 柜身类产品
+        return f"{processed_user_code}-PLY-{door_color}"
+    elif 'DOOR' in description_upper:
+        # 门板类产品
+        return f"{processed_user_code}-DOOR-{door_color}"
+    elif 'HARDWARE' in description_upper or 'HW' in description_upper:
+        # 五金件
         return f"HW-{user_code}"
-    elif 'ACCESSORY' in description_upper:
-        return f"{door_color}-{user_code}"
+    elif 'MOLDING' in description_upper:
+        # 装饰条
+        return f"{door_color}-MOLD-{user_code}"
+    elif 'TOE KICK' in description_upper:
+        # 踢脚线
+        return f"{door_color}-TK-{user_code}"
+    elif 'FILLER' in description_upper:
+        # 填充板
+        return f"{door_color}-FILL-{user_code}"
+    elif 'ENDING PANEL' in description_upper or 'END PANEL' in description_upper:
+        # 端板
+        return f"{door_color}-EP-{user_code}"
+    elif 'RTA ASSM' in description_upper or 'ASSEMBLY' in description_upper:
+        # 组合件
+        return f"{processed_user_code}-ASSM-{door_color}"
     else:
+        # 其他产品，使用默认格式
         return f"{door_color}-{user_code}"
 
+
+def generate_possible_skus(category, product, box_variant, door_variant):
+    """根据产品信息生成可能的SKU列表"""
+    possible_skus = []
+    
+    # 基础SKU格式
+    base_sku = product.upper() if product else ""
+    
+    if not base_sku:
+        return possible_skus
+    
+    # 根据产品类别生成不同的SKU格式
+    if category == 'RTA Assm.组合件':
+        # 组合件格式：{产品代码}-ASSM-{门板颜色}
+        if door_variant:
+            possible_skus.append(f"{base_sku}-ASSM-{door_variant}")
+        possible_skus.append(f"{base_sku}-ASSM")
+        
+    elif category == 'Door门板':
+        # 门板格式：{产品代码}-DOOR-{门板颜色}
+        if door_variant:
+            possible_skus.append(f"{base_sku}-DOOR-{door_variant}")
+        possible_skus.append(f"{base_sku}-DOOR")
+        
+    elif category == 'BOX柜身':
+        # 柜身格式：{产品代码}-PLY-{门板颜色}
+        if door_variant:
+            possible_skus.append(f"{base_sku}-PLY-{door_variant}")
+        possible_skus.append(f"{base_sku}-PLY")
+        
+    elif category == 'Ending Panel端板':
+        # 端板格式：{门板颜色}-EP-{产品代码}
+        if door_variant:
+            possible_skus.append(f"{door_variant}-EP-{base_sku}")
+        possible_skus.append(f"EP-{base_sku}")
+        
+    elif category == 'Molding装饰条':
+        # 装饰条格式：{门板颜色}-MOLD-{产品代码}
+        if door_variant:
+            possible_skus.append(f"{door_variant}-MOLD-{base_sku}")
+        possible_skus.append(f"MOLD-{base_sku}")
+        
+    elif category == 'Toe Kick踢脚线':
+        # 踢脚线格式：{门板颜色}-TK-{产品代码}
+        if door_variant:
+            possible_skus.append(f"{door_variant}-TK-{base_sku}")
+        possible_skus.append(f"TK-{base_sku}")
+        
+    elif category == 'Filler填充板':
+        # 填充板格式：{门板颜色}-FILL-{产品代码}
+        if door_variant:
+            possible_skus.append(f"{door_variant}-FILL-{base_sku}")
+        possible_skus.append(f"FILL-{base_sku}")
+        
+    elif category == 'Hardware五金件':
+        # 五金件格式：HW-{产品代码}
+        possible_skus.append(f"HW-{base_sku}")
+        
+    else:
+        # 默认格式：{门板颜色}-{产品代码}
+        if door_variant:
+            possible_skus.append(f"{door_variant}-{base_sku}")
+        possible_skus.append(base_sku)
+    
+    return possible_skus
 
 
 def apply_sku_mapping(original_sku):
@@ -1761,8 +1822,8 @@ def search_sku_price():
         box_variant = request.args.get('box_variant', '')
         door_variant = request.args.get('door_variant', '')
         
-        # 根据配置的规则生成可能的SKU
-        possible_skus = generate_sku_by_rules(category, product, box_variant, door_variant)
+        # 根据产品信息生成可能的SKU
+        possible_skus = generate_possible_skus(category, product, box_variant, door_variant)
         
         # 在OCCW价格表中查找匹配的SKU和价格
         found_sku = None
