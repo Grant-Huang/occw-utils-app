@@ -439,11 +439,13 @@ function handleUpload(e) {
                     showErrorDetails(response.error_details, 'partial_success');
                 } else {
                     // 完全成功：所有行都成功
-                    showAlert(response.message, 'success');
+                    showAlert(response.message + ' - 价格表已自动刷新', 'success');
                 }
                 
                 $('#excelFile').val('');
+                // 刷新所有相关数据
                 loadStats();
+                loadFilterOptions();
                 loadPriceTable(1);
             } else {
                 handleUploadError(response);
@@ -732,6 +734,14 @@ function clearSearch() {
 function exportPriceTable() {
     showAlert('导出功能开发中...', 'info');
 }
+
+// === 页面初始化 ===
+$(document).ready(function() {
+    // 页面加载时初始化数据
+    loadStats();
+    loadFilterOptions();
+    loadPriceTable(1);
+});
 
 // === 通用函数 ===
 function showAlert(message, type) {
