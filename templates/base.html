@@ -112,6 +112,25 @@
             color: #495057;
             font-weight: 600;
         }
+        
+        /* 统一表格样式 */
+        .table thead th {
+            background-color: #f8f9fa !important;
+            color: #495057 !important;
+            font-weight: bold !important;
+            border-bottom: 2px solid #dee2e6 !important;
+            border-top: none !important;
+        }
+        
+        .table tbody td {
+            background-color: white !important;
+            font-weight: normal !important;
+            border-color: #dee2e6 !important;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa !important;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
