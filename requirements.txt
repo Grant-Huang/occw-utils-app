@@ -1,8 +1,20 @@
+# OCCW报价系统依赖包
+# Web框架
 Flask==2.3.2
+Werkzeug==2.3.6
+
+# PDF处理
 PyPDF2==3.0.1
+
+# 数据处理
 pandas==1.5.3
 openpyxl==3.1.2
+
+# 报告生成
 reportlab==4.0.4
-Werkzeug==2.3.6
-python-dotenv==1.0.0
-gunicorn==20.1.0 
+
+# 生产环境服务器
+gunicorn==20.1.0
+
+# 类型提示支持
+typing-extensions==4.7.1 

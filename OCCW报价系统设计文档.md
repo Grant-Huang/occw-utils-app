@@ -217,10 +217,14 @@ def extract_pdf_content(pdf_path):
 #### 4.2.1 转换规则引擎
 
 **规则类型**：
-1. **直接映射**：一对一映射关系
-2. **模式匹配**：基于正则表达式的模式
-3. **组合规则**：多个条件组合
-4. **自定义规则**：用户定义的特殊规则
+1. **直接映射**：一对一映射关系（通过SKU映射表）
+2. **产品类型识别**：基于产品描述的类型判断
+3. **硬编码规则**：预定义的产品类型转换规则
+
+**简化说明**：
+- 系统已移除复杂的规则配置功能
+- 使用简化的硬编码规则进行SKU生成
+- 支持通过映射表进行自定义SKU转换
 
 #### 4.2.2 SKU生成规则
 
@@ -228,18 +232,41 @@ def extract_pdf_content(pdf_path):
 
 **生成逻辑**：
 ```python
-def generate_sku(product_info):
+def generate_sku(user_code, description, door_color):
     """SKU生成核心逻辑"""
-    category = extract_category(product_info)
-    product_name = extract_product_name(product_info)
-    variants = extract_variants(product_info)
+    description_upper = description.upper()
+    processed_user_code = user_code.replace('-L', '').replace('-R', '')
     
-    if category == "Assm.组合件":
-        return f"{product_name}-{variants['box']}-{variants['door']}"
-    elif category == "Door":
-        return f"{product_name}-{variants['door']}"
-    # ... 其他类别规则
+    # 根据产品类型生成SKU
+    if 'CABINET' in description_upper or 'BOX' in description_upper:
+        return f"{processed_user_code}-PLY-{door_color}"
+    elif 'DOOR' in description_upper:
+        return f"{processed_user_code}-DOOR-{door_color}"
+    elif 'HARDWARE' in description_upper or 'HW' in description_upper:
+        return f"HW-{user_code}"
+    elif 'MOLDING' in description_upper:
+        return f"{door_color}-MOLD-{user_code}"
+    elif 'TOE KICK' in description_upper:
+        return f"{door_color}-TK-{user_code}"
+    elif 'FILLER' in description_upper:
+        return f"{door_color}-FILL-{user_code}"
+    elif 'ENDING PANEL' in description_upper or 'END PANEL' in description_upper:
+        return f"{door_color}-EP-{user_code}"
+    elif 'RTA ASSM' in description_upper or 'ASSEMBLY' in description_upper:
+        return f"{processed_user_code}-ASSM-{door_color}"
+    else:
+        return f"{door_color}-{user_code}"
 ```
+
+**SKU格式说明**：
+- **柜身类**：`{产品代码}-PLY-{门板颜色}`
+- **门板类**：`{产品代码}-DOOR-{门板颜色}`
+- **五金件**：`HW-{产品代码}`
+- **装饰条**：`{门板颜色}-MOLD-{产品代码}`
+- **踢脚线**：`{门板颜色}-TK-{产品代码}`
+- **填充板**：`{门板颜色}-FILL-{产品代码}`
+- **端板**：`{门板颜色}-EP-{产品代码}`
+- **组合件**：`{产品代码}-ASSM-{门板颜色}`
 
 ### 4.3 价格查询功能
 
@@ -845,12 +872,17 @@ def validate_file_upload(file):
 ```
 导航栏
 ├── 首页 (报价单上传)
-├── SKU映射管理 [管理员]
 ├── 价格表管理 [管理员]
-├── 系统配置 [管理员]
+├── SKU映射管理 [管理员]
 ├── 帮助文档
+├── 登录/登出
 └── 语言切换
 ```
+
+**说明**：
+- 系统已简化，移除了复杂的规则配置功能
+- 价格表管理和SKU映射管理需要管理员权限
+- 系统配置功能已移除，简化了管理界面
 
 #### 8.2.2 页面布局模板
 
@@ -1206,9 +1238,36 @@ A: 使用价格表管理功能上传新的Excel文件。
 | v1.1.0 | 2024-02-01 | 新增多语言支持 |
 | v1.2.0 | 2024-03-01 | 优化SKU映射功能 |
 | v2.0.0 | 2024-07-27 | 重写SKU映射管理页面 |
+| v2.5.0 | 2024-07-29 | 统一页面样式，简化系统功能 |
+| v2.6.0 | 2024-07-29 | 修复PDF上传错误，重写SKU生成逻辑 |
+| v2.7.0 | 2024-07-29 | 优化价格表导入后的自动刷新功能 |
+
+### A.4 系统简化说明
+
+**v2.5+ 版本重大更新**：
+
+1. **功能简化**
+   - 移除了复杂的SKU规则配置功能
+   - 删除了系统配置页面
+   - 简化了SKU生成逻辑，使用硬编码规则
+
+2. **界面统一**
+   - 统一了所有页面的标题样式
+   - 统一了按钮颜色为 `#714B67`
+   - 统一了表格样式（浅灰色表头，白色表体）
+
+3. **帮助文档重构**
+   - 重新组织了帮助文档结构
+   - 恢复了多语言支持
+   - 更新了技术支持联系方式
+
+4. **技术优化**
+   - 修复了PDF上传时的SKU生成错误
+   - 优化了价格表导入后的自动刷新
+   - 简化了代码结构，提高了可维护性
 
 ---
 
-**文档版本**: v2.0  
-**最后更新**: 2024-07-27  
+**文档版本**: v2.7  
+**最后更新**: 2024-07-29  
 **维护者**: OCCW系统开发团队 
