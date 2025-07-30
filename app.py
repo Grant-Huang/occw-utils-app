@@ -95,7 +95,6 @@ os.makedirs('data', exist_ok=True)
 standard_prices = {}
 occw_prices = {}  # OCCW价格表
 sku_mappings = {}  # SKU映射关系：{原SKU: 用户选择的SKU}
-sku_rules = {}  # SKU生成规则配置
 
 def load_standard_prices():
     """加载标准价格表"""
@@ -160,36 +159,7 @@ def save_sku_mappings():
         print(f"保存SKU映射关系失败: {e}")
         return False
 
-def load_sku_rules():
-    """加载SKU规则配置"""
-    global sku_rules
-    try:
-        if os.path.exists('data/sku_rules.json'):
-            with open('data/sku_rules.json', 'r', encoding='utf-8') as f:
-                sku_rules = json.load(f)
-                print(f"已加载SKU规则配置")
-        else:
-            # 如果没有配置文件，复制默认配置
-            if os.path.exists('sku_rules.json'):
-                with open('sku_rules.json', 'r', encoding='utf-8') as f:
-                    sku_rules = json.load(f)
-                save_sku_rules()  # 保存到data目录
-                print(f"已复制默认SKU规则配置")
-            else:
-                sku_rules = {}
-    except Exception as e:
-        print(f"加载SKU规则失败: {e}")
-        sku_rules = {}
 
-def save_sku_rules():
-    """保存SKU规则配置"""
-    try:
-        with open('data/sku_rules.json', 'w', encoding='utf-8') as f:
-            json.dump(sku_rules, f, ensure_ascii=False, indent=2)
-        return True
-    except Exception as e:
-        print(f"保存SKU规则失败: {e}")
-        return False
 
 def extract_pdf_content(pdf_path, add_page_markers=True, force_line_split=True):
     """提取PDF文件内容，支持强制将页脚和表头分行"""
@@ -1015,103 +985,7 @@ def generate_sku(user_code, description, door_color):
     else:
         return f"{door_color}-{user_code}"
 
-def generate_sku_by_rules(category, product, box_variant, door_variant):
-    """根据配置的规则生成SKU列表"""
-    global sku_rules
-    possible_skus = []
-    
-    # 使用配置的手动创建规则
-    if 'manual_quote_rules' in sku_rules and 'rules' in sku_rules['manual_quote_rules']:
-        for rule in sku_rules['manual_quote_rules']['rules']:
-            if not rule.get('enabled', True):
-                continue
-                
-            rule_category = rule.get('category', '')
-            condition = rule.get('condition', '')
-            
-            # 检查类别匹配
-            if rule_category == category:
-                # 检查条件
-                if evaluate_sku_condition(condition, product, box_variant, door_variant):
-                    sku_format = rule.get('sku_format', '')
-                    special_handling = rule.get('special_handling', '')
-                    
-                    # 生成SKU
-                    sku = apply_sku_format(sku_format, product, box_variant, door_variant, special_handling)
-                    if sku:
-                        possible_skus.append(sku)
-                        
-                    # 检查是否有备用格式
-                    fallback = rule.get('fallback', '')
-                    if fallback and not sku:
-                        fallback_sku = apply_sku_format(fallback, product, box_variant, door_variant, special_handling)
-                        if fallback_sku:
-                            possible_skus.append(fallback_sku)
-    
-    # 回退到硬编码规则
-    if not possible_skus:
-        if category == "Assm.组合件":
-            if product and box_variant and door_variant:
-                possible_skus.append(f"{product}-{box_variant}-{door_variant}")
-        elif category == "Door":
-            if product and door_variant:
-                possible_skus.append(f"{door_variant}-{product}-Door")
-        elif category == "BOX":
-            if door_variant and not box_variant:
-                if product.upper().endswith("-OPEN"):
-                    possible_skus.append(f"{door_variant}-{product}")
-                else:
-                    possible_skus.append(f"{door_variant}-{product}-OPEN")
-            elif box_variant:
-                possible_skus.append(f"{box_variant}-{product}-BOX")
-        elif category == "HARDWARE":
-            possible_skus.append(f"HW-{product}")
-        else:
-            possible_skus.append(product)
-            if door_variant:
-                possible_skus.append(f"{product}-{door_variant}")
-    
-    return possible_skus
 
-def evaluate_sku_condition(condition, product, box_variant, door_variant):
-    """评估SKU生成条件"""
-    if not condition:
-        return True
-        
-    # 简单的条件评估
-    condition = condition.replace('product', str(bool(product)))
-    condition = condition.replace('box_variant', str(bool(box_variant)))
-    condition = condition.replace('door_variant', str(bool(door_variant)))
-    condition = condition.replace('&&', ' and ')
-    condition = condition.replace('!', ' not ')
-    
-    try:
-        return eval(condition)
-    except:
-        return True
-
-def apply_sku_format(format_str, product, box_variant, door_variant, special_handling=""):
-    """应用SKU格式模板"""
-    if not format_str or not product:
-        return None
-        
-    # 处理特殊情况
-    if special_handling and "不重复添加" in special_handling and "OPEN" in special_handling:
-        if product.upper().endswith("-OPEN") and format_str.endswith("-OPEN"):
-            # 移除格式中的-OPEN后缀
-            format_str = format_str.replace("-OPEN", "")
-    
-    # 替换变量
-    sku = format_str.replace('{product}', product)\
-                    .replace('{product_name}', product)\
-                    .replace('{box_variant}', box_variant or '')\
-                    .replace('{door_variant}', door_variant or '')
-    
-    # 清理空的连字符
-    sku = re.sub(r'-+', '-', sku)  # 多个连字符合并为一个
-    sku = sku.strip('-')  # 去掉首尾的连字符
-    
-    return sku if sku else None
 
 def apply_sku_mapping(original_sku):
     """应用SKU映射关系，返回映射后的SKU"""
@@ -1589,7 +1463,11 @@ def export_sku_mappings():
     except Exception as e:
         return jsonify({'error': f'{get_text("export_mapping_failed")}: {str(e)}'}), 500
 
-
+@app.route('/sku_mappings')
+@admin_required
+def sku_mappings_page():
+    """SKU映射管理页面"""
+    return render_template('sku_mappings.html')
 
 @app.route('/export/occw_excel')
 def export_occw_excel():
@@ -1744,53 +1622,13 @@ def set_language_route(lang):
 
 
 
-@app.route('/rules')
+
+
+@app.route('/prices')
 @admin_required
-def rules_page():
-    """SKU规则配置页面"""
-    return render_template('rules.html')
-
-@app.route('/get_sku_rules', methods=['GET'])
-@admin_required  
-def get_sku_rules():
-    """获取SKU规则配置"""
-    return jsonify(sku_rules)
-
-@app.route('/save_sku_rules', methods=['POST'])
-@admin_required
-def save_sku_rules_api():
-    """保存SKU规则配置"""
-    try:
-        global sku_rules
-        sku_rules = request.json
-        success = save_sku_rules()
-        if success:
-            return jsonify({'success': True, 'message': get_text('sku_rules_save_success')})
-        else:
-            return jsonify({'success': False, 'message': get_text('save_failed')}), 500
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'保存失败: {str(e)}'}), 500
-
-@app.route('/reset_sku_rules', methods=['POST'])
-@admin_required
-def reset_sku_rules():
-    """重置SKU规则到默认配置"""
-    try:
-        global sku_rules
-        if os.path.exists('sku_rules.json'):
-            with open('sku_rules.json', 'r', encoding='utf-8') as f:
-                sku_rules = json.load(f)
-            success = save_sku_rules()
-            if success:
-                return jsonify({'success': True, 'message': get_text('reset_default_success')})
-            else:
-                return jsonify({'success': False, 'message': get_text('reset_failed')}), 500
-        else:
-            return jsonify({'success': False, 'message': get_text('default_config_not_exists')}), 404
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'恢复失败: {str(e)}'}), 500
-
-
+def prices():
+    """价格管理页面"""
+    return render_template('prices.html', prices=standard_prices)
 
 @app.route('/get_pdf_text')
 def get_pdf_text():
@@ -2125,7 +1963,6 @@ for directory in ['uploads', 'data']:
 load_standard_prices()
 load_occw_prices()
 load_sku_mappings()
-load_sku_rules()
 print(f"已加载 {len(occw_prices)} 个OCCW价格")
 print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
 
