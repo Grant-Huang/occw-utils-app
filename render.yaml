@@ -13,7 +13,7 @@ services:
       - key: ADMIN_PASSWORD
         value: admin123
       - key: PYTHON_VERSION
-        value: "3.11"
+        value: "3.11.6"
     healthCheckPath: /
     autoDeploy: true
     buildFilter:
