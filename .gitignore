@@ -71,10 +71,26 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-uploads/
+uploads/*
+!uploads/.gitkeep
 data/*.json
 *.log
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# Excel files (except templates)
+*.xlsx
+*.xls
+
+# PDF files
+*.pdf
+
+# Backup files
+*.bak
+*.backup
+
+# Local configuration
+config.local.py
+.env.local 

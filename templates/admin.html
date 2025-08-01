@@ -1,0 +1,846 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin_dashboard') }}{% endblock %}
+
+{% block content %}
+<!-- 页面标题 -->
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="fas fa-tachometer-alt me-3 page-icon"></i>
+                    {{ t('admin_dashboard') }}
+                </h1>
+                <p class="page-subtitle">{{ t('admin_dashboard_subtitle') }}</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/admin_logout" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt me-1"></i>{{ t('nav_admin_logout') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- 功能卡片 -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" onclick="showAllQuotations()">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('all_quotations') }}</h5>
+                    <p class="card-text">{{ t('all_quotations_desc') }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" onclick="showSalesPersonSettings()">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('sales_person_settings') }}</h5>
+                    <p class="card-text">{{ t('sales_person_settings_desc') }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" onclick="window.open('/prices', '_blank')">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('price_management') }}</h5>
+                    <p class="card-text">{{ t('price_management_desc') }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" onclick="showSkuMappings()">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('sku_mappings') }}</h5>
+                    <p class="card-text">{{ t('sku_mappings_desc') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 功能内容区域 -->
+    <div id="adminContent">
+        <!-- 全部报价单 -->
+        <div id="all-quotations-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list-alt me-2"></i>{{ t('all_quotations') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- 搜索和过滤区域 -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="quotationSearchInput" placeholder="{{ t('search_quotations') }}" onkeyup="filterQuotations()">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="userFilterSelect" onchange="filterQuotations()">
+                                <option value="">{{ t('all_users') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="dateFilterSelect" onchange="filterQuotations()">
+                                <option value="">{{ t('all_dates') }}</option>
+                                <option value="today">{{ t('today') }}</option>
+                                <option value="week">{{ t('this_week') }}</option>
+                                <option value="month">{{ t('this_month') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                <i class="fas fa-times me-1"></i>{{ t('clear_filters') }}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 报价单表格 -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="allQuotationsTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 12%;">{{ t('quotation_id') }}</th>
+                                    <th style="width: 20%;">{{ t('quotation_title') }}</th>
+                                    <th style="width: 12%;">{{ t('user') }}</th>
+                                    <th style="width: 12%;">{{ t('order_date') }}</th>
+                                    <th style="width: 12%;">{{ t('sales_person') }}</th>
+                                    <th style="width: 32%; text-align: right;">{{ t('operation') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allQuotationsTableBody">
+                                <!-- 报价单数据将在这里动态加载 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 分页控件 -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted">
+                            <span id="quotationCount">{{ t('total_quotations') }}: 0</span>
+                        </div>
+                        <nav>
+                            <ul class="pagination pagination-sm" id="quotationPagination">
+                                <!-- 分页按钮将在这里动态生成 -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 销售人员设置 -->
+        <div id="sales-person-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-users me-2"></i>{{ t('sales_person_settings') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>{{ t('add_sales_person') }}</h6>
+                            <form id="addSalesPersonForm">
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="salesPersonName" placeholder="{{ t('sales_person_name') }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control" id="salesPersonEmail" placeholder="{{ t('sales_person_email') }}" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm mt-2">
+                                    <i class="fas fa-plus me-1"></i>{{ t('add') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="salesPersonsList">
+                        <!-- 销售人员列表将在这里动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        <!-- SKU映射 -->
+        <div id="sku-mappings-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exchange-alt me-2"></i>{{ t('sku_mappings') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>{{ t('add_sku_mapping') }}</h6>
+                            <form id="addSkuMappingForm">
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="originalSku" placeholder="{{ t('original_sku') }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="mappedSku" placeholder="{{ t('mapped_sku') }}" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info btn-sm mt-2">
+                                    <i class="fas fa-plus me-1"></i>{{ t('add') }}
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearAllSkuMappings()">
+                                <i class="fas fa-trash me-1"></i>{{ t('clear_all_mappings') }}
+                            </button>
+                            <button type="button" class="btn btn-outline-success btn-sm ms-2" onclick="exportSkuMappings()">
+                                <i class="fas fa-download me-1"></i>{{ t('export_mappings') }}
+                            </button>
+                        </div>
+                    </div>
+                    <div id="skuMappingsList">
+                        <!-- SKU映射列表将在这里动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* 管理员卡片样式 */
+.admin-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #714B67;
+}
+
+.admin-icon {
+    font-size: 3rem;
+    color: #714B67;
+    margin-bottom: 1rem;
+}
+
+.admin-content {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 功能卡片网格 */
+.admin-card .card-body {
+    padding: 2rem 1rem;
+}
+
+.admin-card .card-title {
+    color: #714B67;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.admin-card .card-text {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 页面初始化
+$(document).ready(function() {
+    // 页面初始化完成
+});
+
+// 显示管理员仪表板
+function showAdminDashboard() {
+    $('.admin-card').show();
+    $('.admin-content').hide();
+}
+
+// 显示全部报价单
+function showAllQuotations() {
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#all-quotations-content').show();
+    loadAllQuotations();
+}
+
+// 显示销售人员设置
+function showSalesPersonSettings() {
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#sales-person-content').show();
+    loadSalesPersons();
+}
+
+// 显示价格表管理
+function showPriceManagement() {
+    // 直接跳转到价格表页面
+    window.open('/prices', '_blank');
+}
+
+// 显示SKU映射
+function showSkuMappings() {
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#sku-mappings-content').show();
+    loadSkuMappings();
+}
+
+// 加载全部报价单
+function loadAllQuotations() {
+    $.ajax({
+        url: '/get_all_quotations',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                displayAllQuotationsList(response.quotations);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("load_all_quotations_failed") }}', 'danger');
+        }
+    });
+}
+
+// 全局变量存储所有报价单数据
+let allQuotationsData = [];
+let filteredQuotationsData = [];
+let currentPage = 1;
+const itemsPerPage = 20;
+
+// 显示全部报价单列表
+function displayAllQuotationsList(allQuotations) {
+    // 转换数据格式为扁平化数组
+    allQuotationsData = [];
+    Object.keys(allQuotations).forEach(function(username) {
+        const userQuotations = allQuotations[username];
+        if (userQuotations.length > 0) {
+            userQuotations.forEach(function(quotation) {
+                allQuotationsData.push({
+                    ...quotation,
+                    username: username
+                });
+            });
+        }
+    });
+    
+    // 初始化过滤器和显示
+    initializeFilters();
+    filterQuotations();
+}
+
+// 初始化过滤器
+function initializeFilters() {
+    // 填充用户过滤器
+    const users = [...new Set(allQuotationsData.map(q => q.username))];
+    const userSelect = $('#userFilterSelect');
+    userSelect.find('option:not(:first)').remove();
+    users.forEach(user => {
+        userSelect.append(`<option value="${user}">${user}</option>`);
+    });
+}
+
+// 过滤报价单
+function filterQuotations() {
+    const searchTerm = $('#quotationSearchInput').val().toLowerCase();
+    const userFilter = $('#userFilterSelect').val();
+    const dateFilter = $('#dateFilterSelect').val();
+    
+    filteredQuotationsData = allQuotationsData.filter(quotation => {
+        // 搜索过滤
+        const matchesSearch = !searchTerm || 
+            quotation.title.toLowerCase().includes(searchTerm) ||
+            quotation.quotation_id.toLowerCase().includes(searchTerm) ||
+            quotation.username.toLowerCase().includes(searchTerm) ||
+            (quotation.data && quotation.data.sales_person && quotation.data.sales_person.toLowerCase().includes(searchTerm));
+        
+        // 用户过滤
+        const matchesUser = !userFilter || quotation.username === userFilter;
+        
+        // 日期过滤
+        let matchesDate = true;
+        if (dateFilter && quotation.data && quotation.data.order_date) {
+            const orderDate = new Date(quotation.data.order_date);
+            const now = new Date();
+            
+            switch (dateFilter) {
+                case 'today':
+                    matchesDate = orderDate.toDateString() === now.toDateString();
+                    break;
+                case 'week':
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    matchesDate = orderDate >= weekAgo;
+                    break;
+                case 'month':
+                    const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    matchesDate = orderDate >= monthAgo;
+                    break;
+            }
+        }
+        
+        return matchesSearch && matchesUser && matchesDate;
+    });
+    
+    currentPage = 1;
+    displayQuotationsTable();
+}
+
+// 清除过滤器
+function clearFilters() {
+    $('#quotationSearchInput').val('');
+    $('#userFilterSelect').val('');
+    $('#dateFilterSelect').val('');
+    filterQuotations();
+}
+
+// 显示报价单表格
+function displayQuotationsTable() {
+    const tbody = $('#allQuotationsTableBody');
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = filteredQuotationsData.slice(startIndex, endIndex);
+    
+    if (filteredQuotationsData.length === 0) {
+        tbody.html(`
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                    <h5 class="text-muted">{{ t('no_quotations') }}</h5>
+                    <p class="text-muted">{{ t('no_quotations_desc') }}</p>
+                </td>
+            </tr>
+        `);
+        $('#quotationCount').text('{{ t("total_quotations") }}: 0');
+        $('#quotationPagination').empty();
+        return;
+    }
+    
+    let html = '';
+    pageData.forEach(function(quotation) {
+        const orderDate = quotation.data && quotation.data.order_date ? quotation.data.order_date : '-';
+        const salesPerson = quotation.data && quotation.data.sales_person ? quotation.data.sales_person : '-';
+        
+        html += `
+            <tr>
+                <td><code>${quotation.quotation_id}</code></td>
+                <td>${quotation.title}</td>
+                <td>${quotation.username}</td>
+                <td>${orderDate}</td>
+                <td>${salesPerson}</td>
+                <td style="text-align: right;">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewQuotationDetail('${quotation.quotation_id}')">
+                        <i class="fas fa-eye me-1"></i>{{ t('view') }}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="editQuotation('${quotation.quotation_id}')">
+                        <i class="fas fa-edit me-1"></i>{{ t('edit') }}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteQuotation('${quotation.quotation_id}')">
+                        <i class="fas fa-trash me-1"></i>{{ t('delete') }}
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tbody.html(html);
+    
+    // 更新计数和分页
+    $('#quotationCount').text(`{{ t("total_quotations") }}: ${filteredQuotationsData.length}`);
+    displayPagination();
+}
+
+// 查看报价单详情
+function viewQuotationDetail(quotationId) {
+    window.open(`/view_quotation/${quotationId}`, '_blank');
+}
+
+// 编辑报价单
+function editQuotation(quotationId) {
+    // 直接打开报价单详情页面
+    window.open(`/view_quotation/${quotationId}`, '_blank');
+}
+
+// 删除报价单
+function deleteQuotation(quotationId) {
+    if (confirm('{{ t("confirm_delete_quotation") }}')) {
+        $.ajax({
+            url: `/delete_quotation/${quotationId}`,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    loadAllQuotations(); // 重新加载报价单列表
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("delete_quotation_failed") }}', 'danger');
+            }
+        });
+    }
+}
+
+// 显示分页
+function displayPagination() {
+    const totalPages = Math.ceil(filteredQuotationsData.length / itemsPerPage);
+    const pagination = $('#quotationPagination');
+    
+    if (totalPages <= 1) {
+        pagination.empty();
+        return;
+    }
+    
+    let html = '';
+    
+    // 上一页
+    html += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        </li>
+    `;
+    
+    // 页码
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+    
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+            </li>
+        `;
+    }
+    
+    // 下一页
+    html += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </li>
+    `;
+    
+    pagination.html(html);
+}
+
+// 切换页面
+function changePage(page) {
+    const totalPages = Math.ceil(filteredQuotationsData.length / itemsPerPage);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        displayQuotationsTable();
+    }
+}
+
+// 加载销售人员列表
+function loadSalesPersons() {
+    $.ajax({
+        url: '/get_sales_persons',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                displaySalesPersonsList(response.sales_persons);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("load_sales_persons_failed") }}', 'danger');
+        }
+    });
+}
+
+// 显示销售人员列表
+function displaySalesPersonsList(salesPersons) {
+    const container = $('#salesPersonsList');
+    
+    if (salesPersons.length === 0) {
+        container.html(`
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">{{ t('no_sales_persons') }}</h5>
+                <p class="text-muted">{{ t('no_sales_persons_desc') }}</p>
+            </div>
+        `);
+        return;
+    }
+    
+    let html = '<div class="table-responsive"><table class="table table-striped">';
+    html += '<thead><tr><th>{{ t("name") }}</th><th>{{ t("email") }}</th><th>{{ t("operation") }}</th></tr></thead><tbody>';
+    
+    salesPersons.forEach(function(person) {
+        html += `
+            <tr>
+                <td>${person.name}</td>
+                <td>${person.email}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteSalesPerson('${person.name}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    container.html(html);
+}
+
+// 添加销售人员
+$('#addSalesPersonForm').on('submit', function(e) {
+    e.preventDefault();
+    
+    const name = $('#salesPersonName').val();
+    const email = $('#salesPersonEmail').val();
+    
+    $.ajax({
+        url: '/add_sales_person',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ name: name, email: email }),
+        success: function(response) {
+            if (response.success) {
+                showAlert(response.message, 'success');
+                $('#salesPersonName').val('');
+                $('#salesPersonEmail').val('');
+                loadSalesPersons();
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("add_sales_person_failed") }}', 'danger');
+        }
+    });
+});
+
+// 删除销售人员
+function deleteSalesPerson(name) {
+    if (confirm('{{ t("confirm_delete_sales_person") }}')) {
+        $.ajax({
+            url: '/delete_sales_person',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ name: name }),
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    loadSalesPersons();
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("delete_sales_person_failed") }}', 'danger');
+            }
+        });
+    }
+}
+
+
+
+
+
+// 加载SKU映射
+function loadSkuMappings() {
+    $.ajax({
+        url: '/get_sku_mappings',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                displaySkuMappingsList(response.mappings);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("load_sku_mappings_failed") }}', 'danger');
+        }
+    });
+}
+
+// 显示SKU映射列表
+function displaySkuMappingsList(mappings) {
+    const container = $('#skuMappingsList');
+    
+    if (Object.keys(mappings).length === 0) {
+        container.html(`
+            <div class="text-center py-5">
+                <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">{{ t('no_sku_mappings') }}</h5>
+                <p class="text-muted">{{ t('no_sku_mappings_desc') }}</p>
+            </div>
+        `);
+        return;
+    }
+    
+    let html = '<div class="table-responsive"><table class="table table-striped">';
+    html += '<thead><tr><th>{{ t("original_sku") }}</th><th>{{ t("mapped_sku") }}</th><th>{{ t("operation") }}</th></tr></thead><tbody>';
+    
+    Object.keys(mappings).forEach(function(originalSku) {
+        const mappedSku = mappings[originalSku];
+        html += `
+            <tr>
+                <td><code>${originalSku}</code></td>
+                <td><code class="text-primary">${mappedSku}</code></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteSkuMapping('${originalSku}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    container.html(html);
+}
+
+// 添加SKU映射
+$('#addSkuMappingForm').on('submit', function(e) {
+    e.preventDefault();
+    
+    const originalSku = $('#originalSku').val();
+    const mappedSku = $('#mappedSku').val();
+    
+    $.ajax({
+        url: '/save_sku_mapping',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ original_sku: originalSku, mapped_sku: mappedSku }),
+        success: function(response) {
+            if (response.success) {
+                showAlert(response.message, 'success');
+                $('#originalSku').val('');
+                $('#mappedSku').val('');
+                loadSkuMappings();
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("add_sku_mapping_failed") }}', 'danger');
+        }
+    });
+});
+
+// 删除SKU映射
+function deleteSkuMapping(originalSku) {
+    if (confirm('{{ t("confirm_delete_sku_mapping") }}')) {
+        $.ajax({
+            url: '/delete_sku_mapping',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ original_sku: originalSku }),
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    loadSkuMappings();
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("delete_sku_mapping_failed") }}', 'danger');
+            }
+        });
+    }
+}
+
+// 清空所有SKU映射
+function clearAllSkuMappings() {
+    if (confirm('{{ t("confirm_clear_all_sku_mappings") }}')) {
+        $.ajax({
+            url: '/clear_all_sku_mappings',
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    loadSkuMappings();
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("clear_sku_mappings_failed") }}', 'danger');
+            }
+        });
+    }
+}
+
+// 导出SKU映射
+function exportSkuMappings() {
+    window.open('/export_sku_mappings', '_blank');
+}
+
+// 导出报价单
+function exportQuotation(quotationId) {
+    window.open(`/export_quotation/${quotationId}`, '_blank');
+}
+
+// 显示提示信息
+function showAlert(message, type) {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    $('main').prepend(alertHtml);
+    
+    // 自动隐藏警告和成功消息
+    if (type === 'warning' || type === 'success') {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+    }
+}
+</script>
+{% endblock %} 

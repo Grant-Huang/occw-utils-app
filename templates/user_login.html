@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('user_login_title') }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>{{ t('user_login_title') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">{{ t('username') }}</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ t('password') }}</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-sign-in-alt me-1"></i>{{ t('login') }}
+                            </button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">{{ t('not_registered') }} 
+                                <a href="{{ url_for('user_register') }}" class="text-decoration-none">{{ t('register_here') }}</a>
+                            </small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            username: $('#username').val(),
+            password: $('#password').val()
+        };
+        
+        $.ajax({
+            url: '/user_login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    setTimeout(function() {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+                showAlert(response ? response.error : '{{ t("login_failed") }}', 'danger');
+            }
+        });
+    });
+});
+
+function showAlert(message, type) {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    $('main').prepend(alertHtml);
+    
+    if (type === 'success') {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 3000);
+    }
+}
+</script>
+{% endblock %} 

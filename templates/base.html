@@ -76,15 +76,7 @@
             box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
         }
         
-        /* 状态指示器样式 */
-        .status-indicator {
-            background-color: #714B67;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            display: inline-block;
-        }
+
         
         /* 导航链接样式 */
         .nav-link {
@@ -98,6 +90,80 @@
         }
         
         .nav-link.active {
+            color: #5a4fcf;
+            font-weight: 600;
+        }
+        
+        /* 浮动信息条样式 */
+        .floating-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 33.33vw;
+            max-width: 400px;
+            min-width: 300px;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating-notification .alert {
+            margin-bottom: 0;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+        
+        .floating-notification .alert-success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-left: 4px solid #198754;
+        }
+        
+        .floating-notification .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .floating-notification .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .floating-notification .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #0dcaf0;
+        }
+        
+        .floating-notification .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: inherit;
+            opacity: 0.7;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .floating-notification .close-btn:hover {
+            opacity: 1;
+        }
+        
+        /* 页面标题样式 */
+        .page-title {
             color: #5a4fcf;
             font-weight: 600;
         }
@@ -152,51 +218,30 @@
                             <i class="fas fa-home me-1"></i>{{ t('nav_home') }}
                         </a>
                     </li>
-                    {% if session.get('is_admin') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/prices">
-                            <i class="fas fa-dollar-sign me-1"></i>{{ t('nav_prices') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/sku_mappings">
-                            <i class="fas fa-exchange-alt me-1"></i>{{ t('nav_mappings') }}
-                        </a>
-                    </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/help">
                             <i class="fas fa-question-circle me-1"></i>{{ t('nav_help') }}
                         </a>
                     </li>
-                    
-                    <!-- 语言切换下拉菜单 -->
+                    {% if session.get('username') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-globe me-1"></i>{{ t('nav_language') }}
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>{{ session.get('username') }}
                         </a>
                         <ul class="dropdown-menu">
-                            {% for lang_code, lang_name in supported_languages.items() %}
-                            <li>
-                                <a class="dropdown-item {% if lang_code == current_language %}active{% endif %}" 
-                                   href="#" onclick="switchLanguage('{{ lang_code }}')">
-                                    {{ lang_name }}
-                                </a>
-                            </li>
-                            {% endfor %}
+                            <li><a class="dropdown-item" href="/settings">
+                                <i class="fas fa-cog me-1"></i>{{ t('settings_title') }}
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/user_logout">
+                                <i class="fas fa-sign-out-alt me-1"></i>{{ t('logout') }}
+                            </a></li>
                         </ul>
-                    </li>
-                    
-                    {% if session.get('is_admin') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin_logout">
-                            <i class="fas fa-sign-out-alt me-1"></i>{{ t('nav_admin_logout') }}
-                        </a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin_login">
-                            <i class="fas fa-lock me-1"></i>{{ t('nav_admin_login') }}
+                        <a class="nav-link" href="/user_login">
+                            <i class="fas fa-sign-in-alt me-1"></i>{{ t('user_login') }}
                         </a>
                     </li>
                     {% endif %}
@@ -211,26 +256,61 @@
 
     <footer class="bg-light text-center text-muted py-3 mt-5">
         <div class="container">
-            <p class="mb-0">{{ t('copyright') }}</p>
-            <small class="text-muted">{{ t('company_full_name') }}</small>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <p class="mb-0">{{ t('copyright') }}</p>
+                    <small class="text-muted">{{ t('company_full_name') }}</small>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <!-- 浮动信息条容器 -->
+    <div id="floatingNotificationContainer"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script>
-    // 语言切换功能
-    function switchLanguage(lang) {
-        $.get('/set_language/' + lang, function(response) {
-            if (response.success) {
-                location.reload(); // 重新加载页面以应用新语言
-            } else {
-                console.error('Language switch failed:', response.error);
-            }
-        }).fail(function() {
-            console.error('Language switch request failed');
-        });
+    // 统一的浮动信息条函数
+    function showFloatingNotification(message, type = 'info', duration = 15000) {
+        // 移除现有的通知
+        $('.floating-notification').remove();
+        
+        // 创建新的通知
+        const notification = $(`
+            <div class="floating-notification">
+                <div class="alert alert-${type}">
+                    <button type="button" class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
+                    <div class="notification-content">
+                        ${message}
+                    </div>
+                </div>
+            </div>
+        `);
+        
+        // 添加到容器
+        $('#floatingNotificationContainer').append(notification);
+        
+        // 显示动画
+        setTimeout(() => {
+            notification.addClass('show');
+        }, 100);
+        
+        // 自动隐藏
+        if (duration > 0) {
+            setTimeout(() => {
+                notification.removeClass('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, duration);
+        }
+    }
+    
+    // 替换原有的showAlert函数
+    function showAlert(message, type = 'info') {
+        showFloatingNotification(message, type);
     }
     </script>
     

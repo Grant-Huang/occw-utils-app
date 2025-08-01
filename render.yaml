@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: 2020-occw-convertor
+    name: occw-quotation-system
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 app:app"
+    startCommand: "gunicorn --config gunicorn.conf.py app:app"
     plan: free
     envVars:
       - key: FLASK_ENV
@@ -14,5 +14,14 @@ services:
         value: admin123
       - key: PYTHON_VERSION
         value: "3.11"
+      - key: PORT
+        value: "10000"
     healthCheckPath: /
-    autoDeploy: true 
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - "*.py"
+        - "templates/**"
+        - "requirements.txt"
+        - "gunicorn.conf.py"
+        - "render.yaml" 

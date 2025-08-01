@@ -30,8 +30,18 @@ preload_app = True
 def on_starting(server):
     """启动时创建必要的目录"""
     import os
-    directories = ['uploads', 'data']
+    directories = ['uploads', 'data', 'upload']
     for directory in directories:
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
-            print(f"创建目录: {directory}") 
+            print(f"创建目录: {directory}")
+
+# 启动后回调
+def when_ready(server):
+    """服务器准备就绪后的回调"""
+    print("Gunicorn服务器已启动并准备接受请求")
+
+# 工作进程启动回调
+def on_reload(server):
+    """重新加载时的回调"""
+    print("Gunicorn服务器正在重新加载") 

@@ -2,6 +2,7 @@ import os
 import re
 import json
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for, session
+from urllib.parse import urlencode
 from werkzeug.utils import secure_filename
 import PyPDF2
 import pandas as pd
@@ -14,6 +15,10 @@ from functools import wraps
 from version import VERSION, VERSION_NAME, COMPANY_NAME_ZH, COMPANY_NAME_EN, SYSTEM_NAME_ZH, SYSTEM_NAME_EN, SYSTEM_NAME_FR
 from translations import TRANSLATIONS, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, get_text
 from typing import Dict, List, Tuple, Any
+from io import BytesIO
+import xlsxwriter
+import hashlib
+import uuid
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
@@ -23,8 +28,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# 数据加载将在应用启动时进行
+
 # 管理员配置
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')  # 支持环境变量
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'Admin123')  # 支持环境变量
 ADMIN_SESSION_KEY = "is_admin"
 
 # 语言支持
@@ -95,6 +102,10 @@ os.makedirs('data', exist_ok=True)
 standard_prices = {}
 occw_prices = {}  # OCCW价格表
 sku_mappings = {}  # SKU映射关系：{原SKU: 用户选择的SKU}
+system_settings = {}  # 系统设置
+users = {}  # 用户数据：{username: {password_hash, email, created_at}}
+quotations = {}  # 用户报价单数据：{username: [{quotation_id, title, data, created_at, updated_at}]}
+current_quotation_id = 1  # 用于生成报价单编号
 
 def load_standard_prices():
     """加载标准价格表"""
@@ -158,6 +169,117 @@ def save_sku_mappings():
     except Exception as e:
         print(f"保存SKU映射关系失败: {e}")
         return False
+
+def load_system_settings():
+    """加载系统设置"""
+    global system_settings
+    try:
+        if os.path.exists('data/system_settings.json'):
+            with open('data/system_settings.json', 'r', encoding='utf-8') as f:
+                system_settings = json.load(f)
+        else:
+            # 默认设置
+            system_settings = {
+                'default_sales_person': '',
+                'sales_persons': []
+            }
+            save_system_settings()
+    except Exception as e:
+        print(f"加载系统设置失败: {e}")
+        system_settings = {
+            'default_sales_person': '',
+            'sales_persons': []
+        }
+
+def save_system_settings():
+    """保存系统设置到文件"""
+    try:
+        with open('data/system_settings.json', 'w', encoding='utf-8') as f:
+            json.dump(system_settings, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        print(f"保存系统设置失败: {e}")
+        return False
+
+def load_users():
+    """加载用户数据"""
+    global users
+    try:
+        if os.path.exists('data/users.json'):
+            with open('data/users.json', 'r', encoding='utf-8') as f:
+                users = json.load(f)
+    except Exception as e:
+        print(f"加载用户数据失败: {e}")
+        users = {}
+
+def save_users():
+    """保存用户数据"""
+    try:
+        with open('data/users.json', 'w', encoding='utf-8') as f:
+            json.dump(users, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        print(f"保存用户数据失败: {e}")
+        return False
+
+def load_quotations():
+    """加载报价单数据"""
+    global quotations
+    try:
+        if os.path.exists('data/quotations.json'):
+            with open('data/quotations.json', 'r', encoding='utf-8') as f:
+                quotations = json.load(f)
+    except Exception as e:
+        print(f"加载报价单数据失败: {e}")
+        quotations = {}
+
+def save_quotations():
+    """保存报价单数据"""
+    try:
+        with open('data/quotations.json', 'w', encoding='utf-8') as f:
+            json.dump(quotations, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        print(f"保存报价单数据失败: {e}")
+        return False
+
+def generate_quotation_id():
+    """生成报价单编号 Q + 5位数字"""
+    global current_quotation_id
+    
+    # 从现有报价单中找出最大ID
+    max_id = 0
+    for username, user_quotations in quotations.items():
+        for quotation in user_quotations:
+            if 'quotation_id' in quotation:
+                try:
+                    id_num = int(quotation['quotation_id'][1:])  # 去掉'Q'前缀
+                    max_id = max(max_id, id_num)
+                except ValueError:
+                    continue
+    
+    # 使用最大ID + 1，或者使用current_quotation_id（取较大值）
+    current_quotation_id = max(current_quotation_id, max_id + 1)
+    quotation_id = f"Q{current_quotation_id:05d}"
+    current_quotation_id += 1
+    return quotation_id
+
+def hash_password(password):
+    """密码哈希"""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(password, password_hash):
+    """验证密码"""
+    return hash_password(password) == password_hash
+
+def login_required(f):
+    """登录验证装饰器"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('username'):
+            return redirect(url_for('user_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 
@@ -1066,6 +1188,7 @@ def generate_final_sku(user_code, description, door_color):
 @app.route('/')
 def index():
     """主页"""
+    return render_template('index.html', today_date=datetime.now().strftime('%Y-%m-%d'))
     # 自动检测用户语言偏好
     user_language = detect_user_language()
     return render_template('index.html', detected_language=user_language)
@@ -1076,11 +1199,19 @@ def detect_user_language():
     if 'language' in session:
         return session['language']
     
-    # 2. 检查是否已经自动检测过语言，避免重复检测
+    # 2. 检查登录用户的语言偏好设置
+    username = session.get('username')
+    if username and username in users:
+        user_preferred_language = users[username].get('preferred_language')
+        if user_preferred_language:
+            session['language'] = user_preferred_language
+            return user_preferred_language
+    
+    # 3. 检查是否已经自动检测过语言，避免重复检测
     if 'auto_detected' in session:
         return session.get('language', 'zh')
     
-    # 3. 检查请求头中的Accept-Language
+    # 4. 检查请求头中的Accept-Language
     accept_language = request.headers.get('Accept-Language', '')
     if accept_language:
         # 解析Accept-Language头，获取首选语言
@@ -1100,7 +1231,7 @@ def detect_user_language():
                 session['auto_detected'] = True
                 return 'fr'
     
-    # 4. 默认返回中文
+    # 5. 默认返回中文
     session['language'] = 'zh'
     session['auto_detected'] = True
     return 'zh'
@@ -1532,50 +1663,117 @@ def sku_mappings_page():
 
 @app.route('/export/occw_excel')
 def export_occw_excel():
-    """导出OCCW Excel报价单"""
-    occw_data = request.args.get('occw_data', '[]')
-    occw_data = json.loads(occw_data)
-    
-    if not occw_data:
-        return "没有数据可导出", 400
-    
+    """导出OCCW格式的Excel文件 - 新6列格式"""
     try:
-        # 创建DataFrame
-        df_data = []
-        total_amount = 0
+        occw_data = request.args.get('occw_data')
+        export_date = request.args.get('export_date')
+        export_username = request.args.get('export_username')
+        export_sales_person = request.args.get('export_sales_person')
         
-        for item in occw_data:
-            df_data.append({
-                '序号': item['seq_num'],
-                'OCCW SKU': item['occw_sku'],
-                '数量': item['qty'],
-                'OCCW单价': item['unit_price'],
-                'OCCW总价': item['total_price']
-            })
-            total_amount += item['total_price']
+        if not occw_data:
+            return jsonify({'error': 'No data provided'}), 400
         
-        # 添加合计行
-        df_data.append({
-            '序号': '',
-            'OCCW SKU': '',
-            '数量': '',
-            'OCCW单价': '合计:',
-            'OCCW总价': total_amount
-        })
+        occw_data = json.loads(occw_data)
         
-        df = pd.DataFrame(df_data)
+        # 创建Excel文件
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
         
-        # 创建临时文件
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
-            df.to_excel(tmp.name, index=False, engine='openpyxl')
+        # 设置标题行 - 新6列格式
+        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量', '订单行/单价']
+        for col, header in enumerate(headers):
+            worksheet.write(0, col, header)
+        
+        # 写入数据
+        for row, item in enumerate(occw_data, 1):
+            # 第一行包含日期、客户、销售人员信息
+            if row == 1:
+                worksheet.write(row, 0, export_date)  # 订单日期
+                worksheet.write(row, 1, export_username)  # 客户
+                worksheet.write(row, 2, export_sales_person)  # 销售人员
+            else:
+                # 其他行为空
+                worksheet.write(row, 0, '')
+                worksheet.write(row, 1, '')
+                worksheet.write(row, 2, '')
             
-            # 设置文件名
-            filename = f'OCCW报价单_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
-            
-            return send_file(tmp.name, as_attachment=True, download_name=filename)
-            
+            # 产品信息
+            worksheet.write(row, 3, item['occw_sku'])  # 订单行/产品 (SKU)
+            worksheet.write(row, 4, item['qty'])  # 订单行/数量
+            worksheet.write(row, 5, item['unit_price'])  # 订单行/单价
+        
+        workbook.close()
+        output.seek(0)
+        
+        # 生成文件名：用户名_日期_quote.xlsx
+        filename = f"{export_username}_{export_date}_quote.xlsx"
+        
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=filename
+        )
     except Exception as e:
-        return f"导出失败: {str(e)}", 500
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/export/manual_excel')
+def export_manual_excel():
+    """导出手动创建的报价单 - 新6列格式"""
+    try:
+        manual_data = request.args.get('manual_data')
+        export_date = request.args.get('export_date')
+        export_username = request.args.get('export_username')
+        export_sales_person = request.args.get('export_sales_person')
+        
+        if not manual_data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        manual_data = json.loads(manual_data)
+        
+        # 创建Excel文件
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
+        
+        # 设置标题行 - 新6列格式
+        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量', '订单行/单价']
+        for col, header in enumerate(headers):
+            worksheet.write(0, col, header)
+        
+        # 写入数据
+        for row, item in enumerate(manual_data, 1):
+            # 第一行包含日期、客户、销售人员信息
+            if row == 1:
+                worksheet.write(row, 0, export_date)  # 订单日期
+                worksheet.write(row, 1, export_username)  # 客户
+                worksheet.write(row, 2, export_sales_person)  # 销售人员
+            else:
+                # 其他行为空
+                worksheet.write(row, 0, '')
+                worksheet.write(row, 1, '')
+                worksheet.write(row, 2, '')
+            
+            # 产品信息
+            worksheet.write(row, 3, item['sku'])  # 订单行/产品 (SKU)
+            worksheet.write(row, 4, item['qty'])  # 订单行/数量
+            worksheet.write(row, 5, float(item['price'].replace('$', '')))  # 订单行/单价
+        
+        workbook.close()
+        output.seek(0)
+        
+        # 生成文件名：用户名_日期_quote.xlsx
+        filename = f"{export_username}_{export_date}_quote.xlsx"
+        
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=filename
+        )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/export/<format>')
 def export_quotation(format):
@@ -1654,6 +1852,16 @@ def help():
     """帮助页面"""
     return render_template('help.html')
 
+@app.route('/test_frontend')
+def test_frontend():
+    """前端API测试页面"""
+    return render_template('test_frontend_issue.html')
+
+@app.route('/debug_quotation')
+def debug_quotation():
+    """quotation_detail.html调试页面"""
+    return render_template('debug_quotation.html')
+
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     """管理员登录"""
@@ -1662,7 +1870,7 @@ def admin_login():
         if password == ADMIN_PASSWORD:
             session[ADMIN_SESSION_KEY] = True
             next_page = request.args.get('next')
-            return redirect(next_page or url_for('index'))
+            return redirect(next_page or url_for('admin_dashboard'))
         else:
             return render_template('admin_login.html', error='密码错误')
     return render_template('admin_login.html')
@@ -1673,10 +1881,101 @@ def admin_logout():
     session.pop(ADMIN_SESSION_KEY, None)
     return redirect(url_for('index'))
 
+@app.route('/user_register', methods=['GET', 'POST'])
+def user_register():
+    """用户注册"""
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        email = data.get('email', '').strip()
+        
+        if not username or not password or not email:
+            return jsonify({'success': False, 'error': get_text('all_fields_required')})
+        
+        if username in users:
+            return jsonify({'success': False, 'error': get_text('username_exists')})
+        
+        # 创建新用户
+        users[username] = {
+            'password_hash': hash_password(password),
+            'email': email,
+            'created_at': datetime.now().isoformat()
+        }
+        
+        if save_users():
+            return jsonify({'success': True, 'message': get_text('registration_success')})
+        else:
+            return jsonify({'success': False, 'error': get_text('registration_failed')})
+    
+    return render_template('user_register.html')
+
+@app.route('/user_login', methods=['GET', 'POST'])
+def user_login():
+    """用户登录"""
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        
+        if not username or not password:
+            return jsonify({'success': False, 'error': get_text('username_password_required')})
+        
+        if username not in users:
+            return jsonify({'success': False, 'error': get_text('invalid_credentials')})
+        
+        if not verify_password(password, users[username]['password_hash']):
+            return jsonify({'success': False, 'error': get_text('invalid_credentials')})
+        
+        session['username'] = username
+        return jsonify({'success': True, 'message': get_text('login_success')})
+    
+    return render_template('user_login.html')
+
+@app.route('/user_logout')
+def user_logout():
+    """用户登出"""
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+@app.route('/update_user_profile', methods=['POST'])
+@login_required
+def update_user_profile():
+    """更新用户信息"""
+    try:
+        data = request.get_json()
+        new_password = data.get('new_password', '').strip()
+        username = session.get('username')
+        
+        if not username or username not in users:
+            return jsonify({'success': False, 'error': get_text('user_not_found')})
+        
+        # 如果提供了新密码，则更新密码
+        if new_password:
+            if len(new_password) < 6:
+                return jsonify({'success': False, 'error': get_text('password_too_short')})
+            
+            users[username]['password_hash'] = hash_password(new_password)
+            
+            if save_users():
+                return jsonify({'success': True, 'message': get_text('password_updated_success')})
+            else:
+                return jsonify({'success': False, 'error': get_text('save_failed')})
+        else:
+            return jsonify({'success': False, 'error': get_text('no_changes_made')})
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/set_language/<lang>')
 def set_language_route(lang):
     """设置语言"""
     if set_language(lang):
+        # 如果用户已登录，将语言偏好保存到用户信息中
+        username = session.get('username')
+        if username and username in users:
+            users[username]['preferred_language'] = lang
+            save_users()
         return jsonify({'success': True, 'language': lang})
     else:
         return jsonify({'success': False, 'error': 'Unsupported language'}), 400
@@ -1690,6 +1989,588 @@ def set_language_route(lang):
 def prices():
     """价格管理页面"""
     return render_template('prices.html', prices=standard_prices)
+
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    """管理员仪表板页面"""
+    return render_template('admin.html')
+
+@app.route('/settings')
+@login_required
+def settings():
+    """设置页面"""
+    username = session.get('username')
+    user_info = users.get(username, {}) if username else {}
+    return render_template('settings.html', 
+                         settings=system_settings, 
+                         user_info=user_info,
+                         today_date=datetime.now().strftime('%Y-%m-%d'))
+
+@app.route('/save_settings', methods=['POST'])
+@admin_required
+def save_settings():
+    """保存系统设置"""
+    try:
+        data = request.get_json()
+        system_settings.update(data)
+        if save_system_settings():
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/reset_settings', methods=['POST'])
+@admin_required
+def reset_settings():
+    """重置系统设置"""
+    try:
+        global system_settings
+        system_settings = {
+            'default_sales_person': '',
+            'sales_persons': []
+        }
+        if save_system_settings():
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/get_sales_persons', methods=['GET'])
+def get_sales_persons():
+    """获取销售人员列表"""
+    try:
+        return jsonify({
+            'success': True,
+            'sales_persons': system_settings.get('sales_persons', [])
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/add_sales_person', methods=['POST'])
+@admin_required
+def add_sales_person():
+    """添加销售人员"""
+    try:
+        data = request.get_json()
+        name = data.get('name', '').strip()
+        email = data.get('email', '').strip()
+        
+        if not name or not email:
+            return jsonify({'success': False, 'error': get_text('name_and_email_required')})
+        
+        # 检查是否已存在
+        sales_persons = system_settings.get('sales_persons', [])
+        for person in sales_persons:
+            if person['name'] == name or person['email'] == email:
+                return jsonify({'success': False, 'error': get_text('sales_person_already_exists')})
+        
+        # 添加新销售人员
+        sales_persons.append({
+            'name': name,
+            'email': email
+        })
+        system_settings['sales_persons'] = sales_persons
+        
+        if save_system_settings():
+            return jsonify({
+                'success': True,
+                'message': get_text('sales_person_added_success')
+            })
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/delete_sales_person', methods=['POST'])
+@admin_required
+def delete_sales_person():
+    """删除销售人员"""
+    try:
+        data = request.get_json()
+        name = data.get('name', '').strip()
+        
+        if not name:
+            return jsonify({'success': False, 'error': get_text('name_required')})
+        
+        # 删除销售人员
+        sales_persons = system_settings.get('sales_persons', [])
+        sales_persons = [person for person in sales_persons if person['name'] != name]
+        system_settings['sales_persons'] = sales_persons
+        
+        if save_system_settings():
+            return jsonify({
+                'success': True,
+                'message': get_text('sales_person_deleted_success')
+            })
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/save_quotation', methods=['POST'])
+@login_required
+def save_quotation():
+    """保存报价单"""
+    try:
+        data = request.get_json()
+        username = session.get('username')
+        title = data.get('title', '')
+        quotation_data = data.get('data', {})
+        
+        print(f"保存报价单 - 用户: {username}, 标题: {title}")
+        print(f"报价单数据: {quotation_data}")
+        
+        if not title:
+            return jsonify({'success': False, 'error': get_text('quotation_title_required')})
+        
+        # 生成报价单编号
+        quotation_id = generate_quotation_id()
+        print(f"生成的报价单ID: {quotation_id}")
+        
+        # 简化数据结构，只保存6个核心信息
+        simplified_data = {
+            'type': quotation_data.get('type', 'manual'),  # pdf 或 manual
+            'order_date': quotation_data.get('export_date', datetime.now().strftime('%Y-%m-%d')),
+            'user': quotation_data.get('export_username', username),
+            'sales_person': quotation_data.get('export_sales_person', ''),
+            'products': []
+        }
+        
+        # 处理产品数据，统一格式
+        products = quotation_data.get('products', [])
+        for product in products:
+            # 清理SKU数据
+            sku = product.get('sku', '').strip() if isinstance(product.get('sku', ''), str) else str(product.get('sku', ''))
+            qty = int(product.get('qty', 1))
+            
+            # 统一价格格式为数字
+            if quotation_data.get('type') == 'pdf':
+                # PDF类型：直接使用unit_price
+                price = float(product.get('unit_price', 0))
+            else:
+                # 手动创建：从price字段提取数字
+                price_raw = product.get('price', '$0.00')
+                if isinstance(price_raw, str):
+                    # 移除$符号和空白字符，转换为数字
+                    price_str = price_raw.strip().replace('$', '').replace('\n', '').replace('\r', '').replace(' ', '')
+                    price = float(price_str) if price_str else 0.0
+                else:
+                    price = float(price_raw) if price_raw else 0.0
+            
+            simplified_product = {
+                'sku': sku,
+                'qty': qty,
+                'price': price  # 统一保存为数字格式
+            }
+            simplified_data['products'].append(simplified_product)
+        
+        # 保存报价单
+        if username not in quotations:
+            quotations[username] = []
+        
+        quotation = {
+            'quotation_id': quotation_id,
+            'title': title,
+            'data': simplified_data,
+            'created_at': datetime.now().isoformat(),
+            'updated_at': datetime.now().isoformat()
+        }
+        
+        quotations[username].append(quotation)
+        print(f"已添加报价单到内存，当前用户报价单数量: {len(quotations[username])}")
+        
+        if save_quotations():
+            print(f"报价单已保存到文件")
+            return jsonify({
+                'success': True, 
+                'message': get_text('quotation_saved_success'),
+                'quotation_id': quotation_id
+            })
+        else:
+            print(f"保存报价单到文件失败")
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        print(f"保存报价单异常: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/get_user_quotations', methods=['GET'])
+@login_required
+def get_user_quotations():
+    """获取用户的报价单列表"""
+    try:
+        username = session.get('username')
+        print(f"=== 调试信息 ===")
+        print(f"当前session内容: {dict(session)}")
+        print(f"当前登录用户: {username}")
+        print(f"所有用户: {list(users.keys())}")
+        print(f"所有报价单用户: {list(quotations.keys())}")
+        
+        if not username:
+            print(f"错误: session中没有username")
+            return jsonify({'success': False, 'error': '用户未登录'})
+        
+        if username not in quotations:
+            print(f"错误: 用户 {username} 在quotations中不存在")
+            return jsonify({'success': False, 'error': f'用户 {username} 没有报价单'})
+        
+        user_quotations = quotations.get(username, [])
+        print(f"用户 {username} 的报价单数量: {len(user_quotations)}")
+        print(f"用户 {username} 的报价单: {user_quotations}")
+        
+        return jsonify({
+            'success': True,
+            'quotations': user_quotations
+        })
+    except Exception as e:
+        print(f"获取用户报价单异常: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/get_all_quotations', methods=['GET'])
+@admin_required
+def get_all_quotations():
+    """获取所有用户的报价单列表（管理员专用）"""
+    try:
+        print(f"获取所有报价单 - 管理员: {session.get('username')}")
+        print(f"所有报价单数据: {quotations}")
+        return jsonify({
+            'success': True,
+            'quotations': quotations
+        })
+    except Exception as e:
+        print(f"获取所有报价单异常: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/load_quotation/<quotation_id>', methods=['GET'])
+def load_quotation(quotation_id):
+    """加载指定报价单"""
+    try:
+        username = session.get('username')
+        is_admin_user = session.get('is_admin', False)
+        
+        # 检查用户是否登录（管理员或普通用户）
+        if not username and not is_admin_user:
+            return jsonify({'success': False, 'error': get_text('login_required')})
+        
+        # 管理员可以加载所有报价单，普通用户只能加载自己的
+        if is_admin_user:
+            # 在所有用户的报价单中查找
+            for user_name, user_quotations in quotations.items():
+                for quotation in user_quotations:
+                    if quotation['quotation_id'] == quotation_id:
+                        return jsonify({
+                            'success': True,
+                            'quotation': quotation
+                        })
+        else:
+            # 普通用户只能加载自己的报价单
+            user_quotations = quotations.get(username, [])
+            for quotation in user_quotations:
+                if quotation['quotation_id'] == quotation_id:
+                    return jsonify({
+                        'success': True,
+                        'quotation': quotation
+                    })
+        
+        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/update_quotation/<quotation_id>', methods=['POST'])
+def update_quotation(quotation_id):
+    """更新报价单"""
+    try:
+        data = request.get_json()
+        username = session.get('username')
+        is_admin_user = session.get('is_admin', False)
+        title = data.get('title', '')
+        quotation_data = data.get('data', {})
+        
+        # 检查用户是否登录（管理员或普通用户）
+        if not username and not is_admin_user:
+            return jsonify({'success': False, 'error': get_text('login_required')})
+        
+        if not title:
+            return jsonify({'success': False, 'error': get_text('quotation_title_required')})
+        
+        # 管理员可以更新所有报价单，普通用户只能更新自己的
+        if is_admin_user:
+            # 在所有用户的报价单中查找
+            for user_name, user_quotations in quotations.items():
+                for quotation in user_quotations:
+                    if quotation['quotation_id'] == quotation_id:
+                        quotation['title'] = title
+                        quotation['data'] = quotation_data
+                        quotation['updated_at'] = datetime.now().isoformat()
+                        
+                        if save_quotations():
+                            return jsonify({
+                                'success': True, 
+                                'message': get_text('quotation_updated_success')
+                            })
+                        else:
+                            return jsonify({'success': False, 'error': get_text('save_failed')})
+        else:
+            # 普通用户只能更新自己的报价单
+            user_quotations = quotations.get(username, [])
+            for quotation in user_quotations:
+                if quotation['quotation_id'] == quotation_id:
+                    quotation['title'] = title
+                    quotation['data'] = quotation_data
+                    quotation['updated_at'] = datetime.now().isoformat()
+                    
+                    if save_quotations():
+                        return jsonify({
+                            'success': True, 
+                            'message': get_text('quotation_updated_success')
+                        })
+                    else:
+                        return jsonify({'success': False, 'error': get_text('save_failed')})
+        
+        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/delete_quotation/<quotation_id>', methods=['POST'])
+def delete_quotation(quotation_id):
+    """删除报价单"""
+    try:
+        username = session.get('username')
+        is_admin_user = session.get('is_admin', False)
+        
+        # 检查用户是否登录（管理员或普通用户）
+        if not username and not is_admin_user:
+            return jsonify({'success': False, 'error': get_text('login_required')})
+        
+        # 管理员可以删除所有报价单，普通用户只能删除自己的
+        if is_admin_user:
+            # 在所有用户的报价单中查找
+            for user_name, user_quotations in quotations.items():
+                for i, quotation in enumerate(user_quotations):
+                    if quotation['quotation_id'] == quotation_id:
+                        del user_quotations[i]
+                        
+                        if save_quotations():
+                            return jsonify({
+                                'success': True, 
+                                'message': get_text('quotation_deleted_success')
+                            })
+                        else:
+                            return jsonify({'success': False, 'error': get_text('delete_failed')})
+        else:
+            # 普通用户只能删除自己的报价单
+            user_quotations = quotations.get(username, [])
+            for i, quotation in enumerate(user_quotations):
+                if quotation['quotation_id'] == quotation_id:
+                    del user_quotations[i]
+                    
+                    if save_quotations():
+                        return jsonify({
+                            'success': True, 
+                            'message': get_text('quotation_deleted_success')
+                        })
+                    else:
+                        return jsonify({'success': False, 'error': get_text('delete_failed')})
+        
+        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/view_quotation/<quotation_id>')
+def view_quotation_detail(quotation_id):
+    """查看报价单详情页面"""
+    try:
+        username = session.get('username')
+        is_admin_user = session.get('is_admin', False)
+        
+        # 检查用户是否登录（管理员或普通用户）
+        if not username and not is_admin_user:
+            return redirect(url_for('user_login'))
+        
+        # 管理员可以查看所有报价单，普通用户只能查看自己的
+        if is_admin_user:
+            # 在所有用户的报价单中查找
+            for user_name, user_quotations in quotations.items():
+                for quotation in user_quotations:
+                    if quotation['quotation_id'] == quotation_id:
+                        # 清理报价单数据
+                        cleaned_quotation = clean_quotation_data(quotation)
+                        return render_template('quotation_detail.html', quotation=cleaned_quotation)
+        else:
+            # 普通用户只能查看自己的报价单
+            user_quotations = quotations.get(username, [])
+            for quotation in user_quotations:
+                if quotation['quotation_id'] == quotation_id:
+                    # 清理报价单数据
+                    cleaned_quotation = clean_quotation_data(quotation)
+                    return render_template('quotation_detail.html', quotation=cleaned_quotation)
+        
+        return render_template('quotation_detail.html', quotation=None, error=get_text('quotation_not_found'))
+    except Exception as e:
+        return render_template('quotation_detail.html', quotation=None, error=str(e))
+
+def clean_quotation_data(quotation):
+    """清理报价单数据，去除多余的空白字符，并计算总计"""
+    if not quotation or 'data' not in quotation:
+        return quotation
+    
+    cleaned_quotation = quotation.copy()
+    cleaned_data = quotation['data'].copy()
+    
+    # 清理产品数据并计算总计
+    total_amount = 0.0
+    
+    if 'products' in cleaned_data:
+        cleaned_products = []
+        for product in cleaned_data['products']:
+            cleaned_product = product.copy()
+            
+            # 清理SKU
+            if 'sku' in cleaned_product and isinstance(cleaned_product['sku'], str):
+                cleaned_product['sku'] = cleaned_product['sku'].strip()
+            
+            # 处理价格并计算小计
+            if 'price' in cleaned_product:
+                # 统一处理价格（现在应该都是数字格式，但兼容旧数据）
+                if isinstance(cleaned_product['price'], str):
+                    # 处理旧数据中的字符串价格
+                    price_str = cleaned_product['price'].strip()
+                    price_value = float(price_str.replace('$', '').replace('\n', '').replace('\r', '').replace(' ', ''))
+                else:
+                    # 新数据中的数字价格
+                    price_value = float(cleaned_product['price'])
+                
+                # 计算小计
+                qty = int(cleaned_product.get('qty', 1))
+                line_total = price_value * qty
+                total_amount += line_total
+                
+                # 保存标准化的价格（数字格式）
+                cleaned_product['price'] = price_value
+                cleaned_product['line_total'] = line_total  # 添加小计字段
+            
+            cleaned_products.append(cleaned_product)
+        
+        cleaned_data['products'] = cleaned_products
+    
+    # 添加总计到报价单数据中
+    cleaned_data['total_amount'] = total_amount
+    cleaned_quotation['data'] = cleaned_data
+    return cleaned_quotation
+
+@app.route('/export_quotation/<quotation_id>')
+def export_quotation_detail(quotation_id):
+    """导出报价单"""
+    try:
+        username = session.get('username')
+        is_admin_user = session.get('is_admin', False)
+        
+        # 检查用户是否登录（管理员或普通用户）
+        if not username and not is_admin_user:
+            return redirect(url_for('user_login'))
+        
+        # 管理员可以导出所有报价单，普通用户只能导出自己的
+        if is_admin_user:
+            # 在所有用户的报价单中查找
+            for user_name, user_quotations in quotations.items():
+                for quotation in user_quotations:
+                    if quotation['quotation_id'] == quotation_id:
+                        # 这里可以根据报价单类型调用相应的导出函数
+                        quotation_data = quotation.get('data', {})
+                        if quotation_data.get('type') == 'pdf':
+                            # PDF类型的报价单导出
+                            return export_pdf_quotation(quotation_data)
+                        else:
+                            # 手动创建的报价单导出
+                            return export_manual_quotation(quotation_data)
+        else:
+            # 普通用户只能导出自己的报价单
+            user_quotations = quotations.get(username, [])
+            for quotation in user_quotations:
+                if quotation['quotation_id'] == quotation_id:
+                    # 这里可以根据报价单类型调用相应的导出函数
+                    quotation_data = quotation.get('data', {})
+                    if quotation_data.get('type') == 'pdf':
+                        # PDF类型的报价单导出
+                        return export_pdf_quotation(quotation_data)
+                    else:
+                        # 手动创建的报价单导出
+                        return export_manual_quotation(quotation_data)
+        
+        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+def export_pdf_quotation(quotation_data):
+    """导出PDF类型的报价单"""
+    try:
+        products = quotation_data.get('products', [])
+        export_date = quotation_data.get('order_date', datetime.now().strftime('%Y-%m-%d'))
+        export_username = quotation_data.get('user', '')
+        export_sales_person = quotation_data.get('sales_person', '')
+        
+        # 构造导出参数，使用原有的导出格式
+        occw_data = []
+        for i, product in enumerate(products, 1):
+            occw_data.append({
+                'seq_num': str(i),
+                'occw_sku': product.get('sku', ''),
+                'qty': str(product.get('qty', 1)),
+                'unit_price': product.get('price', 0),
+                'total_price': product.get('price', 0) * product.get('qty', 1)
+            })
+        
+        # 构造URL参数
+        from urllib.parse import urlencode
+        params = {
+            'occw_data': json.dumps(occw_data),
+            'export_date': export_date,
+            'export_username': export_username,
+            'export_sales_person': export_sales_person
+        }
+        
+        # 重定向到原有的导出接口
+        return redirect(f'/export/occw_excel?{urlencode(params)}')
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+def export_manual_quotation(quotation_data):
+    """导出手动创建的报价单"""
+    try:
+        products = quotation_data.get('products', [])
+        export_date = quotation_data.get('order_date', datetime.now().strftime('%Y-%m-%d'))
+        export_username = quotation_data.get('user', '')
+        export_sales_person = quotation_data.get('sales_person', '')
+        
+        # 构造导出参数，使用原有的导出格式
+        manual_data = []
+        for i, product in enumerate(products, 1):
+            manual_data.append({
+                'seq_num': str(i),
+                'category': '',
+                'product': '',
+                'box_variant': '',
+                'door_variant': '',
+                'sku': product.get('sku', ''),
+                'price': product.get('price', '$0.00'),
+                'qty': str(product.get('qty', 1))
+            })
+        
+        # 构造URL参数
+        from urllib.parse import urlencode
+        params = {
+            'manual_data': json.dumps(manual_data),
+            'export_date': export_date,
+            'export_username': export_username,
+            'export_sales_person': export_sales_person
+        }
+        
+        # 重定向到原有的导出接口
+        return redirect(f'/export/manual_excel?{urlencode(params)}')
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 @app.route('/get_pdf_text')
 def get_pdf_text():
@@ -2028,6 +2909,14 @@ print(f"已加载 {len(occw_prices)} 个OCCW价格")
 print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
 
 if __name__ == '__main__':
+    # 加载数据
+    load_standard_prices()
+    load_occw_prices()
+    load_sku_mappings()
+    load_system_settings()
+    load_users()
+    load_quotations()
+    
     # 生产环境配置
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_ENV') == 'development'
