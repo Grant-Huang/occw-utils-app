@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: occw-quotation-system
+    name: occw—utils-app
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn --config gunicorn.conf.py app:app"
