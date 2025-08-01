@@ -1215,8 +1215,8 @@ function loadOccwPrices() {
         type: 'GET',
         success: function(response) {
             if (response.success) {
-                displayOccwPrices(response.prices);
-                initializePriceFilters(response.prices);
+                displayOccwPrices(response.data || response.prices || []);
+                initializePriceFilters(response.data || response.prices || []);
             } else {
                 showAlert(response.error, 'danger');
             }
@@ -1238,12 +1238,18 @@ function displayOccwPrices(prices) {
     }
     
     prices.forEach(function(price) {
+        // 构建变体信息
+        const variant = [];
+        if (price.door_variant) variant.push(price.door_variant);
+        if (price.box_variant) variant.push(price.box_variant);
+        const variantText = variant.join(' / ');
+        
         const row = `
             <tr>
                 <td><code>${price.sku || ''}</code></td>
-                <td>${price.name || ''}</td>
+                <td>${price.product_name || ''}</td>
                 <td><span class="badge bg-secondary">${price.category || ''}</span></td>
-                <td>${price.variant || ''}</td>
+                <td>${variantText}</td>
                 <td><strong>$${price.price || 0}</strong></td>
             </tr>
         `;
