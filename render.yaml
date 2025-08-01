@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: occw—utils-app
+    name: occw-utils-app
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn --config gunicorn.conf.py app:app"
@@ -14,8 +14,6 @@ services:
         value: admin123
       - key: PYTHON_VERSION
         value: "3.11"
-      - key: PORT
-        value: "10000"
     healthCheckPath: /
     autoDeploy: true
     buildFilter:
