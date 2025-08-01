@@ -276,6 +276,32 @@
                             <button type="button" class="btn btn-warning" onclick="saveSystemSettings()">
                                 <i class="fas fa-save me-1"></i>{{ t('save_settings') }}
                             </button>
+                            
+                            <hr class="my-4">
+                            
+                            <h6 class="text-danger mb-3">
+                                <i class="fas fa-shield-alt me-2"></i>{{ t('admin_password_settings') }}
+                            </h6>
+                            <form id="adminPasswordForm">
+                                <div class="mb-3">
+                                    <label for="currentAdminPassword" class="form-label">{{ t('current_admin_password') }}</label>
+                                    <input type="password" class="form-control" id="currentAdminPassword" required>
+                                    <div class="form-text">{{ t('current_password_required') }}</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newAdminPassword" class="form-label">{{ t('new_admin_password') }}</label>
+                                    <input type="password" class="form-control" id="newAdminPassword" required>
+                                    <div class="form-text">{{ t('new_password_requirements') }}</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmAdminPassword" class="form-label">{{ t('confirm_new_password') }}</label>
+                                    <input type="password" class="form-control" id="confirmAdminPassword" required>
+                                    <div class="form-text">{{ t('confirm_password_help') }}</div>
+                                </div>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-key me-1"></i>{{ t('change_admin_password') }}
+                                </button>
+                            </form>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-info mb-3">
@@ -1152,6 +1178,56 @@ $(document).ready(function() {
             },
             error: function() {
                 showAlert('{{ t("upload_failed") }}', 'danger');
+            }
+        });
+    });
+    
+    // 管理员密码修改表单提交处理
+    $('#adminPasswordForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const currentPassword = $('#currentAdminPassword').val();
+        const newPassword = $('#newAdminPassword').val();
+        const confirmPassword = $('#confirmAdminPassword').val();
+        
+        // 验证输入
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            showAlert('{{ t("all_fields_required") }}', 'warning');
+            return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+            showAlert('{{ t("passwords_not_match") }}', 'danger');
+            return;
+        }
+        
+        if (newPassword.length < 6) {
+            showAlert('{{ t("password_too_short") }}', 'warning');
+            return;
+        }
+        
+        // 提交密码修改请求
+        $.ajax({
+            url: '/change_admin_password',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                current_password: currentPassword,
+                new_password: newPassword
+            }),
+            success: function(response) {
+                if (response.success) {
+                    showAlert('{{ t("admin_password_changed_success") }}', 'success');
+                    // 清空表单
+                    $('#currentAdminPassword').val('');
+                    $('#newAdminPassword').val('');
+                    $('#confirmAdminPassword').val('');
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("change_admin_password_failed") }}', 'danger');
             }
         });
     });

@@ -190,7 +190,8 @@ def load_system_settings():
         system_settings = {
             'default_sales_person': '',
             'sales_persons': [],
-            'user_login_enabled': True
+            'user_login_enabled': True,
+            'admin_password': ADMIN_PASSWORD
         }
 
 def save_system_settings():
@@ -1869,7 +1870,9 @@ def admin_login():
     """管理员登录"""
     if request.method == 'POST':
         password = request.form.get('password')
-        if password == ADMIN_PASSWORD:
+        # 从系统设置中获取管理员密码，如果没有则使用默认密码
+        admin_password = system_settings.get('admin_password', ADMIN_PASSWORD)
+        if password == admin_password:
             session[ADMIN_SESSION_KEY] = True
             next_page = request.args.get('next')
             return redirect(next_page or url_for('admin_dashboard'))
@@ -2032,7 +2035,8 @@ def reset_settings():
         system_settings = {
             'default_sales_person': '',
             'sales_persons': [],
-            'user_login_enabled': True
+            'user_login_enabled': True,
+            'admin_password': ADMIN_PASSWORD
         }
         if save_system_settings():
             return jsonify({'success': True})
@@ -2050,6 +2054,37 @@ def update_system_settings():
         system_settings.update(data)
         if save_system_settings():
             return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/change_admin_password', methods=['POST'])
+@admin_required
+def change_admin_password():
+    """修改管理员密码"""
+    try:
+        data = request.get_json()
+        current_password = data.get('current_password', '')
+        new_password = data.get('new_password', '')
+        
+        if not current_password or not new_password:
+            return jsonify({'success': False, 'error': get_text('all_fields_required')})
+        
+        # 验证当前密码
+        admin_password = system_settings.get('admin_password', ADMIN_PASSWORD)
+        if current_password != admin_password:
+            return jsonify({'success': False, 'error': get_text('current_password_incorrect')})
+        
+        # 验证新密码长度
+        if len(new_password) < 6:
+            return jsonify({'success': False, 'error': get_text('password_too_short')})
+        
+        # 更新管理员密码
+        system_settings['admin_password'] = new_password
+        
+        if save_system_settings():
+            return jsonify({'success': True, 'message': get_text('admin_password_changed_success')})
         else:
             return jsonify({'success': False, 'error': get_text('save_failed')})
     except Exception as e:
