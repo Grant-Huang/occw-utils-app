@@ -495,6 +495,30 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    
+                                    <!-- 分页控件 -->
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2">{{ t('show') }}</span>
+                                                <select class="form-select form-select-sm me-2" id="perPageSelect" style="width: auto;" onchange="changePerPage()">
+                                                    <option value="25">25</option>
+                                                    <option value="50" selected>50</option>
+                                                    <option value="100">100</option>
+                                                    <option value="200">200</option>
+                                                </select>
+                                                <span class="me-2">{{ t('entries') }}</span>
+                                                <span id="priceTableInfo" class="text-muted"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <nav aria-label="价格表分页">
+                                                <ul class="pagination pagination-sm justify-content-end mb-0" id="priceTablePagination">
+                                                    <!-- 分页按钮将在这里动态生成 -->
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -589,7 +613,7 @@ function showPriceManagement() {
     $('.admin-content').hide();
     $('#price-management-content').show();
     loadPriceStats();
-    loadOccwPrices();
+    loadOccwPrices(1); // 从第一页开始加载
 }
 
 // 显示SKU映射
@@ -1284,15 +1308,34 @@ function displayPriceStats(stats) {
     $('#priceStats').html(statsHtml);
 }
 
+// 全局分页变量
+let currentPage = 1;
+let totalPages = 1;
+let totalItems = 0;
+let perPage = 50;
+
 // 加载OCCW价格表
-function loadOccwPrices() {
+function loadOccwPrices(page = 1) {
+    currentPage = page;
+    perPage = parseInt($('#perPageSelect').val());
+    
     $.ajax({
         url: '/get_occw_price_table',
         type: 'GET',
+        data: {
+            page: currentPage,
+            per_page: perPage
+        },
         success: function(response) {
             if (response.success) {
                 displayOccwPrices(response.data || response.prices || []);
                 initializePriceFilters(response.data || response.prices || []);
+                
+                // 更新分页信息
+                totalPages = response.total_pages || 1;
+                totalItems = response.total || 0;
+                updatePaginationInfo();
+                updatePaginationControls();
             } else {
                 showAlert(response.error, 'danger');
             }
@@ -1333,6 +1376,78 @@ function displayOccwPrices(prices) {
     });
 }
 
+// 更新分页信息显示
+function updatePaginationInfo() {
+    const start = (currentPage - 1) * perPage + 1;
+    const end = Math.min(currentPage * perPage, totalItems);
+    const info = `显示第 ${start} 到 ${end} 条，共 ${totalItems} 条记录`;
+    $('#priceTableInfo').text(info);
+}
+
+// 更新分页控件
+function updatePaginationControls() {
+    const pagination = $('#priceTablePagination');
+    pagination.empty();
+    
+    if (totalPages <= 1) {
+        return;
+    }
+    
+    // 上一页按钮
+    const prevBtn = $(`<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${currentPage - 1})" ${currentPage === 1 ? 'tabindex="-1"' : ''}>
+            <i class="fas fa-chevron-left"></i>
+        </a>
+    </li>`);
+    pagination.append(prevBtn);
+    
+    // 页码按钮
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    // 第一页
+    if (startPage > 1) {
+        pagination.append(`<li class="page-item"><a class="page-link" href="#" onclick="loadOccwPricesWithFilters(1)">1</a></li>`);
+        if (startPage > 2) {
+            pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+        }
+    }
+    
+    // 中间页码
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = $(`<li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${i})">${i}</a>
+        </li>`);
+        pagination.append(pageBtn);
+    }
+    
+    // 最后一页
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+        }
+        pagination.append(`<li class="page-item"><a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${totalPages})">${totalPages}</a></li>`);
+    }
+    
+    // 下一页按钮
+    const nextBtn = $(`<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${currentPage + 1})" ${currentPage === totalPages ? 'tabindex="-1"' : ''}>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>`);
+    pagination.append(nextBtn);
+}
+
+// 改变每页显示数量
+function changePerPage() {
+    loadOccwPricesWithFilters(1); // 重置到第一页
+}
+
 // 初始化价格过滤器
 function initializePriceFilters(prices) {
     const categories = [...new Set(prices.map(p => p.category).filter(c => c))];
@@ -1346,38 +1461,45 @@ function initializePriceFilters(prices) {
 
 // 过滤价格
 function filterPrices() {
-    const searchTerm = $('#priceSearchInput').val().toLowerCase();
+    // 重置到第一页
+    currentPage = 1;
+    loadOccwPricesWithFilters();
+}
+
+// 带过滤条件的加载价格表
+function loadOccwPricesWithFilters(page = 1) {
+    currentPage = page;
+    perPage = parseInt($('#perPageSelect').val());
+    
+    const searchTerm = $('#priceSearchInput').val();
     const categoryFilter = $('#categoryFilterSelect').val();
     const priceRangeFilter = $('#priceRangeFilterSelect').val();
     
-    $('#occwPricesTableBody tr').each(function() {
-        const row = $(this);
-        const sku = row.find('td:eq(0)').text().toLowerCase();
-        const name = row.find('td:eq(1)').text().toLowerCase();
-        const category = row.find('td:eq(2)').text().toLowerCase();
-        const price = parseFloat(row.find('td:eq(4)').text().replace('$', '')) || 0;
-        
-        let show = true;
-        
-        // 搜索过滤
-        if (searchTerm && !sku.includes(searchTerm) && !name.includes(searchTerm)) {
-            show = false;
-        }
-        
-        // 类别过滤
-        if (categoryFilter && category !== categoryFilter.toLowerCase()) {
-            show = false;
-        }
-        
-        // 价格范围过滤
-        if (priceRangeFilter) {
-            const [min, max] = priceRangeFilter.split('-').map(p => p === '+' ? Infinity : parseFloat(p));
-            if (price < min || (max !== Infinity && price > max)) {
-                show = false;
+    $.ajax({
+        url: '/get_occw_price_table',
+        type: 'GET',
+        data: {
+            page: currentPage,
+            per_page: perPage,
+            search: searchTerm,
+            category: categoryFilter
+        },
+        success: function(response) {
+            if (response.success) {
+                displayOccwPrices(response.data || response.prices || []);
+                
+                // 更新分页信息
+                totalPages = response.total_pages || 1;
+                totalItems = response.total || 0;
+                updatePaginationInfo();
+                updatePaginationControls();
+            } else {
+                showAlert(response.error, 'danger');
             }
+        },
+        error: function() {
+            showAlert('{{ t("load_prices_failed") }}', 'danger');
         }
-        
-        row.toggle(show);
     });
 }
 
