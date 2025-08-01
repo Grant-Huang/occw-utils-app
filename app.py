@@ -1673,6 +1673,14 @@ def export_occw_excel():
         export_username = request.args.get('export_username')
         export_sales_person = request.args.get('export_sales_person')
         
+        # 检查用户登录功能是否被禁用，如果被禁用且没有提供用户名和销售人员，使用默认值
+        user_login_enabled = system_settings.get('user_login_enabled', True)
+        if not user_login_enabled:
+            if not export_username:
+                export_username = 'Public User'
+            if not export_sales_person:
+                export_sales_person = get_default_sales_person()
+        
         if not occw_data:
             return jsonify({'error': 'No data provided'}), 400
         
@@ -1729,6 +1737,14 @@ def export_manual_excel():
         export_date = request.args.get('export_date')
         export_username = request.args.get('export_username')
         export_sales_person = request.args.get('export_sales_person')
+        
+        # 检查用户登录功能是否被禁用，如果被禁用且没有提供用户名和销售人员，使用默认值
+        user_login_enabled = system_settings.get('user_login_enabled', True)
+        if not user_login_enabled:
+            if not export_username:
+                export_username = 'Public User'
+            if not export_sales_person:
+                export_sales_person = get_default_sales_person()
         
         if not manual_data:
             return jsonify({'error': 'No data provided'}), 400
@@ -2519,12 +2535,20 @@ def export_quotation_detail(quotation_id):
         username = session.get('username')
         is_admin_user = session.get('is_admin', False)
         
-        # 检查用户是否登录（管理员或普通用户）
-        if not username and not is_admin_user:
-            return redirect(url_for('user_login'))
+        # 检查用户登录功能是否被禁用
+        user_login_enabled = system_settings.get('user_login_enabled', True)
         
-        # 管理员可以导出所有报价单，普通用户只能导出自己的
-        if is_admin_user:
+        # 如果用户登录功能被禁用，允许未登录用户导出报价单
+        if not user_login_enabled:
+            # 用户登录被禁用时，允许任何人导出报价单
+            pass
+        else:
+            # 用户登录启用时，检查用户是否登录（管理员或普通用户）
+            if not username and not is_admin_user:
+                return redirect(url_for('user_login'))
+        
+        # 如果用户登录功能被禁用，允许导出所有报价单
+        if not user_login_enabled:
             # 在所有用户的报价单中查找
             for user_name, user_quotations in quotations.items():
                 for quotation in user_quotations:
@@ -2538,30 +2562,63 @@ def export_quotation_detail(quotation_id):
                             # 手动创建的报价单导出
                             return export_manual_quotation(quotation_data)
         else:
-            # 普通用户只能导出自己的报价单
-            user_quotations = quotations.get(username, [])
-            for quotation in user_quotations:
-                if quotation['quotation_id'] == quotation_id:
-                    # 这里可以根据报价单类型调用相应的导出函数
-                    quotation_data = quotation.get('data', {})
-                    if quotation_data.get('type') == 'pdf':
-                        # PDF类型的报价单导出
-                        return export_pdf_quotation(quotation_data)
-                    else:
-                        # 手动创建的报价单导出
-                        return export_manual_quotation(quotation_data)
+            # 用户登录功能启用时的原有逻辑
+            # 管理员可以导出所有报价单，普通用户只能导出自己的
+            if is_admin_user:
+                # 在所有用户的报价单中查找
+                for user_name, user_quotations in quotations.items():
+                    for quotation in user_quotations:
+                        if quotation['quotation_id'] == quotation_id:
+                            # 这里可以根据报价单类型调用相应的导出函数
+                            quotation_data = quotation.get('data', {})
+                            if quotation_data.get('type') == 'pdf':
+                                # PDF类型的报价单导出
+                                return export_pdf_quotation(quotation_data)
+                            else:
+                                # 手动创建的报价单导出
+                                return export_manual_quotation(quotation_data)
+            else:
+                # 普通用户只能导出自己的报价单
+                user_quotations = quotations.get(username, [])
+                for quotation in user_quotations:
+                    if quotation['quotation_id'] == quotation_id:
+                        # 这里可以根据报价单类型调用相应的导出函数
+                        quotation_data = quotation.get('data', {})
+                        if quotation_data.get('type') == 'pdf':
+                            # PDF类型的报价单导出
+                            return export_pdf_quotation(quotation_data)
+                        else:
+                            # 手动创建的报价单导出
+                            return export_manual_quotation(quotation_data)
         
         return jsonify({'success': False, 'error': get_text('quotation_not_found')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+def get_default_sales_person():
+    """获取默认销售人员（邮箱为info@oppeincabinet.ca的销售人员）"""
+    sales_persons = system_settings.get('sales_persons', [])
+    for person in sales_persons:
+        if person.get('email') == 'info@oppeincabinet.ca':
+            return person.get('name', '')
+    return ''
 
 def export_pdf_quotation(quotation_data):
     """导出PDF类型的报价单"""
     try:
         products = quotation_data.get('products', [])
         export_date = quotation_data.get('order_date', datetime.now().strftime('%Y-%m-%d'))
-        export_username = quotation_data.get('user', '')
-        export_sales_person = quotation_data.get('sales_person', '')
+        
+        # 检查用户登录功能是否被禁用
+        user_login_enabled = system_settings.get('user_login_enabled', True)
+        if not user_login_enabled:
+            # 用户登录被禁用时，使用默认值
+            export_username = 'Public User'
+            export_sales_person = get_default_sales_person()
+        else:
+            # 用户登录启用时，使用原有逻辑
+            export_username = quotation_data.get('user', '')
+            export_sales_person = quotation_data.get('sales_person', '')
         
         # 构造导出参数，使用原有的导出格式
         occw_data = []
@@ -2593,8 +2650,17 @@ def export_manual_quotation(quotation_data):
     try:
         products = quotation_data.get('products', [])
         export_date = quotation_data.get('order_date', datetime.now().strftime('%Y-%m-%d'))
-        export_username = quotation_data.get('user', '')
-        export_sales_person = quotation_data.get('sales_person', '')
+        
+        # 检查用户登录功能是否被禁用
+        user_login_enabled = system_settings.get('user_login_enabled', True)
+        if not user_login_enabled:
+            # 用户登录被禁用时，使用默认值
+            export_username = 'Public User'
+            export_sales_person = get_default_sales_person()
+        else:
+            # 用户登录启用时，使用原有逻辑
+            export_username = quotation_data.get('user', '')
+            export_sales_person = quotation_data.get('sales_person', '')
         
         # 构造导出参数，使用原有的导出格式
         manual_data = []

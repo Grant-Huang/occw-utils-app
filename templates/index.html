@@ -820,8 +820,8 @@ function exportOCCWQuotation() {
     
     // 获取用户输入的日期、用户名和销售人员
     const exportDate = $('#exportDate').val();
-    const exportUsername = $('#exportUsername').val();
-    const exportSalesPerson = $('#exportSalesPerson').val();
+    let exportUsername = $('#exportUsername').val();
+    let exportSalesPerson = $('#exportSalesPerson').val();
     
     // 验证必填信息
     if (!exportDate) {
@@ -829,14 +829,31 @@ function exportOCCWQuotation() {
         return;
     }
     
-    if (!exportUsername) {
-        showAlert('用户名不能为空', 'warning');
-        return;
-    }
+    // 检查用户登录功能是否被禁用
+    const userLoginEnabled = {{ 'true' if system_settings.get('user_login_enabled', True) else 'false' }};
     
-    if (!exportSalesPerson) {
-        showAlert('请选择销售人员', 'warning');
-        return;
+    if (!userLoginEnabled) {
+        // 用户登录被禁用时，使用默认值
+        if (!exportUsername) {
+            exportUsername = 'Public User';
+        }
+        if (!exportSalesPerson) {
+            // 获取默认销售人员（邮箱为info@oppeincabinet.ca的销售人员）
+            const salesPersons = {{ system_settings.get('sales_persons', []) | tojson }};
+            const defaultSalesPerson = salesPersons.find(person => person.email === 'info@oppeincabinet.ca');
+            exportSalesPerson = defaultSalesPerson ? defaultSalesPerson.name : '';
+        }
+    } else {
+        // 用户登录启用时，验证必填信息
+        if (!exportUsername) {
+            showAlert('用户名不能为空', 'warning');
+            return;
+        }
+        
+        if (!exportSalesPerson) {
+            showAlert('请选择销售人员', 'warning');
+            return;
+        }
     }
     
     // 验证产品数据完整性
@@ -2930,8 +2947,8 @@ function exportManualQuotation() {
     
     // 获取用户输入的日期、用户名和销售人员
     const exportDate = $('#manualExportDate').val();
-    const exportUsername = $('#manualExportUsername').val();
-    const exportSalesPerson = $('#manualExportSalesPerson').val();
+    let exportUsername = $('#manualExportUsername').val();
+    let exportSalesPerson = $('#manualExportSalesPerson').val();
     
     // 验证必填信息
     if (!exportDate) {
@@ -2939,14 +2956,31 @@ function exportManualQuotation() {
         return;
     }
     
-    if (!exportUsername) {
-        showAlert('用户名不能为空', 'warning');
-        return;
-    }
+    // 检查用户登录功能是否被禁用
+    const userLoginEnabled = {{ 'true' if system_settings.get('user_login_enabled', True) else 'false' }};
     
-    if (!exportSalesPerson) {
-        showAlert('请选择销售人员', 'warning');
-        return;
+    if (!userLoginEnabled) {
+        // 用户登录被禁用时，使用默认值
+        if (!exportUsername) {
+            exportUsername = 'Public User';
+        }
+        if (!exportSalesPerson) {
+            // 获取默认销售人员（邮箱为info@oppeincabinet.ca的销售人员）
+            const salesPersons = {{ system_settings.get('sales_persons', []) | tojson }};
+            const defaultSalesPerson = salesPersons.find(person => person.email === 'info@oppeincabinet.ca');
+            exportSalesPerson = defaultSalesPerson ? defaultSalesPerson.name : '';
+        }
+    } else {
+        // 用户登录启用时，验证必填信息
+        if (!exportUsername) {
+            showAlert('用户名不能为空', 'warning');
+            return;
+        }
+        
+        if (!exportSalesPerson) {
+            showAlert('请选择销售人员', 'warning');
+            return;
+        }
     }
     
     // 验证产品数据完整性
