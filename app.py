@@ -1989,8 +1989,8 @@ def set_language_route(lang):
 @app.route('/prices')
 @admin_required
 def prices():
-    """价格管理页面"""
-    return render_template('prices.html', prices=standard_prices)
+    """价格管理页面 - 重定向到管理员仪表板"""
+    return redirect('/admin')
 
 @app.route('/admin')
 @admin_required

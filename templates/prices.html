@@ -3,29 +3,17 @@
 {% block title %}{{ t('price_management_title') }} - {{ t('system_name') }}{% endblock %}
 
 {% block content %}
-<!-- 页面标题 -->
-<div class="page-header">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="page-title">
-                    <i class="fas fa-database me-3 page-icon"></i>
-                    {{ t('price_management_title') }}
-                </h1>
-                <p class="page-subtitle">{{ t('occw_price_table_management') }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-warning text-dark">
-                    <h4 class="card-title mb-0">
-                        <i class="fas fa-database me-2"></i>{{ t('occw_price_table_management') }}
-                    </h4>
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-dollar-sign me-2"></i>{{ t('price_management') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-dark btn-sm" onclick="window.location.href='/admin'">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
                 </div>
                 <div class="card-body">
                     

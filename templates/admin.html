@@ -51,7 +51,7 @@
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="window.open('/prices', '_blank')">
+            <div class="card h-100 admin-card" onclick="showPriceManagement()">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-dollar-sign"></i>
@@ -300,6 +300,182 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 价格管理 -->
+        <div id="price-management-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-dollar-sign me-2"></i>{{ t('price_management') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-dark btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- 导入说明 -->
+                    <div class="alert alert-info mb-4">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>{{ t('excel_format_requirements') }}
+                        </h5>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <p class="mb-2"><strong>{{ t('required_columns') }}：</strong></p>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered mb-3">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">{{ t('column_name') }}</th>
+                                                <th width="15%">{{ t('column_type') }}</th>
+                                                <th width="65%">{{ t('column_description') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>{{ t('internal_reference') }}</code></td>
+                                                <td>{{ t('text_type') }}</td>
+                                                <td>{{ t('sku_identifier') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>{{ t('sales_price') }}</code></td>
+                                                <td>{{ t('number_type') }}</td>
+                                                <td>{{ t('product_price') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>{{ t('variant_value') }}</code></td>
+                                                <td>{{ t('text_type') }}</td>
+                                                <td>{{ t('variant_format') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>{{ t('name_col') }}</code></td>
+                                                <td>{{ t('text_type') }}</td>
+                                                <td>{{ t('product_name_desc') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>{{ t('product_category_col') }}</code></td>
+                                                <td>{{ t('text_type') }}</td>
+                                                <td>{{ t('product_category_desc') }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <p class="mb-2"><strong>{{ t('supported_categories') }}：</strong></p>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-1"></i>RTA Assm.组合件</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Door</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>BOX</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Ending Panel</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Molding</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Toe Kick</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Filler</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>{{ t('other_hardware') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 文件上传区域 -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-upload me-2"></i>{{ t('upload_occw_prices') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="uploadOccwPricesForm" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label for="occwPricesFile" class="form-label">{{ t('select_excel_file') }}</label>
+                                            <input type="file" class="form-control" id="occwPricesFile" name="file" accept=".xlsx,.xls" required>
+                                            <div class="form-text">{{ t('excel_file_requirements') }}</div>
+                                        </div>
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fas fa-upload me-1"></i>{{ t('upload_prices') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-search me-2"></i>{{ t('price_statistics') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="priceStats">
+                                        <p class="text-muted">{{ t('upload_file_to_see_stats') }}</p>
+                                    </div>
+                                    <button type="button" class="btn btn-info btn-sm" onclick="loadPriceStats()">
+                                        <i class="fas fa-refresh me-1"></i>{{ t('refresh_stats') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 价格表显示区域 -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-table me-2"></i>{{ t('occw_price_table') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="priceSearchInput" placeholder="{{ t('search_prices') }}" onkeyup="filterPrices()">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control" id="categoryFilterSelect" onchange="filterPrices()">
+                                                <option value="">{{ t('all_categories') }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control" id="priceRangeFilterSelect" onchange="filterPrices()">
+                                                <option value="">{{ t('all_prices') }}</option>
+                                                <option value="0-100">$0 - $100</option>
+                                                <option value="100-500">$100 - $500</option>
+                                                <option value="500-1000">$500 - $1000</option>
+                                                <option value="1000+">$1000+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="clearPriceFilters()">
+                                                <i class="fas fa-times me-1"></i>{{ t('clear_filters') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" id="occwPricesTable">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>{{ t('sku') }}</th>
+                                                    <th>{{ t('product_name') }}</th>
+                                                    <th>{{ t('category') }}</th>
+                                                    <th>{{ t('variant') }}</th>
+                                                    <th>{{ t('price') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="occwPricesTableBody">
+                                                <!-- 价格数据将在这里动态加载 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -383,8 +559,11 @@ function showSalesPersonSettings() {
 
 // 显示价格表管理
 function showPriceManagement() {
-    // 直接跳转到价格表页面
-    window.open('/prices', '_blank');
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#price-management-content').show();
+    loadPriceStats();
+    loadOccwPrices();
 }
 
 // 显示SKU映射
@@ -937,6 +1116,195 @@ function exportSkuMappings() {
 // 导出报价单
 function exportQuotation(quotationId) {
     window.open(`/export_quotation/${quotationId}`, '_blank');
+}
+
+// 价格管理相关函数
+$(document).ready(function() {
+    // 价格上传表单提交处理
+    $('#uploadOccwPricesForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData();
+        const fileInput = $('#occwPricesFile')[0];
+        
+        if (fileInput.files.length === 0) {
+            showAlert('{{ t("please_select_file") }}', 'warning');
+            return;
+        }
+        
+        formData.append('file', fileInput.files[0]);
+        
+        $.ajax({
+            url: '/upload_occw_prices',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    showAlert(response.message, 'success');
+                    $('#occwPricesFile').val('');
+                    loadPriceStats();
+                    loadOccwPrices();
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('{{ t("upload_failed") }}', 'danger');
+            }
+        });
+    });
+});
+
+// 加载价格统计
+function loadPriceStats() {
+    $.ajax({
+        url: '/get_occw_stats',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                displayPriceStats(response.stats);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("load_stats_failed") }}', 'danger');
+        }
+    });
+}
+
+// 显示价格统计
+function displayPriceStats(stats) {
+    const statsHtml = `
+        <div class="row">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-primary">${stats.total_products || 0}</h4>
+                    <small class="text-muted">{{ t('total_products') }}</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-success">${stats.total_categories || 0}</h4>
+                    <small class="text-muted">{{ t('total_categories') }}</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-info">$${stats.average_price || 0}</h4>
+                    <small class="text-muted">{{ t('average_price') }}</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-warning">$${stats.total_value || 0}</h4>
+                    <small class="text-muted">{{ t('total_value') }}</small>
+                </div>
+            </div>
+        </div>
+    `;
+    $('#priceStats').html(statsHtml);
+}
+
+// 加载OCCW价格表
+function loadOccwPrices() {
+    $.ajax({
+        url: '/get_occw_price_table',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                displayOccwPrices(response.prices);
+                initializePriceFilters(response.prices);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("load_prices_failed") }}', 'danger');
+        }
+    });
+}
+
+// 显示OCCW价格表
+function displayOccwPrices(prices) {
+    const tbody = $('#occwPricesTableBody');
+    tbody.empty();
+    
+    if (prices.length === 0) {
+        tbody.html('<tr><td colspan="5" class="text-center text-muted">{{ t("no_prices_found") }}</td></tr>');
+        return;
+    }
+    
+    prices.forEach(function(price) {
+        const row = `
+            <tr>
+                <td><code>${price.sku || ''}</code></td>
+                <td>${price.name || ''}</td>
+                <td><span class="badge bg-secondary">${price.category || ''}</span></td>
+                <td>${price.variant || ''}</td>
+                <td><strong>$${price.price || 0}</strong></td>
+            </tr>
+        `;
+        tbody.append(row);
+    });
+}
+
+// 初始化价格过滤器
+function initializePriceFilters(prices) {
+    const categories = [...new Set(prices.map(p => p.category).filter(c => c))];
+    const categorySelect = $('#categoryFilterSelect');
+    
+    categorySelect.find('option:not(:first)').remove();
+    categories.forEach(category => {
+        categorySelect.append(`<option value="${category}">${category}</option>`);
+    });
+}
+
+// 过滤价格
+function filterPrices() {
+    const searchTerm = $('#priceSearchInput').val().toLowerCase();
+    const categoryFilter = $('#categoryFilterSelect').val();
+    const priceRangeFilter = $('#priceRangeFilterSelect').val();
+    
+    $('#occwPricesTableBody tr').each(function() {
+        const row = $(this);
+        const sku = row.find('td:eq(0)').text().toLowerCase();
+        const name = row.find('td:eq(1)').text().toLowerCase();
+        const category = row.find('td:eq(2)').text().toLowerCase();
+        const price = parseFloat(row.find('td:eq(4)').text().replace('$', '')) || 0;
+        
+        let show = true;
+        
+        // 搜索过滤
+        if (searchTerm && !sku.includes(searchTerm) && !name.includes(searchTerm)) {
+            show = false;
+        }
+        
+        // 类别过滤
+        if (categoryFilter && category !== categoryFilter.toLowerCase()) {
+            show = false;
+        }
+        
+        // 价格范围过滤
+        if (priceRangeFilter) {
+            const [min, max] = priceRangeFilter.split('-').map(p => p === '+' ? Infinity : parseFloat(p));
+            if (price < min || (max !== Infinity && price > max)) {
+                show = false;
+            }
+        }
+        
+        row.toggle(show);
+    });
+}
+
+// 清空价格过滤器
+function clearPriceFilters() {
+    $('#priceSearchInput').val('');
+    $('#categoryFilterSelect').val('');
+    $('#priceRangeFilterSelect').val('');
+    filterPrices();
 }
 
 // 显示提示信息
