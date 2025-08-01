@@ -223,6 +223,19 @@
                             <i class="fas fa-question-circle me-1"></i>{{ t('nav_help') }}
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i>{{ t('language') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="setLanguage('zh')">
+                                <i class="fas fa-flag me-1"></i>中文
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setLanguage('en')">
+                                <i class="fas fa-flag me-1"></i>English
+                            </a></li>
+                        </ul>
+                    </li>
                     {% if session.get('username') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
@@ -238,7 +251,7 @@
                             </a></li>
                         </ul>
                     </li>
-                    {% else %}
+                    {% elif system_settings.get('user_login_enabled', True) %}
                     <li class="nav-item">
                         <a class="nav-link" href="/user_login">
                             <i class="fas fa-sign-in-alt me-1"></i>{{ t('user_login') }}
@@ -311,6 +324,25 @@
     // 替换原有的showAlert函数
     function showAlert(message, type = 'info') {
         showFloatingNotification(message, type);
+    }
+    
+    // 语言切换函数
+    function setLanguage(lang) {
+        fetch(`/set_language/${lang}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showFloatingNotification('{{ t("language_changed") }}', 'success', 3000);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showFloatingNotification('{{ t("language_change_failed") }}', 'error', 3000);
+                }
+            })
+            .catch(error => {
+                showFloatingNotification('{{ t("language_change_failed") }}', 'error', 3000);
+            });
     }
     </script>
     

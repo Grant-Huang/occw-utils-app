@@ -73,6 +73,18 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" onclick="showSystemSettings()">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('system_settings') }}</h5>
+                    <p class="card-text">{{ t('system_settings_desc') }}</p>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- 功能内容区域 -->
@@ -231,6 +243,63 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 系统设置 -->
+        <div id="system-settings-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>{{ t('system_settings') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-dark btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-toggle-on me-2"></i>{{ t('feature_controls') }}
+                            </h6>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="userLoginEnabled" 
+                                           {% if system_settings.get('user_login_enabled', True) %}checked{% endif %}>
+                                    <label class="form-check-label" for="userLoginEnabled">
+                                        <strong>{{ t('enable_user_login') }}</strong>
+                                    </label>
+                                    <small class="form-text text-muted d-block">
+                                        {{ t('user_login_description') }}
+                                    </small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-warning" onclick="saveSystemSettings()">
+                                <i class="fas fa-save me-1"></i>{{ t('save_settings') }}
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-info mb-3">
+                                <i class="fas fa-info-circle me-2"></i>{{ t('system_info') }}
+                            </h6>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <p class="mb-2">
+                                        <strong>{{ t('current_status') }}:</strong>
+                                        <span id="userLoginStatus" class="badge {% if system_settings.get('user_login_enabled', True) %}bg-success{% else %}bg-danger{% endif %}">
+                                            {% if system_settings.get('user_login_enabled', True) %}{{ t('enabled') }}{% else %}{{ t('disabled') }}{% endif %}
+                                        </span>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>{{ t('last_updated') }}:</strong>
+                                        <span id="lastUpdated">{{ t('just_now') }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -324,6 +393,52 @@ function showSkuMappings() {
     $('.admin-content').hide();
     $('#sku-mappings-content').show();
     loadSkuMappings();
+}
+
+// 显示系统设置
+function showSystemSettings() {
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#system-settings-content').show();
+}
+
+// 保存系统设置
+function saveSystemSettings() {
+    const userLoginEnabled = $('#userLoginEnabled').is(':checked');
+    
+    $.ajax({
+        url: '/update_system_settings',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            user_login_enabled: userLoginEnabled
+        }),
+        success: function(response) {
+            if (response.success) {
+                showAlert('{{ t("settings_saved_success") }}', 'success');
+                updateSystemStatus(userLoginEnabled);
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("save_settings_failed") }}', 'danger');
+        }
+    });
+}
+
+// 更新系统状态显示
+function updateSystemStatus(userLoginEnabled) {
+    const statusElement = $('#userLoginStatus');
+    const lastUpdatedElement = $('#lastUpdated');
+    
+    if (userLoginEnabled) {
+        statusElement.removeClass('bg-danger').addClass('bg-success').text('{{ t("enabled") }}');
+    } else {
+        statusElement.removeClass('bg-success').addClass('bg-danger').text('{{ t("disabled") }}');
+    }
+    
+    lastUpdatedElement.text(new Date().toLocaleString());
 }
 
 // 加载全部报价单

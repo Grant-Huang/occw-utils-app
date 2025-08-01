@@ -62,6 +62,7 @@ def inject_globals():
         'system_name_zh': SYSTEM_NAME_ZH,
         'system_name_en': SYSTEM_NAME_EN,
         'system_name_fr': SYSTEM_NAME_FR,
+        'system_settings': system_settings,
         't': lambda key: get_text(key, current_lang)
     }
 
@@ -188,7 +189,8 @@ def load_system_settings():
         print(f"加载系统设置失败: {e}")
         system_settings = {
             'default_sales_person': '',
-            'sales_persons': []
+            'sales_persons': [],
+            'user_login_enabled': True
         }
 
 def save_system_settings():
@@ -1994,7 +1996,7 @@ def prices():
 @admin_required
 def admin_dashboard():
     """管理员仪表板页面"""
-    return render_template('admin.html')
+    return render_template('admin.html', system_settings=system_settings)
 
 @app.route('/settings')
 @login_required
@@ -2029,8 +2031,23 @@ def reset_settings():
         global system_settings
         system_settings = {
             'default_sales_person': '',
-            'sales_persons': []
+            'sales_persons': [],
+            'user_login_enabled': True
         }
+        if save_system_settings():
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': get_text('save_failed')})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/update_system_settings', methods=['POST'])
+@admin_required
+def update_system_settings():
+    """更新系统设置"""
+    try:
+        data = request.get_json()
+        system_settings.update(data)
         if save_system_settings():
             return jsonify({'success': True})
         else:
