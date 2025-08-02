@@ -27,7 +27,7 @@
     <div class="row">
         <!-- 功能卡片 -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="showAllQuotations()">
+            <div class="card h-100 admin-card" data-action="showAllQuotations">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-list-alt"></i>
@@ -39,7 +39,7 @@
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="showSalesPersonSettings()">
+            <div class="card h-100 admin-card" data-action="showSalesPersonSettings">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-users"></i>
@@ -51,7 +51,7 @@
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="showPriceManagement()">
+            <div class="card h-100 admin-card" data-action="showPriceManagement">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-dollar-sign"></i>
@@ -63,7 +63,7 @@
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="showSkuMappings()">
+            <div class="card h-100 admin-card" data-action="showSkuMappings">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-exchange-alt"></i>
@@ -75,7 +75,7 @@
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card h-100 admin-card" onclick="showSystemSettings()">
+            <div class="card h-100 admin-card" data-action="showSystemSettings">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-cogs"></i>
@@ -714,9 +714,32 @@
 // 页面初始化
 $(document).ready(function() {
     console.log('Admin page loaded');
+    
     // 添加点击事件监听器
     $('.admin-card').on('click', function() {
-        console.log('Admin card clicked:', $(this).find('.card-title').text());
+        const action = $(this).data('action');
+        console.log('Admin card clicked:', $(this).find('.card-title').text(), 'Action:', action);
+        
+        // 根据data-action属性调用相应的函数
+        switch(action) {
+            case 'showAllQuotations':
+                showAllQuotations();
+                break;
+            case 'showSalesPersonSettings':
+                showSalesPersonSettings();
+                break;
+            case 'showPriceManagement':
+                showPriceManagement();
+                break;
+            case 'showSkuMappings':
+                showSkuMappings();
+                break;
+            case 'showSystemSettings':
+                showSystemSettings();
+                break;
+            default:
+                console.log('Unknown action:', action);
+        }
     });
 });
 
@@ -1456,7 +1479,6 @@ function displayPriceStats(stats) {
 }
 
 // 全局分页变量
-let currentPage = 1;
 let totalPages = 1;
 let totalItems = 0;
 let perPage = 50;
