@@ -4,18 +4,18 @@
 
 {% block content %}
 <!-- 页面标题 -->
-<div class="page-header">
+<div class="admin-dashboard-header">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="page-title">
+                <h1 class="admin-dashboard-title">
                     <i class="fas fa-tachometer-alt me-3 page-icon"></i>
                     {{ t('admin_dashboard') }}
                 </h1>
-                <p class="page-subtitle">{{ t('admin_dashboard_subtitle') }}</p>
+                <p class="admin-dashboard-subtitle">{{ t('admin_dashboard_subtitle') }}</p>
             </div>
             <div class="col-md-4 text-end">
-                <a href="/admin_logout" class="btn btn-outline-danger">
+                <a href="/admin_logout" class="btn btn-outline-light">
                     <i class="fas fa-sign-out-alt me-1"></i>{{ t('nav_admin_logout') }}
                 </a>
             </div>
@@ -246,12 +246,12 @@
         
         <!-- 系统设置 -->
         <div id="system-settings-content" class="admin-content" style="display: none;">
-            <div class="card shadow-sm">
-                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <div class="card system-settings-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
                         <i class="fas fa-cogs me-2"></i>{{ t('system_settings') }}
                     </h5>
-                    <button type="button" class="btn btn-outline-dark btn-sm" onclick="showAdminDashboard()">
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
                         <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
                     </button>
                 </div>
@@ -329,12 +329,12 @@
         
         <!-- 价格管理 -->
         <div id="price-management-content" class="admin-content" style="display: none;">
-            <div class="card shadow-sm">
-                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
                         <i class="fas fa-dollar-sign me-2"></i>{{ t('price_management') }}
                     </h5>
-                    <button type="button" class="btn btn-outline-dark btn-sm" onclick="showAdminDashboard()">
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
                         <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
                     </button>
                 </div>
@@ -455,7 +455,7 @@
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row mb-3">
+                                    <div class="row mb-3 price-filter-row">
                                         <div class="col-md-2">
                                             <input type="text" class="form-control" id="skuFilterInput" placeholder="{{ t('search_sku') }}" onkeyup="filterPrices()">
                                         </div>
@@ -475,7 +475,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="button" class="btn btn-outline-secondary" onclick="clearPriceFilters()">
+                                            <button type="button" class="btn btn-outline-primary" onclick="clearPriceFilters()">
                                                 <i class="fas fa-times me-1"></i>{{ t('clear_filters') }}
                                             </button>
                                         </div>
@@ -539,43 +539,172 @@
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .admin-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #714B67;
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(113, 75, 103, 0.2);
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
 }
 
 .admin-icon {
-    font-size: 3rem;
-    color: #714B67;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-card:hover .admin-icon {
+    transform: scale(1.1);
+    color: var(--primary-dark);
 }
 
 .admin-content {
-    animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    animation: fadeInUp 0.6s ease-out;
 }
 
 /* 功能卡片网格 */
 .admin-card .card-body {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
 }
 
 .admin-card .card-title {
-    color: #714B67;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
 }
 
 .admin-card .card-text {
-    color: #6c757d;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* 管理员仪表板特殊样式 */
+.admin-dashboard-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(113, 75, 103, 0.3);
+}
+
+.admin-dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.admin-dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    color: var(--white);
+}
+
+/* 统计卡片样式 */
+.stats-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(113, 75, 103, 0.3);
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(113, 75, 103, 0.4);
+}
+
+.stats-card .card-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.stats-label {
     font-size: 0.9rem;
+    opacity: 0.9;
+    color: var(--white);
+}
+
+/* 价格管理特殊样式 */
+.price-filter-row {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.price-filter-row .form-control,
+.price-filter-row .form-select {
+    border-radius: 0.5rem;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.price-filter-row .form-control:focus,
+.price-filter-row .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
+}
+
+/* 系统设置特殊样式 */
+.system-settings-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(113, 75, 103, 0.15);
+}
+
+.system-settings-card .card-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+/* 表单开关样式 */
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .admin-card .card-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .admin-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .admin-card .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+    }
 }
 </style>
 {% endblock %}
