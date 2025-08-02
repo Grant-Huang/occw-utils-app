@@ -1,0 +1,931 @@
+{
+  "Grant": [
+    {
+      "quotation_id": "Q00004",
+      "title": "XXXX报价单",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-07-31",
+        "user": "Grant",
+        "sales_person": "Rain Luo",
+        "products": [
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403,
+            "line_total": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403,
+            "line_total": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403,
+            "line_total": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403,
+            "line_total": 403
+          },
+          {
+            "sku": "W1230-PLY-PGW",
+            "qty": 1,
+            "price": 237,
+            "line_total": 237
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82,
+            "line_total": 82
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": 1,
+            "price": 640,
+            "line_total": 640
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": 1,
+            "price": 640,
+            "line_total": 640
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82,
+            "line_total": 82
+          },
+          {
+            "sku": "W3021-PLY-PGW",
+            "qty": 1,
+            "price": 321,
+            "line_total": 321
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82,
+            "line_total": 82
+          },
+          {
+            "sku": "PGW-WMC2418-OPEN",
+            "qty": 1,
+            "price": 292,
+            "line_total": 292
+          },
+          {
+            "sku": "W2418-PLY-PGW",
+            "qty": 1,
+            "price": 239,
+            "line_total": 239
+          },
+          {
+            "sku": "W1836-PLY-PGW",
+            "qty": 1,
+            "price": 362,
+            "line_total": 362
+          },
+          {
+            "sku": "W361824-PLY-PGW",
+            "qty": 1,
+            "price": 455,
+            "line_total": 455
+          },
+          {
+            "sku": "PGW-BEP24",
+            "qty": 1,
+            "price": 148,
+            "line_total": 148
+          },
+          {
+            "sku": "B18-PLY-PGW",
+            "qty": 1,
+            "price": 503,
+            "line_total": 503
+          },
+          {
+            "sku": "SB42-PLY-PGW",
+            "qty": 1,
+            "price": 625,
+            "line_total": 625
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30,
+            "line_total": 30
+          },
+          {
+            "sku": "BBC45-PLY-PGW",
+            "qty": 1,
+            "price": 659,
+            "line_total": 659
+          },
+          {
+            "sku": "B24-PLY-PGW",
+            "qty": 1,
+            "price": 601,
+            "line_total": 601
+          },
+          {
+            "sku": "2DB30-PLY-PGW",
+            "qty": 1,
+            "price": 794,
+            "line_total": 794
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": 1,
+            "price": 583,
+            "line_total": 583
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30,
+            "line_total": 30
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30,
+            "line_total": 30
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": 1,
+            "price": 583,
+            "line_total": 583
+          },
+          {
+            "sku": "3DB36-PLY-PGW",
+            "qty": 1,
+            "price": 1085,
+            "line_total": 1085
+          },
+          {
+            "sku": "BTC18-PLY-PGW",
+            "qty": 1,
+            "price": 850,
+            "line_total": 850
+          },
+          {
+            "sku": "3DB18-PLY-PGW",
+            "qty": 1,
+            "price": 749,
+            "line_total": 749
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": 1,
+            "price": 957,
+            "line_total": 957
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": 1,
+            "price": 957,
+            "line_total": 957
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": 1,
+            "price": 348,
+            "line_total": 348
+          },
+          {
+            "sku": "PGW-TF696",
+            "qty": 1,
+            "price": 158,
+            "line_total": 158
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": 1,
+            "price": 1134,
+            "line_total": 1134
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": 1,
+            "price": 1134,
+            "line_total": 1134
+          },
+          {
+            "sku": "PC3096-PLY-PGW",
+            "qty": 1,
+            "price": 1621,
+            "line_total": 1621
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": 1,
+            "price": 348,
+            "line_total": 348
+          },
+          {
+            "sku": "BSS-MTEP2490",
+            "qty": 1,
+            "price": 551,
+            "line_total": 551
+          }
+        ]
+      },
+      "created_at": "2025-07-31T00:34:25.080336",
+      "updated_at": "2025-08-01T00:35:51.487787"
+    },
+    {
+      "quotation_id": "Q00005",
+      "title": "报价单111",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-07-31",
+        "user": "Grant",
+        "sales_person": "Rain Luo",
+        "products": [
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": "1",
+            "price": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": "1",
+            "price": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": "1",
+            "price": 403
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": "1",
+            "price": 403
+          },
+          {
+            "sku": "W1230-PLY-PGW",
+            "qty": "1",
+            "price": 237
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": "1",
+            "price": 82
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": "1",
+            "price": 640
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": "1",
+            "price": 640
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": "1",
+            "price": 82
+          },
+          {
+            "sku": "W3021-PLY-PGW",
+            "qty": "1",
+            "price": 321
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": "1",
+            "price": 82
+          },
+          {
+            "sku": "PGW-WMC2418-OPEN",
+            "qty": "1",
+            "price": 292
+          },
+          {
+            "sku": "W2418-PLY-PGW",
+            "qty": "1",
+            "price": 239
+          },
+          {
+            "sku": "W1836-PLY-PGW",
+            "qty": "1",
+            "price": 362
+          },
+          {
+            "sku": "W361824-PLY-PGW",
+            "qty": "1",
+            "price": 455
+          },
+          {
+            "sku": "PGW-BEP24",
+            "qty": "1",
+            "price": 148
+          },
+          {
+            "sku": "B18-PLY-PGW",
+            "qty": "1",
+            "price": 503
+          },
+          {
+            "sku": "SB42-PLY-PGW",
+            "qty": "1",
+            "price": 625
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": "1",
+            "price": 30
+          },
+          {
+            "sku": "BBC45-PLY-PGW",
+            "qty": "1",
+            "price": 659
+          },
+          {
+            "sku": "B24-PLY-PGW",
+            "qty": "1",
+            "price": 601
+          },
+          {
+            "sku": "2DB30-PLY-PGW",
+            "qty": "1",
+            "price": 794
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": "1",
+            "price": 583
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": "1",
+            "price": 30
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": "1",
+            "price": 30
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": "1",
+            "price": 583
+          },
+          {
+            "sku": "3DB36-PLY-PGW",
+            "qty": "1",
+            "price": 1085
+          },
+          {
+            "sku": "BTC18-PLY-PGW",
+            "qty": "1",
+            "price": 850
+          },
+          {
+            "sku": "3DB18-PLY-PGW",
+            "qty": "1",
+            "price": 749
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": "1",
+            "price": 957
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": "1",
+            "price": 957
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": "1",
+            "price": 348
+          },
+          {
+            "sku": "PGW-TF696",
+            "qty": "1",
+            "price": 158
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": "1",
+            "price": 1134
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": "1",
+            "price": 1134
+          },
+          {
+            "sku": "PC3096-PLY-PGW",
+            "qty": "1",
+            "price": 1621
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": "1",
+            "price": 348
+          }
+        ]
+      },
+      "created_at": "2025-07-31T00:48:26.169571",
+      "updated_at": "2025-07-31T00:48:26.169571"
+    },
+    {
+      "quotation_id": "Q00006",
+      "title": "给师傅电话通话",
+      "data": {
+        "type": "manual",
+        "order_date": "2025-07-31",
+        "user": "Grant",
+        "sales_person": "Fiona Liu",
+        "products": [
+          {
+            "sku": "BSS-VAL36",
+            "qty": 1,
+            "price": 68,
+            "line_total": 68
+          },
+          {
+            "sku": "3DB12-PLY-MWM",
+            "qty": 1,
+            "price": 666,
+            "line_total": 666
+          },
+          {
+            "sku": "WSS-B15FH-DOOR",
+            "qty": 4,
+            "price": 101,
+            "line_total": 404
+          },
+          {
+            "sku": "3DB27-PLY-BSS",
+            "qty": 2,
+            "price": 983,
+            "line_total": 1966
+          }
+        ]
+      },
+      "created_at": "2025-07-31T00:51:40.504778",
+      "updated_at": "2025-08-01T00:28:43.227696"
+    },
+    {
+      "quotation_id": "Q00007",
+      "title": "Jason的第一个报价单",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-07-31",
+        "user": "Grant",
+        "sales_person": "Jason Ma",
+        "products": [
+          {
+            "sku": "W3036-PLY-SSW",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "W3015-PLY-SSW",
+            "qty": 1,
+            "price": 281.0
+          },
+          {
+            "sku": "W3636-PLY-SSW",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "W1236-PLY-SSW",
+            "qty": 1,
+            "price": 294.0
+          },
+          {
+            "sku": "W2415-PLY-SSW",
+            "qty": 1,
+            "price": 231.0
+          },
+          {
+            "sku": "WER2436-PLY-SSW",
+            "qty": 1,
+            "price": 757.0
+          },
+          {
+            "sku": "W1812-PLY-SSW",
+            "qty": 1,
+            "price": 159.0
+          },
+          {
+            "sku": "W1242-PLY-SSW",
+            "qty": 1,
+            "price": 349.0
+          },
+          {
+            "sku": "W3036-PLY-SSW",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "W3042-PLY-SSW",
+            "qty": 1,
+            "price": 714.0
+          },
+          {
+            "sku": "W3036-PLY-SSW",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "W2442-PLY-SSW",
+            "qty": 1,
+            "price": 597.0
+          },
+          {
+            "sku": "W1236-PLY-SSW",
+            "qty": 1,
+            "price": 294.0
+          },
+          {
+            "sku": "W2415-PLY-SSW",
+            "qty": 1,
+            "price": 231.0
+          },
+          {
+            "sku": "WSS-FS36",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSS-FS36",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSS-FS36",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSL3615-PLY-SSW",
+            "qty": 1,
+            "price": 452.0
+          },
+          {
+            "sku": "W3636-PLY-SSW",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "WSS-WEP1242",
+            "qty": 1,
+            "price": 95.0
+          },
+          {
+            "sku": "W3636-PLY-SSW",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "WSS-WEP1242",
+            "qty": 1,
+            "price": 95.0
+          },
+          {
+            "sku": "WSL3615-PLY-SSW",
+            "qty": 1,
+            "price": 452.0
+          },
+          {
+            "sku": "W3636-PLY-SSW",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "W301524-PLY-SSW",
+            "qty": 1,
+            "price": 380.0
+          },
+          {
+            "sku": "WER2436-PLY-SSW",
+            "qty": 1,
+            "price": 757.0
+          },
+          {
+            "sku": "3DB30-PLY-WSS",
+            "qty": 1,
+            "price": 758.0
+          },
+          {
+            "sku": "SB36-PLY-WSS",
+            "qty": 1,
+            "price": 468.0
+          },
+          {
+            "sku": "BLS36-PLY-WSS",
+            "qty": 1,
+            "price": 949.0
+          },
+          {
+            "sku": "3DB30-PLY-SSW",
+            "qty": 1,
+            "price": 999.0
+          },
+          {
+            "sku": "3DB30-PLY-SSW",
+            "qty": 1,
+            "price": 999.0
+          },
+          {
+            "sku": "SB30-PLY-SSW",
+            "qty": 1,
+            "price": 534.0
+          },
+          {
+            "sku": "B36FH-PB-WSS",
+            "qty": 1,
+            "price": 507.0
+          },
+          {
+            "sku": "B30-PLY-WSS",
+            "qty": 1,
+            "price": 549.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "BSR12-PLY-WSS",
+            "qty": 1,
+            "price": 554.0
+          },
+          {
+            "sku": "BSR12-PLY-SSW",
+            "qty": 1,
+            "price": 728.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "3DB24-PLY-WSS",
+            "qty": 1,
+            "price": 678.0
+          },
+          {
+            "sku": "BSR12-PLY-SSW",
+            "qty": 1,
+            "price": 728.0
+          },
+          {
+            "sku": "WSS-REF24105",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "WSS-REF24105",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "PC3090-PLY-SSW",
+            "qty": 1,
+            "price": 1759.0
+          },
+          {
+            "sku": "WSS-REF24105",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "PC1890-PLY-SSW",
+            "qty": 1,
+            "price": 1205.0
+          },
+          {
+            "sku": "WSS-REF24105",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "WSS-TK8",
+            "qty": 5,
+            "price": 94.0
+          }
+        ]
+      },
+      "created_at": "2025-07-31T20:24:17.684680",
+      "updated_at": "2025-07-31T20:24:17.684680"
+    },
+    {
+      "quotation_id": "Q00008",
+      "title": "3252345236324",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-07-31",
+        "user": "Grant",
+        "sales_person": "Carlos",
+        "products": [
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "W2430-PLY-PGW",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "W1230-PLY-PGW",
+            "qty": 1,
+            "price": 237.0
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": 1,
+            "price": 640.0
+          },
+          {
+            "sku": "W3636-PLY-PGW",
+            "qty": 1,
+            "price": 640.0
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "W3021-PLY-PGW",
+            "qty": 1,
+            "price": 321.0
+          },
+          {
+            "sku": "PGW-WEP1236",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "PGW-WMC2418-OPEN",
+            "qty": 1,
+            "price": 292.0
+          },
+          {
+            "sku": "W2418-PLY-PGW",
+            "qty": 1,
+            "price": 239.0
+          },
+          {
+            "sku": "W1836-PLY-PGW",
+            "qty": 1,
+            "price": 362.0
+          },
+          {
+            "sku": "W361824-PLY-PGW",
+            "qty": 1,
+            "price": 455.0
+          },
+          {
+            "sku": "PGW-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "B18-PLY-PGW",
+            "qty": 1,
+            "price": 503.0
+          },
+          {
+            "sku": "SB42-PLY-PGW",
+            "qty": 1,
+            "price": 625.0
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "BBC45-PLY-PGW",
+            "qty": 1,
+            "price": 659.0
+          },
+          {
+            "sku": "B24-PLY-PGW",
+            "qty": 1,
+            "price": 601.0
+          },
+          {
+            "sku": "2DB30-PLY-PGW",
+            "qty": 1,
+            "price": 794.0
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": 1,
+            "price": 583.0
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "PGW-WF330",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "BSR06-PLY-PGW",
+            "qty": 1,
+            "price": 583.0
+          },
+          {
+            "sku": "3DB36-PLY-PGW",
+            "qty": 1,
+            "price": 1085.0
+          },
+          {
+            "sku": "BTC18-PLY-PGW",
+            "qty": 1,
+            "price": 850.0
+          },
+          {
+            "sku": "3DB18-PLY-PGW",
+            "qty": 1,
+            "price": 749.0
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": 1,
+            "price": 957.0
+          },
+          {
+            "sku": "3DB30-PLY-PGW",
+            "qty": 1,
+            "price": 957.0
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": 1,
+            "price": 348.0
+          },
+          {
+            "sku": "PGW-TF696",
+            "qty": 1,
+            "price": 158.0
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": 1,
+            "price": 1134.0
+          },
+          {
+            "sku": "PC1896-PLY-PGW",
+            "qty": 1,
+            "price": 1134.0
+          },
+          {
+            "sku": "PC3096-PLY-PGW",
+            "qty": 1,
+            "price": 1621.0
+          },
+          {
+            "sku": "PGW-REF2496",
+            "qty": 1,
+            "price": 348.0
+          }
+        ]
+      },
+      "created_at": "2025-07-31T20:40:37.171616",
+      "updated_at": "2025-07-31T20:40:37.171616"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "default_sales_person": "Rain Luo",
+  "sales_persons": [
+    {
+      "name": "Rain Luo",
+      "email": "rain.luo@oppeincabinet.ca"
+    },
+    {
+      "name": "Carlos",
+      "email": "gruas_atreyu@hotmail.com"
+    },
+    {
+      "name": "Fiona Liu",
+      "email": "fionaliu@oppeincabinet.ca"
+    },
+    {
+      "name": "Tina Cao",
+      "email": "tinacao@oppeincabinet.ca"
+    },
+    {
+      "name": "Jason Ma",
+      "email": "jason.ma@oppeincabinet.ca"
+    },
+    {
+      "name": "Public User",
+      "email": "info@oppeincabinet.ca"
+    }
+  ],
+  "user_login_enabled": true
+}
