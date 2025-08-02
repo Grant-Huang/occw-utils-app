@@ -456,21 +456,22 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control" id="priceSearchInput" placeholder="{{ t('search_prices') }}" onkeyup="filterPrices()">
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" id="skuFilterInput" placeholder="{{ t('search_sku') }}" onkeyup="filterPrices()">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select class="form-control" id="categoryFilterSelect" onchange="filterPrices()">
                                                 <option value="">{{ t('all_categories') }}</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
-                                            <select class="form-control" id="priceRangeFilterSelect" onchange="filterPrices()">
-                                                <option value="">{{ t('all_prices') }}</option>
-                                                <option value="0-100">$0 - $100</option>
-                                                <option value="100-500">$100 - $500</option>
-                                                <option value="500-1000">$500 - $1000</option>
-                                                <option value="1000+">$1000+</option>
+                                        <div class="col-md-2">
+                                            <select class="form-control" id="boxVariantFilterSelect" onchange="filterPrices()">
+                                                <option value="">{{ t('all_box_variants') }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="form-control" id="doorVariantFilterSelect" onchange="filterPrices()">
+                                                <option value="">{{ t('all_door_variants') }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
@@ -486,7 +487,8 @@
                                                     <th>{{ t('sku') }}</th>
                                                     <th>{{ t('product_name') }}</th>
                                                     <th>{{ t('category') }}</th>
-                                                    <th>{{ t('variant') }}</th>
+                                                    <th>{{ t('box_variant') }}</th>
+                                                    <th>{{ t('door_variant') }}</th>
                                                     <th>{{ t('price') }}</th>
                                                 </tr>
                                             </thead>
@@ -1352,23 +1354,18 @@ function displayOccwPrices(prices) {
     tbody.empty();
     
     if (prices.length === 0) {
-        tbody.html('<tr><td colspan="5" class="text-center text-muted">{{ t("no_prices_found") }}</td></tr>');
+        tbody.html('<tr><td colspan="6" class="text-center text-muted">{{ t("no_prices_found") }}</td></tr>');
         return;
     }
     
     prices.forEach(function(price) {
-        // 构建变体信息
-        const variant = [];
-        if (price.door_variant) variant.push(price.door_variant);
-        if (price.box_variant) variant.push(price.box_variant);
-        const variantText = variant.join(' / ');
-        
         const row = `
             <tr>
                 <td><code>${price.sku || ''}</code></td>
                 <td>${price.product_name || ''}</td>
                 <td><span class="badge bg-secondary">${price.category || ''}</span></td>
-                <td>${variantText}</td>
+                <td>${price.box_variant || ''}</td>
+                <td>${price.door_variant || ''}</td>
                 <td><strong>$${price.price || 0}</strong></td>
             </tr>
         `;
@@ -1451,11 +1448,27 @@ function changePerPage() {
 // 初始化价格过滤器
 function initializePriceFilters(prices) {
     const categories = [...new Set(prices.map(p => p.category).filter(c => c))];
+    const boxVariants = [...new Set(prices.map(p => p.box_variant).filter(v => v))];
+    const doorVariants = [...new Set(prices.map(p => p.door_variant).filter(v => v))];
+    
     const categorySelect = $('#categoryFilterSelect');
+    const boxVariantSelect = $('#boxVariantFilterSelect');
+    const doorVariantSelect = $('#doorVariantFilterSelect');
     
     categorySelect.find('option:not(:first)').remove();
+    boxVariantSelect.find('option:not(:first)').remove();
+    doorVariantSelect.find('option:not(:first)').remove();
+    
     categories.forEach(category => {
         categorySelect.append(`<option value="${category}">${category}</option>`);
+    });
+    
+    boxVariants.forEach(variant => {
+        boxVariantSelect.append(`<option value="${variant}">${variant}</option>`);
+    });
+    
+    doorVariants.forEach(variant => {
+        doorVariantSelect.append(`<option value="${variant}">${variant}</option>`);
     });
 }
 
@@ -1471,9 +1484,10 @@ function loadOccwPricesWithFilters(page = 1) {
     currentPage = page;
     perPage = parseInt($('#perPageSelect').val());
     
-    const searchTerm = $('#priceSearchInput').val();
+    const skuFilter = $('#skuFilterInput').val();
     const categoryFilter = $('#categoryFilterSelect').val();
-    const priceRangeFilter = $('#priceRangeFilterSelect').val();
+    const boxVariantFilter = $('#boxVariantFilterSelect').val();
+    const doorVariantFilter = $('#doorVariantFilterSelect').val();
     
     $.ajax({
         url: '/get_occw_price_table',
@@ -1481,8 +1495,10 @@ function loadOccwPricesWithFilters(page = 1) {
         data: {
             page: currentPage,
             per_page: perPage,
-            search: searchTerm,
-            category: categoryFilter
+            search_sku: skuFilter,
+            category: categoryFilter,
+            box_variant: boxVariantFilter,
+            door_variant: doorVariantFilter
         },
         success: function(response) {
             if (response.success) {
@@ -1505,9 +1521,10 @@ function loadOccwPricesWithFilters(page = 1) {
 
 // 清空价格过滤器
 function clearPriceFilters() {
-    $('#priceSearchInput').val('');
+    $('#skuFilterInput').val('');
     $('#categoryFilterSelect').val('');
-    $('#priceRangeFilterSelect').val('');
+    $('#boxVariantFilterSelect').val('');
+    $('#doorVariantFilterSelect').val('');
     filterPrices();
 }
 
