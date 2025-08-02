@@ -776,7 +776,7 @@ function showPriceManagement() {
     $('.admin-content').hide();
     $('#price-management-content').show();
     loadPriceStats();
-    loadOccwPrices(1); // 从第一页开始加载
+    loadOccwPrices(1); // 从第一页开始加载，这会同时初始化过滤器
 }
 
 // 显示SKU映射
@@ -1447,6 +1447,12 @@ function loadPriceStats() {
 
 // 显示价格统计
 function displayPriceStats(stats) {
+    // 检查stats是否存在
+    if (!stats) {
+        $('#priceStats').html('<p class="text-muted">{{ t("upload_file_to_see_stats") }}</p>');
+        return;
+    }
+    
     const statsHtml = `
         <div class="row">
             <div class="col-md-3">
@@ -1614,10 +1620,46 @@ function changePerPage() {
 
 // 初始化价格过滤器
 function initializePriceFilters(prices) {
+    // 如果prices为空，尝试从所有数据中获取过滤器选项
+    if (!prices || prices.length === 0) {
+        loadAllPriceDataForFilters();
+        return;
+    }
+    
     const categories = [...new Set(prices.map(p => p.category).filter(c => c))];
     const boxVariants = [...new Set(prices.map(p => p.box_variant).filter(v => v))];
     const doorVariants = [...new Set(prices.map(p => p.door_variant).filter(v => v))];
     
+    populateFilterOptions(categories, boxVariants, doorVariants);
+}
+
+// 加载所有价格数据用于初始化过滤器
+function loadAllPriceDataForFilters() {
+    $.ajax({
+        url: '/get_occw_price_table',
+        type: 'GET',
+        data: {
+            page: 1,
+            per_page: 10000 // 获取所有数据
+        },
+        success: function(response) {
+            if (response.success && response.data) {
+                const allPrices = response.data;
+                const categories = [...new Set(allPrices.map(p => p.category).filter(c => c))];
+                const boxVariants = [...new Set(allPrices.map(p => p.box_variant).filter(v => v))];
+                const doorVariants = [...new Set(allPrices.map(p => p.door_variant).filter(v => v))];
+                
+                populateFilterOptions(categories, boxVariants, doorVariants);
+            }
+        },
+        error: function() {
+            console.log('Failed to load all price data for filters');
+        }
+    });
+}
+
+// 填充过滤器选项
+function populateFilterOptions(categories, boxVariants, doorVariants) {
     const categorySelect = $('#categoryFilterSelect');
     const boxVariantSelect = $('#boxVariantFilterSelect');
     const doorVariantSelect = $('#doorVariantFilterSelect');
