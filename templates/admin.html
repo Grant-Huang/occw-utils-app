@@ -713,7 +713,11 @@
 <script>
 // 页面初始化
 $(document).ready(function() {
-    // 页面初始化完成
+    console.log('Admin page loaded');
+    // 添加点击事件监听器
+    $('.admin-card').on('click', function() {
+        console.log('Admin card clicked:', $(this).find('.card-title').text());
+    });
 });
 
 // 显示管理员仪表板
@@ -724,10 +728,15 @@ function showAdminDashboard() {
 
 // 显示全部报价单
 function showAllQuotations() {
-    $('.admin-card').hide();
-    $('.admin-content').hide();
-    $('#all-quotations-content').show();
-    loadAllQuotations();
+    console.log('showAllQuotations called');
+    try {
+        $('.admin-card').hide();
+        $('.admin-content').hide();
+        $('#all-quotations-content').show();
+        loadAllQuotations();
+    } catch (error) {
+        console.error('Error in showAllQuotations:', error);
+    }
 }
 
 // 显示销售人员设置
@@ -803,20 +812,27 @@ function updateSystemStatus(userLoginEnabled) {
 
 // 加载全部报价单
 function loadAllQuotations() {
-    $.ajax({
-        url: '/get_all_quotations',
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                displayAllQuotationsList(response.quotations);
-            } else {
-                showAlert(response.error, 'danger');
+    console.log('loadAllQuotations called');
+    try {
+        $.ajax({
+            url: '/get_all_quotations',
+            type: 'GET',
+            success: function(response) {
+                console.log('loadAllQuotations response:', response);
+                if (response.success) {
+                    displayAllQuotationsList(response.quotations);
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('loadAllQuotations error:', error);
+                showAlert('{{ t("load_all_quotations_failed") }}', 'danger');
             }
-        },
-        error: function() {
-            showAlert('{{ t("load_all_quotations_failed") }}', 'danger');
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error in loadAllQuotations:', error);
+    }
 }
 
 // 全局变量存储所有报价单数据

@@ -286,6 +286,7 @@ TRANSLATIONS = {
         # 消息
         'upload_success': '文件上传成功',
         'upload_failed': '文件上传失败',
+        'please_select_file': '请选择文件',
         'parse_success': '解析成功',
         'parse_failed': '解析失败',
         'partial_success': '部分成功',
@@ -1285,6 +1286,7 @@ TRANSLATIONS = {
         # Messages
         'upload_success': 'File uploaded successfully',
         'upload_failed': 'File upload failed',
+        'please_select_file': 'Please select a file',
         'parse_success': 'Parsing successful',
         'parse_failed': 'Parsing failed',
         'partial_success': 'Partial success',
@@ -2182,6 +2184,7 @@ TRANSLATIONS = {
         # Messages
         'upload_success': 'Fichier téléchargé avec succès',
         'upload_failed': 'Échec du téléchargement',
+        'please_select_file': 'Veuillez sélectionner un fichier',
         'parse_success': 'Analyse réussie',
         'parse_failed': 'Échec de l\'analyse',
         'partial_success': 'Succès partiel',
