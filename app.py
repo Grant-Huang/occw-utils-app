@@ -2075,6 +2075,34 @@ def update_system_settings():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/get_system_settings', methods=['GET'])
+def get_system_settings():
+    """获取系统设置"""
+    try:
+        return jsonify(system_settings)
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/save_import_filter_settings', methods=['POST'])
+@admin_required
+def save_import_filter_settings():
+    """保存导入过滤设定"""
+    try:
+        data = request.get_json()
+        
+        # 更新系统设置中的导入过滤设定
+        for key, value in data.items():
+            if key.startswith('import_filter_'):
+                system_settings[key] = value
+        
+        if save_system_settings():
+            return jsonify({'success': True, 'message': '导入过滤设定保存成功'})
+        else:
+            return jsonify({'success': False, 'error': '保存失败'})
+    except Exception as e:
+        print(f"保存导入过滤设定时出错: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/change_admin_password', methods=['POST'])
 @admin_required
 def change_admin_password():
@@ -2116,6 +2144,49 @@ def get_sales_persons():
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/get_order_statuses', methods=['GET'])
+def get_order_statuses():
+    """获取所有订单状态列表（从已上传的数据中提取）"""
+    try:
+        # 优先从转换后数据获取（因为这是用户实际看到的数据）
+        if 'converted_data_file' in session and os.path.exists(session['converted_data_file']):
+            print("从转换后数据文件获取订单状态")
+            with open(session['converted_data_file'], 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            df = pd.DataFrame(data)
+        # 其次尝试从原始导入数据获取
+        elif 'imported_data_file' in session and os.path.exists(session['imported_data_file']):
+            print("从原始导入数据文件获取订单状态")
+            with open(session['imported_data_file'], 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            df = pd.DataFrame(data)
+        else:
+            # 如果没有session数据，尝试从upload文件夹读取
+            print("从upload文件夹读取Excel文件获取订单状态")
+            file_path = os.path.join('upload', '销售订单.xlsx')
+            if os.path.exists(file_path):
+                df = pd.read_excel(file_path)
+            else:
+                print("没有找到任何数据源")
+                return jsonify([])
+        
+        # 获取订单状态列表，去除空值和重复值
+        if '订单状态' in df.columns:
+            order_statuses = df['订单状态'].dropna().unique().tolist()
+            # 过滤掉NaN和空字符串，并排序
+            order_statuses = sorted([str(status) for status in order_statuses 
+                                   if str(status) != 'nan' and str(status).strip() != ''])
+            print(f"找到订单状态: {order_statuses}")
+            return jsonify(order_statuses)
+        else:
+            print("数据中没有找到'订单状态'列")
+            return jsonify([])
+    except Exception as e:
+        print(f"获取订单状态列表时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return jsonify([])
 
 @app.route('/add_sales_person', methods=['POST'])
 @admin_required
@@ -2603,6 +2674,484 @@ def get_default_sales_person():
             return person.get('name', '')
     return ''
 
+def apply_amount_filter(df):
+    """应用金额过滤，过滤掉低于阈值的订单"""
+    try:
+        # 获取系统设置中的过滤阈值（优先使用新的合并后设置）
+        load_system_settings()  # 加载设置到全局变量
+        threshold = system_settings.get('import_filter_min_amount', 
+                                       system_settings.get('quotation_amount_filter_threshold', 1000))
+        try:
+            threshold = float(threshold) if threshold else 1000
+        except (ValueError, TypeError):
+            threshold = 1000
+        
+        print(f"应用金额过滤，阈值: {threshold}")
+        
+        # 确保总计列是数值类型
+        df['总计'] = pd.to_numeric(df['总计'], errors='coerce')
+        
+        # 过滤掉总计金额低于阈值的行
+        df_filtered = df[df['总计'] >= threshold].copy()
+        
+        filtered_count = len(df) - len(df_filtered)
+        print(f"过滤掉 {filtered_count} 行金额低于 {threshold} 的数据")
+        print(f"过滤后剩余 {len(df_filtered)} 行数据")
+        
+        return df_filtered
+        
+    except Exception as e:
+        print(f"应用金额过滤时出错: {e}")
+        # 如果过滤出错，返回原数据
+        return df
+
+def apply_amount_range_filter(df, amount_range):
+    """根据金额区间过滤数据（按报价单金额）"""
+    if not amount_range:
+        return df
+    
+    try:
+        df_copy = df.copy()
+        
+        # 检查是否有报价单金额字段，如果没有则使用总计字段
+        amount_column = '报价单金额' if '报价单金额' in df_copy.columns else '总计'
+        
+        if amount_range == '0-1000':
+            df_filtered = df_copy[df_copy[amount_column] <= 1000]
+        elif amount_range == '1000-5000':
+            df_filtered = df_copy[(df_copy[amount_column] > 1000) & (df_copy[amount_column] <= 5000)]
+        elif amount_range == '5000-10000':
+            df_filtered = df_copy[(df_copy[amount_column] > 5000) & (df_copy[amount_column] <= 10000)]
+        elif amount_range == '10000+':
+            df_filtered = df_copy[df_copy[amount_column] > 10000]
+        else:
+            df_filtered = df_copy
+        
+        print(f"金额区间过滤 ({amount_range}): 原始数据 {len(df)} 行 -> 过滤后 {len(df_filtered)} 行，使用字段: {amount_column}")
+        return df_filtered
+        
+    except Exception as e:
+        print(f"金额区间过滤时出错: {e}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        # 如果过滤出错，返回原数据
+        return df
+
+def apply_import_filters(df):
+    """应用导入时的所有过滤条件"""
+    try:
+        # 加载系统设置
+        load_system_settings()
+        
+        original_count = len(df)
+        print(f"开始应用导入过滤条件，原始数据: {original_count} 行")
+        
+        # 1. 应用金额阈值过滤（优先使用新的import_filter_min_amount设置）
+        threshold = system_settings.get('import_filter_min_amount', 
+                                       system_settings.get('quotation_amount_filter_threshold', 1000))
+        try:
+            threshold = float(threshold) if threshold else 1000
+        except (ValueError, TypeError):
+            threshold = 1000
+            
+        if threshold > 0:
+            df['总计'] = pd.to_numeric(df['总计'], errors='coerce')
+            df = df[df['总计'] >= threshold].copy()
+            print(f"金额过滤后剩余: {len(df)} 行 (阈值: {threshold})")
+        
+        # 2. 应用销售人员过滤
+        sales_person_filter = system_settings.get('import_filter_sales_person', '').strip()
+        if sales_person_filter:
+            sales_persons = [sp.strip() for sp in sales_person_filter.split(',') if sp.strip()]
+            if sales_persons:
+                df = df[df['销售人员'].isin(sales_persons)].copy()
+                print(f"销售人员过滤后剩余: {len(df)} 行 (销售人员: {sales_persons})")
+        
+        # 3. 应用客户过滤
+        customer_filter = system_settings.get('import_filter_customer', '').strip()
+        if customer_filter:
+            customers = [c.strip() for c in customer_filter.split(',') if c.strip()]
+            if customers:
+                df = df[df['客户'].isin(customers)].copy()
+                print(f"客户过滤后剩余: {len(df)} 行 (客户: {customers})")
+        
+        # 4. 应用日期范围过滤
+        start_date = system_settings.get('import_filter_start_date', '').strip()
+        end_date = system_settings.get('import_filter_end_date', '').strip()
+        
+        if start_date or end_date:
+            df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+            
+            if start_date:
+                start_date_obj = pd.to_datetime(start_date)
+                df = df[df['订单日期'] >= start_date_obj].copy()
+                print(f"开始日期过滤后剩余: {len(df)} 行 (>= {start_date})")
+            
+            if end_date:
+                end_date_obj = pd.to_datetime(end_date)
+                df = df[df['订单日期'] <= end_date_obj].copy()
+                print(f"结束日期过滤后剩余: {len(df)} 行 (<= {end_date})")
+        
+        # 5. 应用订单状态过滤（支持多选）
+        order_status_filter = system_settings.get('import_filter_order_status', '').strip()
+        if order_status_filter:
+            # 支持多个状态，用逗号分隔
+            selected_statuses = [status.strip() for status in order_status_filter.split(',') if status.strip()]
+            if selected_statuses:
+                df = df[df['订单状态'].isin(selected_statuses)].copy()
+                print(f"订单状态过滤后剩余: {len(df)} 行 (状态: {selected_statuses})")
+        
+        # 注意：金额过滤已在第1步完成，不需要重复过滤
+        final_count = len(df)
+        filtered_count = original_count - final_count
+        print(f"总共过滤掉 {filtered_count} 行数据，最终剩余 {final_count} 行数据")
+        
+        return df
+        
+    except Exception as e:
+        print(f"应用导入过滤时出错: {e}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        # 如果过滤出错，返回原数据
+        return df
+
+def analyze_converted_time_trends(df, time_period='monthly'):
+    """基于转换后数据分析时间趋势"""
+    try:
+        # 创建副本避免SettingWithCopyWarning
+        df_copy = df.copy()
+        
+        if time_period == 'weekly':
+            df_copy['time_period'] = df_copy['订单日期'].dt.to_period('W')
+        else:  # monthly
+            df_copy['time_period'] = df_copy['订单日期'].dt.to_period('M')
+        
+        # 按时间周期分组统计，直接使用转换后的字段
+        monthly_stats = df_copy.groupby('time_period').agg({
+            '总计': 'sum',
+            '订单金额': 'sum',
+            '报价单金额': 'sum'
+        }).reset_index()
+        
+        labels = [str(period) for period in monthly_stats['time_period']]
+        total_amounts = [float(x) for x in monthly_stats['总计'].tolist()]
+        order_amounts = [float(x) for x in monthly_stats['订单金额'].tolist()]
+        quotation_amounts = [float(x) for x in monthly_stats['报价单金额'].tolist()]
+        
+        # 🔧 计算金额转化率
+        amount_conversion_rates = []
+        for i in range(len(order_amounts)):
+            if quotation_amounts[i] > 0:
+                rate = float((order_amounts[i] / quotation_amounts[i]) * 100)
+            else:
+                rate = 0.0
+            amount_conversion_rates.append(rate)
+        
+        print(f"时间趋势分析 - 标签: {labels}")
+        print(f"订单金额: {order_amounts}")
+        print(f"报价单金额: {quotation_amounts}")
+        print(f"金额转化率: {amount_conversion_rates}")
+        
+        return {
+            'labels': labels,
+            'total_amounts': total_amounts,
+            'order_amounts': order_amounts,
+            'quotation_amounts': quotation_amounts,
+            'amount_conversion_rates': amount_conversion_rates  # 🆕 添加金额转化率
+        }
+    except Exception as e:
+        print(f"转换后数据时间趋势分析错误: {e}")
+        return {'labels': [], 'total_amounts': [], 'order_amounts': [], 'quotation_amounts': [], 'amount_conversion_rates': []}
+
+def analyze_converted_conversion_rates(df, time_period='monthly'):
+    """基于转换后数据分析转化率"""
+    try:
+        # 创建副本避免SettingWithCopyWarning
+        df_copy = df.copy()
+        
+        if time_period == 'weekly':
+            df_copy['time_period'] = df_copy['订单日期'].dt.to_period('W')
+        else:  # monthly
+            df_copy['time_period'] = df_copy['订单日期'].dt.to_period('M')
+        
+        # 按时间周期分组统计，直接使用转换后的字段
+        monthly_stats = df_copy.groupby('time_period').agg({
+            '订单数量': 'sum',
+            '报价单数量': 'sum'
+        }).reset_index()
+        
+        labels = [str(period) for period in monthly_stats['time_period']]
+        order_counts = [int(x) for x in monthly_stats['订单数量'].tolist()]
+        quotation_counts = [int(x) for x in monthly_stats['报价单数量'].tolist()]
+        
+        # 计算转化率
+        rates = []
+        for i in range(len(order_counts)):
+            if quotation_counts[i] > 0:
+                rate = float((order_counts[i] / quotation_counts[i]) * 100)
+            else:
+                rate = 0.0
+            rates.append(rate)
+        
+        print(f"转化率分析 - 标签: {labels}")
+        print(f"订单数量: {order_counts}")
+        print(f"报价单数量: {quotation_counts}")
+        print(f"转化率: {rates}")
+        
+        return {
+            'labels': labels,
+            'rates': rates,
+            'order_counts': order_counts,
+            'quotation_counts': quotation_counts
+        }
+    except Exception as e:
+        print(f"转换后数据转化率分析错误: {e}")
+        return {'labels': [], 'rates': [], 'order_counts': [], 'quotation_counts': []}
+
+def analyze_converted_sales_person_performance(df):
+    """基于转换后数据分析销售员业绩"""
+    try:
+        # 按销售员分组统计，直接使用转换后的字段
+        sales_person_stats = df.groupby('销售人员').agg({
+            '订单金额': 'sum',
+            '报价单金额': 'sum', 
+            '订单数量': 'sum',
+            '报价单数量': 'sum',
+            '毛利率（%）': 'mean'
+        }).reset_index()
+        
+        result = []
+        for _, row in sales_person_stats.iterrows():
+            sales_person = row['销售人员']
+            
+            # 跳过NaN或无效的销售员姓名
+            if pd.isna(sales_person) or str(sales_person).lower() == 'nan' or sales_person == '':
+                continue
+            
+            # 转换为Python原生数据类型以避免JSON序列化问题
+            order_amount = float(row['订单金额']) if pd.notna(row['订单金额']) else 0.0
+            quotation_amount = float(row['报价单金额']) if pd.notna(row['报价单金额']) else 0.0
+            order_count = int(row['订单数量']) if pd.notna(row['订单数量']) else 0
+            quotation_count = int(row['报价单数量']) if pd.notna(row['报价单数量']) else 0
+            
+            # 计算转化率
+            count_conversion_rate = float(order_count / quotation_count) if quotation_count > 0 else 0.0
+            amount_conversion_rate = float(order_amount / quotation_amount) if quotation_amount > 0 else 0.0
+            
+            result.append({
+                'sales_person': str(sales_person),
+                'order_amount': order_amount,
+                'quotation_amount': quotation_amount,
+                'order_count': order_count,
+                'quotation_count': quotation_count,
+                'count_conversion_rate': count_conversion_rate,
+                'amount_conversion_rate': amount_conversion_rate,
+                'average_profit_margin': float(row['毛利率（%）']) if pd.notna(row['毛利率（%）']) else 0.0
+            })
+        
+        return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
+    except Exception as e:
+        print(f"转换后数据销售员业绩分析错误: {e}")
+        return []
+
+def analyze_converted_customer_orders(df):
+    """基于转换后数据分析客户订单"""
+    try:
+        # 按客户分组统计，直接使用转换后的字段
+        customer_stats = df.groupby('客户').agg({
+            '订单金额': 'sum',
+            '报价单金额': 'sum',
+            '订单数量': 'sum', 
+            '报价单数量': 'sum'
+        }).reset_index()
+        
+        result = []
+        for _, row in customer_stats.iterrows():
+            customer = row['客户']
+            
+            # 跳过NaN或无效的客户名称
+            if pd.isna(customer) or str(customer).lower() == 'nan' or customer == '':
+                continue
+            
+            # 转换为Python原生数据类型以避免JSON序列化问题
+            order_amount = float(row['订单金额']) if pd.notna(row['订单金额']) else 0.0
+            quotation_amount = float(row['报价单金额']) if pd.notna(row['报价单金额']) else 0.0
+            order_count = int(row['订单数量']) if pd.notna(row['订单数量']) else 0
+            quotation_count = int(row['报价单数量']) if pd.notna(row['报价单数量']) else 0
+            
+            # 计算转化率
+            count_conversion_rate = float(order_count / quotation_count) if quotation_count > 0 else 0.0
+            amount_conversion_rate = float(order_amount / quotation_amount) if quotation_amount > 0 else 0.0
+            
+            result.append({
+                'customer': str(customer),
+                'order_amount': order_amount,
+                'quotation_amount': quotation_amount,
+                'order_count': order_count,
+                'quotation_count': quotation_count,
+                'count_conversion_rate': count_conversion_rate,
+                'amount_conversion_rate': amount_conversion_rate
+            })
+        
+        return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
+    except Exception as e:
+        print(f"转换后数据客户订单分析错误: {e}")
+        return []
+
+def analyze_converted_sales_person_performance_by_month(df):
+    """基于转换后数据按月分析销售员业绩"""
+    try:
+        # 创建年月列
+        df_copy = df.copy()
+        df_copy['year_month'] = df_copy['订单日期'].dt.to_period('M')
+        
+        # 按销售员和月份分组统计
+        monthly_analysis = {}
+        
+        for sales_person in df_copy['销售人员'].unique():
+            if pd.isna(sales_person) or str(sales_person).lower() == 'nan' or sales_person == '':
+                continue
+                
+            person_data = df_copy[df_copy['销售人员'] == sales_person]
+            monthly_analysis[sales_person] = {}
+            
+            for year_month in person_data['year_month'].unique():
+                if pd.isna(year_month):
+                    continue
+                    
+                month_data = person_data[person_data['year_month'] == year_month]
+                
+                monthly_analysis[sales_person][str(year_month)] = {
+                    'order_amount': float(month_data['订单金额'].sum()),
+                    'quotation_amount': float(month_data['报价单金额'].sum()),
+                    'order_count': int(month_data['订单数量'].sum()),
+                    'quotation_count': int(month_data['报价单数量'].sum())
+                }
+        
+        return monthly_analysis
+    except Exception as e:
+        print(f"转换后数据按月销售员业绩分析错误: {e}")
+        return {}
+
+def generate_converted_data(df):
+    """
+    生成包含转换字段的数据
+    
+    ⭐ 核心业务逻辑 - 数据转换规则：
+    1. 如果订单状态=报价单，则订单金额=0，订单数量=0，报价单金额=总计，报价单数量=1
+    2. 如果订单状态=订单，则订单金额=总计，订单数量=1，报价单金额=总计，报价单数量=1
+    3. 如果订单状态=已取消，过滤掉这一行（不包含在转换后数据中）
+    4. 如果订单状态=已发送报价单，则订单金额=0，订单数量=0，报价单金额=总计，报价单数量=1
+    
+    ⚠️ 重要说明：
+    - 规则2意味着每个"订单"状态的记录会同时贡献订单金额和报价单金额
+    - 这样设计的目的是假设每个成功的订单都有对应的报价单过程
+    - 转化率计算时，"订单"状态的记录会在分子和分母中都有贡献
+    - 所有使用转换后数据的页面和分析函数都必须遵循此逻辑
+    
+    注意：此逻辑在整个系统中必须保持一致，所有使用转换后数据的页面都基于此逻辑
+    """
+    try:
+        converted_data = []
+        filtered_count = 0  # 记录被过滤掉的"已取消"订单数量
+        
+        for _, row in df.iterrows():
+            order_status = str(row['订单状态']).strip() if pd.notna(row['订单状态']) else ''
+            amount = float(row['总计']) if pd.notna(row['总计']) else 0.0
+            
+            # ⭐ 核心逻辑：根据订单状态过滤和转换数据
+            if order_status == '已取消':
+                # 规则3：已取消的订单直接过滤掉，不包含在转换后数据中
+                filtered_count += 1
+                continue
+            
+            # 基础记录信息
+            record = {}
+            for key, value in row.items():
+                # 处理各种数据类型，确保JSON可序列化
+                if pd.isna(value):
+                    if key in ['销售人员', '客户', '编号', '订单状态']:
+                        record[key] = ''
+                    else:
+                        record[key] = None
+                elif isinstance(value, pd.Timestamp):
+                    record[key] = value.strftime('%Y-%m-%d %H:%M:%S') if not pd.isna(value) else None
+                elif hasattr(value, 'isoformat'):
+                    record[key] = value.isoformat()
+                elif hasattr(value, '__iter__') and not isinstance(value, (str, bytes)):
+                    record[key] = str(value)
+                elif isinstance(value, (int, float, str, bool)) or value is None:
+                    record[key] = value
+                else:
+                    record[key] = str(value)
+            
+            # ⭐ 核心逻辑：根据订单状态设置转换后的字段
+            if order_status == '报价单':
+                # 规则1：报价单状态
+                record['订单金额'] = 0
+                record['订单数量'] = 0
+                record['报价单金额'] = amount
+                record['报价单数量'] = 1
+                
+            elif order_status == '订单' or '销售订单' in order_status:
+                # 规则2：订单状态（包括销售订单的各种变体）
+                record['订单金额'] = amount
+                record['订单数量'] = 1
+                record['报价单金额'] = amount  # ⭐ 注意：订单状态下报价单金额也等于总计
+                record['报价单数量'] = 1
+                
+            elif order_status == '已发送报价单':
+                # 规则4：已发送报价单状态
+                record['订单金额'] = 0
+                record['订单数量'] = 0
+                record['报价单金额'] = amount
+                record['报价单数量'] = 1
+                
+            else:
+                # 其他未明确定义的状态，按报价单处理（保守策略）
+                print(f"警告：遇到未定义的订单状态 '{order_status}'，按报价单处理")
+                record['订单金额'] = 0
+                record['订单数量'] = 0
+                record['报价单金额'] = amount
+                record['报价单数量'] = 1
+            
+            # 单条记录级别不计算转化率，设置为0
+            # 转化率应该在聚合层面计算（如按销售人员、客户等分组后计算）
+            record['金额转化率'] = 0
+            record['数量转化率'] = 0
+            
+            converted_data.append(record)
+        
+        print(f"数据转换完成: 原始记录数={len(df)}, 过滤掉已取消订单={filtered_count}, 转换后记录数={len(converted_data)}")
+        return converted_data
+        
+    except Exception as e:
+        print(f"生成转换数据时出错: {e}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return []
+
+def cleanup_old_imported_data_files():
+    """清理超过1小时的临时导入数据文件"""
+    try:
+        temp_dir = tempfile.gettempdir()
+        current_time = datetime.now()
+        
+        # 查找所有导入数据临时文件
+        for filename in os.listdir(temp_dir):
+            if filename.startswith('imported_data_') and filename.endswith('.json'):
+                filepath = os.path.join(temp_dir, filename)
+                try:
+                    # 检查文件修改时间
+                    file_time = datetime.fromtimestamp(os.path.getmtime(filepath))
+                    if (current_time - file_time).total_seconds() > 3600:  # 1小时
+                        os.remove(filepath)
+                        print(f"清理过期临时文件: {filepath}")
+                except Exception as e:
+                    print(f"清理临时文件 {filepath} 失败: {e}")
+    except Exception as e:
+        print(f"清理临时文件时出错: {e}")
+
 def export_pdf_quotation(quotation_data):
     """导出PDF类型的报价单"""
     try:
@@ -2689,6 +3238,77 @@ def export_manual_quotation(quotation_data):
         return redirect(f'/export/manual_excel?{urlencode(params)}')
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/view_imported_data')
+def view_imported_data():
+    """查看导入的销售数据页面"""
+    # 添加调试信息
+    print(f"查看导入数据 - Session内容: {dict(session)}")
+    print(f"Session中的键: {list(session.keys())}")
+    
+    # 检查session中是否有导入数据文件的信息
+    if 'imported_data_file' not in session:
+        print("错误：Session中没有找到 imported_data_file 键")
+        return render_template('imported_data.html', error="没有找到导入的销售数据，请先导入数据。", system_settings=system_settings)
+    
+    try:
+        # 获取临时文件路径
+        temp_filepath = session['imported_data_file']
+        
+        # 检查文件是否存在
+        if not os.path.exists(temp_filepath):
+            # 清除过期的session信息
+            session.pop('imported_data_file', None)
+            session.pop('imported_data_count', None)
+            session.pop('imported_data_timestamp', None)
+            return render_template('imported_data.html', error="导入的数据文件已过期，请重新导入数据。", system_settings=system_settings)
+        
+        # 从临时文件读取数据
+        with open(temp_filepath, 'r', encoding='utf-8') as f:
+            imported_data = json.load(f)
+        
+        return render_template('imported_data.html', 
+                             data=imported_data, 
+                             total_records=len(imported_data),
+                             system_settings=system_settings)
+    except Exception as e:
+        print(f"读取导入数据时出错: {str(e)}")
+        return render_template('imported_data.html', error=f"显示数据时出错: {str(e)}", system_settings=system_settings)
+
+@app.route('/view_converted_data')
+def view_converted_data():
+    """查看转换后的销售数据页面"""
+    # 添加调试信息
+    print(f"查看转换数据 - Session内容: {dict(session)}")
+    print(f"Session中的键: {list(session.keys())}")
+    
+    # 检查session中是否有转换数据文件的信息
+    if 'converted_data_file' not in session:
+        print("错误：Session中没有找到 converted_data_file 键")
+        return render_template('converted_data.html', error="没有找到转换后的销售数据，请先导入数据。", system_settings=system_settings)
+    
+    try:
+        # 获取临时文件路径
+        temp_filepath = session['converted_data_file']
+        
+        # 检查文件是否存在
+        if not os.path.exists(temp_filepath):
+            # 清除过期的session信息
+            session.pop('converted_data_file', None)
+            session.pop('converted_data_count', None)
+            return render_template('converted_data.html', error="转换后的数据文件已过期，请重新导入数据。", system_settings=system_settings)
+        
+        # 从临时文件读取数据
+        with open(temp_filepath, 'r', encoding='utf-8') as f:
+            converted_data = json.load(f)
+        
+        return render_template('converted_data.html', 
+                             data=converted_data, 
+                             total_records=len(converted_data),
+                             system_settings=system_settings)
+    except Exception as e:
+        print(f"读取转换数据时出错: {str(e)}")
+        return render_template('converted_data.html', error=f"显示数据时出错: {str(e)}", system_settings=system_settings)
 
 @app.route('/get_pdf_text')
 def get_pdf_text():
@@ -3012,6 +3632,728 @@ def get_price_filter_options():
         })
     except Exception as e:
         return jsonify({'error': f'{get_text("get_filter_options_failed")}: {str(e)}'}), 500
+
+# 销售分析相关路由
+@app.route('/upload_sales_data', methods=['POST'])
+def upload_sales_data():
+    """上传销售数据Excel文件"""
+    try:
+        if 'file' not in request.files:
+            response = jsonify({'success': False, 'error': get_text('file_required')})
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        file = request.files['file']
+        if file.filename == '':
+            response = jsonify({'success': False, 'error': get_text('file_required')})
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        if not file.filename.endswith(('.xlsx', '.xls')):
+            response = jsonify({'success': False, 'error': get_text('invalid_file_format')})
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        # 保存文件
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # 读取Excel文件
+        df = pd.read_excel(filepath)
+        
+        # 验证必要的列
+        required_columns = ['编号', '订单日期', '销售人员', '客户', '总计', '毛利率（%）', '订单状态']
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            response = jsonify({
+                'success': False, 
+                'error': f'缺少必要的列: {", ".join(missing_columns)}'
+            })
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        # 清理旧的临时文件
+        cleanup_old_imported_data_files()
+        
+        # 注意：imported_data 将在过滤后生成，以确保保存的是过滤后的数据
+        
+        # 生成唯一的临时文件名
+        import uuid
+        temp_filename = f"imported_data_{uuid.uuid4().hex}.json"
+        temp_filepath = os.path.join(tempfile.gettempdir(), temp_filename)
+        
+        # 先进行数据预处理，设置is_order和is_quotation字段
+        df['订单日期'] = pd.to_datetime(df['订单日期']).dt.date  # 只保留日期部分，去掉时间
+        df['总计'] = pd.to_numeric(df['总计'], errors='coerce').fillna(0)
+        # 🔧 修复毛利率：Excel中的小数值需要乘以100转换为百分比
+        df['毛利率（%）'] = pd.to_numeric(df['毛利率（%）'], errors='coerce').fillna(0) * 100
+        
+        # 过滤掉NaN销售员和客户的行，并创建副本
+        df = df.dropna(subset=['销售人员', '客户']).copy()
+        
+        # 设置订单和报价单标识
+        df.loc[:, 'is_order'] = df['订单状态'].str.contains('销售订单', na=False)
+        df.loc[:, 'is_quotation'] = df['订单状态'].str.contains('报价单', na=False)
+        
+        # 处理同一编号的报价单和订单金额
+        df = adjust_quotation_amounts(df)
+        
+        # 🔧 在保存数据之前应用所有过滤条件
+        print(f"应用导入过滤前数据行数: {len(df)}")
+        df_filtered = apply_import_filters(df)
+        print(f"应用导入过滤后数据行数: {len(df_filtered)}")
+        
+        # 使用过滤后的数据生成导入数据列表
+        imported_data = []
+        for record in df_filtered.to_dict('records'):
+            # 确保每个记录都是可序列化的
+            clean_record = {}
+            for key, value in record.items():
+                # 处理各种数据类型，确保JSON可序列化
+                if pd.isna(value):
+                    # 对于重要的字符串字段，使用空字符串而不是None
+                    if key in ['销售人员', '客户', '编号', '订单状态']:
+                        clean_record[key] = ''
+                    else:
+                        clean_record[key] = None
+                elif isinstance(value, pd.Timestamp):
+                    # 处理pandas Timestamp对象
+                    clean_record[key] = value.strftime('%Y-%m-%d %H:%M:%S') if not pd.isna(value) else None
+                elif hasattr(value, 'isoformat'):
+                    # 处理其他日期时间对象
+                    clean_record[key] = value.isoformat()
+                elif hasattr(value, '__iter__') and not isinstance(value, (str, bytes)):
+                    # 处理可能的生成器或其他可迭代对象
+                    clean_record[key] = str(value)
+                elif isinstance(value, (int, float, str, bool)) or value is None:
+                    # 基本数据类型，直接使用
+                    clean_record[key] = value
+                else:
+                    # 其他类型转换为字符串
+                    clean_record[key] = str(value)
+            imported_data.append(clean_record)
+        
+        # 保存过滤后的数据到临时文件
+        try:
+            print(f"准备保存 {len(imported_data)} 条过滤后记录到临时文件")
+            with open(temp_filepath, 'w', encoding='utf-8') as f:
+                json.dump(imported_data, f, ensure_ascii=False, indent=2)
+            
+            # 生成并保存转换后的数据（使用过滤后的df_filtered）
+            converted_data = generate_converted_data(df_filtered)
+            converted_temp_filename = f"converted_data_{uuid.uuid4().hex}.json"
+            converted_temp_filepath = os.path.join(tempfile.gettempdir(), converted_temp_filename)
+            
+            with open(converted_temp_filepath, 'w', encoding='utf-8') as f:
+                json.dump(converted_data, f, ensure_ascii=False, indent=2)
+            
+            # 在session中只保存文件路径和一些基本信息
+            session['imported_data_file'] = temp_filepath
+            session['converted_data_file'] = converted_temp_filepath
+            session['imported_data_count'] = len(imported_data)
+            session['converted_data_count'] = len(converted_data)
+            session['imported_data_timestamp'] = datetime.now().isoformat()
+            
+            print(f"已保存过滤后导入数据到临时文件: {temp_filepath}")
+            print(f"已保存过滤后转换数据到临时文件: {converted_temp_filepath}")
+            print(f"过滤后转换数据记录数: {len(converted_data)}")
+            print(f"Session设置完成 - Session内容: {dict(session)}")
+            print(f"设置的文件路径: {session.get('imported_data_file')}")
+        except Exception as e:
+            print(f"保存导入数据到临时文件失败: {e}")
+            print(f"错误类型: {type(e).__name__}")
+            import traceback
+            print(f"错误详情: {traceback.format_exc()}")
+            # 如果保存失败，清除session标记
+            session.pop('imported_data_file', None)
+            session.pop('converted_data_file', None)
+        
+        # 使用转换后的数据进行分析
+        if 'converted_data_file' in session and os.path.exists(session['converted_data_file']):
+            analysis_data = analyze_converted_data(session['converted_data_file'])
+        else:
+            # 如果转换数据不存在，使用原始数据分析
+            analysis_data = analyze_sales_data(df_filtered)
+        
+        response = jsonify({
+            'success': True,
+            'data': analysis_data
+        })
+        response.headers['Content-Type'] = 'application/json'
+        return response
+        
+    except Exception as e:
+        import traceback
+        print(f"销售数据上传错误: {str(e)}")
+        print(f"错误详情: {traceback.format_exc()}")
+        response = jsonify({'success': False, 'error': f'数据处理失败: {str(e)}'})
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+@app.route('/update_sales_analysis', methods=['POST'])
+def update_sales_analysis():
+    """更新销售分析（根据时间周期）"""
+    try:
+        time_period = request.form.get('time_period', 'monthly')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+        amount_range = request.form.get('amount_range')  # 🆕 获取金额区间参数
+        data = json.loads(request.form.get('data', '{}'))
+        
+        if not data:
+            return jsonify({'success': False, 'error': get_text('no_data_found')})
+        
+        # 重新分析数据（根据时间周期、日期范围和金额区间）
+        analysis_data = analyze_sales_data_by_period(data, time_period, start_date, end_date, amount_range)
+        
+        return jsonify({
+            'success': True,
+            'data': analysis_data
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/export_sales_analysis', methods=['POST'])
+def export_sales_analysis():
+    """导出销售分析报告"""
+    try:
+        time_period = request.form.get('time_period', 'monthly')
+        data = json.loads(request.form.get('data', '{}'))
+        
+        if not data:
+            return jsonify({'success': False, 'error': get_text('no_data_found')})
+        
+        # 生成Excel报告
+        filename = f'sales_analysis_{time_period}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        export_sales_analysis_to_excel(data, filepath, time_period)
+        
+        return jsonify({
+            'success': True,
+            'download_url': f'/download/{filename}'
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    """下载文件"""
+    try:
+        return send_file(
+            os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            as_attachment=True,
+            download_name=filename
+        )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
+@app.route('/get_sales_raw_data')
+def get_sales_raw_data():
+    """获取销售原始数据"""
+    try:
+        # 读取Excel文件
+        file_path = os.path.join('upload', '销售订单.xlsx')
+        if not os.path.exists(file_path):
+            return jsonify({'success': False, 'error': '数据文件不存在'})
+        
+        df = pd.read_excel(file_path)
+        
+        # 转换为字典列表
+        data = list(df.to_dict('records'))
+        
+        return jsonify({
+            'success': True,
+            'data': data
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/download_sample_file')
+def download_sample_file():
+    """下载样本文件"""
+    try:
+        # 使用现有的销售订单文件作为样本
+        sample_file_path = os.path.join('upload', '销售订单.xlsx')
+        if os.path.exists(sample_file_path):
+            return send_file(
+                sample_file_path,
+                as_attachment=True,
+                download_name='销售数据样本.xlsx'
+            )
+        else:
+            return jsonify({'error': '样本文件不存在'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
+def analyze_converted_data(converted_data_file, amount_range=None):
+    """使用转换后的数据进行分析"""
+    try:
+        print(f"使用转换后的数据文件进行分析: {converted_data_file}")
+        
+        # 读取转换后的数据
+        with open(converted_data_file, 'r', encoding='utf-8') as f:
+            converted_records = json.load(f)
+        
+        # 转换为DataFrame
+        df = pd.DataFrame(converted_records)
+        
+        # 🆕 应用金额区间过滤
+        if amount_range:
+            df = apply_amount_range_filter(df, amount_range)
+            print(f"应用金额区间过滤 ({amount_range}) 后，数据行数: {len(df)}")
+        
+        # 确保日期列的格式正确
+        df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+        
+        # 确保数值列的格式正确
+        for col in ['总计', '订单金额', '报价单金额', '订单数量', '报价单数量']:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+        
+        print(f"转换后数据加载完成，共 {len(df)} 条记录")
+        
+        # 使用转换后数据的专门分析函数
+        sales_person_analysis = analyze_converted_sales_person_performance(df)
+        customer_analysis = analyze_converted_customer_orders(df)
+        trend_data = analyze_converted_time_trends(df, 'monthly')
+        conversion_data = analyze_converted_conversion_rates(df, 'monthly')
+        sales_person_monthly_analysis = analyze_converted_sales_person_performance_by_month(df)
+        
+        return {
+            'sales_person_analysis': sales_person_analysis,
+            'customer_analysis': customer_analysis,
+            'trend_data': trend_data,
+            'conversion_data': conversion_data,
+            'sales_person_monthly_analysis': sales_person_monthly_analysis
+        }
+        
+    except Exception as e:
+        print(f"分析转换后数据时出错: {e}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        raise Exception(f'转换后数据分析失败: {str(e)}')
+
+def analyze_sales_data(df):
+    """分析销售数据（数据预处理已在调用前完成）"""
+    try:
+        
+        # 销售员业绩分析
+        sales_person_analysis = analyze_sales_person_performance(df)
+        
+        # 客户订单分析
+        customer_analysis = analyze_customer_orders(df)
+        
+        # 时间趋势分析（默认按月）
+        trend_data = analyze_time_trends(df, 'monthly')
+        
+        # 转化率分析（默认按月）
+        conversion_data = analyze_conversion_rates(df, 'monthly')
+        
+        # 按月的销售员业绩分析
+        sales_person_monthly_analysis = analyze_sales_person_performance_by_month(df)
+        
+        return {
+            'sales_person_analysis': sales_person_analysis,
+            'customer_analysis': customer_analysis,
+            'trend_data': trend_data,
+            'conversion_data': conversion_data,
+            'sales_person_monthly_analysis': sales_person_monthly_analysis
+        }
+        
+    except Exception as e:
+        raise Exception(f'数据分析失败: {str(e)}')
+
+def adjust_quotation_amounts(df):
+    """调整报价单金额：如果同一编号的报价单金额小于订单金额，则将报价单金额调整为订单金额"""
+    try:
+        # 按编号分组处理
+        for number, group in df.groupby('编号'):
+            if len(group) > 1:  # 只有同一编号有多条记录时才需要处理
+                # 找出该编号下的订单和报价单（使用已设置的标识）
+                orders = group[group['is_order'] == True]
+                quotations = group[group['is_quotation'] == True]
+                
+                if len(orders) > 0 and len(quotations) > 0:
+                    # 获取订单金额（取最大值，以防有多个订单）
+                    order_amount = orders['总计'].max()
+                    
+                    # 检查报价单金额是否小于订单金额
+                    for idx in quotations.index:
+                        quotation_amount = df.loc[idx, '总计']
+                        if quotation_amount < order_amount:
+                            print(f"调整报价单金额: 编号 {number}, 原金额 {quotation_amount}, 调整为 {order_amount}")
+                            df.loc[idx, '总计'] = order_amount
+        
+        return df
+        
+    except Exception as e:
+        print(f"调整报价单金额时出错: {str(e)}")
+        return df
+
+def analyze_sales_person_performance(df):
+    """
+    ⚠️ 废弃函数：分析销售员业绩 - 基于原始数据
+    
+    注意：此函数基于原始数据和旧的转换逻辑，已被废弃。
+    请使用 analyze_converted_sales_person_performance() 函数，该函数基于最新的转换后数据。
+    
+    新的业务逻辑已在 generate_converted_data() 函数中实现。
+    """
+    sales_person_stats = {}
+
+    # 按编号分组处理数据
+    for number, group in df.groupby('编号'):
+        # 获取销售员信息（取第一条记录）
+        sales_person = group.iloc[0]['销售人员']
+
+        # 跳过NaN销售员
+        if pd.isna(sales_person) or sales_person == '' or str(sales_person).lower() == 'nan':
+            continue
+
+        if sales_person not in sales_person_stats:
+            sales_person_stats[sales_person] = {
+                'order_amount': 0,
+                'quotation_amount': 0,
+                'order_count': 0,
+                'quotation_count': 0,
+                'profit_margins': []
+            }
+
+        # 处理每个编号下的所有记录
+        for _, row in group.iterrows():
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            amount = row['总计']
+            profit_margin = row['毛利率（%）']
+
+            if is_order:
+                # 销售订单：订单金额=总计金额，报价单金额=总计金额，订单数量=1，报价单数量=1
+                sales_person_stats[sales_person]['order_amount'] += amount
+                sales_person_stats[sales_person]['quotation_amount'] += amount
+                sales_person_stats[sales_person]['order_count'] += 1
+                sales_person_stats[sales_person]['quotation_count'] += 1
+            elif is_quotation:
+                # 报价单：订单金额=0，报价单金额=总计金额，订单数量=0，报价单数量=1
+                sales_person_stats[sales_person]['quotation_amount'] += amount
+                sales_person_stats[sales_person]['quotation_count'] += 1
+
+            # 收集毛利率数据
+            if profit_margin > 0:
+                sales_person_stats[sales_person]['profit_margins'].append(profit_margin)
+
+    # 计算转化率和平均毛利率
+    result = []
+    for sales_person, stats in sales_person_stats.items():
+        # 确保销售员姓名不是NaN
+        if pd.isna(sales_person) or str(sales_person).lower() == 'nan':
+            continue
+
+        order_amount = stats['order_amount']
+        quotation_amount = stats['quotation_amount']
+        order_count = stats['order_count']
+        quotation_count = stats['quotation_count']
+
+        # 数量转化率 = 订单数量 / 报价单数量
+        count_conversion_rate = order_count / quotation_count if quotation_count > 0 else 0
+        # 金额转化率 = 订单金额 / 报价单金额
+        amount_conversion_rate = order_amount / quotation_amount if quotation_amount > 0 else 0
+        avg_profit_margin = sum(stats['profit_margins']) / len(stats['profit_margins']) if stats['profit_margins'] else 0
+
+        result.append({
+            'sales_person': sales_person,
+            'order_amount': order_amount,
+            'quotation_amount': quotation_amount,
+            'order_count': order_count,
+            'quotation_count': quotation_count,
+            'count_conversion_rate': count_conversion_rate,
+            'amount_conversion_rate': amount_conversion_rate,
+            'average_profit_margin': avg_profit_margin
+        })
+
+    return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
+
+def analyze_sales_person_performance_by_month(df):
+    """按月分析销售员业绩"""
+    # 设置月份为索引
+    df['month'] = df['订单日期'].dt.to_period('M')
+    
+    # 按销售员和月份分组
+    monthly_analysis = {}
+    
+    for (sales_person, month), group in df.groupby(['销售人员', 'month']):
+        if sales_person not in monthly_analysis:
+            monthly_analysis[sales_person] = {}
+        
+        # 初始化统计数据
+        stats = {
+            'order_amount': 0,
+            'quotation_amount': 0,
+            'order_count': 0,
+            'quotation_count': 0
+        }
+        
+        # 统计每个月的数据
+        for _, row in group.iterrows():
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            amount = row['总计']
+            
+            if is_order:
+                # 销售订单：订单金额=总计金额，报价单金额=总计金额，订单数量=1，报价单数量=1
+                stats['order_amount'] += amount
+                stats['quotation_amount'] += amount
+                stats['order_count'] += 1
+                stats['quotation_count'] += 1
+            elif is_quotation:
+                # 报价单：订单金额=0，报价单金额=总计金额，订单数量=0，报价单数量=1
+                stats['quotation_amount'] += amount
+                stats['quotation_count'] += 1
+                
+        monthly_analysis[sales_person][str(month)] = stats
+        
+    return monthly_analysis
+
+def analyze_customer_orders(df):
+    """分析客户订单 - 重新设计逻辑确保每个编号都有完整的报价单和订单数据"""
+    customer_stats = {}
+    
+    # 按编号分组处理数据
+    for number, group in df.groupby('编号'):
+        # 获取客户信息（取第一条记录）
+        customer = group.iloc[0]['客户']
+        
+        # 跳过NaN客户
+        if pd.isna(customer) or customer == '' or str(customer).lower() == 'nan':
+            continue
+        
+        if customer not in customer_stats:
+            customer_stats[customer] = {
+                'order_count': 0,
+                'quotation_count': 0,
+                'order_amount': 0,
+                'quotation_amount': 0
+            }
+        
+        # 处理每个编号下的所有记录
+        for _, row in group.iterrows():
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            amount = row['总计']
+            
+            if is_order:
+                # 销售订单：订单金额=总计金额，报价单金额=总计金额，订单数量=1，报价单数量=1
+                customer_stats[customer]['order_count'] += 1
+                customer_stats[customer]['order_amount'] += amount
+                customer_stats[customer]['quotation_count'] += 1
+                customer_stats[customer]['quotation_amount'] += amount
+            elif is_quotation:
+                # 报价单：订单金额=0，报价单金额=总计金额，订单数量=0，报价单数量=1
+                customer_stats[customer]['quotation_count'] += 1
+                customer_stats[customer]['quotation_amount'] += amount
+    
+    result = []
+    for customer, stats in customer_stats.items():
+        # 确保客户姓名不是NaN
+        if pd.isna(customer) or str(customer).lower() == 'nan':
+            continue
+            
+        result.append({
+            'customer_name': customer,
+            'order_count': stats['order_count'],
+            'quotation_count': stats['quotation_count'],
+            'order_amount': stats['order_amount'],
+            'quotation_amount': stats['quotation_amount']
+        })
+    
+    return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
+
+def analyze_time_trends(df, time_period='monthly'):
+    """分析时间趋势"""
+    # 创建副本避免SettingWithCopyWarning
+    df_copy = df.copy()
+    
+    if time_period == 'weekly':
+        df_copy['time_period'] = df_copy['订单日期'].dt.to_period('W')
+    else:  # monthly
+        df_copy['time_period'] = df_copy['订单日期'].dt.to_period('M')
+    
+    # 按时间周期分组统计
+    monthly_stats = df_copy.groupby('time_period').agg({
+        '总计': 'sum',
+        'is_order': 'sum',
+        'is_quotation': 'sum'
+    }).reset_index()
+    
+    labels = [str(period) for period in monthly_stats['time_period']]
+    total_amounts = monthly_stats['总计'].tolist()
+    
+    # 按照正确的业务逻辑计算订单金额和报价单金额
+    order_amounts = []
+    quotation_amounts = []
+    
+    for time_period in monthly_stats['time_period']:
+        # 获取这个时间段的所有数据
+        period_data = df_copy[df_copy['time_period'] == time_period]
+        
+        order_amount = 0
+        quotation_amount = 0
+        
+        for _, row in period_data.iterrows():
+            amount = row['总计']
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            
+            if is_order:
+                # 销售订单：订单金额+=总计，报价单金额+=总计
+                order_amount += amount
+                quotation_amount += amount
+            elif is_quotation:
+                # 报价单：订单金额+=0，报价单金额+=总计
+                quotation_amount += amount
+        
+        order_amounts.append(order_amount)
+        quotation_amounts.append(quotation_amount)
+    
+    return {
+        'labels': labels,
+        'total_amounts': total_amounts,
+        'order_amounts': order_amounts,
+        'quotation_amounts': quotation_amounts
+    }
+
+def analyze_conversion_rates(df, time_period='monthly'):
+    """分析转化率"""
+    # 创建副本避免SettingWithCopyWarning
+    df_copy = df.copy()
+    
+    if time_period == 'weekly':
+        df_copy['time_period'] = df_copy['订单日期'].dt.to_period('W')
+    else:  # monthly
+        df_copy['time_period'] = df_copy['订单日期'].dt.to_period('M')
+    
+    monthly_stats = df_copy.groupby('time_period').agg({
+        '总计': 'sum',
+        'is_order': 'sum',
+        'is_quotation': 'sum'
+    }).reset_index()
+    
+    labels = [str(period) for period in monthly_stats['time_period']]
+    rates = []
+    order_counts = []
+    quotation_counts = []
+    
+    for _, row in monthly_stats.iterrows():
+        total_amount = row['总计']
+        order_count = row['is_order']  # 订单数量
+        quotation_only_count = row['is_quotation']  # 纯报价单数量
+        total_quotation_count = order_count + quotation_only_count  # 总报价数量
+        
+        order_counts.append(order_count)
+        quotation_counts.append(total_quotation_count)
+        
+        # 数量转化率 = 订单数量 / 总报价数量
+        if total_quotation_count > 0:
+            rate = (order_count / total_quotation_count) * 100
+        else:
+            rate = 0
+        
+        rates.append(rate)
+    
+    return {
+        'labels': labels,
+        'rates': rates,
+        'order_counts': order_counts,
+        'quotation_counts': quotation_counts
+    }
+
+def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=None, amount_range=None):
+    """根据时间周期重新分析数据（从转换后数据集读取）"""
+    try:
+        # 🎯 遵循规则3：从转换后数据集读取数据
+        from flask import session
+        
+        # 检查是否有转换后数据文件
+        if 'converted_data_file' not in session or not os.path.exists(session['converted_data_file']):
+            print("没有找到转换后数据文件，返回原数据")
+            return data
+        
+        # 从转换后数据文件读取数据
+        with open(session['converted_data_file'], 'r', encoding='utf-8') as f:
+            converted_records = json.load(f)
+        
+        df = pd.DataFrame(converted_records)
+        
+        # 数据预处理
+        df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+        for col in ['总计', '订单金额', '报价单金额', '订单数量', '报价单数量']:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+        
+        # 根据日期范围过滤数据
+        if start_date and end_date:
+            start_date = pd.to_datetime(start_date)
+            end_date = pd.to_datetime(end_date)
+            df = df[(df['订单日期'] >= start_date) & (df['订单日期'] <= end_date)]
+        
+        # 🆕 根据金额区间过滤数据
+        if amount_range:
+            df = apply_amount_range_filter(df, amount_range)
+        
+        print(f"按时间周期分析转换后数据，共 {len(df)} 条记录")
+        
+        # 使用转换后数据的专门分析函数
+        sales_person_analysis = analyze_converted_sales_person_performance(df)
+        customer_analysis = analyze_converted_customer_orders(df)
+        
+        # 根据时间周期分析图表数据
+        if time_period in ['monthly', 'weekly']:
+            trend_data = analyze_converted_time_trends(df, time_period)
+            conversion_data = analyze_converted_conversion_rates(df, time_period)
+        else:
+            # 默认按月分析
+            trend_data = analyze_converted_time_trends(df, 'monthly')
+            conversion_data = analyze_converted_conversion_rates(df, 'monthly')
+        
+        return {
+            'sales_person_analysis': sales_person_analysis,
+            'customer_analysis': customer_analysis,
+            'trend_data': trend_data,
+            'conversion_data': conversion_data
+        }
+        
+    except Exception as e:
+        print(f"重新分析数据时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return data
+
+def export_sales_analysis_to_excel(data, filepath, time_period):
+    """导出销售分析报告到Excel"""
+    with pd.ExcelWriter(filepath, engine='xlsxwriter') as writer:
+        # 销售员业绩表
+        sales_person_df = pd.DataFrame(data['sales_person_analysis'])
+        sales_person_df.to_excel(writer, sheet_name='销售员业绩', index=False)
+        
+        # 客户订单表
+        customer_df = pd.DataFrame(data['customer_analysis'])
+        customer_df.to_excel(writer, sheet_name='客户订单', index=False)
+        
+        # 时间趋势表
+        trend_df = pd.DataFrame({
+            '时间': data['trend_data']['labels'],
+            '总金额': data['trend_data']['total_amounts']
+        })
+        trend_df.to_excel(writer, sheet_name='时间趋势', index=False)
+        
+        # 转化率表
+        conversion_df = pd.DataFrame({
+            '时间': data['conversion_data']['labels'],
+            '转化率(%)': data['conversion_data']['rates']
+        })
+        conversion_df.to_excel(writer, sheet_name='转化率', index=False)
 
 # 确保目录存在
 for directory in ['uploads', 'data']:

@@ -89,6 +89,34 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             transform: translateY(-2px);
         }
+        
+        /* 排序表头样式 */
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        
+        .sortable:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .sortable i {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+        
+        .sortable:hover i {
+            opacity: 1;
+        }
+        
+        .fa-sort-up {
+            color: #007bff;
+        }
+        
+        .fa-sort-down {
+            color: #007bff;
+        }
 
         .card-header {
             background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
@@ -624,6 +652,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     
     <script>
     // 统一的浮动信息条函数

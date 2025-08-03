@@ -1,0 +1,597 @@
+{% extends "base.html" %}
+
+{% block title %}导入的销售数据{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="page-title">
+                            <i class="fas fa-table me-3 page-icon"></i>
+                            导入的销售数据
+                        </h1>
+                        <p class="page-subtitle">查看最近导入的销售订单数据</p>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary" onclick="window.close()">
+                            <i class="fas fa-times me-1"></i>关闭
+                        </button>
+                        <a href="/" class="btn btn-primary ms-2">
+                            <i class="fas fa-home me-1"></i>返回主页
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if error %}
+            <!-- 错误消息 -->
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                {{ error }}
+            </div>
+            {% elif data %}
+            <!-- 当前过滤设定提示 -->
+            {% if system_settings.get('import_filter_min_amount') or system_settings.get('import_filter_sales_person') or system_settings.get('import_filter_customer') or system_settings.get('import_filter_start_date') or system_settings.get('import_filter_end_date') or system_settings.get('import_filter_order_status') %}
+            <div class="alert alert-warning" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-filter me-2"></i>当前应用的导入过滤条件
+                </h6>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="mb-2">
+                            {% if system_settings.get('import_filter_min_amount') %}
+                            <li><strong>最小金额阈值:</strong> ≥ ${{ system_settings.get('import_filter_min_amount') }}</li>
+                            {% endif %}
+                            {% if system_settings.get('import_filter_sales_person') %}
+                            <li><strong>销售人员:</strong> {{ system_settings.get('import_filter_sales_person') }}</li>
+                            {% endif %}
+                            {% if system_settings.get('import_filter_customer') %}
+                            <li><strong>客户:</strong> {{ system_settings.get('import_filter_customer') }}</li>
+                            {% endif %}
+                            {% if system_settings.get('import_filter_start_date') %}
+                            <li><strong>开始日期:</strong> {{ system_settings.get('import_filter_start_date') }}</li>
+                            {% endif %}
+                            {% if system_settings.get('import_filter_end_date') %}
+                            <li><strong>结束日期:</strong> {{ system_settings.get('import_filter_end_date') }}</li>
+                            {% endif %}
+                            {% if system_settings.get('import_filter_order_status') %}
+                            <li><strong>订单状态:</strong> {{ system_settings.get('import_filter_order_status') }}</li>
+                            {% endif %}
+                        </ul>
+                        <p class="mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            显示的数据已根据上述过滤条件筛选。要修改过滤设定，请前往
+                            <a href="/admin" class="alert-link">管理员仪表板 → 订单导入过滤设置</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- 数据统计信息 -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>数据概览
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-list-ol text-primary me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">总记录数</div>
+                                    <div class="h4 mb-0 text-primary">{{ total_records }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-success me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">销售人员数</div>
+                                    <div class="h4 mb-0 text-success">{{ data | map(attribute='销售人员') | select | list | unique | list | length }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-building text-warning me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">客户数</div>
+                                    <div class="h4 mb-0 text-warning">{{ data | map(attribute='客户') | select | list | unique | list | length }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar text-info me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">日期范围</div>
+                                    <div class="small text-muted">
+                                        {% set valid_dates = [] %}
+                                        {% for record in data %}
+                                            {% if record['订单日期'] and record['订单日期'] != 'None' %}
+                                                {% set _ = valid_dates.append(record['订单日期']) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if valid_dates %}
+                                            {{ valid_dates | min }} 至 {{ valid_dates | max }}
+                                        {% else %}
+                                            无数据
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据过滤和搜索 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">数据过滤</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="searchInput" class="form-label">搜索</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="搜索编号、客户或销售人员" onkeyup="filterData()">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="salesPersonFilter" class="form-label">销售人员</label>
+                            <select class="form-control" id="salesPersonFilter" onchange="filterData()">
+                                <option value="">全部</option>
+                                {% for person in data | map(attribute='销售人员') | list | unique | sort %}
+                                <option value="{{ person }}">{{ person }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="statusFilter" class="form-label">订单状态</label>
+                            <select class="form-control" id="statusFilter" onchange="filterData()">
+                                <option value="">全部</option>
+                                {% for status in data | map(attribute='订单状态') | list | unique | sort %}
+                                <option value="{{ status }}">{{ status }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="startDate" class="form-label">开始日期</label>
+                            <input type="date" class="form-control" id="startDate" onchange="filterData()">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="endDate" class="form-label">结束日期</label>
+                            <input type="date" class="form-control" id="endDate" onchange="filterData()">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="button" class="btn btn-outline-secondary d-block" onclick="clearFilters()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据表格 -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table me-2"></i>销售数据详情
+                    </h5>
+                    <div>
+                        <button type="button" class="btn btn-outline-success btn-sm" onclick="exportToExcel()">
+                            <i class="fas fa-file-excel me-1"></i>导出Excel
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="dataTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 10%; cursor: pointer;" onclick="sortData('编号')">编号 <i id="sort-编号" class="fas fa-sort"></i></th>
+                                    <th style="width: 12%; cursor: pointer;" onclick="sortData('订单日期')">订单日期 <i id="sort-订单日期" class="fas fa-sort"></i></th>
+                                    <th style="width: 10%; cursor: pointer;" onclick="sortData('销售人员')">销售人员 <i id="sort-销售人员" class="fas fa-sort"></i></th>
+                                    <th style="width: 15%; cursor: pointer;" onclick="sortData('客户')">客户 <i id="sort-客户" class="fas fa-sort"></i></th>
+                                    <th style="width: 12%; cursor: pointer;" onclick="sortData('总计')">总计 <i id="sort-总计" class="fas fa-sort"></i></th>
+                                    <th style="width: 10%; cursor: pointer;" onclick="sortData('毛利率（%）')">毛利率（%） <i id="sort-毛利率（%）" class="fas fa-sort"></i></th>
+                                    <th style="width: 10%; cursor: pointer;" onclick="sortData('订单状态')">订单状态 <i id="sort-订单状态" class="fas fa-sort"></i></th>
+                                    <th style="width: 21%;">其他信息</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                                {% for record in data %}
+                                <tr data-record="{{ record | tojson | e }}">
+                                    <td>{{ record['编号'] }}</td>
+                                    <td>{{ record['订单日期'] }}</td>
+                                    <td>{{ record['销售人员'] }}</td>
+                                    <td>{{ record['客户'] }}</td>
+                                    <td class="text-end">
+                                        {% if record['总计'] %}
+                                        ${{ "%.2f" | format(record['总计']) }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        {% if record['毛利率（%）'] %}
+                                        {{ "%.1f" | format(record['毛利率（%）']) }}%
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record['订单状态'] == '销售订单' %}
+                                        <span class="badge bg-success">{{ record['订单状态'] }}</span>
+                                        {% elif record['订单状态'] == '报价单' %}
+                                        <span class="badge bg-warning">{{ record['订单状态'] }}</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">{{ record['订单状态'] }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-info btn-sm" onclick="showRecordDetails(this)">
+                                            <i class="fas fa-eye me-1"></i>详情
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 分页控件 -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="d-flex align-items-center">
+                            <label for="pageSize" class="form-label me-2 mb-0">每页显示：</label>
+                            <select class="form-select form-select-sm" id="pageSize" style="width: auto;" onchange="changePageSize()">
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="all">全部</option>
+                            </select>
+                            <span class="ms-3 text-muted" id="pageInfo">显示 1-25 条，共 {{ total_records }} 条</span>
+                        </div>
+                        <nav aria-label="数据分页">
+                            <ul class="pagination pagination-sm mb-0" id="pagination">
+                                <!-- 分页按钮将在这里动态生成 -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 记录详情模态框 -->
+<div class="modal fade" id="recordDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">记录详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="recordDetailBody">
+                <!-- 详情内容将在这里动态加载 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let allRecords = {{ data | tojson if data else '[]' }};
+let filteredRecords = [...allRecords];
+let currentPage = 1;
+let pageSize = 25;
+
+// 数据过滤
+function filterData() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const salesPersonFilter = document.getElementById('salesPersonFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    filteredRecords = allRecords.filter(record => {
+        // 搜索过滤
+        const matchesSearch = !searchTerm || 
+            (record['编号'] && record['编号'].toString().toLowerCase().includes(searchTerm)) ||
+            (record['客户'] && record['客户'].toLowerCase().includes(searchTerm)) ||
+            (record['销售人员'] && record['销售人员'].toLowerCase().includes(searchTerm));
+        
+        // 销售人员过滤
+        const matchesSalesPerson = !salesPersonFilter || record['销售人员'] === salesPersonFilter;
+        
+        // 状态过滤
+        const matchesStatus = !statusFilter || record['订单状态'] === statusFilter;
+        
+        // 日期过滤
+        let matchesDate = true;
+        if (startDate || endDate) {
+            const orderDate = record['订单日期'];
+            // 检查日期是否有效
+            if (orderDate && orderDate !== 'None' && orderDate !== null) {
+                const recordDate = new Date(orderDate);
+                // 确保日期对象有效
+                if (!isNaN(recordDate.getTime())) {
+                    if (startDate && recordDate < new Date(startDate)) matchesDate = false;
+                    if (endDate && recordDate > new Date(endDate)) matchesDate = false;
+                } else {
+                    // 无效日期，根据需要决定是否匹配
+                    matchesDate = !startDate && !endDate;
+                }
+            } else {
+                // 没有日期数据，根据需要决定是否匹配
+                matchesDate = !startDate && !endDate;
+            }
+        }
+        
+        return matchesSearch && matchesSalesPerson && matchesStatus && matchesDate;
+    });
+    
+    currentPage = 1;
+    displayData();
+}
+
+// 清除过滤器
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('salesPersonFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    filterData();
+}
+
+// 改变每页显示数量
+function changePageSize() {
+    const newPageSize = document.getElementById('pageSize').value;
+    pageSize = newPageSize === 'all' ? filteredRecords.length : parseInt(newPageSize);
+    currentPage = 1;
+    displayData();
+}
+
+// 显示数据
+function displayData() {
+    const tbody = document.getElementById('dataTableBody');
+    if (!tbody) {
+        // 如果表格不存在（比如显示错误页面时），直接返回
+        return;
+    }
+    tbody.innerHTML = '';
+    
+    let startIndex = 0;
+    let endIndex = filteredRecords.length;
+    
+    if (pageSize < filteredRecords.length) {
+        startIndex = (currentPage - 1) * pageSize;
+        endIndex = Math.min(startIndex + pageSize, filteredRecords.length);
+    }
+    
+    const recordsToShow = filteredRecords.slice(startIndex, endIndex);
+    
+    recordsToShow.forEach(record => {
+        const row = document.createElement('tr');
+        row.setAttribute('data-record', JSON.stringify(record));
+        
+        const totalAmount = record['总计'] ? `$${parseFloat(record['总计']).toFixed(2)}` : '-';
+        const profitMargin = record['毛利率（%）'] ? `${parseFloat(record['毛利率（%）']).toFixed(1)}%` : '-';
+        
+        let statusBadge = '';
+        if (record['订单状态'] === '销售订单') {
+            statusBadge = '<span class="badge bg-success">销售订单</span>';
+        } else if (record['订单状态'] === '报价单') {
+            statusBadge = '<span class="badge bg-warning">报价单</span>';
+        } else {
+            statusBadge = `<span class="badge bg-secondary">${record['订单状态']}</span>`;
+        }
+        
+        row.innerHTML = `
+            <td>${record['编号']}</td>
+            <td>${record['订单日期']}</td>
+            <td>${record['销售人员']}</td>
+            <td>${record['客户']}</td>
+            <td class="text-end">${totalAmount}</td>
+            <td class="text-end">${profitMargin}</td>
+            <td>${statusBadge}</td>
+            <td>
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="showRecordDetails(this)">
+                    <i class="fas fa-eye me-1"></i>详情
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+    
+    updatePageInfo();
+    updatePagination();
+}
+
+// 更新页面信息
+function updatePageInfo() {
+    const totalRecords = filteredRecords.length;
+    let startRecord = 1;
+    let endRecord = totalRecords;
+    
+    if (pageSize < totalRecords) {
+        startRecord = (currentPage - 1) * pageSize + 1;
+        endRecord = Math.min(currentPage * pageSize, totalRecords);
+    }
+    
+    document.getElementById('pageInfo').textContent = 
+        `显示 ${startRecord}-${endRecord} 条，共 ${totalRecords} 条`;
+}
+
+// 更新分页
+function updatePagination() {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+    
+    if (pageSize >= filteredRecords.length) {
+        return; // 不需要分页
+    }
+    
+    const totalPages = Math.ceil(filteredRecords.length / pageSize);
+    
+    // 上一页
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">上一页</a>`;
+    pagination.appendChild(prevLi);
+    
+    // 页码
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+        pagination.appendChild(li);
+    }
+    
+    // 下一页
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">下一页</a>`;
+    pagination.appendChild(nextLi);
+}
+
+// 改变页面
+function changePage(page) {
+    const totalPages = Math.ceil(filteredRecords.length / pageSize);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        displayData();
+    }
+}
+
+// 显示记录详情
+function showRecordDetails(button) {
+    const row = button.closest('tr');
+    const record = JSON.parse(row.getAttribute('data-record'));
+    
+    const detailBody = document.getElementById('recordDetailBody');
+    detailBody.innerHTML = '';
+    
+    // 创建详情表格
+    const table = document.createElement('table');
+    table.className = 'table table-bordered';
+    
+    Object.keys(record).forEach(key => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="width: 30%; font-weight: bold; background-color: #f8f9fa;">${key}</td>
+            <td>${record[key] || '-'}</td>
+        `;
+        table.appendChild(row);
+    });
+    
+    detailBody.appendChild(table);
+    
+    // 显示模态框
+    new bootstrap.Modal(document.getElementById('recordDetailModal')).show();
+}
+
+// 排序功能
+let currentSortColumn = '';
+let currentSortDirection = 'asc';
+
+function sortData(column) {
+    // 切换排序方向
+    if (currentSortColumn === column) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSortColumn = column;
+        currentSortDirection = 'asc';
+    }
+    
+    // 更新排序图标
+    document.querySelectorAll('[id^="sort-"]').forEach(icon => {
+        icon.className = 'fas fa-sort';
+    });
+    const sortIcon = document.getElementById(`sort-${column}`);
+    if (sortIcon) {
+        sortIcon.className = currentSortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+    }
+    
+    // 排序数据
+    filteredRecords.sort((a, b) => {
+        let valueA = a[column];
+        let valueB = b[column];
+        
+        // 处理不同数据类型
+        if (column === '总计' || column === '毛利率（%）') {
+            valueA = parseFloat(valueA) || 0;
+            valueB = parseFloat(valueB) || 0;
+        } else if (column === '订单日期') {
+            valueA = new Date(valueA || '1900-01-01');
+            valueB = new Date(valueB || '1900-01-01');
+        } else {
+            valueA = (valueA || '').toString().toLowerCase();
+            valueB = (valueB || '').toString().toLowerCase();
+        }
+        
+        if (currentSortDirection === 'asc') {
+            return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+        } else {
+            return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+        }
+    });
+    
+    // 重新显示数据
+    currentPage = 1;
+    displayData();
+}
+
+// 导出到Excel
+function exportToExcel() {
+    // 创建CSV内容
+    const headers = ['编号', '订单日期', '销售人员', '客户', '总计', '毛利率（%）', '订单状态'];
+    let csvContent = headers.join(',') + '\n';
+    
+    filteredRecords.forEach(record => {
+        const row = headers.map(header => {
+            let value = record[header] || '';
+            // 处理包含逗号的值
+            if (value && value.toString().includes(',')) {
+                value = `"${value}"`;
+            }
+            return value;
+        }).join(',');
+        csvContent += row + '\n';
+    });
+    
+    // 创建并下载文件
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `销售数据_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 只有在有数据且表格存在时才初始化显示
+    if (allRecords.length > 0 && document.getElementById('dataTableBody')) {
+        displayData();
+    }
+});
+</script>
+{% endblock %}

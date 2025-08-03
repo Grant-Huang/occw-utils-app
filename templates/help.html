@@ -43,7 +43,12 @@
                                 <i class="fas fa-edit me-1"></i>{{ t('help_manual_create') }}
                             </a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <a href="#sales-analysis" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-chart-line me-1"></i>{{ t('sales_analysis') }}
+                            </a>
+                        </div>
+                        <div class="col-md-2">
                             <a href="#troubleshooting" class="btn btn-outline-primary btn-sm w-100 mb-2">
                                 <i class="fas fa-tools me-1"></i>{{ t('help_troubleshooting') }}
                             </a>
@@ -237,6 +242,223 @@
                                     <li>{{ t('help_product_type_filler') }}</li>
                                     <li>{{ t('help_product_type_hardware') }}</li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 销售分析功能 -->
+    <div class="row mb-4" id="sales-analysis">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>{{ t('sales_analysis_features') }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="salesAnalysisAccordion">
+                        <!-- 数据导入与过滤 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="dataImport">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataImport">
+                                    <i class="fas fa-upload me-2"></i>数据导入与过滤设置
+                                </button>
+                            </h2>
+                            <div id="collapseDataImport" class="accordion-collapse collapse show" data-bs-parent="#salesAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <h6><i class="fas fa-cog me-2"></i>导入过滤设置（管理员功能）</h6>
+                                    <p>管理员可以在"导入数据过滤"页面配置过滤条件：</p>
+                                    <ul>
+                                        <li><strong>最小导入金额阈值</strong>：只导入总计金额大于等于设定值的数据</li>
+                                        <li><strong>销售人员过滤</strong>：多个销售人员用逗号分隔，留空表示不过滤</li>
+                                        <li><strong>客户过滤</strong>：多个客户用逗号分隔，留空表示不过滤</li>
+                                        <li><strong>日期范围</strong>：设置开始和结束日期，只导入指定时间范围的数据</li>
+                                        <li><strong>订单状态过滤</strong>：动态多选，系统自动提取数据中的所有订单状态</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-file-excel me-2"></i>数据导入步骤</h6>
+                                    <ol>
+                                        <li>准备标准格式的 Excel 文件（销售订单.xlsx）</li>
+                                        <li>在主页面点击"选择销售订单文件"</li>
+                                        <li>上传文件，系统会自动应用预设的过滤条件</li>
+                                        <li>查看"导入数据过滤后剩余的行数"确认过滤结果</li>
+                                        <li>点击"更新分析表格"开始分析</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 数据查看功能 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="dataViewing">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataViewing">
+                                    <i class="fas fa-table me-2"></i>数据查看功能
+                                </button>
+                            </h2>
+                            <div id="collapseDataViewing" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <h6><i class="fas fa-eye me-2"></i>查看导入数据</h6>
+                                    <p>点击"查看导入数据"按钮可以：</p>
+                                    <ul>
+                                        <li>查看原始导入的销售数据</li>
+                                        <li>支持列排序（点击列标题）</li>
+                                        <li>支持搜索和过滤</li>
+                                        <li>支持分页显示</li>
+                                        <li>支持导出为Excel文件</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-exchange-alt me-2"></i>查看转换数据</h6>
+                                    <p>点击"查看转换数据"按钮可以：</p>
+                                    <ul>
+                                        <li>查看系统转换后的标准化数据</li>
+                                        <li>包含新增字段：订单金额、报价单金额、订单数量、报价单数量</li>
+                                        <li>支持所有查看导入数据的功能</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 分析表格 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="analysisTables">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalysisTables">
+                                    <i class="fas fa-table me-2"></i>分析表格
+                                </button>
+                            </h2>
+                            <div id="collapseAnalysisTables" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <h6><i class="fas fa-user-tie me-2"></i>销售员业绩分析表</h6>
+                                    <p>显示每个销售员的业绩统计：</p>
+                                    <ul>
+                                        <li><strong>订单数量</strong>：成功转化的订单数</li>
+                                        <li><strong>总报价数量</strong>：总报价单数量</li>
+                                        <li><strong>订单金额</strong>：订单总金额</li>
+                                        <li><strong>总报价金额</strong>：报价单总金额</li>
+                                        <li><strong>数量转化率</strong>：订单数量/总报价数量</li>
+                                        <li><strong>金额转化率</strong>：订单金额/总报价金额</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-users me-2"></i>客户订单分析表</h6>
+                                    <p>显示每个客户的订单统计和转化率，默认显示10条记录。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 图表分析 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="chartAnalysis">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChartAnalysis">
+                                    <i class="fas fa-chart-bar me-2"></i>图表分析
+                                </button>
+                            </h2>
+                            <div id="collapseChartAnalysis" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <h6><i class="fas fa-dollar-sign me-2"></i>订单金额转化率分析</h6>
+                                    <p>双Y轴折线图：</p>
+                                    <ul>
+                                        <li><strong>主Y轴（实线）</strong>：订单金额、总报价金额</li>
+                                        <li><strong>副Y轴（虚线）</strong>：金额转化率</li>
+                                        <li>支持按销售人员过滤</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-sort-numeric-up me-2"></i>订单数量转化率分析</h6>
+                                    <p>双Y轴折线图：</p>
+                                    <ul>
+                                        <li><strong>主Y轴（实线）</strong>：订单数、总报价数量</li>
+                                        <li><strong>副Y轴（虚线）</strong>：数量转化率</li>
+                                        <li>支持按销售人员过滤</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-balance-scale me-2"></i>销售人员对比图表</h6>
+                                    <p>包含三个对比图表：</p>
+                                    <ul>
+                                        <li><strong>数量对比</strong>：对比不同销售人员的订单数量和报价数量</li>
+                                        <li><strong>金额对比</strong>：对比不同销售人员的订单金额和报价金额</li>
+                                        <li><strong>转化率对比</strong>：对比数量转化率和金额转化率</li>
+                                        <li>支持图表最大化显示</li>
+                                        <li>销售员业绩表格增加汇总行，显示全员统计</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-globe me-2"></i>多语言支持</h6>
+                                    <p>系统完整支持三种语言：</p>
+                                    <ul>
+                                        <li><strong>中文</strong>：简体中文界面，适合国内用户</li>
+                                        <li><strong>英文</strong>：标准英语界面，面向国际用户</li>
+                                        <li><strong>法文</strong>：法语界面支持，适合加拿大法语区</li>
+                                        <li>实时语言切换，无需重新登录</li>
+                                        <li>所有界面元素完整翻译</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 数据转换逻辑 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="dataLogic">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataLogic">
+                                    <i class="fas fa-cogs me-2"></i>数据转换逻辑
+                                </button>
+                            </h2>
+                            <div id="collapseDataLogic" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <h6><i class="fas fa-exchange-alt me-2"></i>转换规则</h6>
+                                    <p>系统根据订单状态自动转换数据：</p>
+                                    
+                                    <div class="alert alert-info">
+                                        <strong>销售订单</strong>：
+                                        <ul>
+                                            <li>订单金额 = 总计金额</li>
+                                            <li>报价单金额 = 总计金额</li>
+                                            <li>订单数量 = 1</li>
+                                            <li>报价单数量 = 1</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning">
+                                        <strong>报价单</strong>：
+                                        <ul>
+                                            <li>订单金额 = 0</li>
+                                            <li>报价单金额 = 总计金额</li>
+                                            <li>订单数量 = 0</li>
+                                            <li>报价单数量 = 1</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="alert alert-secondary">
+                                        <strong>已发送报价单</strong>：
+                                        <ul>
+                                            <li>订单金额 = 0</li>
+                                            <li>报价单金额 = 总计金额</li>
+                                            <li>订单数量 = 0</li>
+                                            <li>报价单数量 = 1</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="alert alert-danger">
+                                        <strong>已取消</strong>：
+                                        <ul>
+                                            <li>自动过滤掉此类数据，不参与统计</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h6><i class="fas fa-calculator me-2"></i>转化率计算</h6>
+                                    <ul>
+                                        <li><strong>数量转化率</strong> = 订单数量 ÷ 报价单数量 × 100%</li>
+                                        <li><strong>金额转化率</strong> = 订单金额 ÷ 报价单金额 × 100%</li>
+                                    </ul>
+                                    
+                                    <h6><i class="fas fa-filter me-2"></i>金额区间过滤</h6>
+                                    <p>系统支持按报价单金额进行区间过滤分析：</p>
+                                    <ul>
+                                        <li><strong>≤1000</strong>：报价单金额小于等于1000的数据</li>
+                                        <li><strong>1000-5000</strong>：报价单金额在1000-5000之间的数据</li>
+                                        <li><strong>5000-10000</strong>：报价单金额在5000-10000之间的数据</li>
+                                        <li><strong>≥10000</strong>：报价单金额大于等于10000的数据</li>
+                                        <li><strong>全部金额</strong>：不限制金额范围</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

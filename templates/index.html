@@ -67,6 +67,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 admin-card" onclick="showSalesAnalysisApp()">
+                        <div class="card-body text-center">
+                            <div class="admin-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h5 class="card-title">{{ t('sales_analysis') }}</h5>
+                            <p class="card-text">{{ t('sales_analysis_desc') }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- APP内容区域 -->
@@ -189,6 +200,387 @@
                         <div class="card-body">
                             <div id="allQuotationsList">
                                 <!-- 所有报价单列表将在这里动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 销售分析APP -->
+                <div id="sales-analysis-app" class="app-content" style="display: none;">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-chart-line me-2"></i>{{ t('sales_analysis') }}
+                            </h5>
+                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="showHomePage()">
+                                <i class="fas fa-home me-1"></i>{{ t('back_to_home') }}
+                            </button>
+                        </div>
+                        <div class="card-body">
+
+
+                            <!-- 数据导入公共服务 -->
+                            <div id="dataImportService" style="display: none;">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-upload me-2"></i>数据导入
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <form id="salesDataForm" enctype="multipart/form-data">
+                                                    <div class="mb-3">
+                                                        <label for="salesDataFile" class="form-label">上传Odoo导出的销售数据</label>
+                                                        <input type="file" class="form-control" id="salesDataFile" name="file" accept=".xlsx,.xls" required>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="fas fa-upload me-1"></i>{{ t('upload_sales_data_button') }}
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-secondary" onclick="viewImportedData()">
+                                                            <i class="fas fa-eye me-1"></i>查看导入数据
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-info" onclick="viewConvertedData()">
+                                                            <i class="fas fa-table me-1"></i>查看转换数据
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                <div id="salesUploadProgress" class="mt-3" style="display: none;">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                                                    </div>
+                                                    <small class="text-muted">{{ t('analyzing_data') }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 导航按钮 -->
+                            <div class="row mb-3" id="sectionNavigation" style="display: none;">
+                                <div class="col-12">
+                                    <div class="btn-group w-100" role="group">
+                                        <button type="button" class="btn btn-primary" onclick="showSection('dataSummarySection')">
+                                            <i class="fas fa-table me-1"></i>第一部分：数据汇总
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info" onclick="showSection('chartSection')">
+                                            <i class="fas fa-chart-line me-1"></i>第二部分：统计图表
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" onclick="showSection('salesComparisonSection')">
+                                            <i class="fas fa-users me-1"></i>第三部分：销售人员对比
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 第一部分：数据汇总 -->
+                            <div id="dataSummarySection" style="display: none;">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-table me-2"></i>第一部分：数据汇总
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- 表格查询控制区域 -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-2">
+                                                <label for="tableTimePeriodSelect" class="form-label">时间区间</label>
+                                                <select class="form-control" id="tableTimePeriodSelect" onchange="updateTableTimePeriod()">
+                                                    <option value="all">{{ t('all_time') }}</option>
+                                                    <option value="custom">{{ t('custom_time_range') }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2" id="tableCustomDateRange" style="display: none;">
+                                                <label for="tableStartDate" class="form-label">{{ t('start_date') }}：</label>
+                                                <input type="date" class="form-control" id="tableStartDate">
+                                            </div>
+                                            <div class="col-md-2" id="tableCustomDateRange2" style="display: none;">
+                                                <label for="tableEndDate" class="form-label">{{ t('end_date') }}：</label>
+                                                <input type="date" class="form-control" id="tableEndDate">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="tableAmountRangeSelect" class="form-label">{{ t('amount_range') }}</label>
+                                                <select class="form-control" id="tableAmountRangeSelect" onchange="updateTableAnalysis()">
+                                                    <option value="">{{ t('all_amounts') }}</option>
+                                                    <option value="0-1000">≤1000</option>
+                                                    <option value="1000-5000">1000-5000</option>
+                                                    <option value="5000-10000">5000-10000</option>
+                                                    <option value="10000+">≥10000</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label">&nbsp;</label>
+                                                <div>
+                                                    <button type="button" class="btn btn-success" onclick="updateTableAnalysis()">
+                                                        <i class="fas fa-sync-alt me-1"></i>{{ t('update_analysis_table') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 销售员业绩分析 -->
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">{{ t('sales_person_performance') }}</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped" id="salesPersonTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="sortable" data-sort="sales_person" onclick="sortTable('salesPersonTable', 'sales_person', this)">
+                                                                            {{ t('sales_person') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_count" onclick="sortTable('salesPersonTable', 'order_count', this)">
+                                                                            {{ t('order_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_count" onclick="sortTable('salesPersonTable', 'quotation_count', this)">
+                                                                            {{ t('quotation_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_amount" onclick="sortTable('salesPersonTable', 'order_amount', this)">
+                                                                            {{ t('order_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_amount" onclick="sortTable('salesPersonTable', 'quotation_amount', this)">
+                                                                            {{ t('quotation_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="count_conversion_rate" onclick="sortTable('salesPersonTable', 'count_conversion_rate', this)">
+                                                                            {{ t('count_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="amount_conversion_rate" onclick="sortTable('salesPersonTable', 'amount_conversion_rate', this)">
+                                                                            {{ t('amount_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="salesPersonTableBody">
+                                                                    <!-- 销售员数据将在这里动态加载 -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 客户订单分析 -->
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">{{ t('customer_order_analysis') }}</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped" id="customerTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="sortable" data-sort="customer_name" onclick="sortTable('customerTable', 'customer_name', this)">
+                                                                            {{ t('customer_name') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_count" onclick="sortTable('customerTable', 'order_count', this)">
+                                                                            {{ t('order_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_count" onclick="sortTable('customerTable', 'quotation_count', this)">
+                                                                            {{ t('quotation_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_amount" onclick="sortTable('customerTable', 'order_amount', this)">
+                                                                            {{ t('order_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_amount" onclick="sortTable('customerTable', 'quotation_amount', this)">
+                                                                            {{ t('quotation_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="count_conversion_rate" onclick="sortTable('customerTable', 'count_conversion_rate', this)">
+                                                                            {{ t('count_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="amount_conversion_rate" onclick="sortTable('customerTable', 'amount_conversion_rate', this)">
+                                                                            {{ t('amount_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="customerTableBody">
+                                                                    <!-- 客户数据将在这里动态加载 -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <!-- 分页控件 -->
+                                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <label for="customerTablePageSize" class="form-label me-2 mb-0">{{ t('items_per_page') }}：</label>
+                                                                <select class="form-select form-select-sm" id="customerTablePageSize" style="width: auto;" onchange="changeCustomerTablePageSize()">
+                                                                                                                                    <option value="10" selected>10</option>
+                                                                <option value="25">25</option>
+                                                                    <option value="50">50</option>
+                                                                    <option value="100">100</option>
+                                                                </select>
+                                                                <span class="ms-3 text-muted" id="customerTableInfo">显示 1-25 条，共 0 条</span>
+                                                            </div>
+                                                            <nav aria-label="客户订单分析分页">
+                                                                <ul class="pagination pagination-sm mb-0" id="customerTablePagination">
+                                                                    <!-- 分页按钮将在这里动态生成 -->
+                                                                </ul>
+                                                            </nav>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 第二部分：统计图表 -->
+                            <div id="chartSection" style="display: none;">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-line me-2"></i>第二部分：统计图表
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                                                <!-- 图表过滤控制 -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="chartTimePeriodSelect" class="form-label">图表时间维度</label>
+                                <select class="form-control" id="chartTimePeriodSelect" onchange="updateChartTimePeriod()">
+                                    <option value="monthly">{{ t('monthly') }}</option>
+                                    <option value="weekly">{{ t('weekly') }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="chartSalesPersonSelect" class="form-label">销售人员过滤</label>
+                                <select class="form-control" id="chartSalesPersonSelect" onchange="updateChartsByPerson()">
+                                    <option value="">全部销售人员</option>
+                                    <!-- 选项将通过JavaScript动态填充 -->
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-info" onclick="updateChartAnalysis()">
+                                        <i class="fas fa-chart-line me-1"></i>更新图表
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                                        <!-- 时间趋势图表 -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                                                <h6 class="mb-0">订单金额转化率分析</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('salesTrendChart', '订单金额转化率分析')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="salesTrendChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                                                <h6 class="mb-0">订单数量转化率分析</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '订单数量转化率分析')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="conversionRateChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            <!-- 第三部分：销售人员对比 -->
+                            <div id="salesComparisonSection" style="display: none;">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-users me-2"></i>第三部分：销售人员对比
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- 销售人员选择 -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="salesPerson1" class="form-label">销售人员1</label>
+                                                <select class="form-control" id="salesPerson1" onchange="updateComparisonCharts()">
+                                                    <option value="">请选择销售人员</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="salesPerson2" class="form-label">销售人员2</label>
+                                                <select class="form-control" id="salesPerson2" onchange="updateComparisonCharts()">
+                                                    <option value="">请选择销售人员</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">&nbsp;</label>
+                                                <div>
+                                                    <button type="button" class="btn btn-warning" onclick="updateComparisonCharts()">
+                                                        <i class="fas fa-sync-alt me-1"></i>更新对比图表
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 对比图表 -->
+                                        <div class="row">
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">数量对比</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonCountChart', '数量对比图')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="comparisonCountChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">金额对比</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonAmountChart', '金额对比图')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="comparisonAmountChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">转化率对比</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonConversionChart', '转化率对比图')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="comparisonConversionChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -617,6 +1009,7 @@ function hideAllApps() {
     $('#manual-create-app').hide();
     $('#my-quotations-app').hide();
     $('#all-quotations-app').hide();
+    $('#sales-analysis-app').hide();
     $('#quotationResult').hide();
 }
 
@@ -935,7 +1328,23 @@ function showAlert(message, type) {
     // 自动隐藏警告和成功消息
     if (type === 'warning' || type === 'success') {
         setTimeout(function() {
-            $('.alert').alert('close');
+            try {
+                const alerts = $('.alert');
+                if (alerts.length > 0) {
+                    alerts.each(function() {
+                        try {
+                            $(this).alert('close');
+                        } catch (error) {
+                            console.warn('关闭单个警告框时出错:', error);
+                            $(this).remove();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.warn('关闭警告框时出错:', error);
+                // 如果Bootstrap方法失败，手动移除所有警告框
+                $('.alert').remove();
+            }
         }, 5000);
     }
 }
@@ -1804,7 +2213,7 @@ function loadSalesPersons() {
 
 // 根据用户登录状态设置默认导出值
 function setDefaultExportValues(salesPersons) {
-    const userLoginEnabled = {{ 'true' if system_settings.get('user_login_enabled', True) else 'false' }};
+    const userLoginEnabled = {% if system_settings.get('user_login_enabled', True) %}true{% else %}false{% endif %};
     const currentUsername = '{{ session.get("username", "") }}';
     
     // 设置用户名
@@ -1855,6 +2264,23 @@ function showExportSuccessModal() {
     // 添加新的模态框并显示
     $('body').append(modalHtml);
     new bootstrap.Modal(document.getElementById('exportSuccessModal')).show();
+}
+
+function showSalesAnalysisApp() {
+    $('.admin-card').hide();
+    hideAllApps();
+    $('#sales-analysis-app').show();
+    
+    // 重置表单和分析结果
+    $('#salesDataForm')[0].reset();
+    $('#salesUploadProgress').hide();
+    
+    // 显示数据导入服务，隐藏其他部分
+    $('#dataImportService').show();
+    $('#sectionNavigation').hide();
+    $('#dataSummarySection').hide();
+    $('#chartSection').hide();
+    $('#salesComparisonSection').hide();
 }
 
 function showMyQuotationsApp() {
@@ -3073,5 +3499,1875 @@ function createExcelFromManualData(products) {
     link.download = `manual_quotation_${new Date().getTime()}.csv`;
     link.click();
 }
+
+// 销售分析相关函数
+let salesAnalysisData = null;
+
+// 显示原始数据
+function showSampleData() {
+    // 从服务器获取原始数据
+    $.ajax({
+        url: '/get_sales_raw_data',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                showRawDataModal(response.data);
+            } else {
+                showAlert(response.error || '获取数据失败', 'danger');
+            }
+        },
+        error: function() {
+            showAlert('获取数据失败', 'danger');
+        }
+    });
+}
+
+// 显示原始数据模态框
+function showRawDataModal(data) {
+    const modalHtml = `
+        <div class="modal fade" id="rawDataModal" tabindex="-1" aria-labelledby="rawDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rawDataModalLabel">
+                            <i class="fas fa-table me-2"></i>销售数据原始记录
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" id="searchInput" placeholder="搜索..." onkeyup="filterTable()">
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="salesPersonFilter" onchange="filterTable()">
+                                    <option value="">所有销售人员</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="customerFilter" onchange="filterTable()">
+                                    <option value="">所有客户</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="statusFilter" onchange="filterTable()">
+                                    <option value="">所有状态</option>
+                                    <option value="销售订单">销售订单</option>
+                                    <option value="报价单">报价单</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="amountRangeFilter" onchange="filterTable()">
+                                    <option value="">{{ t('all_amounts') }}</option>
+                                    <option value="0-1000">≤1000</option>
+                                    <option value="1000-5000">1000-5000</option>
+                                    <option value="5000-10000">5000-10000</option>
+                                    <option value="10000+">≥10000</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex gap-1">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearAllFilters()">
+                                        <i class="fas fa-eraser"></i> 清空
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-sm" onclick="showAmountRangeStats()">
+                                        <i class="fas fa-chart-bar"></i> 转化率
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 金额区间转化率统计 -->
+                        <div id="amountRangeStats" class="card mb-3" style="display: none;">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>各金额区间转化率分析</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="amountRangeStatsContent">
+                                    <!-- 转化率统计将在这里动态加载 -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover" id="rawDataTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>订单日期</th>
+                                        <th>销售人员</th>
+                                        <th>客户</th>
+                                        <th>总计</th>
+                                        <th>毛利率（%）</th>
+                                        <th>订单状态</th>
+                                        <th>发票状态</th>
+                                        <th>是否付款</th>
+                                        <th>交货状态</th>
+                                        <th>税项</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rawDataTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                显示 <span id="showingInfo">0-0</span> 条，共 <span id="totalInfo">0</span> 条记录
+                            </div>
+                            <nav>
+                                <ul class="pagination pagination-sm" id="pagination">
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadSampleFile()">
+                            <i class="fas fa-download me-1"></i>{{ t('download_sample_file') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 移除现有的模态框
+    $('#rawDataModal').remove();
+    
+    // 添加新的模态框并显示
+    $('body').append(modalHtml);
+    
+    // 存储数据供过滤使用
+    window.rawData = data;
+    window.currentPage = 1;
+    window.itemsPerPage = 20;
+    
+    // 初始化过滤器和表格
+    initializeFilters(data);
+    displayRawData(data);
+    
+    new bootstrap.Modal(document.getElementById('rawDataModal')).show();
+}
+
+// 查看导入的数据（在新页面中打开）
+function viewImportedData() {
+    // 在新窗口中打开导入数据页面
+    window.open('/view_imported_data', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+}
+
+// 查看转换后的数据（在新页面中打开）
+function viewConvertedData() {
+    // 在新窗口中打开转换数据页面
+    window.open('/view_converted_data', '_blank', 'width=1400,height=800,scrollbars=yes,resizable=yes');
+}
+
+// 初始化过滤器
+function initializeFilters(data) {
+    const salesPersons = [...new Set(data.map(row => row['销售人员']).filter(Boolean))];
+    const customers = [...new Set(data.map(row => row['客户']).filter(Boolean))];
+    
+    const salesPersonSelect = document.getElementById('salesPersonFilter');
+    const customerSelect = document.getElementById('customerFilter');
+    
+    salesPersons.forEach(person => {
+        const option = document.createElement('option');
+        option.value = person;
+        option.textContent = person;
+        salesPersonSelect.appendChild(option);
+    });
+    
+    customers.forEach(customer => {
+        const option = document.createElement('option');
+        option.value = customer;
+        option.textContent = customer;
+        customerSelect.appendChild(option);
+    });
+}
+
+// 过滤表格
+function filterTable() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const salesPerson = document.getElementById('salesPersonFilter').value;
+    const customer = document.getElementById('customerFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    const amountRange = document.getElementById('amountRangeFilter').value;
+    
+    const filteredData = window.rawData.filter(row => {
+        const matchesSearch = !searchTerm || 
+            Object.values(row).some(value => 
+                String(value).toLowerCase().includes(searchTerm)
+            );
+        const matchesSalesPerson = !salesPerson || row['销售人员'] === salesPerson;
+        const matchesCustomer = !customer || row['客户'] === customer;
+        const matchesStatus = !status || row['订单状态'] === status;
+        
+        // 🆕 添加金额区间过滤逻辑
+        let matchesAmountRange = true;
+        if (amountRange) {
+            const amount = parseFloat(row['总计']) || 0;
+            switch (amountRange) {
+                case '0-1000':
+                    matchesAmountRange = amount <= 1000;
+                    break;
+                case '1000-5000':
+                    matchesAmountRange = amount > 1000 && amount <= 5000;
+                    break;
+                case '5000-10000':
+                    matchesAmountRange = amount > 5000 && amount <= 10000;
+                    break;
+                case '10000+':
+                    matchesAmountRange = amount > 10000;
+                    break;
+                default:
+                    matchesAmountRange = true;
+            }
+        }
+        
+        return matchesSearch && matchesSalesPerson && matchesCustomer && matchesStatus && matchesAmountRange;
+    });
+    
+    window.currentPage = 1;
+    displayRawData(filteredData);
+    
+    // 🔧 修复：过滤表格时也需要更新图表
+    // 如果有销售人员过滤，同步到图表过滤器
+    if (salesPerson) {
+        const chartSalesPersonSelect = document.getElementById('chartSalesPersonSelect');
+        if (chartSalesPersonSelect) {
+            chartSalesPersonSelect.value = salesPerson;
+            updateChartsByPerson(); // 更新图表
+        }
+    } else {
+        // 如果没有销售人员过滤，清空图表过滤器并重新加载所有数据
+        const chartSalesPersonSelect = document.getElementById('chartSalesPersonSelect');
+        if (chartSalesPersonSelect) {
+            chartSalesPersonSelect.value = '';
+            updateChartsByPerson(); // 重新显示所有数据的图表
+        }
+    }
+}
+
+// 🆕 清空所有过滤器
+function clearAllFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('salesPersonFilter').value = '';
+    document.getElementById('customerFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('amountRangeFilter').value = '';
+    
+    // 隐藏转化率统计
+    document.getElementById('amountRangeStats').style.display = 'none';
+    
+    // 重新显示所有数据
+    filterTable();
+}
+
+// 🆕 显示各金额区间转化率统计
+function showAmountRangeStats() {
+    if (!window.rawData || window.rawData.length === 0) {
+        showAlert('请先上传数据', 'warning');
+        return;
+    }
+    
+    // 获取当前过滤条件（除了金额区间）
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const salesPerson = document.getElementById('salesPersonFilter').value;
+    const customer = document.getElementById('customerFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    
+    // 预过滤数据（除了金额区间）
+    const baseFilteredData = window.rawData.filter(row => {
+        const matchesSearch = !searchTerm || 
+            Object.values(row).some(value => 
+                String(value).toLowerCase().includes(searchTerm)
+            );
+        const matchesSalesPerson = !salesPerson || row['销售人员'] === salesPerson;
+        const matchesCustomer = !customer || row['客户'] === customer;
+        const matchesStatus = !status || row['订单状态'] === status;
+        
+        return matchesSearch && matchesSalesPerson && matchesCustomer && matchesStatus;
+    });
+    
+    // 定义金额区间
+    const ranges = [
+        { key: '0-1000', label: '≤1000', filter: (amount) => amount <= 1000 },
+        { key: '1000-5000', label: '1000-5000', filter: (amount) => amount > 1000 && amount <= 5000 },
+        { key: '5000-10000', label: '5000-10000', filter: (amount) => amount > 5000 && amount <= 10000 },
+        { key: '10000+', label: '≥10000', filter: (amount) => amount > 10000 },
+        { key: 'all', label: '全部金额', filter: (amount) => true }
+    ];
+    
+    let statsHtml = '';
+    
+    ranges.forEach(range => {
+        // 过滤该金额区间的数据
+        const rangeData = baseFilteredData.filter(row => {
+            const amount = parseFloat(row['总计']) || 0;
+            return range.filter(amount);
+        });
+        
+        // 计算转化率
+        let orderCount = 0;
+        let quotationCount = 0;
+        let orderAmount = 0;
+        let quotationAmount = 0;
+        
+        rangeData.forEach(row => {
+            const amount = parseFloat(row['总计']) || 0;
+            const status = row['订单状态'];
+            
+            if (status === '报价单') {
+                quotationAmount += amount;
+                quotationCount += 1;
+            } else if (status === '订单' || status.includes('销售订单')) {
+                orderAmount += amount;
+                orderCount += 1;
+                quotationAmount += amount; // 根据转换逻辑，订单也贡献报价单金额
+                quotationCount += 1;
+            } else if (status === '已发送报价单') {
+                quotationAmount += amount;
+                quotationCount += 1;
+            }
+            // 已取消的订单已在数据转换时被过滤
+        });
+        
+        const countConversionRate = quotationCount > 0 ? (orderCount / quotationCount * 100) : 0;
+        const amountConversionRate = quotationAmount > 0 ? (orderAmount / quotationAmount * 100) : 0;
+        
+        const bgClass = range.key === 'all' ? 'bg-primary text-white' : 'bg-light';
+        
+        statsHtml += `
+            <div class="col-md-${range.key === 'all' ? '12' : '6'} mb-3">
+                <div class="card ${bgClass}">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">${range.label}</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="h5 mb-1">${countConversionRate.toFixed(1)}%</div>
+                                <small>数量转化率</small>
+                                <div class="text-muted small">${orderCount}/${quotationCount}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="h5 mb-1">${amountConversionRate.toFixed(1)}%</div>
+                                <small>金额转化率</small>
+                                <div class="text-muted small">$${orderAmount.toLocaleString()}/$${quotationAmount.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">总记录数: ${rangeData.length}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById('amountRangeStatsContent').innerHTML = statsHtml;
+    document.getElementById('amountRangeStats').style.display = 'block';
+}
+
+// 显示原始数据
+function displayRawData(data) {
+    const tbody = document.getElementById('rawDataTableBody');
+    const startIndex = (window.currentPage - 1) * window.itemsPerPage;
+    const endIndex = startIndex + window.itemsPerPage;
+    const pageData = data.slice(startIndex, endIndex);
+    
+    tbody.innerHTML = '';
+    
+    pageData.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${row['编号'] || ''}</td>
+            <td>${row['订单日期'] || ''}</td>
+            <td>${row['销售人员'] || ''}</td>
+            <td>${row['客户'] || ''}</td>
+            <td>$${parseFloat(row['总计'] || 0).toFixed(2)}</td>
+            <td>${parseFloat(row['毛利率（%）'] || 0).toFixed(1)}%</td>
+            <td>${row['订单状态'] || ''}</td>
+            <td>${row['发票状态'] || ''}</td>
+            <td>${row['是否付款'] || ''}</td>
+            <td>${row['交货状态'] || ''}</td>
+            <td>$${parseFloat(row['税项'] || 0).toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    
+    // 更新分页信息
+    document.getElementById('showingInfo').textContent = `${startIndex + 1}-${Math.min(endIndex, data.length)}`;
+    document.getElementById('totalInfo').textContent = data.length;
+    
+    // 生成分页
+    generatePagination(data.length);
+}
+
+// 生成分页
+function generatePagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / window.itemsPerPage);
+    const pagination = document.getElementById('pagination');
+    
+    let html = '';
+    
+    // 上一页
+    html += `
+        <li class="page-item ${window.currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${window.currentPage - 1})">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        </li>
+    `;
+    
+    // 页码
+    const startPage = Math.max(1, window.currentPage - 2);
+    const endPage = Math.min(totalPages, window.currentPage + 2);
+    
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === window.currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+            </li>
+        `;
+    }
+    
+    // 下一页
+    html += `
+        <li class="page-item ${window.currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${window.currentPage + 1})">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </li>
+    `;
+    
+    pagination.innerHTML = html;
+}
+
+// 切换页面
+function changePage(page) {
+    const totalPages = Math.ceil(window.rawData.length / window.itemsPerPage);
+    if (page >= 1 && page <= totalPages) {
+        window.currentPage = page;
+        displayRawData(window.rawData);
+    }
+}
+
+// 表格排序功能
+let sortDirection = {}; // 存储每个表格的排序方向
+
+function sortTable(tableId, column, element) {
+    // 重置所有排序图标
+    const table = document.getElementById(tableId);
+    const headers = table.querySelectorAll('th.sortable i');
+    headers.forEach(icon => {
+        icon.className = 'fas fa-sort';
+    });
+    
+    // 确定排序方向
+    if (!sortDirection[tableId]) {
+        sortDirection[tableId] = {};
+    }
+    
+    if (sortDirection[tableId][column] === 'asc') {
+        sortDirection[tableId][column] = 'desc';
+        element.querySelector('i').className = 'fas fa-sort-down';
+    } else {
+        sortDirection[tableId][column] = 'asc';
+        element.querySelector('i').className = 'fas fa-sort-up';
+    }
+    
+    // 获取表格数据
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // 根据表格类型获取数据
+    let data;
+    if (tableId === 'salesPersonTable') {
+        data = window.salesAnalysisData ? window.salesAnalysisData.sales_person_analysis : [];
+    } else if (tableId === 'customerTable') {
+        data = window.salesAnalysisData ? window.salesAnalysisData.customer_analysis : [];
+    } else {
+        return;
+    }
+    
+    // 排序数据
+    const sortedData = sortData(data, column, sortDirection[tableId][column]);
+    
+    // 重新显示数据
+    if (tableId === 'salesPersonTable') {
+        displaySalesPersonAnalysis(sortedData);
+    } else if (tableId === 'customerTable') {
+        displayCustomerAnalysis(sortedData);
+    }
+}
+
+// 数据排序函数
+function sortData(data, column, direction) {
+    return data.sort((a, b) => {
+        let aValue = a[column];
+        let bValue = b[column];
+        
+        // 处理数值类型
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return direction === 'asc' ? aValue - bValue : bValue - aValue;
+        }
+        
+        // 处理字符串类型
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+            return direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+        }
+        
+        // 处理混合类型
+        aValue = String(aValue || '');
+        bValue = String(bValue || '');
+        return direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    });
+}
+
+// 下载样本文件
+function downloadSampleFile() {
+    // 创建一个简单的样本Excel文件下载链接
+    const link = document.createElement('a');
+    link.href = '/download_sample_file';
+    link.download = '销售数据样本.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// 打开图表放大模态框
+function openChartModal(chartId, title) {
+    // 创建模态框HTML
+    const modalHtml = `
+        <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="chartModalLabel">
+                            <i class="fas fa-chart-line me-2"></i>${title}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <canvas id="modalChart" width="800" height="400"></canvas>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadChart()">
+                            <i class="fas fa-download me-1"></i>下载图表
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 移除已存在的模态框
+    $('#chartModal').remove();
+    
+    // 添加新模态框到页面
+    $('body').append(modalHtml);
+    
+    // 显示模态框
+    const modal = new bootstrap.Modal(document.getElementById('chartModal'));
+    modal.show();
+    
+    // 复制图表到模态框
+    setTimeout(() => {
+        copyChartToModal(chartId);
+    }, 300);
+}
+
+// 复制图表到模态框
+function copyChartToModal(originalChartId) {
+    const originalCanvas = document.getElementById(originalChartId);
+    const modalCanvas = document.getElementById('modalChart');
+    
+    if (!originalCanvas || !modalCanvas) {
+        console.error('找不到图表元素');
+        return;
+    }
+    
+    // 获取原始图表的Chart.js实例
+    let originalChart = null;
+    if (originalChartId === 'salesTrendChart' && window.salesTrendChart) {
+        originalChart = window.salesTrendChart;
+    } else if (originalChartId === 'conversionRateChart' && window.conversionRateChart) {
+        originalChart = window.conversionRateChart;
+    } else if (originalChartId === 'comparisonCountChart' && window.comparisonCountChart) {
+        originalChart = window.comparisonCountChart;
+    } else if (originalChartId === 'comparisonAmountChart' && window.comparisonAmountChart) {
+        originalChart = window.comparisonAmountChart;
+    } else if (originalChartId === 'comparisonConversionChart' && window.comparisonConversionChart) {
+        originalChart = window.comparisonConversionChart;
+    }
+    
+    if (!originalChart) {
+        console.error('找不到原始图表实例');
+        return;
+    }
+    
+    // 创建新的图表实例
+    const modalChart = new Chart(modalCanvas, {
+        type: originalChart.config.type,
+        data: originalChart.config.data,
+        options: {
+            ...originalChart.config.options,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                ...originalChart.config.options.plugins,
+                legend: {
+                    position: 'top',
+                    display: true
+                }
+            }
+        }
+    });
+    
+    // 保存模态框图表实例
+    window.modalChart = modalChart;
+}
+
+// 下载图表
+function downloadChart() {
+    if (!window.modalChart) {
+        showAlert('没有可下载的图表', 'warning');
+        return;
+    }
+    
+    const canvas = window.modalChart.canvas;
+    const link = document.createElement('a');
+    link.download = '销售分析图表.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showAlert('图表下载成功', 'success');
+}
+
+// 切换显示部分
+function showSection(sectionId) {
+    // 隐藏所有部分
+    $('#dataSummarySection, #chartSection, #salesComparisonSection').hide();
+    
+    // 显示选中的部分
+    $('#' + sectionId).show();
+    
+    // 更新导航按钮状态
+    updateNavigationButtons(sectionId);
+}
+
+// 更新导航按钮状态
+function updateNavigationButtons(activeSectionId) {
+    // 重置所有按钮
+    $('#sectionNavigation .btn').removeClass('btn-primary btn-success btn-info btn-warning').addClass('btn-outline-primary btn-outline-success btn-outline-info btn-outline-warning');
+    
+    // 激活当前按钮
+    if (activeSectionId === 'dataSummarySection') {
+        $('#sectionNavigation .btn:first').removeClass('btn-outline-primary').addClass('btn-primary');
+    } else if (activeSectionId === 'chartSection') {
+        $('#sectionNavigation .btn:nth-child(2)').removeClass('btn-outline-info').addClass('btn-info');
+    } else if (activeSectionId === 'salesComparisonSection') {
+        $('#sectionNavigation .btn:last').removeClass('btn-outline-warning').addClass('btn-warning');
+    }
+}
+
+// 初始化销售人员下拉框
+function initializeSalesPersonDropdowns() {
+    if (!window.salesAnalysisData || !window.salesAnalysisData.sales_person_analysis) {
+        return;
+    }
+    
+    const salesPersons = window.salesAnalysisData.sales_person_analysis.map(item => item.sales_person);
+    
+    // 更新销售人员对比下拉框
+    const salesPerson1 = $('#salesPerson1');
+    const salesPerson2 = $('#salesPerson2');
+    
+    salesPerson1.empty();
+    salesPerson2.empty();
+    
+    salesPerson1.append('<option value="">请选择销售人员</option>');
+    salesPerson2.append('<option value="">请选择销售人员</option>');
+    
+    salesPersons.forEach(person => {
+        salesPerson1.append(`<option value="${person}">${person}</option>`);
+        salesPerson2.append(`<option value="${person}">${person}</option>`);
+    });
+}
+
+// 更新对比图表
+function updateComparisonCharts() {
+    const salesPerson1 = $('#salesPerson1').val();
+    const salesPerson2 = $('#salesPerson2').val();
+    
+    if (!salesPerson1 || !salesPerson2) {
+        showAlert('请选择两个销售人员进行对比', 'warning');
+        return;
+    }
+    
+    if (salesPerson1 === salesPerson2) {
+        showAlert('请选择不同的销售人员进行对比', 'warning');
+        return;
+    }
+    
+    // 这里可以调用后端API获取对比数据
+    // 暂时使用现有数据生成对比图表
+    createComparisonCharts(salesPerson1, salesPerson2);
+}
+
+// 创建对比图表
+function createComparisonCharts(salesPerson1, salesPerson2) {
+    // 获取按月分组的销售数据
+    console.log('创建对比图表，销售员:', salesPerson1, salesPerson2);
+    console.log('window.salesAnalysisData:', window.salesAnalysisData);
+    
+    const monthlyData = window.salesAnalysisData ? window.salesAnalysisData.sales_person_monthly_analysis : {};
+    console.log('monthlyData:', monthlyData);
+    
+    if (!monthlyData) {
+        console.log('错误：没有月度数据');
+        showAlert('没有找到月度数据', 'warning');
+        return;
+    }
+    
+    if (!monthlyData[salesPerson1]) {
+        console.log('错误：没有找到销售员1的数据:', salesPerson1);
+        console.log('可用的销售员:', Object.keys(monthlyData));
+        showAlert(`未找到销售员 ${salesPerson1} 的月度数据`, 'warning');
+        return;
+    }
+    
+    if (!monthlyData[salesPerson2]) {
+        console.log('错误：没有找到销售员2的数据:', salesPerson2);
+        console.log('可用的销售员:', Object.keys(monthlyData));
+        showAlert(`未找到销售员 ${salesPerson2} 的月度数据`, 'warning');
+        return;
+    }
+    
+    // 准备图表数据
+    const labels = [...new Set([...Object.keys(monthlyData[salesPerson1]), ...Object.keys(monthlyData[salesPerson2])])].sort();
+    
+    const person1CountData = {
+        quotation: labels.map(month => (monthlyData[salesPerson1][month] ? monthlyData[salesPerson1][month].quotation_count : 0)),
+        order: labels.map(month => (monthlyData[salesPerson1][month] ? monthlyData[salesPerson1][month].order_count : 0))
+    };
+    const person2CountData = {
+        quotation: labels.map(month => (monthlyData[salesPerson2][month] ? monthlyData[salesPerson2][month].quotation_count : 0)),
+        order: labels.map(month => (monthlyData[salesPerson2][month] ? monthlyData[salesPerson2][month].order_count : 0))
+    };
+    
+    const person1AmountData = {
+        quotation: labels.map(month => (monthlyData[salesPerson1][month] ? monthlyData[salesPerson1][month].quotation_amount : 0)),
+        order: labels.map(month => (monthlyData[salesPerson1][month] ? monthlyData[salesPerson1][month].order_amount : 0))
+    };
+    const person2AmountData = {
+        quotation: labels.map(month => (monthlyData[salesPerson2][month] ? monthlyData[salesPerson2][month].quotation_amount : 0)),
+        order: labels.map(month => (monthlyData[salesPerson2][month] ? monthlyData[salesPerson2][month].order_amount : 0))
+    };
+    
+    const person1ConversionData = {
+        count: labels.map(month => {
+            const data = monthlyData[salesPerson1] && monthlyData[salesPerson1][month];
+            return data && data.quotation_count > 0 ? (data.order_count / data.quotation_count) * 100 : 0;
+        }),
+        amount: labels.map(month => {
+            const data = monthlyData[salesPerson1] && monthlyData[salesPerson1][month];
+            return data && data.quotation_amount > 0 ? (data.order_amount / data.quotation_amount) * 100 : 0;
+        })
+    };
+    const person2ConversionData = {
+        count: labels.map(month => {
+            const data = monthlyData[salesPerson2] && monthlyData[salesPerson2][month];
+            return data && data.quotation_count > 0 ? (data.order_count / data.quotation_count) * 100 : 0;
+        }),
+        amount: labels.map(month => {
+            const data = monthlyData[salesPerson2] && monthlyData[salesPerson2][month];
+            return data && data.quotation_amount > 0 ? (data.order_amount / data.quotation_amount) * 100 : 0;
+        })
+    };
+
+    // 1. 数量对比图
+    const comparisonCountCtx = document.getElementById('comparisonCountChart');
+    if (comparisonCountCtx) {
+        if (window.comparisonCountChart && typeof window.comparisonCountChart.destroy === 'function') {
+            window.comparisonCountChart.destroy();
+        }
+        window.comparisonCountChart = new Chart(comparisonCountCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: `${salesPerson1} - 总报价数量`,
+                        data: person1CountData.quotation,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson1} - 订单数量`,
+                        data: person1CountData.order,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 总报价数量`,
+                        data: person2CountData.quotation,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 订单数量`,
+                        data: person2CountData.order,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '数量'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '月份'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. 金额对比图
+    const comparisonAmountCtx = document.getElementById('comparisonAmountChart');
+    if (comparisonAmountCtx) {
+        if (window.comparisonAmountChart && typeof window.comparisonAmountChart.destroy === 'function') {
+            window.comparisonAmountChart.destroy();
+        }
+        window.comparisonAmountChart = new Chart(comparisonAmountCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: `${salesPerson1} - 总报价金额`,
+                        data: person1AmountData.quotation,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson1} - 订单金额`,
+                        data: person1AmountData.order,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 总报价金额`,
+                        data: person2AmountData.quotation,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 订单金额`,
+                        data: person2AmountData.order,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '金额 ($)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '月份'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // 3. 转化率对比图
+    const comparisonConversionCtx = document.getElementById('comparisonConversionChart');
+    if (comparisonConversionCtx) {
+        if (window.comparisonConversionChart && typeof window.comparisonConversionChart.destroy === 'function') {
+            window.comparisonConversionChart.destroy();
+        }
+        window.comparisonConversionChart = new Chart(comparisonConversionCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: `${salesPerson1} - 数量转化率`,
+                        data: person1ConversionData.count,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson1} - 金额转化率`,
+                        data: person1ConversionData.amount,
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 数量转化率`,
+                        data: person2ConversionData.count,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [],
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: `${salesPerson2} - 金额转化率`,
+                        data: person2ConversionData.amount,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: '转化率 (%)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '月份'
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// 处理销售数据上传
+$(document).ready(function() {
+    $('#salesDataForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const fileInput = $('#salesDataFile')[0];
+        
+        if (!fileInput.files[0]) {
+            showAlert('{{ t("file_required") }}', 'warning');
+            return;
+        }
+        
+        $('#salesUploadProgress').show();
+        
+        $.ajax({
+            url: '/upload_sales_data',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#salesUploadProgress').hide();
+                console.log('销售数据上传响应:', response);
+                if (response.success) {
+                    salesAnalysisData = response.data;
+                    
+                    // 显示分析结果
+                    try {
+                        displaySalesAnalysis(salesAnalysisData);
+                        showAlert('{{ t("data_import_success") }}', 'success');
+                    } catch (displayError) {
+                        console.error('显示分析结果时出错:', displayError);
+                        // 即使显示失败，数据导入本身是成功的
+                        showAlert('{{ t("data_import_success_display_failed") }}', 'warning');
+                    }
+                } else {
+                    showAlert(response.error || '{{ t("data_import_failed") }}', 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#salesUploadProgress').hide();
+                console.error('销售数据上传错误:', {xhr, status, error});
+                console.error('响应文本:', xhr.responseText);
+                showAlert('{{ t("data_import_failed") }}', 'danger');
+            }
+        });
+    });
+    
+
+});
+
+// 显示销售分析结果
+function displaySalesAnalysis(data) {
+    try {
+        console.log('开始显示销售分析结果:', data);
+        
+        // 显示数据导入服务
+        $('#dataImportService').show();
+        
+        // 显示导航按钮
+        $('#sectionNavigation').show();
+        
+        // 显示三个部分
+        $('#dataSummarySection').show();
+        $('#chartSection').show();
+        $('#salesComparisonSection').show();
+        
+        // 保存数据到全局变量供排序使用
+        window.salesAnalysisData = data;
+        
+        // 初始化销售人员下拉框
+        initializeSalesPersonDropdowns();
+        
+        // 初始化图表区域的销售人员下拉框
+        initializeChartSalesPersonDropdown();
+        
+        // 显示销售员业绩分析
+        if (data.sales_person_analysis) {
+            displaySalesPersonAnalysis(data.sales_person_analysis);
+        }
+        
+        // 显示客户订单分析
+        if (data.customer_analysis) {
+            displayCustomerAnalysis(data.customer_analysis);
+        }
+        
+        // 显示图表（即使失败也不影响其他功能）
+        try {
+            if (data.trend_data && data.conversion_data) {
+                displayCharts(data);
+            } else {
+                console.warn('图表数据不完整，跳过图表显示');
+            }
+        } catch (chartError) {
+            console.error('图表显示失败，但不影响其他功能:', chartError);
+            // 不显示错误提示，因为表格数据已经成功显示
+        }
+        
+        console.log('销售分析结果显示完成');
+    } catch (error) {
+        console.error('显示销售分析结果时出错:', error);
+        showAlert('显示分析结果时出错: ' + error.message, 'danger');
+    }
+}
+
+// 显示销售员业绩分析
+function displaySalesPersonAnalysis(salesPersonData) {
+    try {
+        const tbody = $('#salesPersonTableBody');
+        tbody.empty();
+        
+        // 保存数据到全局变量供排序使用
+        if (window.salesAnalysisData) {
+            window.salesAnalysisData.sales_person_analysis = salesPersonData;
+        }
+        
+        // 🆕 计算汇总数据
+        let totalOrderCount = 0;
+        let totalQuotationCount = 0;
+        let totalOrderAmount = 0;
+        let totalQuotationAmount = 0;
+        
+        salesPersonData.forEach(person => {
+            // 处理NaN值
+            const salesPerson = person.sales_person || '未知';
+            const orderCount = isNaN(person.order_count) ? 0 : person.order_count;
+            const quotationCount = isNaN(person.quotation_count) ? 0 : person.quotation_count;
+            const orderAmount = isNaN(person.order_amount) ? 0 : person.order_amount;
+            const quotationAmount = isNaN(person.quotation_amount) ? 0 : person.quotation_amount;
+            const countConversionRate = isNaN(person.count_conversion_rate) ? 0 : person.count_conversion_rate;
+            const amountConversionRate = isNaN(person.amount_conversion_rate) ? 0 : person.amount_conversion_rate;
+            
+            // 累计汇总数据
+            totalOrderCount += orderCount;
+            totalQuotationCount += quotationCount;
+            totalOrderAmount += orderAmount;
+            totalQuotationAmount += quotationAmount;
+            
+            const row = `
+                <tr>
+                    <td>${salesPerson}</td>
+                    <td>${orderCount}</td>
+                    <td>${quotationCount}</td>
+                    <td>$${orderAmount.toFixed(2)}</td>
+                    <td>$${quotationAmount.toFixed(2)}</td>
+                    <td>${(countConversionRate * 100).toFixed(1)}%</td>
+                    <td>${(amountConversionRate * 100).toFixed(1)}%</td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+        
+        // 🆕 添加汇总行
+        if (salesPersonData.length > 0) {
+            const totalCountConversionRate = totalQuotationCount > 0 ? (totalOrderCount / totalQuotationCount) * 100 : 0;
+            const totalAmountConversionRate = totalQuotationAmount > 0 ? (totalOrderAmount / totalQuotationAmount) * 100 : 0;
+            
+            const summaryRow = `
+                <tr class="table-warning border-top border-3">
+                    <td><strong>汇总 (${salesPersonData.length}人)</strong></td>
+                    <td><strong>${totalOrderCount}</strong></td>
+                    <td><strong>${totalQuotationCount}</strong></td>
+                    <td><strong>$${totalOrderAmount.toFixed(2)}</strong></td>
+                    <td><strong>$${totalQuotationAmount.toFixed(2)}</strong></td>
+                    <td><strong>${totalCountConversionRate.toFixed(1)}%</strong></td>
+                    <td><strong>${totalAmountConversionRate.toFixed(1)}%</strong></td>
+                </tr>
+            `;
+            tbody.append(summaryRow);
+        }
+        
+    } catch (error) {
+        console.error('显示销售员业绩分析时出错:', error);
+        showAlert('显示销售员业绩分析时出错: ' + error.message, 'danger');
+    }
+}
+
+// 客户订单分析分页变量
+let customerTableCurrentPage = 1;
+let customerTablePageSize = 10;
+let customerTableAllData = [];
+
+// 显示客户订单分析
+function displayCustomerAnalysis(customerData) {
+    try {
+        // 保存原始数据到全局变量
+        customerTableAllData = customerData;
+        
+        // 保存数据到全局变量供排序使用
+        if (window.salesAnalysisData) {
+            window.salesAnalysisData.customer_analysis = customerData;
+        }
+        
+        // 重置分页
+        customerTableCurrentPage = 1;
+        
+        // 显示分页数据
+        displayCustomerTablePage(customerData);
+        
+    } catch (error) {
+        console.error('显示客户订单分析时出错:', error);
+        showAlert('显示客户订单分析时出错: ' + error.message, 'danger');
+    }
+}
+
+
+
+// 显示客户表格分页数据
+function displayCustomerTablePage(data) {
+    try {
+        const tbody = $('#customerTableBody');
+        tbody.empty();
+        
+        const startIndex = (customerTableCurrentPage - 1) * customerTablePageSize;
+        const endIndex = startIndex + customerTablePageSize;
+        const pageData = data.slice(startIndex, endIndex);
+        
+        pageData.forEach(customer => {
+            // 处理NaN值
+            const customerName = customer.customer || '未知客户';
+            const orderCount = isNaN(customer.order_count) ? 0 : customer.order_count;
+            const quotationCount = isNaN(customer.quotation_count) ? 0 : customer.quotation_count;
+            const orderAmount = isNaN(customer.order_amount) ? 0 : customer.order_amount;
+            const quotationAmount = isNaN(customer.quotation_amount) ? 0 : customer.quotation_amount;
+            
+            // 计算转化率
+            const countConversionRate = quotationCount > 0 ? (orderCount / quotationCount) * 100 : 0;
+            const amountConversionRate = quotationAmount > 0 ? (orderAmount / quotationAmount) * 100 : 0;
+            
+            // 添加转换率到数据对象中供排序使用
+            customer.count_conversion_rate = countConversionRate;
+            customer.amount_conversion_rate = amountConversionRate;
+            
+            const row = `
+                <tr>
+                    <td>${customerName}</td>
+                    <td>${orderCount}</td>
+                    <td>${quotationCount}</td>
+                    <td>$${orderAmount.toFixed(2)}</td>
+                    <td>$${quotationAmount.toFixed(2)}</td>
+                    <td>${countConversionRate.toFixed(1)}%</td>
+                    <td>${amountConversionRate.toFixed(1)}%</td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+        
+        // 更新分页信息
+        updateCustomerTablePagination(data.length);
+        
+    } catch (error) {
+        console.error('显示客户表格分页数据时出错:', error);
+        showAlert('显示客户表格分页数据时出错: ' + error.message, 'danger');
+    }
+}
+
+// 更新客户表格分页控件
+function updateCustomerTablePagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / customerTablePageSize);
+    const pagination = $('#customerTablePagination');
+    const info = $('#customerTableInfo');
+    
+    // 更新信息显示
+    const startItem = (customerTableCurrentPage - 1) * customerTablePageSize + 1;
+    const endItem = Math.min(customerTableCurrentPage * customerTablePageSize, totalItems);
+    info.text(`显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`);
+    
+    // 生成分页按钮
+    pagination.empty();
+    
+    if (totalPages <= 1) {
+        return;
+    }
+    
+    // 上一页按钮
+    const prevBtn = `
+        <li class="page-item ${customerTableCurrentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changeCustomerTablePage(${customerTableCurrentPage - 1})" ${customerTableCurrentPage === 1 ? 'tabindex="-1"' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        </li>
+    `;
+    pagination.append(prevBtn);
+    
+    // 页码按钮
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, customerTableCurrentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = `
+            <li class="page-item ${i === customerTableCurrentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="changeCustomerTablePage(${i})">${i}</a>
+            </li>
+        `;
+        pagination.append(pageBtn);
+    }
+    
+    // 下一页按钮
+    const nextBtn = `
+        <li class="page-item ${customerTableCurrentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changeCustomerTablePage(${customerTableCurrentPage + 1})" ${customerTableCurrentPage === totalPages ? 'tabindex="-1"' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </li>
+    `;
+    pagination.append(nextBtn);
+}
+
+// 切换客户表格页码
+function changeCustomerTablePage(page) {
+    if (page < 1) return;
+    
+    const totalPages = Math.ceil(customerTableAllData.length / customerTablePageSize);
+    
+    if (page > totalPages) return;
+    
+    customerTableCurrentPage = page;
+    displayCustomerTablePage(customerTableAllData);
+}
+
+// 改变客户表格每页显示数量
+function changeCustomerTablePageSize() {
+    customerTablePageSize = parseInt($('#customerTablePageSize').val());
+    customerTableCurrentPage = 1;
+    
+    displayCustomerTablePage(customerTableAllData);
+}
+
+
+
+
+
+// 显示图表
+function displayCharts(data) {
+    try {
+        console.log('开始创建图表，数据:', data);
+        
+        // 检查Chart.js是否可用
+        if (typeof Chart === 'undefined') {
+            throw new Error('Chart.js 库未加载');
+        }
+        
+        // 销毁现有图表
+        try {
+            if (window.salesTrendChart) {
+                // Chart.js 4.x的销毁方法
+                if (typeof window.salesTrendChart.destroy === 'function') {
+                    window.salesTrendChart.destroy();
+                } else if (window.salesTrendChart.destroy) {
+                    window.salesTrendChart.destroy();
+                } else if (window.salesTrendChart.stop) {
+                    window.salesTrendChart.stop();
+                }
+                window.salesTrendChart = null;
+            }
+            if (window.conversionRateChart) {
+                // Chart.js 4.x的销毁方法
+                if (typeof window.conversionRateChart.destroy === 'function') {
+                    window.conversionRateChart.destroy();
+                } else if (window.conversionRateChart.destroy) {
+                    window.conversionRateChart.destroy();
+                } else if (window.conversionRateChart.stop) {
+                    window.conversionRateChart.stop();
+                }
+                window.conversionRateChart = null;
+            }
+        } catch (error) {
+            console.warn('销毁图表时出错:', error);
+            // 如果销毁失败，直接设置为null
+            window.salesTrendChart = null;
+            window.conversionRateChart = null;
+        }
+        
+        // 订单金额转化率分析图（订单金额、总报价金额、金额转化率）
+        const salesTrendCtx = document.getElementById('salesTrendChart');
+        console.log('订单金额转化率分析图canvas元素:', salesTrendCtx);
+        
+        if (salesTrendCtx && data.trend_data && data.trend_data.labels) {
+            console.log('创建订单金额转化率分析图，数据:', data.trend_data);
+            
+            // 使用后端计算好的数据
+            const orderAmounts = data.trend_data.order_amounts || [];
+            const quotationAmounts = data.trend_data.quotation_amounts || [];
+            
+            // 🔧 使用后端计算好的金额转化率，而不是前端重新计算
+            const amountConversionRates = data.trend_data.amount_conversion_rates || [];
+            
+            window.salesTrendChart = new Chart(salesTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: data.trend_data.labels,
+                    datasets: [
+                        {
+                            label: '订单金额',
+                            data: orderAmounts,
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            tension: 0.1,
+                            yAxisID: 'y',
+                            borderDash: [] // 实线
+                        },
+                        {
+                            label: '总报价金额',
+                            data: quotationAmounts,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            tension: 0.1,
+                            yAxisID: 'y',
+                            borderDash: [] // 实线
+                        },
+                        {
+                            label: '金额转化率',
+                            data: amountConversionRates,
+                            borderColor: 'rgb(255, 159, 64)',
+                            backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                            tension: 0.1,
+                            yAxisID: 'y1',
+                            borderDash: [5, 5] // 虚线
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '金额 ($)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '转化率 (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataset.label === '金额转化率') {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                                    } else {
+                                        return context.dataset.label + ': $' + context.parsed.y.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            console.log('销售趋势图创建成功');
+        } else {
+            console.warn('销售趋势图数据不完整:', {
+                hasCanvas: !!salesTrendCtx,
+                hasTrendData: !!data.trend_data,
+                hasLabels: !!(data.trend_data && data.trend_data.labels)
+            });
+        }
+        
+        // 订单数量转化率分析图（订单数、总报价数量、数量转化率）
+        const conversionRateCtx = document.getElementById('conversionRateChart');
+        console.log('订单数量转化率分析图canvas元素:', conversionRateCtx);
+        
+        if (conversionRateCtx && data.conversion_data && data.conversion_data.labels) {
+            console.log('创建订单数量转化率分析图，数据:', data.conversion_data);
+            
+            // 计算数量转化率（订单数 / 总报价数量 * 100）
+            const countConversionRates = data.conversion_data.labels.map((label, index) => {
+                const orderCount = data.conversion_data.order_counts ? data.conversion_data.order_counts[index] || 0 : 0;
+                const quotationCount = data.conversion_data.quotation_counts ? data.conversion_data.quotation_counts[index] || 0 : 0;
+                if (quotationCount === 0) return 0;
+                return (orderCount / quotationCount * 100);
+            });
+            
+            window.conversionRateChart = new Chart(conversionRateCtx, {
+                type: 'line',
+                data: {
+                    labels: data.conversion_data.labels,
+                    datasets: [
+                        {
+                            label: '订单数',
+                            data: data.conversion_data.order_counts,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            yAxisID: 'y',
+                            borderDash: [] // 实线
+                        },
+                        {
+                            label: '总报价数量',
+                            data: data.conversion_data.quotation_counts,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            yAxisID: 'y',
+                            borderDash: [] // 实线
+                        },
+                        {
+                            label: '数量转化率',
+                            data: countConversionRates,
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            yAxisID: 'y1',
+                            borderDash: [5, 5] // 虚线
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '数量'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '转化率 (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataset.label === '数量转化率') {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                                    } else {
+                                        return context.dataset.label + ': ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            console.log('转化率图创建成功');
+        } else {
+            console.warn('转化率图数据不完整:', {
+                hasCanvas: !!conversionRateCtx,
+                hasConversionData: !!data.conversion_data,
+                hasLabels: !!(data.conversion_data && data.conversion_data.labels)
+            });
+        }
+        
+        console.log('图表创建完成');
+    } catch (error) {
+        console.error('图表创建失败:', error);
+        // 不显示错误提示，因为表格数据已经成功显示
+        console.warn('图表创建失败，但不影响其他功能:', error.message);
+    }
+}
+
+// 更新表格时间周期选择
+function updateTableTimePeriod() {
+    const timePeriod = $('#tableTimePeriodSelect').val();
+    const customDateRange = $('#tableCustomDateRange');
+    const customDateRange2 = $('#tableCustomDateRange2');
+    
+    if (timePeriod === 'custom') {
+        customDateRange.show();
+        customDateRange2.show();
+    } else {
+        customDateRange.hide();
+        customDateRange2.hide();
+    }
+}
+
+// 更新图表时间周期选择
+function updateChartTimePeriod() {
+    // 图表时间周期选择不需要显示/隐藏其他控件，直接更新图表即可
+    updateChartAnalysis();
+}
+
+// 更新表格分析（根据时间周期和金额区间）
+function updateTableAnalysis() {
+    if (!salesAnalysisData) return;
+    
+    const timePeriod = $('#tableTimePeriodSelect').val();
+    const amountRange = $('#tableAmountRangeSelect').val(); // 🆕 获取金额区间
+    let startDate = null;
+    let endDate = null;
+    
+    if (timePeriod === 'custom') {
+        startDate = $('#tableStartDate').val();
+        endDate = $('#tableEndDate').val();
+        
+        if (!startDate || !endDate) {
+            showAlert('{{ t("please_select_start_end_date") }}', 'warning');
+            return;
+        }
+        
+        if (startDate > endDate) {
+            showAlert('{{ t("start_date_cannot_be_later") }}', 'warning');
+            return;
+        }
+    }
+    
+    $.ajax({
+        url: '/update_sales_analysis',
+        type: 'POST',
+        data: {
+            time_period: timePeriod,
+            start_date: startDate,
+            end_date: endDate,
+            amount_range: amountRange, // 🆕 发送金额区间参数
+            data: JSON.stringify(salesAnalysisData)
+        },
+        success: function(response) {
+            if (response.success) {
+                // 只更新表格数据，不更新图表
+                if (response.data.sales_person_analysis) {
+                    displaySalesPersonAnalysis(response.data.sales_person_analysis);
+                }
+                if (response.data.customer_analysis) {
+                    displayCustomerAnalysis(response.data.customer_analysis);
+                }
+                // 重新初始化销售人员下拉框
+                initializeSalesPersonDropdowns();
+                // 更新全局数据
+                window.salesAnalysisData = response.data;
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("data_import_failed") }}', 'danger');
+        }
+    });
+}
+
+// 初始化图表区域的销售人员下拉框
+function initializeChartSalesPersonDropdown() {
+    const chartSelect = $('#chartSalesPersonSelect');
+    chartSelect.empty().append('<option value="">全部销售人员</option>');
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.sales_person_analysis) {
+        const salesPersons = window.salesAnalysisData.sales_person_analysis;
+        salesPersons.forEach(person => {
+            chartSelect.append(`<option value="${person.sales_person}">${person.sales_person}</option>`);
+        });
+    }
+}
+
+// 根据销售人员过滤更新图表
+function updateChartsByPerson() {
+    const selectedPerson = $('#chartSalesPersonSelect').val();
+    if (!window.salesAnalysisData) return;
+    
+    let filteredData = { ...window.salesAnalysisData };
+    
+    if (selectedPerson) {
+        // 过滤趋势数据
+        if (filteredData.trend_data) {
+            filteredData.trend_data = filterTrendDataByPerson(filteredData.trend_data, selectedPerson);
+        }
+        
+        // 过滤转化率数据
+        if (filteredData.conversion_data) {
+            filteredData.conversion_data = filterConversionDataByPerson(filteredData.conversion_data, selectedPerson);
+        }
+    }
+    
+    // 重新显示图表
+    displayCharts(filteredData);
+}
+
+// 过滤趋势数据按销售人员
+function filterTrendDataByPerson(trendData, selectedPerson) {
+    if (!window.salesAnalysisData.sales_person_monthly_analysis || !window.salesAnalysisData.sales_person_monthly_analysis[selectedPerson]) {
+        return trendData;
+    }
+    
+    const personMonthlyData = window.salesAnalysisData.sales_person_monthly_analysis[selectedPerson];
+    const months = Object.keys(personMonthlyData).sort();
+    
+    const filteredData = {
+        labels: months,
+        total_amounts: [],
+        quotation_amounts: []
+    };
+    
+    months.forEach(month => {
+        const monthData = personMonthlyData[month];
+        filteredData.total_amounts.push(monthData.order_amount + monthData.quotation_amount);
+        filteredData.quotation_amounts.push(monthData.quotation_amount);
+    });
+    
+    return filteredData;
+}
+
+// 过滤转化率数据按销售人员
+function filterConversionDataByPerson(conversionData, selectedPerson) {
+    if (!window.salesAnalysisData.sales_person_monthly_analysis || !window.salesAnalysisData.sales_person_monthly_analysis[selectedPerson]) {
+        return conversionData;
+    }
+    
+    const personMonthlyData = window.salesAnalysisData.sales_person_monthly_analysis[selectedPerson];
+    const months = Object.keys(personMonthlyData).sort();
+    
+    const filteredData = {
+        labels: months,
+        order_counts: [],
+        quotation_counts: [],
+        rates: []
+    };
+    
+    months.forEach(month => {
+        const monthData = personMonthlyData[month];
+        filteredData.order_counts.push(monthData.order_count);
+        filteredData.quotation_counts.push(monthData.quotation_count);
+        
+        // 计算转化率
+        const rate = monthData.quotation_count > 0 ? 
+                    (monthData.order_count / monthData.quotation_count * 100) : 0;
+        filteredData.rates.push(rate);
+    });
+    
+    return filteredData;
+}
+
+// 更新图表分析（根据时间周期）
+function updateChartAnalysis() {
+    if (!salesAnalysisData) return;
+    
+    const timePeriod = $('#chartTimePeriodSelect').val();
+    
+    $.ajax({
+        url: '/update_sales_analysis',
+        type: 'POST',
+        data: {
+            time_period: timePeriod,
+            start_date: null,
+            end_date: null,
+            data: JSON.stringify(salesAnalysisData)
+        },
+        success: function(response) {
+            if (response.success) {
+                // 更新全局数据
+                window.salesAnalysisData.trend_data = response.data.trend_data;
+                window.salesAnalysisData.conversion_data = response.data.conversion_data;
+                
+                // 应用销售人员过滤
+                const selectedPerson = $('#chartSalesPersonSelect').val();
+                let chartData = response.data;
+                
+                if (selectedPerson) {
+                    chartData = { ...response.data };
+                    if (chartData.trend_data) {
+                        chartData.trend_data = filterTrendDataByPerson(chartData.trend_data, selectedPerson);
+                    }
+                    if (chartData.conversion_data) {
+                        chartData.conversion_data = filterConversionDataByPerson(chartData.conversion_data, selectedPerson);
+                    }
+                }
+                
+                // 只更新图表，不更新表格
+                if (chartData.trend_data && chartData.conversion_data) {
+                    displayCharts(chartData);
+                }
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("data_import_failed") }}', 'danger');
+        }
+    });
+}
+
+// 导出分析报告
+function exportAnalysisReport() {
+    if (!salesAnalysisData) {
+        showAlert('{{ t("no_data_found") }}', 'warning');
+        return;
+    }
+    
+    const timePeriod = $('#tableTimePeriodSelect').val();
+    
+    $.ajax({
+        url: '/export_sales_analysis',
+        type: 'POST',
+        data: {
+            time_period: timePeriod,
+            data: JSON.stringify(salesAnalysisData)
+        },
+        success: function(response) {
+            if (response.success) {
+                // 下载文件
+                const link = document.createElement('a');
+                link.href = response.download_url;
+                link.download = `sales_analysis_${new Date().getTime()}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showAlert('{{ t("export_success") }}', 'success');
+            } else {
+                showAlert(response.error, 'danger');
+            }
+        },
+        error: function() {
+            showAlert('{{ t("data_import_failed") }}', 'danger');
+        }
+    });
+}
+
+
+
 </script>
 {% endblock %} 
