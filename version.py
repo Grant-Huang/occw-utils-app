@@ -3,8 +3,8 @@
 版本信息配置
 """
 
-VERSION = "2.1"
-VERSION_NAME = "OCCW报价系统 v2.1"
+VERSION = "2.2.0 release 2"
+VERSION_NAME = "OCCW报价系统 v2.2.0 release 2"
 COMPANY_NAME_ZH = "加西欧派"
 COMPANY_NAME_EN = "Oppein Cabinet Canada West Ltd."
 SYSTEM_NAME_ZH = "OCCW APP"
@@ -13,6 +13,23 @@ SYSTEM_NAME_FR = "OCCW APP"
 
 # 版本历史
 VERSION_HISTORY = {
+    "2.2.0 release 2": {
+        "date": "2025-01-26",
+        "features": [
+            "🔧 修复手动创建报价单导出功能：修正表格数据读取错误",
+            "⚙️ 增加Gunicorn请求行长度限制：解决大数据量导出问题",
+            "🔄 优化导出请求方式：从GET改为POST避免URL过长",
+            "🎯 完善表格结构匹配：修正价格和数量列索引",
+            "📋 统一toast通知系统：替换原有alert和flash消息"
+        ],
+        "changes": [
+            "修复updateManualTotal函数中的列索引错误",
+            "增加gunicorn.conf.py中的limit_request_line配置",
+            "修改deploy.sh使用配置文件启动Gunicorn",
+            "将exportManualQuotation改为POST请求",
+            "完善前端错误处理和用户体验"
+        ]
+    },
     "2.1": {
         "date": "2025-01-26",
         "features": [
