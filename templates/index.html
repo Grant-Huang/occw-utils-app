@@ -224,7 +224,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header bg-primary text-white">
                                         <h5 class="mb-0">
-                                            <i class="fas fa-upload me-2"></i>数据导入
+                                            <i class="fas fa-upload me-2"></i>{{ t('data_import') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
@@ -232,7 +232,7 @@
                                             <div class="col-12">
                                                 <form id="salesDataForm" enctype="multipart/form-data">
                                                     <div class="mb-3">
-                                                        <label for="salesDataFile" class="form-label">上传Odoo导出的销售数据</label>
+                                                        <label for="salesDataFile" class="form-label">{{ t('upload_odoo_sales_data') }}</label>
                                                         <input type="file" class="form-control" id="salesDataFile" name="file" accept=".xlsx,.xls" required>
                                                     </div>
                                                     <div class="d-flex gap-2">
@@ -240,10 +240,10 @@
                                                             <i class="fas fa-upload me-1"></i>{{ t('upload_sales_data_button') }}
                                                         </button>
                                                         <button type="button" class="btn btn-outline-secondary" onclick="viewImportedData()">
-                                                            <i class="fas fa-eye me-1"></i>查看导入数据
+                                                            <i class="fas fa-eye me-1"></i>{{ t('view_imported_data') }}
                                                         </button>
                                                         <button type="button" class="btn btn-outline-info" onclick="viewConvertedData()">
-                                                            <i class="fas fa-table me-1"></i>查看转换数据
+                                                            <i class="fas fa-table me-1"></i>{{ t('view_converted_data') }}
                                                         </button>
                                                     </div>
                                                 </form>
@@ -264,13 +264,13 @@
                                 <div class="col-12">
                                     <div class="btn-group w-100" role="group">
                                         <button type="button" class="btn btn-primary" onclick="showSection('dataSummarySection')">
-                                            <i class="fas fa-table me-1"></i>第一部分：数据汇总
+                                            <i class="fas fa-table me-1"></i>{{ t('section_data_summary') }}
                                         </button>
                                         <button type="button" class="btn btn-outline-info" onclick="showSection('chartSection')">
-                                            <i class="fas fa-chart-line me-1"></i>第二部分：统计图表
+                                            <i class="fas fa-chart-line me-1"></i>{{ t('section_chart_analysis') }}
                                         </button>
                                         <button type="button" class="btn btn-outline-warning" onclick="showSection('salesComparisonSection')">
-                                            <i class="fas fa-users me-1"></i>第三部分：销售人员对比
+                                            <i class="fas fa-users me-1"></i>{{ t('section_sales_comparison') }}
                                         </button>
                                     </div>
                                 </div>
@@ -281,7 +281,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header bg-success text-white">
                                         <h5 class="mb-0">
-                                            <i class="fas fa-table me-2"></i>第一部分：数据汇总
+                                            <i class="fas fa-table me-2"></i>{{ t('section_data_summary') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
@@ -440,23 +440,23 @@
                                 <div class="card mb-4">
                                     <div class="card-header bg-info text-white">
                                         <h5 class="mb-0">
-                                            <i class="fas fa-chart-line me-2"></i>第二部分：统计图表
+                                            <i class="fas fa-chart-line me-2"></i>{{ t('section_chart_analysis') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
                                                                 <!-- 图表过滤控制 -->
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="chartTimePeriodSelect" class="form-label">图表时间维度</label>
+                                <label for="chartTimePeriodSelect" class="form-label">{{ t('chart_time_dimension') }}</label>
                                 <select class="form-control" id="chartTimePeriodSelect" onchange="updateChartTimePeriod()">
                                     <option value="monthly">{{ t('monthly') }}</option>
                                     <option value="weekly">{{ t('weekly') }}</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label for="chartSalesPersonSelect" class="form-label">销售人员过滤</label>
+                                <label for="chartSalesPersonSelect" class="form-label">{{ t('sales_person_filter') }}</label>
                                 <select class="form-control" id="chartSalesPersonSelect" onchange="updateChartsByPerson()">
-                                    <option value="">全部销售人员</option>
+                                    <option value="">{{ t('all_sales_persons') }}</option>
                                     <!-- 选项将通过JavaScript动态填充 -->
                                 </select>
                             </div>
@@ -464,7 +464,7 @@
                                 <label class="form-label">&nbsp;</label>
                                 <div>
                                     <button type="button" class="btn btn-info" onclick="updateChartAnalysis()">
-                                        <i class="fas fa-chart-line me-1"></i>更新图表
+                                        <i class="fas fa-chart-line me-1"></i>{{ t('update_charts') }}
                                     </button>
                                 </div>
                             </div>
@@ -475,8 +475,8 @@
                                             <div class="col-md-6 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                                                <h6 class="mb-0">订单金额转化率分析</h6>
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('salesTrendChart', '订单金额转化率分析')">
+                                                                                <h6 class="mb-0">{{ t('order_amount_conversion_analysis') }}</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('salesTrendChart', '{{ t('order_amount_conversion_analysis') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -488,8 +488,8 @@
                                             <div class="col-md-6 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                                                <h6 class="mb-0">订单数量转化率分析</h6>
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '订单数量转化率分析')">
+                                                                                <h6 class="mb-0">{{ t('order_quantity_conversion_analysis') }}</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '{{ t('order_quantity_conversion_analysis') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -509,29 +509,29 @@
                                 <div class="card mb-4">
                                     <div class="card-header bg-warning text-dark">
                                         <h5 class="mb-0">
-                                            <i class="fas fa-users me-2"></i>第三部分：销售人员对比
+                                            <i class="fas fa-users me-2"></i>{{ t('section_sales_comparison') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
                                         <!-- 销售人员选择 -->
                                         <div class="row mb-3">
                                             <div class="col-md-4">
-                                                <label for="salesPerson1" class="form-label">销售人员1</label>
+                                                <label for="salesPerson1" class="form-label">{{ t('sales_person_1') }}</label>
                                                 <select class="form-control" id="salesPerson1" onchange="updateComparisonCharts()">
-                                                    <option value="">请选择销售人员</option>
+                                                    <option value="">{{ t("please_select_sales_person") }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="salesPerson2" class="form-label">销售人员2</label>
+                                                <label for="salesPerson2" class="form-label">{{ t('sales_person_2') }}</label>
                                                 <select class="form-control" id="salesPerson2" onchange="updateComparisonCharts()">
-                                                    <option value="">请选择销售人员</option>
+                                                    <option value="">{{ t("please_select_sales_person") }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">&nbsp;</label>
                                                 <div>
                                                     <button type="button" class="btn btn-warning" onclick="updateComparisonCharts()">
-                                                        <i class="fas fa-sync-alt me-1"></i>更新对比图表
+                                                        <i class="fas fa-sync-alt me-1"></i>{{ t('update_comparison_charts') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -542,8 +542,8 @@
                                             <div class="col-md-4 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                        <h6 class="mb-0">数量对比</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonCountChart', '数量对比图')">
+                                                        <h6 class="mb-0">{{ t('quantity_comparison') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonCountChart', '{{ t('quantity_comparison_chart') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -555,8 +555,8 @@
                                             <div class="col-md-4 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                        <h6 class="mb-0">金额对比</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonAmountChart', '金额对比图')">
+                                                        <h6 class="mb-0">{{ t('amount_comparison') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonAmountChart', '{{ t('amount_comparison_chart') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -568,8 +568,8 @@
                                             <div class="col-md-4 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                        <h6 class="mb-0">转化率对比</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonConversionChart', '转化率对比图')">
+                                                        <h6 class="mb-0">{{ t('conversion_rate_comparison') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonConversionChart', '{{ t('conversion_rate_comparison_chart') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -620,26 +620,26 @@
                                                 <tr id="add-row-1">
                                                     <td>
                                                         <select class="form-select form-select-sm" onchange="onCategoryChange(1)" id="category-1">
-                                                            <option value="">选择类型</option>
+                                                            <option value="">{{ t('select_type') }}</option>
                                                         </select>
                                                     </td>
                                                     <td>
                                                         <select class="form-select form-select-sm" onchange="onProductChange(1)" id="product-1" disabled>
-                                                            <option value="">选择产品</option>
+                                                            <option value="">{{ t('select_product') }}</option>
                                                         </select>
                                                     </td>
                                                     <td>
                                                         <select class="form-select form-select-sm" onchange="onVariantChange(1)" id="box-variant-1" disabled>
-                                                            <option value="">选择柜身变体</option>
+                                                            <option value="">{{ t('select_box_variant') }}</option>
                                                         </select>
                                                     </td>
                                                     <td>
                                                         <select class="form-select form-select-sm" onchange="onVariantChange(1)" id="door-variant-1" disabled>
-                                                            <option value="">选择门板变体</option>
+                                                            <option value="">{{ t('select_door_variant') }}</option>
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <span id="sku-1" class="badge bg-secondary">未选择</span>
+                                                        <span id="sku-1" class="badge bg-secondary">{{ t('not_selected') }}</span>
                                                     </td>
                                                     <td>
                                                         <span id="price-1">$0.00</span>
@@ -653,7 +653,7 @@
                                     </div>
                                     <div class="mt-3 text-end">
                                         <button type="button" class="btn btn-success" onclick="addToProductList(1)">
-                                            <i class="fas fa-plus me-1"></i>添加产品
+                                            <i class="fas fa-plus me-1"></i>{{ t('add_product') }}
                                         </button>
                                     </div>
                                 </div>
@@ -1120,7 +1120,7 @@ $(document).ready(function() {
                     $('#quotationResult').show();
                     
                     // 显示成功消息并提示可以查看PDF文本
-                    showAlert('报价单解析成功！点击"PDF文本"按钮可查看原始PDF内容', 'success');
+                                            showAlert('{{ t("quotation_parsed_success") }}', 'success');
                 } else {
                     showAlert(response.error, 'danger');
                 }
@@ -1229,7 +1229,7 @@ function exportOCCWQuotation() {
     }
     
     if (!exportSalesPerson) {
-        showAlert('请选择销售人员', 'warning');
+        showAlert('{{ t("please_select_sales_person") }}', 'warning');
         return;
     }
     
@@ -1315,39 +1315,7 @@ function exportOCCWQuotation() {
     showExportSuccessModal();
 }
 
-function showAlert(message, type) {
-    const alertHtml = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-    
-    $('main').prepend(alertHtml);
-    
-    // 自动隐藏警告和成功消息
-    if (type === 'warning' || type === 'success') {
-        setTimeout(function() {
-            try {
-                const alerts = $('.alert');
-                if (alerts.length > 0) {
-                    alerts.each(function() {
-                        try {
-                            $(this).alert('close');
-                        } catch (error) {
-                            console.warn('关闭单个警告框时出错:', error);
-                            $(this).remove();
-                        }
-                    });
-                }
-            } catch (error) {
-                console.warn('关闭警告框时出错:', error);
-                // 如果Bootstrap方法失败，手动移除所有警告框
-                $('.alert').remove();
-            }
-        }, 5000);
-    }
-}
+// showAlert 函数已在 base.html 中统一实现为 toast 系统
 
 function showPdfText() {
     // 优先使用已保存的原始PDF文本
@@ -1803,7 +1771,7 @@ function loadProductsByCategory(category, rowNum) {
                 const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
                 
                 // 填充产品选择
-                productSelect.innerHTML = '<option value="">选择产品</option>';
+                productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
@@ -1871,12 +1839,12 @@ function onCategoryChangeManual(rowNum) {
     const doorVariantSelect = document.getElementById(`door-variant-manual-${rowNum}`);
     
     // 清空后续选择
-    productSelect.innerHTML = '<option value="">选择产品</option>';
+    productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
     boxVariantSelect.innerHTML = '<option value="">选择柜身变体</option>';
     doorVariantSelect.innerHTML = '<option value="">选择门板变体</option>';
     
     // 重置SKU和价格
-    document.getElementById(`sku-manual-${rowNum}`).textContent = '未选择';
+    document.getElementById(`sku-manual-${rowNum}`).textContent = '{{ t("not_selected") }}';
     document.getElementById(`sku-manual-${rowNum}`).className = 'badge bg-secondary';
     document.getElementById(`price-manual-${rowNum}`).textContent = '$0.00';
     
@@ -1914,7 +1882,7 @@ function loadProductsByCategoryManual(category, rowNum) {
                 const doorVariantSelect = document.getElementById(`door-variant-manual-${rowNum}`);
                 
                 // 填充产品选择
-                productSelect.innerHTML = '<option value="">选择产品</option>';
+                productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
@@ -2056,14 +2024,14 @@ function clearCurrentManualRow(rowNum) {
     const row = document.getElementById(`add-row-${rowNum}`);
     if (row) {
         // 清空所有选择框和输入框
-        document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">选择类型</option>';
-        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">选择产品</option>';
+        document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">{{ t("select_type") }}</option>';
+        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">{{ t("select_product") }}</option>';
         document.getElementById(`product-${rowNum}`).disabled = true;
         document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">选择柜身变体</option>';
         document.getElementById(`box-variant-${rowNum}`).disabled = true;
         document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">选择门板变体</option>';
         document.getElementById(`door-variant-${rowNum}`).disabled = true;
-        document.getElementById(`sku-${rowNum}`).textContent = '未选择';
+        document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
         document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
         document.getElementById(`price-${rowNum}`).textContent = '$0.00';
         document.getElementById(`qty-${rowNum}`).value = '1';
@@ -2194,7 +2162,12 @@ function loadSalesPersons() {
                 manualSelect.find('option:not(:first)').remove();
                 pdfSelect.find('option:not(:first)').remove();
                 
-                // 添加销售人员选项
+                // 添加默认销售人员选项
+                const defaultOption = `<option value="info@oppeincabinet.ca">info@oppeincabinet.ca</option>`;
+                manualSelect.append(defaultOption);
+                pdfSelect.append(defaultOption);
+                
+                // 添加其他销售人员选项
                 salesPersons.forEach(function(person) {
                     const option = `<option value="${person.name}">${person.name} (${person.email})</option>`;
                     manualSelect.append(option);
@@ -2227,12 +2200,9 @@ function setDefaultExportValues(salesPersons) {
         $('#manualExportUsername').val(currentUsername);
     }
     
-    // 设置默认销售人员（邮箱为info@oppeincabinet.ca的销售人员）
-    const defaultSalesPerson = salesPersons.find(person => person.email === 'info@oppeincabinet.ca');
-    if (defaultSalesPerson) {
-        $('#exportSalesPerson').val(defaultSalesPerson.name);
-        $('#manualExportSalesPerson').val(defaultSalesPerson.name);
-    }
+    // 设置默认销售人员为info@oppeincabinet.ca
+    $('#exportSalesPerson').val('info@oppeincabinet.ca');
+    $('#manualExportSalesPerson').val('info@oppeincabinet.ca');
 }
 
 function showExportSuccessModal() {
@@ -2611,12 +2581,12 @@ function addManualProductRow(product) {
         <td>${manualProductCounter}</td>
         <td>
             <select class="form-select form-select-sm" onchange="onCategoryChangeManual(${manualProductCounter})" id="category-manual-${manualProductCounter}">
-                <option value="">选择类型</option>
+                <option value="">{{ t("select_type") }}</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onProductChangeManual(${manualProductCounter})" id="product-manual-${manualProductCounter}" disabled>
-                <option value="">选择产品</option>
+                <option value="">{{ t("select_product") }}</option>
             </select>
         </td>
         <td>
@@ -2630,7 +2600,7 @@ function addManualProductRow(product) {
             </select>
         </td>
         <td>
-            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">未选择</span>
+            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">{{ t("not_selected") }}</span>
         </td>
         <td>
             <span id="price-manual-${manualProductCounter}">$0.00</span>
@@ -2665,12 +2635,12 @@ function addManualProductRowWithCallback(product, callback) {
         <td>${manualProductCounter}</td>
         <td>
             <select class="form-select form-select-sm" onchange="onCategoryChangeManual(${manualProductCounter})" id="category-manual-${manualProductCounter}">
-                <option value="">选择类型</option>
+                <option value="">{{ t("select_type") }}</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onProductChangeManual(${manualProductCounter})" id="product-manual-${manualProductCounter}" disabled>
-                <option value="">选择产品</option>
+                <option value="">{{ t("select_product") }}</option>
             </select>
         </td>
         <td>
@@ -2684,7 +2654,7 @@ function addManualProductRowWithCallback(product, callback) {
             </select>
         </td>
         <td>
-            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">未选择</span>
+            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">{{ t("not_selected") }}</span>
         </td>
         <td>
             <span id="price-manual-${manualProductCounter}">$0.00</span>
@@ -3025,7 +2995,7 @@ function addToProductList(rowNum) {
     const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = document.getElementById(`qty-${rowNum}`).value;
     
-    if (sku === '未选择' || price === '$0.00') {
+    if (sku === '{{ t("not_selected") }}' || price === '$0.00') {
         showAlert('请先选择完整的产品信息', 'warning');
         return;
     }
@@ -3154,7 +3124,7 @@ function saveToMyQuotations(type) {
         }
         
         if (!exportSalesPerson) {
-            showAlert('请选择销售人员', 'warning');
+            showAlert('{{ t("please_select_sales_person") }}', 'warning');
             return;
         }
         
@@ -3220,7 +3190,7 @@ function saveToMyQuotations(type) {
         }
         
         if (!exportSalesPerson) {
-            showAlert('请选择销售人员', 'warning');
+            showAlert('{{ t("please_select_sales_person") }}', 'warning');
             return;
         }
         
@@ -3400,7 +3370,7 @@ function exportManualQuotation() {
     }
     
     if (!exportSalesPerson) {
-        showAlert('请选择销售人员', 'warning');
+        showAlert('{{ t("please_select_sales_person") }}', 'warning');
         return;
     }
     
@@ -4188,8 +4158,8 @@ function initializeSalesPersonDropdowns() {
     salesPerson1.empty();
     salesPerson2.empty();
     
-    salesPerson1.append('<option value="">请选择销售人员</option>');
-    salesPerson2.append('<option value="">请选择销售人员</option>');
+    salesPerson1.append('<option value="">{{ t("please_select_sales_person") }}</option>');
+    salesPerson2.append('<option value="">{{ t("please_select_sales_person") }}</option>');
     
     salesPersons.forEach(person => {
         salesPerson1.append(`<option value="${person}">${person}</option>`);

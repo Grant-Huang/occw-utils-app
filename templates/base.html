@@ -90,6 +90,102 @@
             transform: translateY(-2px);
         }
         
+        /* Toast 提示系统样式 */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 10px;
+            padding: 16px 20px;
+            min-width: 300px;
+            max-width: 400px;
+            pointer-events: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left-color: var(--success-color);
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left-color: var(--info-color);
+        }
+        
+        .toast-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .toast-close:hover {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+            color: var(--text-dark);
+        }
+        
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background-color: currentColor;
+            opacity: 0.3;
+            transition: width linear;
+        }
+        
         /* 排序表头样式 */
         .sortable {
             cursor: pointer;
@@ -647,6 +743,9 @@
         </div>
     </footer>
 
+    <!-- Toast 提示容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- 浮动信息条容器 -->
     <div id="floatingNotificationContainer"></div>
 
@@ -655,45 +754,104 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     
     <script>
-    // 统一的浮动信息条函数
-    function showFloatingNotification(message, type = 'info', duration = 15000) {
-        // 移除现有的通知
-        $('.floating-notification').remove();
+    // Toast 提示系统
+    class ToastManager {
+        constructor() {
+            this.container = document.getElementById('toastContainer');
+            this.toasts = [];
+        }
         
-        // 创建新的通知
-        const notification = $(`
-            <div class="floating-notification">
-                <div class="alert alert-${type}">
-                    <button type="button" class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
-                    <div class="notification-content">
-                        ${message}
-                    </div>
-                </div>
-            </div>
-        `);
-        
-        // 添加到容器
-        $('#floatingNotificationContainer').append(notification);
-        
-        // 显示动画
-        setTimeout(() => {
-            notification.addClass('show');
-        }, 100);
-        
-        // 自动隐藏
-        if (duration > 0) {
+        show(message, type = 'info', duration = 5000) {
+            const toast = this.createToast(message, type);
+            this.container.appendChild(toast);
+            this.toasts.push(toast);
+            
+            // 显示动画
             setTimeout(() => {
-                notification.removeClass('show');
+                toast.classList.add('show');
+            }, 100);
+            
+            // 设置进度条
+            if (duration > 0) {
+                const progress = toast.querySelector('.toast-progress');
+                progress.style.transition = `width ${duration}ms linear`;
                 setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, duration);
+                    progress.style.width = '0%';
+                }, 100);
+                
+                // 自动隐藏
+                setTimeout(() => {
+                    this.hide(toast);
+                }, duration);
+            }
+        }
+        
+        createToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const title = this.getTitle(type);
+            
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <h6 class="toast-title">${title}</h6>
+                    <button class="toast-close" onclick="toastManager.hide(this.parentElement.parentElement)">×</button>
+                </div>
+                <div class="toast-message">${message}</div>
+                <div class="toast-progress" style="width: 100%;"></div>
+            `;
+            
+            return toast;
+        }
+        
+        getTitle(type) {
+            const titles = {
+                'success': '成功',
+                'error': '错误',
+                'warning': '警告',
+                'info': '提示'
+            };
+            return titles[type] || '提示';
+        }
+        
+        hide(toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.parentElement.removeChild(toast);
+                }
+                const index = this.toasts.indexOf(toast);
+                if (index > -1) {
+                    this.toasts.splice(index, 1);
+                }
+            }, 300);
+        }
+        
+        hideAll() {
+            this.toasts.forEach(toast => this.hide(toast));
         }
     }
     
-    // 替换原有的showAlert函数
+    // 全局 toast 管理器
+    const toastManager = new ToastManager();
+    
+    // 统一的 showAlert 函数（替换原有的）
     function showAlert(message, type = 'info') {
-        showFloatingNotification(message, type);
+        // 将 Bootstrap 的 alert 类型映射到 toast 类型
+        const typeMap = {
+            'success': 'success',
+            'danger': 'error',
+            'warning': 'warning',
+            'info': 'info'
+        };
+        
+        const toastType = typeMap[type] || 'info';
+        toastManager.show(message, toastType);
+    }
+    
+    // 兼容原有的 showFloatingNotification 函数
+    function showFloatingNotification(message, type = 'info', duration = 5000) {
+        showAlert(message, type);
     }
     
     // 语言切换函数
@@ -702,18 +860,30 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showFloatingNotification('{{ t("language_changed") }}', 'success', 3000);
+                    showAlert('{{ t("language_changed") }}', 'success');
                     setTimeout(() => {
                         location.reload();
                     }, 1000);
                 } else {
-                    showFloatingNotification('{{ t("language_change_failed") }}', 'error', 3000);
+                    showAlert('{{ t("language_change_failed") }}', 'error');
                 }
             })
             .catch(error => {
-                showFloatingNotification('{{ t("language_change_failed") }}', 'error', 3000);
+                showAlert('{{ t("language_change_failed") }}', 'error');
             });
     }
+    
+    // 页面加载完成后处理 flash 消息
+    document.addEventListener('DOMContentLoaded', function() {
+        // 检查是否有 flash 消息需要显示
+        const flashMessages = document.querySelectorAll('[data-flash]');
+        flashMessages.forEach(element => {
+            const message = element.getAttribute('data-flash');
+            const type = element.getAttribute('data-flash-type') || 'info';
+            showAlert(message, type);
+            element.remove();
+        });
+    });
     </script>
     
     {% block extra_js %}{% endblock %}

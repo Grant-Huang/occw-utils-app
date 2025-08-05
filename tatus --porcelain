@@ -1,0 +1,16 @@
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'templates/admin.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'templates/help.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'templates/index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'translations.py', LF will be replaced by CRLF the next time Git touches it
+.gitignore
+app.py
+data/system_settings.json
+pdf_rules.json
+railway.toml
+sku_rules.json
+templates/admin.html
+templates/help.html
+templates/index.html
+translations.py

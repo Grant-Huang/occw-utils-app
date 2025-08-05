@@ -726,29 +726,6 @@ $(document).ready(function() {
     loadPriceTable(1);
 });
 
-// === 通用函数 ===
-function showAlert(message, type) {
-    const alertClass = {
-        'success': 'alert-success',
-        'danger': 'alert-danger',
-        'warning': 'alert-warning',
-        'info': 'alert-info'
-    }[type] || 'alert-info';
-    
-    const alertHtml = `
-        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-    
-    // 在页面顶部显示
-    $('.container-fluid').prepend(alertHtml);
-    
-    // 5秒后自动关闭
-    setTimeout(() => {
-        $('.alert').alert('close');
-    }, 5000);
-}
+// showAlert 函数已在 base.html 中统一实现为 toast 系统
 </script>
 {% endblock %} 

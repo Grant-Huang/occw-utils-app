@@ -437,10 +437,10 @@ def parse_quotation_pdf(pdf_content):
     if pdf_total is not None:
         if abs(calc_total - pdf_total) < 0.01:
             compare_result = True
-            compare_message = f"✅ 解析总价与PDF合计金额一致: {calc_total:.2f}"
+            compare_message = f"✅ {get_text('parsing_total_matches_pdf', get_current_language())}: {calc_total:.2f}"
         else:
             compare_result = False
-            compare_message = f"❌ 解析总价({calc_total:.2f})与PDF合计金额({pdf_total:.2f})不一致，请检查解析逻辑或PDF内容！"
+            compare_message = f"❌ {get_text('parsing_total_mismatch_pdf', get_current_language()).format(calc_total=calc_total, pdf_total=pdf_total)}"
     else:
         compare_result = None
         compare_message = "⚠️ 未识别到PDF合计金额，无法比对！"
@@ -2103,6 +2103,57 @@ def save_import_filter_settings():
         print(f"保存导入过滤设定时出错: {e}")
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/get_import_filters', methods=['GET'])
+@admin_required
+def get_import_filters():
+    """获取导入过滤设置"""
+    try:
+        # 提取所有以import_filter_开头的设置
+        filters = {}
+        for key, value in system_settings.items():
+            if key.startswith('import_filter_'):
+                filters[key] = value
+        
+        # 如果没有设置，返回默认值
+        if not filters:
+            filters = {
+                'import_filter_min_amount': 1000,
+                'import_filter_start_date': None,
+                'import_filter_end_date': None,
+                'import_filter_sales_person': None,
+                'import_filter_customer': None,
+                'import_filter_order_status': '销售订单,报价单,已发送报价单'
+            }
+        
+        return jsonify({'success': True, 'filters': filters})
+    except Exception as e:
+        print(f"获取导入过滤设置时出错: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/save_import_filters', methods=['POST'])
+@admin_required 
+def save_import_filters():
+    """保存导入过滤设置"""
+    try:
+        data = request.get_json()
+        
+        # 更新系统设置中的导入过滤设定
+        for key, value in data.items():
+            if key.startswith('import_filter_'):
+                # 处理空值和None值
+                if value == '' or value is None:
+                    system_settings[key] = None
+                else:
+                    system_settings[key] = value
+        
+        if save_system_settings():
+            return jsonify({'success': True, 'message': '导入过滤设置保存成功'})
+        else:
+            return jsonify({'success': False, 'error': '保存失败'})
+    except Exception as e:
+        print(f"保存导入过滤设置时出错: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/change_admin_password', methods=['POST'])
 @admin_required
 def change_admin_password():
@@ -2727,7 +2778,7 @@ def apply_amount_range_filter(df, amount_range):
         else:
             df_filtered = df_copy
         
-        print(f"金额区间过滤 ({amount_range}): 原始数据 {len(df)} 行 -> 过滤后 {len(df_filtered)} 行，使用字段: {amount_column}")
+
         return df_filtered
         
     except Exception as e:
@@ -2744,40 +2795,35 @@ def apply_import_filters(df):
         load_system_settings()
         
         original_count = len(df)
-        print(f"开始应用导入过滤条件，原始数据: {original_count} 行")
-        
         # 1. 应用金额阈值过滤（优先使用新的import_filter_min_amount设置）
         threshold = system_settings.get('import_filter_min_amount', 
                                        system_settings.get('quotation_amount_filter_threshold', 1000))
         try:
-            threshold = float(threshold) if threshold else 1000
+            threshold = float(threshold) if threshold is not None else 1000
         except (ValueError, TypeError):
             threshold = 1000
             
-        if threshold > 0:
+        if threshold is not None:
             df['总计'] = pd.to_numeric(df['总计'], errors='coerce')
             df = df[df['总计'] >= threshold].copy()
-            print(f"金额过滤后剩余: {len(df)} 行 (阈值: {threshold})")
         
         # 2. 应用销售人员过滤
-        sales_person_filter = system_settings.get('import_filter_sales_person', '').strip()
-        if sales_person_filter:
+        sales_person_filter = system_settings.get('import_filter_sales_person', '') or ''
+        if sales_person_filter.strip():
             sales_persons = [sp.strip() for sp in sales_person_filter.split(',') if sp.strip()]
             if sales_persons:
                 df = df[df['销售人员'].isin(sales_persons)].copy()
-                print(f"销售人员过滤后剩余: {len(df)} 行 (销售人员: {sales_persons})")
         
         # 3. 应用客户过滤
-        customer_filter = system_settings.get('import_filter_customer', '').strip()
-        if customer_filter:
+        customer_filter = system_settings.get('import_filter_customer', '') or ''
+        if customer_filter.strip():
             customers = [c.strip() for c in customer_filter.split(',') if c.strip()]
             if customers:
                 df = df[df['客户'].isin(customers)].copy()
-                print(f"客户过滤后剩余: {len(df)} 行 (客户: {customers})")
         
         # 4. 应用日期范围过滤
-        start_date = system_settings.get('import_filter_start_date', '').strip()
-        end_date = system_settings.get('import_filter_end_date', '').strip()
+        start_date = (system_settings.get('import_filter_start_date', '') or '').strip()
+        end_date = (system_settings.get('import_filter_end_date', '') or '').strip()
         
         if start_date or end_date:
             df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
@@ -2785,26 +2831,22 @@ def apply_import_filters(df):
             if start_date:
                 start_date_obj = pd.to_datetime(start_date)
                 df = df[df['订单日期'] >= start_date_obj].copy()
-                print(f"开始日期过滤后剩余: {len(df)} 行 (>= {start_date})")
             
             if end_date:
                 end_date_obj = pd.to_datetime(end_date)
                 df = df[df['订单日期'] <= end_date_obj].copy()
-                print(f"结束日期过滤后剩余: {len(df)} 行 (<= {end_date})")
         
         # 5. 应用订单状态过滤（支持多选）
-        order_status_filter = system_settings.get('import_filter_order_status', '').strip()
-        if order_status_filter:
+        order_status_filter = system_settings.get('import_filter_order_status', '') or ''
+        if order_status_filter.strip():
             # 支持多个状态，用逗号分隔
             selected_statuses = [status.strip() for status in order_status_filter.split(',') if status.strip()]
             if selected_statuses:
                 df = df[df['订单状态'].isin(selected_statuses)].copy()
-                print(f"订单状态过滤后剩余: {len(df)} 行 (状态: {selected_statuses})")
         
         # 注意：金额过滤已在第1步完成，不需要重复过滤
         final_count = len(df)
         filtered_count = original_count - final_count
-        print(f"总共过滤掉 {filtered_count} 行数据，最终剩余 {final_count} 行数据")
         
         return df
         
@@ -2847,10 +2889,8 @@ def analyze_converted_time_trends(df, time_period='monthly'):
                 rate = 0.0
             amount_conversion_rates.append(rate)
         
-        print(f"时间趋势分析 - 标签: {labels}")
-        print(f"订单金额: {order_amounts}")
-        print(f"报价单金额: {quotation_amounts}")
-        print(f"金额转化率: {amount_conversion_rates}")
+
+
         
         return {
             'labels': labels,
@@ -2893,10 +2933,7 @@ def analyze_converted_conversion_rates(df, time_period='monthly'):
                 rate = 0.0
             rates.append(rate)
         
-        print(f"转化率分析 - 标签: {labels}")
-        print(f"订单数量: {order_counts}")
-        print(f"报价单数量: {quotation_counts}")
-        print(f"转化率: {rates}")
+
         
         return {
             'labels': labels,
@@ -3122,7 +3159,7 @@ def generate_converted_data(df):
             
             converted_data.append(record)
         
-        print(f"数据转换完成: 原始记录数={len(df)}, 过滤掉已取消订单={filtered_count}, 转换后记录数={len(converted_data)}")
+
         return converted_data
         
     except Exception as e:
@@ -3700,9 +3737,7 @@ def upload_sales_data():
         df = adjust_quotation_amounts(df)
         
         # 🔧 在保存数据之前应用所有过滤条件
-        print(f"应用导入过滤前数据行数: {len(df)}")
         df_filtered = apply_import_filters(df)
-        print(f"应用导入过滤后数据行数: {len(df_filtered)}")
         
         # 使用过滤后的数据生成导入数据列表
         imported_data = []
@@ -3736,7 +3771,7 @@ def upload_sales_data():
         
         # 保存过滤后的数据到临时文件
         try:
-            print(f"准备保存 {len(imported_data)} 条过滤后记录到临时文件")
+    
             with open(temp_filepath, 'w', encoding='utf-8') as f:
                 json.dump(imported_data, f, ensure_ascii=False, indent=2)
             
@@ -3755,9 +3790,7 @@ def upload_sales_data():
             session['converted_data_count'] = len(converted_data)
             session['imported_data_timestamp'] = datetime.now().isoformat()
             
-            print(f"已保存过滤后导入数据到临时文件: {temp_filepath}")
-            print(f"已保存过滤后转换数据到临时文件: {converted_temp_filepath}")
-            print(f"过滤后转换数据记录数: {len(converted_data)}")
+            
             print(f"Session设置完成 - Session内容: {dict(session)}")
             print(f"设置的文件路径: {session.get('imported_data_file')}")
         except Exception as e:
@@ -3893,7 +3926,7 @@ def download_sample_file():
 def analyze_converted_data(converted_data_file, amount_range=None):
     """使用转换后的数据进行分析"""
     try:
-        print(f"使用转换后的数据文件进行分析: {converted_data_file}")
+
         
         # 读取转换后的数据
         with open(converted_data_file, 'r', encoding='utf-8') as f:
@@ -3905,7 +3938,7 @@ def analyze_converted_data(converted_data_file, amount_range=None):
         # 🆕 应用金额区间过滤
         if amount_range:
             df = apply_amount_range_filter(df, amount_range)
-            print(f"应用金额区间过滤 ({amount_range}) 后，数据行数: {len(df)}")
+    
         
         # 确保日期列的格式正确
         df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
@@ -3914,7 +3947,7 @@ def analyze_converted_data(converted_data_file, amount_range=None):
         for col in ['总计', '订单金额', '报价单金额', '订单数量', '报价单数量']:
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
         
-        print(f"转换后数据加载完成，共 {len(df)} 条记录")
+
         
         # 使用转换后数据的专门分析函数
         sales_person_analysis = analyze_converted_sales_person_performance(df)
@@ -4302,7 +4335,7 @@ def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=No
         if amount_range:
             df = apply_amount_range_filter(df, amount_range)
         
-        print(f"按时间周期分析转换后数据，共 {len(df)} 条记录")
+
         
         # 使用转换后数据的专门分析函数
         sales_person_analysis = analyze_converted_sales_person_performance(df)
@@ -4378,7 +4411,7 @@ if __name__ == '__main__':
     load_quotations()
     
     # 生产环境配置
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 999))
     debug = os.environ.get('FLASK_ENV') == 'development'
     
     app.run(host='0.0.0.0', port=port, debug=debug) 

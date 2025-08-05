@@ -105,22 +105,6 @@ $(document).ready(function() {
 
 
 
-function showAlert(message, type) {
-    const alertHtml = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-    
-    $('main').prepend(alertHtml);
-    
-    // 自动隐藏成功消息
-    if (type === 'success') {
-        setTimeout(function() {
-            $('.alert').alert('close');
-        }, 3000);
-    }
-}
+// showAlert 函数已在 base.html 中统一实现为 toast 系统
 </script>
 {% endblock %} 

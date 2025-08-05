@@ -85,6 +85,18 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 admin-card" data-action="showImportFilters">
+                <div class="card-body text-center">
+                    <div class="admin-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h5 class="card-title">{{ t('import_filter_settings') }}</h5>
+                    <p class="card-text">{{ t('import_filter_settings_desc') }}</p>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- 功能内容区域 -->
@@ -528,6 +540,119 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 销售订单导入过滤设置 -->
+        <div id="import-filters-content" class="admin-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-filter me-2"></i>{{ t('import_filter_settings') }}
+                    </h5>
+                    <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
+                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>过滤设置说明
+                        </h6>
+                        <p class="mb-0">这些设置将在销售订单数据导入时自动应用，过滤掉不符合条件的数据。所有过滤条件为可选，留空表示不限制该条件。</p>
+                    </div>
+                    
+                    <form id="importFiltersForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-dollar-sign me-2"></i>金额过滤
+                                </h6>
+                                <div class="mb-3">
+                                    <label for="minAmount" class="form-label">最小导入金额阈值</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="minAmount" 
+                                               placeholder="例如：1000" min="0" step="0.01">
+                                    </div>
+                                    <small class="form-text text-muted">只导入总计金额大于等于此值的数据</small>
+                                </div>
+                                
+                                <h6 class="text-primary mb-3 mt-4">
+                                    <i class="fas fa-calendar me-2"></i>日期过滤
+                                </h6>
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">开始日期</label>
+                                    <input type="date" class="form-control" id="startDate">
+                                    <small class="form-text text-muted">只导入此日期之后的数据</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">结束日期</label>
+                                    <input type="date" class="form-control" id="endDate">
+                                    <small class="form-text text-muted">只导入此日期之前的数据</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-users me-2"></i>人员和客户过滤
+                                </h6>
+                                <div class="mb-3">
+                                    <label for="salesPersonFilter" class="form-label">销售人员过滤</label>
+                                    <input type="text" class="form-control" id="salesPersonFilter" 
+                                           placeholder="例如：张三,李四,王五">
+                                    <small class="form-text text-muted">多个销售人员用逗号分隔，留空表示不过滤</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerFilter" class="form-label">客户过滤</label>
+                                    <input type="text" class="form-control" id="customerFilter" 
+                                           placeholder="例如：客户A,客户B">
+                                    <small class="form-text text-muted">多个客户用逗号分隔，留空表示不过滤</small>
+                                </div>
+                                
+                                <h6 class="text-primary mb-3 mt-4">
+                                    <i class="fas fa-tags me-2"></i>状态过滤
+                                </h6>
+                                <div class="mb-3">
+                                    <label class="form-label">订单状态过滤</label>
+                                    <div id="orderStatusFilters">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="销售订单" id="status_销售订单" checked>
+                                            <label class="form-check-label" for="status_销售订单">销售订单</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="报价单" id="status_报价单" checked>
+                                            <label class="form-check-label" for="status_报价单">报价单</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="已发送报价单" id="status_已发送报价单" checked>
+                                            <label class="form-check-label" for="status_已发送报价单">已发送报价单</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="已取消" id="status_已取消">
+                                            <label class="form-check-label" for="status_已取消">已取消</label>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">选择要导入的订单状态类型</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-warning me-2">
+                                    <i class="fas fa-save me-1"></i>保存过滤设置
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="resetFilters()">
+                                    <i class="fas fa-undo me-1"></i>重置设置
+                                </button>
+                                <button type="button" class="btn btn-outline-info" onclick="loadCurrentFilters()">
+                                    <i class="fas fa-refresh me-1"></i>加载当前设置
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -737,6 +862,9 @@ $(document).ready(function() {
             case 'showSystemSettings':
                 showSystemSettings();
                 break;
+            case 'showImportFilters':
+                showImportFilters();
+                break;
             default:
                 console.log('Unknown action:', action);
         }
@@ -792,6 +920,14 @@ function showSystemSettings() {
     $('.admin-card').hide();
     $('.admin-content').hide();
     $('#system-settings-content').show();
+}
+
+// 显示导入过滤设置
+function showImportFilters() {
+    $('.admin-card').hide();
+    $('.admin-content').hide();
+    $('#import-filters-content').show();
+    loadCurrentFilters();
 }
 
 // 保存系统设置
@@ -1737,23 +1873,123 @@ function clearPriceFilters() {
     filterPrices();
 }
 
-// 显示提示信息
-function showAlert(message, type) {
-    const alertHtml = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
+// showAlert 函数已在 base.html 中统一实现为 toast 系统
+
+// 导入过滤设置相关函数
+// 加载当前过滤设置
+function loadCurrentFilters() {
+    $.ajax({
+        url: '/get_import_filters',
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                populateFilterForm(response.filters);
+            } else {
+                console.log('Failed to load filters:', response.error);
+                // 如果加载失败，设置默认值
+                setDefaultFilters();
+            }
+        },
+        error: function() {
+            console.log('Failed to load filters');
+            setDefaultFilters();
+        }
+    });
+}
+
+// 填充过滤表单
+function populateFilterForm(filters) {
+    $('#minAmount').val(filters.import_filter_min_amount !== null && filters.import_filter_min_amount !== undefined ? filters.import_filter_min_amount : '');
+    $('#startDate').val(filters.import_filter_start_date || '');
+    $('#endDate').val(filters.import_filter_end_date || '');
+    $('#salesPersonFilter').val(filters.import_filter_sales_person || '');
+    $('#customerFilter').val(filters.import_filter_customer || '');
     
-    $('main').prepend(alertHtml);
+    // 设置订单状态复选框
+    const orderStatuses = filters.import_filter_order_status ? 
+        filters.import_filter_order_status.split(',') : 
+        ['销售订单', '报价单', '已发送报价单'];
     
-    // 自动隐藏警告和成功消息
-    if (type === 'warning' || type === 'success') {
-        setTimeout(function() {
-            $('.alert').alert('close');
-        }, 5000);
-    }
+    // 重置所有复选框
+    $('#orderStatusFilters input[type="checkbox"]').prop('checked', false);
+    
+    // 设置选中的状态
+    orderStatuses.forEach(function(status) {
+        const statusId = 'status_' + status.trim();
+        $('#' + statusId).prop('checked', true);
+    });
+}
+
+// 设置默认过滤设置
+function setDefaultFilters() {
+    $('#minAmount').val('1000');
+    $('#startDate').val('');
+    $('#endDate').val('');
+    $('#salesPersonFilter').val('');
+    $('#customerFilter').val('');
+    
+    // 默认选中常用状态
+    $('#status_销售订单').prop('checked', true);
+    $('#status_报价单').prop('checked', true);
+    $('#status_已发送报价单').prop('checked', true);
+    $('#status_已取消').prop('checked', false);
+}
+
+// 重置过滤设置
+function resetFilters() {
+    setDefaultFilters();
+}
+
+// 导入过滤表单提交处理
+$(document).ready(function() {
+    $('#importFiltersForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // 收集表单数据
+        const filterData = {
+            import_filter_min_amount: $('#minAmount').val() === '' ? null : parseFloat($('#minAmount').val()),
+            import_filter_start_date: $('#startDate').val() || null,
+            import_filter_end_date: $('#endDate').val() || null,
+            import_filter_sales_person: $('#salesPersonFilter').val() || null,
+            import_filter_customer: $('#customerFilter').val() || null,
+            import_filter_order_status: getSelectedOrderStatuses()
+        };
+        
+        // 验证日期
+        if (filterData.import_filter_start_date && filterData.import_filter_end_date) {
+            if (filterData.import_filter_start_date > filterData.import_filter_end_date) {
+                showAlert('开始日期不能晚于结束日期', 'warning');
+                return;
+            }
+        }
+        
+        // 保存过滤设置
+        $.ajax({
+            url: '/save_import_filters',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(filterData),
+            success: function(response) {
+                if (response.success) {
+                    showAlert('过滤设置保存成功', 'success');
+                } else {
+                    showAlert(response.error, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('保存过滤设置失败', 'danger');
+            }
+        });
+    });
+});
+
+// 获取选中的订单状态
+function getSelectedOrderStatuses() {
+    const selected = [];
+    $('#orderStatusFilters input[type="checkbox"]:checked').each(function() {
+        selected.push($(this).val());
+    });
+    return selected.join(',');
 }
 </script>
 {% endblock %} 
