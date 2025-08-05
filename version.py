@@ -4,12 +4,12 @@
 """
 
 VERSION = "2.2.0 release 2"
-VERSION_NAME = "OCCW报价系统 v2.2.0 release 2"
+VERSION_NAME = "OCCW报价与销售分析系统 v2.2.0 release 2"
 COMPANY_NAME_ZH = "加西欧派"
 COMPANY_NAME_EN = "Oppein Cabinet Canada West Ltd."
-SYSTEM_NAME_ZH = "OCCW APP"
-SYSTEM_NAME_EN = "OCCW APP"
-SYSTEM_NAME_FR = "OCCW APP"
+SYSTEM_NAME_ZH = "OCCW报价与销售分析系统"
+SYSTEM_NAME_EN = "OCCW Quotation & Sales Analysis System"
+SYSTEM_NAME_FR = "Système de Devis et d'Analyse des Ventes OCCW"
 
 # 版本历史
 VERSION_HISTORY = {
