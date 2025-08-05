@@ -1,0 +1,11 @@
+{
+  "example_quotation_1": {
+    "id": "Q001",
+    "date": "2025-01-01",
+    "customer": "Example Customer",
+    "sales_person": "Example Sales",
+    "total_amount": 1000.00,
+    "status": "报价单",
+    "products": []
+  }
+} 

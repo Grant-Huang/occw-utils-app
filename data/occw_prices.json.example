@@ -1,0 +1,12 @@
+{
+  "EXAMPLE-SKU-001": {
+    "price": 100.00,
+    "category": "Example Category",
+    "description": "Example Product Description"
+  },
+  "EXAMPLE-SKU-002": {
+    "price": 200.00,
+    "category": "Example Category",
+    "description": "Another Example Product"
+  }
+} 

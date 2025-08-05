@@ -37,7 +37,36 @@ if ! pip show gunicorn >/dev/null 2>&1; then
     pip install gunicorn
 fi
 
-# Step 6: 启动 Flask 应用（通过 Gunicorn）
+# Step 6: 初始化数据文件（如果不存在）
+echo "📋 初始化数据文件..."
+
+# 复制模板文件到实际文件（如果不存在）
+if [ ! -f "data/system_settings.json" ]; then
+    echo "📄 创建 system_settings.json 从模板..."
+    cp data/system_settings.json.template data/system_settings.json
+fi
+
+if [ ! -f "data/users.json" ]; then
+    echo "👥 创建 users.json 从示例..."
+    cp data/users.json.example data/users.json
+fi
+
+if [ ! -f "data/sku_mappings.json" ]; then
+    echo "🔗 创建 sku_mappings.json 从示例..."
+    cp data/sku_mappings.json.example data/sku_mappings.json
+fi
+
+if [ ! -f "data/quotations.json" ]; then
+    echo "📊 创建 quotations.json 从示例..."
+    cp data/quotations.json.example data/quotations.json
+fi
+
+if [ ! -f "data/occw_prices.json" ]; then
+    echo "💰 创建 occw_prices.json 从示例..."
+    cp data/occw_prices.json.example data/occw_prices.json
+fi
+
+# Step 7: 启动 Flask 应用（通过 Gunicorn）
 echo "🚀 正在通过 Gunicorn 启动 Flask 应用..."
 #gunicorn -w 4 -b 0.0.0.0:$GUNICORN_PORT app:app
-nohup gunicorn -w 1 -b 0.0.0.0:999 app:app > gunicorn.log 2>&1 &
+nohup gunicorn -w 1 -b 0.0.0.0:999 --pid gunicorn.pid app:app > gunicorn.log 2>&1 &

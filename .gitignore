@@ -98,12 +98,17 @@ config.local.py
 #deploy.sh
 
 # Runtime data files (generated during application usage)
-#data/users.json
-#data/quotations.json
-#data/sku_mappings.json
-#data/occw_prices.json
+data/users.json
+data/quotations.json
+data/sku_mappings.json
+data/occw_prices.json
+data/system_settings.json
+
+# But allow template and example files
+!data/*.template
+!data/*.example
 
 # Note: The following files in data/ should be committed as they contain system settings:
 # - data/sku_rules.json (SKU generation rules)
 # - data/pdf_rules.json (PDF parsing rules)
-# - data/system_settings.json (system configuration) 
+# - data/system_settings.json.template (system configuration template) 

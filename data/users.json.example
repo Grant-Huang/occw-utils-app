@@ -1,0 +1,8 @@
+{
+  "admin": {
+    "password_hash": "your_password_hash_here",
+    "email": "admin@example.com",
+    "created_at": "2025-01-01T00:00:00.000000",
+    "preferred_language": "zh"
+  }
+} 

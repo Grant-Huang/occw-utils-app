@@ -1,0 +1,37 @@
+{
+  "default_sales_person": "Rain Luo",
+  "sales_persons": [
+    {
+      "name": "Rain Luo",
+      "email": "rain.luo@oppeincabinet.ca"
+    },
+    {
+      "name": "Carlos",
+      "email": "gruas_atreyu@hotmail.com"
+    },
+    {
+      "name": "Fiona Liu",
+      "email": "fionaliu@oppeincabinet.ca"
+    },
+    {
+      "name": "Tina Cao",
+      "email": "tinacao@oppeincabinet.ca"
+    },
+    {
+      "name": "Jason Ma",
+      "email": "jason.ma@oppeincabinet.ca"
+    },
+    {
+      "name": "Public User",
+      "email": "info@oppeincabinet.ca"
+    }
+  ],
+  "user_login_enabled": false,
+  "quotation_amount_filter_threshold": 1000,
+  "import_filter_min_amount": 0,
+  "import_filter_sales_person": null,
+  "import_filter_customer": null,
+  "import_filter_start_date": null,
+  "import_filter_end_date": null,
+  "import_filter_order_status": "销售订单,报价单,已发送报价单"
+} 
