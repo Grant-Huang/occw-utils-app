@@ -4,7 +4,7 @@
 
 APP_DIR="/opt/occw-utils-app"
 VENV_DIR="$APP_DIR/venv"
-PYTHON_BIN="/usr/bin/python3.11"  # 你可以根据安装路径修改
+PYTHON_BIN="/usr/bin/python3.11"  # 你可以根据实际安装路径调整
 
 echo "📦 部署 OCCW-utils 应用"
 
@@ -31,6 +31,11 @@ else
     echo "⚠️ 没有找到 requirements.txt，跳过依赖安装"
 fi
 
-# Step 5: 启动应用
+# Step 5: 设置环境变量并启动应用
 echo "🚀 正在启动应用..."
-python app.py
+
+export PORT=999
+export FLASK_ENV=production
+
+# 使用 exec 启动，便于进程管理（尤其是结合 systemd）
+exec python app.py
