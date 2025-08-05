@@ -43,7 +43,7 @@ def main():
     from app import app
     
     # 从环境变量获取端口，Render默认提供PORT环境变量
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 999))
     debug = os.environ.get('FLASK_ENV') == 'development'
     
     print(f"🌐 服务器将在端口 {port} 上启动")

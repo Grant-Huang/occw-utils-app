@@ -2,7 +2,7 @@
 import os
 
 # 绑定地址和端口
-bind = f"0.0.0.0:{os.environ.get('PORT', 5000)}"
+bind = f"0.0.0.0:{os.environ.get('PORT', 999)}"
 
 # 工作进程数量（免费套餐推荐1个）
 workers = 1
