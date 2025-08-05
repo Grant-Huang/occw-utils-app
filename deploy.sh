@@ -69,4 +69,4 @@ fi
 # Step 7: 启动 Flask 应用（通过 Gunicorn）
 echo "🚀 正在通过 Gunicorn 启动 Flask 应用..."
 #gunicorn -w 4 -b 0.0.0.0:$GUNICORN_PORT app:app
-nohup gunicorn -w 1 -b 0.0.0.0:999 --pid gunicorn.pid app:app > gunicorn.log 2>&1 &
+nohup gunicorn -c gunicorn.conf.py --pid gunicorn.pid app:app > gunicorn.log 2>&1 &

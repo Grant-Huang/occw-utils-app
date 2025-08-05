@@ -1729,14 +1729,22 @@ def export_occw_excel():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/export/manual_excel')
+@app.route('/export/manual_excel', methods=['GET', 'POST'])
 def export_manual_excel():
     """导出手动创建的报价单 - 新6列格式"""
     try:
-        manual_data = request.args.get('manual_data')
-        export_date = request.args.get('export_date')
-        export_username = request.args.get('export_username')
-        export_sales_person = request.args.get('export_sales_person')
+        # 支持GET和POST请求
+        if request.method == 'POST':
+            data = request.get_json()
+            manual_data = data.get('manual_data')
+            export_date = data.get('export_date')
+            export_username = data.get('export_username')
+            export_sales_person = data.get('export_sales_person')
+        else:
+            manual_data = request.args.get('manual_data')
+            export_date = request.args.get('export_date')
+            export_username = request.args.get('export_username')
+            export_sales_person = request.args.get('export_sales_person')
         
         # 检查用户登录功能是否被禁用，如果被禁用且没有提供用户名和销售人员，使用默认值
         user_login_enabled = system_settings.get('user_login_enabled', True)
@@ -1785,12 +1793,21 @@ def export_manual_excel():
         # 生成文件名：用户名_日期_quote.xlsx
         filename = f"{export_username}_{export_date}_quote.xlsx"
         
-        return send_file(
-            output,
-            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            as_attachment=True,
-            download_name=filename
-        )
+        # 根据请求方法返回不同的响应
+        if request.method == 'POST':
+            # POST请求返回文件内容
+            return output.getvalue(), 200, {
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition': f'attachment; filename="{filename}"'
+            }
+        else:
+            # GET请求使用send_file
+            return send_file(
+                output,
+                mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                as_attachment=True,
+                download_name=filename
+            )
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

@@ -14,6 +14,15 @@ threads = 2
 timeout = 120
 keepalive = 2
 
+# 请求限制设置
+max_requests = 1000
+max_requests_jitter = 50
+
+# HTTP请求限制
+limit_request_line = 8192  # 增加请求行最大长度限制
+limit_request_fields = 100  # 请求头字段数量限制
+limit_request_field_size = 8190  # 单个请求头字段大小限制
+
 # 日志配置
 loglevel = 'info'
 accesslog = '-'

@@ -2058,13 +2058,13 @@ function updateManualTotal() {
     const rows = tbody.getElementsByTagName('tr');
     
     for (let row of rows) {
-        // 新的表格结构：序号、SKU、数量、价格
-        const qtyText = row.cells[2].textContent;
-        const priceText = row.cells[3].textContent;
+        // 表格结构：序号、类型、产品名称、柜身变体、门板变体、SKU、价格、数量、操作
+        const priceText = row.cells[6].textContent; // 价格在第7列
+        const qtyInput = row.cells[7].querySelector('input'); // 数量输入框在第8列
         
-        if (priceText && qtyText) {
+        if (priceText && qtyInput) {
             const price = parseFloat(priceText.replace('$', '')) || 0;
-            const qty = parseInt(qtyText) || 0;
+            const qty = parseInt(qtyInput.value) || 0;
             total += price * qty;
         }
     }
@@ -2073,6 +2073,8 @@ function updateManualTotal() {
     
     // 更新折扣计算器
     updateDiscountCalculator('manual', total);
+    // 更新导出和保存按钮状态
+    updateExportButton();
 }
 
 function updateDiscountCalculator(type, originalPrice) {
@@ -2126,12 +2128,12 @@ $(document).ready(function() {
         let total = 0;
         
         for (let row of rows) {
-            const priceText = row.cells[3].textContent;
-            const qtyText = row.cells[2].textContent;
+            const priceText = row.cells[6].textContent; // 价格在第7列
+            const qtyInput = row.cells[7].querySelector('input'); // 数量输入框在第8列
             
-            if (priceText && qtyText) {
+            if (priceText && qtyInput) {
                 const price = parseFloat(priceText.replace('$', '')) || 0;
-                const qty = parseInt(qtyText) || 0;
+                const qty = parseInt(qtyInput.value) || 0;
                 total += price * qty;
             }
         }
@@ -3429,23 +3431,41 @@ function exportManualQuotation() {
     }
     
     // 发送到服务器进行导出
-    const params = new URLSearchParams({
+    const exportData = {
         manual_data: JSON.stringify(products),
         export_date: exportDate,
         export_username: exportUsername,
         export_sales_person: exportSalesPerson
+    };
+    
+    // 使用POST请求避免URL过长问题
+    $.ajax({
+        url: '/export/manual_excel',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(exportData),
+        success: function(response) {
+            // 创建下载链接
+            const blob = new Blob([response], { 
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+            });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${exportUsername}_${exportDate}_quote.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            // 显示成功提示
+            showExportSuccessModal();
+        },
+        error: function(xhr, status, error) {
+            console.error('导出失败:', error);
+            showAlert('导出失败: ' + (xhr.responseJSON?.error || error), 'error');
+        }
     });
-    
-    // 下载文件
-    const link = document.createElement('a');
-    link.href = `/export/manual_excel?${params.toString()}`;
-    link.download = `${exportUsername}_${exportDate}_quote.xlsx`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // 显示成功提示
-    showExportSuccessModal();
 }
 
 function createExcelFromManualData(products) {
