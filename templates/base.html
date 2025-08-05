@@ -12,26 +12,34 @@
             --primary-color: #714B67;
             --primary-dark: #5d3d54;
             --primary-light: #8a5d7a;
-            --secondary-color: #f8f9fa;
-            --text-dark: #495057;
-            --text-light: #6c757d;
+            --secondary-color: #d8dadd;
+            --text-dark: #374151;
+            --text-light: #6b7280;
             --white: #ffffff;
             --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
+            --warning-color: #e99d00;
+            --danger-color: #d44c59;
             --info-color: #17a2b8;
+            --border-color: #d8dadd;
+            --focus-color: #74b4b9;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
         }
 
         /* 全局样式重置 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-dark);
-            background-color: #f8f9fa;
+            background-color: var(--secondary-color);
         }
 
         /* 导航栏样式 */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%) !important;
+            background: var(--primary-color) !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -215,15 +223,15 @@
         }
 
         .card-header {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            color: var(--white);
-            border-bottom: none;
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
             border-radius: 0.75rem 0.75rem 0 0 !important;
             padding: 1rem 1.5rem;
         }
 
         .card-header h5 {
-            color: var(--white);
+            color: var(--text-dark);
             font-weight: 600;
             margin: 0;
         }
@@ -279,12 +287,24 @@
             border-radius: 0.5rem;
         }
 
+        .btn-warning:hover {
+            background-color: #d68900;
+            border-color: #d68900;
+            color: var(--text-dark);
+        }
+
         .btn-danger {
             background-color: var(--danger-color);
             border-color: var(--danger-color);
             color: var(--white);
             font-weight: 500;
             border-radius: 0.5rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #c13d4a;
+            border-color: #c13d4a;
+            color: var(--white);
         }
 
         .btn-outline-primary {
@@ -654,6 +674,166 @@
 
         .bg-primary {
             background-color: var(--primary-color) !important;
+        }
+
+        /* Odoo风格组件颜色调整 */
+        
+        /* 按钮颜色调整 */
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--text-dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-400);
+            border-color: var(--gray-400);
+            color: var(--text-dark);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+            color: var(--text-dark);
+        }
+        
+        .btn-warning:hover {
+            background-color: #d68900;
+            border-color: #d68900;
+            color: var(--text-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: var(--white);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c13d4a;
+            border-color: #c13d4a;
+            color: var(--white);
+        }
+
+        /* 表单元素颜色调整 */
+        .form-control:focus {
+            border-color: var(--focus-color);
+            box-shadow: 0 0 0 0.2rem rgba(116, 180, 185, 0.25);
+        }
+        
+        .form-select:focus {
+            border-color: var(--focus-color);
+            box-shadow: 0 0 0 0.2rem rgba(116, 180, 185, 0.25);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--focus-color);
+            box-shadow: 0 0 0 0.2rem rgba(116, 180, 185, 0.25);
+        }
+
+        /* 表格颜色调整 */
+        .table {
+            border-color: var(--border-color);
+        }
+        
+        .table thead th {
+            background-color: var(--secondary-color);
+            border-bottom-color: var(--border-color);
+            color: var(--text-dark);
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* 卡片和面板颜色调整 */
+        .card {
+            border-color: var(--border-color);
+        }
+        
+        .card-header {
+            background-color: var(--secondary-color);
+            border-bottom-color: var(--border-color);
+            color: var(--text-dark);
+        }
+        
+        .card-header h5 {
+            color: var(--text-dark);
+        }
+
+        /* 导航和菜单颜色调整 */
+        .dropdown-menu {
+            border-color: var(--border-color);
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .nav-tabs .nav-link {
+            border-color: var(--border-color);
+        }
+        
+        .nav-tabs .nav-link.active {
+            border-color: var(--border-color) var(--border-color) var(--white);
+        }
+
+        /* 警告和提示颜色调整 */
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        /* 进度条颜色调整 */
+        .progress {
+            background-color: var(--secondary-color);
+        }
+        
+        .progress-bar {
+            background-color: var(--primary-color);
+        }
+
+        /* 分页颜色调整 */
+        .page-link {
+            color: var(--primary-color);
+            border-color: var(--border-color);
+        }
+        
+        .page-link:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--border-color);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* 文本颜色调整 */
+        .text-muted {
+            color: var(--text-light) !important;
+        }
+        
+        .text-secondary {
+            color: var(--text-light) !important;
         }
     </style>
     {% block extra_css %}{% endblock %}
