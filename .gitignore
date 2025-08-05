@@ -73,6 +73,8 @@ Thumbs.db
 # Project specific
 uploads/*
 !uploads/.gitkeep
+upload/*
+!upload/.gitkeep
 *.log
 
 # Temporary files
