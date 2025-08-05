@@ -95,13 +95,13 @@ config.local.py
 .env.local
 
 # Deploy scripts
-deploy.sh
+#deploy.sh
 
 # Runtime data files (generated during application usage)
-data/users.json
-data/quotations.json
-data/sku_mappings.json
-data/occw_prices.json
+#data/users.json
+#data/quotations.json
+#data/sku_mappings.json
+#data/occw_prices.json
 
 # Note: The following files in data/ should be committed as they contain system settings:
 # - data/sku_rules.json (SKU generation rules)
