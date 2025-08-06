@@ -26,7 +26,7 @@
       "email": "info@oppeincabinet.ca"
     }
   ],
-  "user_login_enabled": false,
+  "user_login_enabled": true,
   "quotation_amount_filter_threshold": 1000,
   "import_filter_min_amount": 0,
   "import_filter_sales_person": null,

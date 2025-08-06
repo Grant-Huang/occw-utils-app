@@ -101,7 +101,7 @@
                                     <div class="form-text">{{ t('upload_pdf_desc') }}</div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-purple">
+                                    <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-upload me-1"></i>{{ t('upload_button') }}
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary" onclick="showPdfText()">
@@ -607,11 +607,11 @@
                                         <table class="table table-bordered table-hover" id="addProductTable">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 20%;">{{ t('product_type') }}</th>
-                                                    <th style="width: 20%;">{{ t('product_name') }}</th>
+                                                    <th style="width: 15%;">{{ t('product_type') }}</th>
+                                                    <th style="width: 15%;">{{ t('product_name') }}</th>
                                                     <th style="width: 15%;">{{ t('box_variant') }}</th>
                                                     <th style="width: 15%;">{{ t('door_variant') }}</th>
-                                                    <th style="width: 15%;">SKU</th>
+                                                    <th style="width: 20%;">SKU</th>
                                                     <th style="width: 10%;">{{ t('unit_price') }}</th>
                                                     <th style="width: 10%;">{{ t('quantity') }}</th>
                                                 </tr>
@@ -671,11 +671,11 @@
                                         <table class="table table-bordered table-hover" id="manualProductsTable">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 8%;">{{ t('sequence_number') }}</th>
-                                                    <th style="width: 45%;">SKU</th>
-                                                    <th style="width: 15%;">{{ t('quantity') }}</th>
+                                                    <th style="width: 10%;">{{ t('sequence_number') }}</th>
+                                                    <th style="width: 40%;">SKU</th>
                                                     <th style="width: 15%;">{{ t('unit_price') }}</th>
-                                                    <th style="width: 17%;">{{ t('operation') }}</th>
+                                                    <th style="width: 15%;">{{ t('quantity') }}</th>
+                                                    <th style="width: 20%;">{{ t('operation') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="manualProductsTableBody">
@@ -717,9 +717,11 @@
                                         <button type="button" class="btn btn-outline-success" onclick="exportManualQuotation()" id="exportManualBtn" disabled>
                                             <i class="fas fa-download me-1"></i>{{ t('export_quote') }}
                                         </button>
+                                        {% if system_settings.get('user_login_enabled', True) %}
                                         <button type="button" class="btn btn-outline-info ms-2" onclick="saveToMyQuotations('manual')" id="saveManualBtn" disabled>
                                             <i class="fas fa-save me-1"></i>{{ t('save_to_my_quotations') }}
                                         </button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -825,9 +827,11 @@
                         <button type="button" class="btn btn-outline-success btn-sm" onclick="exportOCCWQuotation()">
                             <i class="fas fa-file-excel me-1"></i>{{ t('export_quote') }}
                         </button>
+                        {% if system_settings.get('user_login_enabled', True) %}
                         <button type="button" class="btn btn-outline-info btn-sm ms-2" onclick="saveToMyQuotations('pdf')">
                             <i class="fas fa-save me-1"></i>{{ t('save_to_my_quotations') }}
                         </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -1312,7 +1316,7 @@ function exportOCCWQuotation() {
     document.body.removeChild(link);
     
     // 显示成功提示
-    showExportSuccessModal();
+    showAlert('{{ t("export_success_message") }}', 'success');
 }
 
 // showAlert 函数已在 base.html 中统一实现为 toast 系统
@@ -1416,7 +1420,13 @@ function saveSkuMapping(originalSku, mappedSku, seqNum) {
                 const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
                 const qty = parseInt(qtyCell.text()) || 1;
                 
-                const unitPrice = response.occw_price;
+                // 调试：检查返回的价格数据
+                console.log('SKU映射响应:', response);
+                console.log('返回的价格:', response.occw_price, '类型:', typeof response.occw_price);
+                
+                const unitPrice = parseFloat(response.occw_price) || 0;
+                console.log('解析后的价格:', unitPrice);
+                
                 const totalPrice = unitPrice * qty;
                 
                 // 更新价格显示
@@ -1661,15 +1671,24 @@ function updatePriceForSKU(seqNum, sku) {
 }
 
 function updatePriceDisplay(seqNum, unitPrice) {
+    // 调试：检查输入参数
+    console.log(`updatePriceDisplay - seqNum: ${seqNum}, unitPrice: ${unitPrice}, 类型: ${typeof unitPrice}`);
+    
+    // 确保unitPrice是有效数字
+    const validPrice = parseFloat(unitPrice) || 0;
+    console.log(`updatePriceDisplay - 有效价格: ${validPrice}`);
+    
     // 获取数量
     const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
     const qty = parseInt(qtyCell.text()) || 1;
-    const totalPrice = unitPrice * qty;
+    const totalPrice = validPrice * qty;
+    
+    console.log(`updatePriceDisplay - 数量: ${qty}, 总价: ${totalPrice}`);
     
     const priceCell = $(`#occw-price-${seqNum}`);
     const totalCell = $(`#occw-total-${seqNum}`);
     
-    priceCell.html(`$${parseFloat(unitPrice).toFixed(2)}`);
+    priceCell.html(`$${validPrice.toFixed(2)}`);
     totalCell.html(`$${totalPrice.toFixed(2)}`);
     
     // 如果价格为0，添加浅红色背景
@@ -2058,9 +2077,9 @@ function updateManualTotal() {
     const rows = tbody.getElementsByTagName('tr');
     
     for (let row of rows) {
-        // 表格结构：序号、类型、产品名称、柜身变体、门板变体、SKU、价格、数量、操作
-        const priceText = row.cells[6].textContent; // 价格在第7列
-        const qtyInput = row.cells[7].querySelector('input'); // 数量输入框在第8列
+        // 表格结构：序号、SKU、价格、数量、操作（5列）
+        const priceText = row.cells[2].textContent; // 价格在第3列
+        const qtyInput = row.cells[3].querySelector('input'); // 数量输入框在第4列
         
         if (priceText && qtyInput) {
             const price = parseFloat(priceText.replace('$', '')) || 0;
@@ -2128,8 +2147,8 @@ $(document).ready(function() {
         let total = 0;
         
         for (let row of rows) {
-            const priceText = row.cells[6].textContent; // 价格在第7列
-            const qtyInput = row.cells[7].querySelector('input'); // 数量输入框在第8列
+            const priceText = row.cells[2].textContent; // 价格在第3列
+            const qtyInput = row.cells[3].querySelector('input'); // 数量输入框在第4列
             
             if (priceText && qtyInput) {
                 const price = parseFloat(priceText.replace('$', '')) || 0;
@@ -2207,36 +2226,7 @@ function setDefaultExportValues(salesPersons) {
     $('#manualExportSalesPerson').val('info@oppeincabinet.ca');
 }
 
-function showExportSuccessModal() {
-    const modalHtml = `
-        <div class="modal fade" id="exportSuccessModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ t('export_success') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle me-2"></i>
-                            {{ t('export_success_message') }}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ t('close') }}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // 移除旧的模态框（如果存在）
-    $('#exportSuccessModal').remove();
-    
-    // 添加新的模态框并显示
-    $('body').append(modalHtml);
-    new bootstrap.Modal(document.getElementById('exportSuccessModal')).show();
-}
+
 
 function showSalesAnalysisApp() {
     $('.admin-card').hide();
@@ -2958,7 +2948,7 @@ function loadQuotationData(quotation) {
         data.products.forEach(function(product, index) {
             console.log('处理产品:', product);
             
-            // 添加到产品列表表格（只显示3个字段）
+            // 添加到产品列表表格（简化结构，隐藏类别等列）
             const tbody = document.getElementById('manualProductsTableBody');
             const rowId = `list-row-${index + 1}`;
             
@@ -2967,8 +2957,15 @@ function loadQuotationData(quotation) {
             row.innerHTML = `
                 <td>${index + 1}</td>
                 <td><code>${product.sku}</code></td>
-                <td>${product.qty}</td>
                 <td>$${parseFloat(product.price).toFixed(2)}</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm" value="${product.qty}" min="1" onchange="updateManualTotal()">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeManualProductFromList('${rowId}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
             `;
             
             tbody.appendChild(row);
@@ -2993,6 +2990,10 @@ function loadQuotationData(quotation) {
 
 function addToProductList(rowNum) {
     // 从添加产品表格添加到产品列表
+    const category = document.getElementById(`category-${rowNum}`).value;
+    const product = document.getElementById(`product-${rowNum}`).value;
+    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
+    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
     const sku = document.getElementById(`sku-${rowNum}`).textContent;
     const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = document.getElementById(`qty-${rowNum}`).value;
@@ -3002,7 +3003,7 @@ function addToProductList(rowNum) {
         return;
     }
     
-    // 添加到产品列表
+    // 添加到产品列表（简化结构，隐藏类别等列）
     const tbody = document.getElementById('manualProductsTableBody');
     const rowId = `list-row-${tbody.children.length + 1}`;
     
@@ -3011,8 +3012,10 @@ function addToProductList(rowNum) {
     row.innerHTML = `
         <td>${tbody.children.length + 1}</td>
         <td><code>${sku}</code></td>
-        <td>${qty}</td>
         <td>${price}</td>
+        <td>
+            <input type="number" class="form-control form-control-sm" value="${qty}" min="1" onchange="updateManualTotal()">
+        </td>
         <td>
             <button type="button" class="btn btn-sm btn-danger" onclick="removeManualProductFromList('${rowId}')">
                 <i class="fas fa-trash"></i>
@@ -3085,16 +3088,29 @@ function deleteQuotation(quotationId) {
 }
 
 function checkUserLoginStatus() {
+    // 检查用户登录功能是否启用
+    const userLoginEnabled = {% if system_settings.get('user_login_enabled', True) %}true{% else %}false{% endif %};
+    
     // 检查用户是否登录
     const username = '{{ session.get("username", "") }}';
     window.isUserLoggedIn = username !== '';
     
-    if (window.isUserLoggedIn) {
+    // 只有当用户登录功能启用且用户已登录时才显示我的报价单卡片
+    if (userLoginEnabled && window.isUserLoggedIn) {
         $('#myQuotationsCard').show();
+    } else {
+        $('#myQuotationsCard').hide();
     }
 }
 
 function saveToMyQuotations(type) {
+    // 检查用户登录功能是否启用
+    const userLoginEnabled = {% if system_settings.get('user_login_enabled', True) %}true{% else %}false{% endif %};
+    if (!userLoginEnabled) {
+        showAlert('用户登录功能已禁用，无法保存报价单', 'warning');
+        return;
+    }
+    
     // 检查用户是否登录
     if (!window.isUserLoggedIn) {
         showAlert('{{ t("login_required_to_save") }}', 'warning');
@@ -3376,25 +3392,11 @@ function exportManualQuotation() {
         return;
     }
     
-    // 验证产品数据完整性
+    // 验证产品数据完整性（适应5列结构）
     for (let row of rows) {
-        const category = row.cells[1].querySelector('select').value;
-        const product = row.cells[2].querySelector('select').value;
-        const boxVariant = row.cells[3].querySelector('select').value;
-        const doorVariant = row.cells[4].querySelector('select').value;
-        const sku = row.cells[5].textContent;
-        const price = row.cells[6].textContent;
-        const qty = row.cells[7].querySelector('input').value;
-        
-        if (!category) {
-            showAlert(`第${row.cells[0].textContent}行的产品类型不能为空`, 'warning');
-            return;
-        }
-        
-        if (!product) {
-            showAlert(`第${row.cells[0].textContent}行的产品名称不能为空`, 'warning');
-            return;
-        }
+        const sku = row.cells[1].textContent;
+        const price = row.cells[2].textContent;
+        const qty = row.cells[3].querySelector('input').value;
         
         if (!sku || sku === '{{ t("not_selected") }}') {
             showAlert(`第${row.cells[0].textContent}行的SKU不能为空`, 'warning');
@@ -3414,18 +3416,13 @@ function exportManualQuotation() {
         }
     }
     
-    // 收集产品数据
+    // 收集产品数据（简化格式，只包含后端需要的字段）
     const products = [];
     for (let row of rows) {
         const rowData = {
-            seq_num: row.cells[0].textContent,
-            category: row.cells[1].querySelector('select').value,
-            product: row.cells[2].querySelector('select').value,
-            box_variant: row.cells[3].querySelector('select').value,
-            door_variant: row.cells[4].querySelector('select').value,
-            sku: row.cells[5].textContent,
-            price: row.cells[6].textContent,
-            qty: row.cells[7].querySelector('input').value
+            sku: row.cells[1].textContent,
+            qty: row.cells[3].querySelector('input').value,
+            price: row.cells[2].textContent
         };
         products.push(rowData);
     }
@@ -3438,34 +3435,44 @@ function exportManualQuotation() {
         export_sales_person: exportSalesPerson
     };
     
-    // 使用POST请求避免URL过长问题
-    $.ajax({
-        url: '/export/manual_excel',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(exportData),
-        success: function(response) {
-            // 创建下载链接
-            const blob = new Blob([response], { 
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-            });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${exportUsername}_${exportDate}_quote.xlsx`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-            
-            // 显示成功提示
-            showExportSuccessModal();
-        },
-        error: function(xhr, status, error) {
-            console.error('导出失败:', error);
-            showAlert('导出失败: ' + (xhr.responseJSON?.error || error), 'error');
-        }
-    });
+    // 使用表单提交来下载文件，避免AJAX的二进制数据处理问题
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/export/manual_excel';
+    form.target = '_blank';
+    
+    // 添加数据字段
+    const dataField = document.createElement('input');
+    dataField.type = 'hidden';
+    dataField.name = 'manual_data';
+    dataField.value = JSON.stringify(products);
+    form.appendChild(dataField);
+    
+    const dateField = document.createElement('input');
+    dateField.type = 'hidden';
+    dateField.name = 'export_date';
+    dateField.value = exportDate;
+    form.appendChild(dateField);
+    
+    const usernameField = document.createElement('input');
+    usernameField.type = 'hidden';
+    usernameField.name = 'export_username';
+    usernameField.value = exportUsername;
+    form.appendChild(usernameField);
+    
+    const salesPersonField = document.createElement('input');
+    salesPersonField.type = 'hidden';
+    salesPersonField.name = 'export_sales_person';
+    salesPersonField.value = exportSalesPerson;
+    form.appendChild(salesPersonField);
+    
+    // 提交表单
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    
+    // 显示成功提示
+    showAlert('{{ t("export_success_message") }}', 'success');
 }
 
 function createExcelFromManualData(products) {

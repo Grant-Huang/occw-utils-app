@@ -1521,8 +1521,31 @@ def save_sku_mapping():
         sku_mappings[original_sku] = mapped_sku
         
         if save_sku_mappings():
-            # 返回映射的SKU对应的价格
-            occw_price = occw_prices.get(mapped_sku, 0.0)
+            # 返回映射的SKU对应的价格（处理新旧数据格式兼容性）
+            price_data = occw_prices.get(mapped_sku, 0.0)
+            
+            # 调试：打印价格数据信息
+            print(f"SKU映射调试 - 原始SKU: {original_sku}, 映射SKU: {mapped_sku}")
+            print(f"价格数据类型: {type(price_data)}, 价格数据: {price_data}")
+            
+            # 处理新旧数据格式兼容性
+            if isinstance(price_data, dict):
+                # 新格式：完整产品信息
+                occw_price = price_data.get('unit_price', 0.0)
+                print(f"新格式 - 提取的价格: {occw_price}")
+            else:
+                # 旧格式：只有价格
+                occw_price = price_data
+                print(f"旧格式 - 直接价格: {occw_price}")
+            
+            # 确保价格是数字类型
+            try:
+                occw_price = float(occw_price) if occw_price is not None else 0.0
+            except (ValueError, TypeError):
+                occw_price = 0.0
+            
+            print(f"最终返回价格: {occw_price}, 类型: {type(occw_price)}")
+            
             return jsonify({
                 'success': True,
                 'message': '映射关系保存成功',
@@ -1735,12 +1758,13 @@ def export_manual_excel():
     try:
         # 支持GET和POST请求
         if request.method == 'POST':
-            data = request.get_json()
-            manual_data = data.get('manual_data')
-            export_date = data.get('export_date')
-            export_username = data.get('export_username')
-            export_sales_person = data.get('export_sales_person')
+            # 处理表单数据
+            manual_data = request.form.get('manual_data')
+            export_date = request.form.get('export_date')
+            export_username = request.form.get('export_username')
+            export_sales_person = request.form.get('export_sales_person')
         else:
+            # 处理GET请求参数
             manual_data = request.args.get('manual_data')
             export_date = request.args.get('export_date')
             export_username = request.args.get('export_username')
@@ -1771,18 +1795,18 @@ def export_manual_excel():
         
         # 写入数据
         for row, item in enumerate(manual_data, 1):
-            # 第一行包含日期、客户、销售人员信息
+            # 第一行包含日期、客户、销售人员信息，其他行为空
             if row == 1:
                 worksheet.write(row, 0, export_date)  # 订单日期
                 worksheet.write(row, 1, export_username)  # 客户
                 worksheet.write(row, 2, export_sales_person)  # 销售人员
             else:
-                # 其他行为空
-                worksheet.write(row, 0, '')
-                worksheet.write(row, 1, '')
-                worksheet.write(row, 2, '')
+                # 其他行的日期、客户、销售人员列为空
+                worksheet.write(row, 0, '')  # 订单日期
+                worksheet.write(row, 1, '')  # 客户
+                worksheet.write(row, 2, '')  # 销售人员
             
-            # 产品信息
+            # 产品信息（每行都有完整数据）
             worksheet.write(row, 3, item['sku'])  # 订单行/产品 (SKU)
             worksheet.write(row, 4, item['qty'])  # 订单行/数量
             worksheet.write(row, 5, float(item['price'].replace('$', '')))  # 订单行/单价
@@ -1793,21 +1817,13 @@ def export_manual_excel():
         # 生成文件名：用户名_日期_quote.xlsx
         filename = f"{export_username}_{export_date}_quote.xlsx"
         
-        # 根据请求方法返回不同的响应
-        if request.method == 'POST':
-            # POST请求返回文件内容
-            return output.getvalue(), 200, {
-                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition': f'attachment; filename="{filename}"'
-            }
-        else:
-            # GET请求使用send_file
-            return send_file(
-                output,
-                mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                as_attachment=True,
-                download_name=filename
-            )
+        # 统一使用send_file返回，确保文件格式正确
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=filename
+        )
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
