@@ -2272,6 +2272,58 @@ def get_order_statuses():
         print(f"错误详情: {traceback.format_exc()}")
         return jsonify([])
 
+@app.route('/get_customer_type_options', methods=['GET'])
+def get_customer_type_options():
+    """获取客户类型过滤选项"""
+    try:
+        # 优先从转换后数据获取（因为这是用户实际看到的数据）
+        if 'converted_data_file' in session and os.path.exists(session['converted_data_file']):
+            print("从转换后数据文件获取客户类型")
+            with open(session['converted_data_file'], 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            df = pd.DataFrame(data)
+        # 其次尝试从原始导入数据获取
+        elif 'imported_data_file' in session and os.path.exists(session['imported_data_file']):
+            print("从原始导入数据文件获取客户类型")
+            with open(session['imported_data_file'], 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            df = pd.DataFrame(data)
+        else:
+            # 如果没有session数据，尝试从upload文件夹读取
+            print("从upload文件夹读取Excel文件获取客户类型")
+            file_path = os.path.join('upload', '销售订单.xlsx')
+            if os.path.exists(file_path):
+                df = pd.read_excel(file_path)
+            else:
+                print("没有找到任何数据源")
+                return jsonify({'success': False, 'error': '没有可用的销售数据'})
+        
+        # 获取客户公司类型和客户类型列表
+        company_types = []
+        customer_types = []
+        
+        if '客户/公司类型' in df.columns:
+            company_types = df['客户/公司类型'].dropna().unique().tolist()
+            company_types = sorted([str(ct) for ct in company_types 
+                                  if str(ct) != 'nan' and str(ct).strip() != ''])
+        
+        if '客户/类型' in df.columns:
+            customer_types = df['客户/类型'].dropna().unique().tolist()
+            customer_types = sorted([str(ct) for ct in customer_types 
+                                   if str(ct) != 'nan' and str(ct).strip() != ''])
+        
+        return jsonify({
+            'success': True,
+            'company_types': company_types,
+            'customer_types': customer_types
+        })
+        
+    except Exception as e:
+        print(f"获取客户类型选项时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/add_sales_person', methods=['POST'])
 @admin_required
 def add_sales_person():
@@ -3743,6 +3795,21 @@ def upload_sales_data():
             response.headers['Content-Type'] = 'application/json'
             return response
         
+        # 检查新增的客户类型列是否存在，如果不存在则添加默认值
+        if '客户/公司类型' not in df.columns:
+            df['客户/公司类型'] = '未知'
+        else:
+            # 处理空值，替换为"未设置"
+            df['客户/公司类型'] = df['客户/公司类型'].fillna('未设置')
+            df['客户/公司类型'] = df['客户/公司类型'].replace(['', 'nan', 'NaN'], '未设置')
+        
+        if '客户/类型' not in df.columns:
+            df['客户/类型'] = '未知'
+        else:
+            # 处理空值，替换为"未设置"
+            df['客户/类型'] = df['客户/类型'].fillna('未设置')
+            df['客户/类型'] = df['客户/类型'].replace(['', 'nan', 'NaN'], '未设置')
+        
         # 清理旧的临时文件
         cleanup_old_imported_data_files()
         
@@ -3837,10 +3904,16 @@ def upload_sales_data():
         
         # 使用转换后的数据进行分析
         if 'converted_data_file' in session and os.path.exists(session['converted_data_file']):
+            print("使用转换后的数据进行分析...")
             analysis_data = analyze_converted_data(session['converted_data_file'])
         else:
             # 如果转换数据不存在，使用原始数据分析
+            print("使用原始数据进行分析...")
             analysis_data = analyze_sales_data(df_filtered)
+        
+        print(f"分析数据返回的键: {list(analysis_data.keys()) if analysis_data else 'None'}")
+        print(f"customer_type_analysis 在返回数据中: {'customer_type_analysis' in analysis_data if analysis_data else False}")
+        print(f"customer_type_charts 在返回数据中: {'customer_type_charts' in analysis_data if analysis_data else False}")
         
         response = jsonify({
             'success': True,
@@ -3985,17 +4058,36 @@ def analyze_converted_data(converted_data_file, amount_range=None):
         # 使用转换后数据的专门分析函数
         sales_person_analysis = analyze_converted_sales_person_performance(df)
         customer_analysis = analyze_converted_customer_orders(df)
+        
+        # 客户类型分析（使用原始分析函数，因为转换后数据可能没有客户类型列）
+        print("开始分析客户类型数据（转换后数据）...")
+        customer_type_analysis = analyze_customer_types(df)
+        print(f"客户类型分析结果: {customer_type_analysis}")
+        
+        # 客户类型图表分析
+        print("开始分析客户类型图表数据（转换后数据）...")
+        customer_type_charts = analyze_customer_type_charts(df)
+        print(f"客户类型图表数据: {customer_type_charts}")
+        
         trend_data = analyze_converted_time_trends(df, 'monthly')
         conversion_data = analyze_converted_conversion_rates(df, 'monthly')
         sales_person_monthly_analysis = analyze_converted_sales_person_performance_by_month(df)
         
-        return {
+        result = {
             'sales_person_analysis': sales_person_analysis,
             'customer_analysis': customer_analysis,
+            'customer_type_analysis': customer_type_analysis,
+            'customer_type_charts': customer_type_charts,
             'trend_data': trend_data,
             'conversion_data': conversion_data,
             'sales_person_monthly_analysis': sales_person_monthly_analysis
         }
+        
+        print(f"转换后数据分析完成，返回数据包含: {list(result.keys())}")
+        print(f"customer_type_analysis 存在: {'customer_type_analysis' in result}")
+        print(f"customer_type_charts 存在: {'customer_type_charts' in result}")
+        
+        return result
         
     except Exception as e:
         print(f"分析转换后数据时出错: {e}")
@@ -4006,12 +4098,23 @@ def analyze_converted_data(converted_data_file, amount_range=None):
 def analyze_sales_data(df):
     """分析销售数据（数据预处理已在调用前完成）"""
     try:
+        print("开始分析销售数据...")
         
         # 销售员业绩分析
         sales_person_analysis = analyze_sales_person_performance(df)
         
         # 客户订单分析
         customer_analysis = analyze_customer_orders(df)
+        
+        # 客户类型分析
+        print("开始分析客户类型数据...")
+        customer_type_analysis = analyze_customer_types(df)
+        print(f"客户类型分析结果: {customer_type_analysis}")
+        
+        # 客户类型图表分析
+        print("开始分析客户类型图表数据...")
+        customer_type_charts = analyze_customer_type_charts(df)
+        print(f"客户类型图表数据: {customer_type_charts}")
         
         # 时间趋势分析（默认按月）
         trend_data = analyze_time_trends(df, 'monthly')
@@ -4022,15 +4125,26 @@ def analyze_sales_data(df):
         # 按月的销售员业绩分析
         sales_person_monthly_analysis = analyze_sales_person_performance_by_month(df)
         
-        return {
+        result = {
             'sales_person_analysis': sales_person_analysis,
             'customer_analysis': customer_analysis,
+            'customer_type_analysis': customer_type_analysis,
+            'customer_type_charts': customer_type_charts,
             'trend_data': trend_data,
             'conversion_data': conversion_data,
             'sales_person_monthly_analysis': sales_person_monthly_analysis
         }
         
+        print(f"分析完成，返回数据包含: {list(result.keys())}")
+        print(f"customer_type_analysis 存在: {'customer_type_analysis' in result}")
+        print(f"customer_type_charts 存在: {'customer_type_charts' in result}")
+        
+        return result
+        
     except Exception as e:
+        print(f"分析销售数据时出错: {e}")
+        import traceback
+        traceback.print_exc()
         raise Exception(f'数据分析失败: {str(e)}')
 
 def adjust_quotation_amounts(df):
@@ -4237,6 +4351,62 @@ def analyze_customer_orders(df):
     
     return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
 
+def analyze_customer_types(df):
+    """分析客户类型数据"""
+    customer_type_stats = {}
+    
+    # 按编号分组处理数据
+    for number, group in df.groupby('编号'):
+        # 获取客户类型信息（取第一条记录）
+        company_type = group.iloc[0].get('客户/公司类型', '未知')
+        customer_type = group.iloc[0].get('客户/类型', '未知')
+        
+        # 跳过NaN客户类型
+        if pd.isna(company_type) or company_type == '' or str(company_type).lower() == 'nan':
+            company_type = '未知'
+        if pd.isna(customer_type) or customer_type == '' or str(customer_type).lower() == 'nan':
+            customer_type = '未知'
+        
+        # 使用客户类型作为键
+        type_key = customer_type
+        
+        if type_key not in customer_type_stats:
+            customer_type_stats[type_key] = {
+                'order_count': 0,
+                'quotation_count': 0,
+                'order_amount': 0,
+                'quotation_amount': 0
+            }
+        
+        # 处理每个编号下的所有记录
+        for _, row in group.iterrows():
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            amount = row['总计']
+            
+            if is_order:
+                # 销售订单：订单金额=总计金额，报价单金额=总计金额，订单数量=1，报价单数量=1
+                customer_type_stats[type_key]['order_count'] += 1
+                customer_type_stats[type_key]['order_amount'] += amount
+                customer_type_stats[type_key]['quotation_count'] += 1
+                customer_type_stats[type_key]['quotation_amount'] += amount
+            elif is_quotation:
+                # 报价单：订单金额=0，报价单金额=总计金额，订单数量=0，报价单数量=1
+                customer_type_stats[type_key]['quotation_count'] += 1
+                customer_type_stats[type_key]['quotation_amount'] += amount
+    
+    result = []
+    for customer_type, stats in customer_type_stats.items():
+        result.append({
+            'customer_type': customer_type,
+            'order_count': stats['order_count'],
+            'quotation_count': stats['quotation_count'],
+            'order_amount': stats['order_amount'],
+            'quotation_amount': stats['quotation_amount']
+        })
+    
+    return sorted(result, key=lambda x: x['order_amount'] + x['quotation_amount'], reverse=True)
+
 def analyze_time_trends(df, time_period='monthly'):
     """分析时间趋势"""
     # 创建副本避免SettingWithCopyWarning
@@ -4334,6 +4504,84 @@ def analyze_conversion_rates(df, time_period='monthly'):
         'rates': rates,
         'order_counts': order_counts,
         'quotation_counts': quotation_counts
+    }
+
+def analyze_customer_type_charts(df):
+    """分析客户类型图表数据"""
+    customer_type_stats = {}
+    
+    # 按编号分组处理数据
+    for number, group in df.groupby('编号'):
+        # 获取客户类型信息（取第一条记录）
+        customer_type = group.iloc[0].get('客户/类型', '未知')
+        
+        # 跳过NaN客户类型
+        if pd.isna(customer_type) or customer_type == '' or str(customer_type).lower() == 'nan':
+            customer_type = '未知'
+        
+        if customer_type not in customer_type_stats:
+            customer_type_stats[customer_type] = {
+                'order_count': 0,
+                'quotation_count': 0,
+                'order_amount': 0,
+                'quotation_amount': 0
+            }
+        
+        # 处理每个编号下的所有记录
+        for _, row in group.iterrows():
+            is_order = row['is_order']
+            is_quotation = row['is_quotation']
+            amount = row['总计']
+            
+            if is_order:
+                customer_type_stats[customer_type]['order_count'] += 1
+                customer_type_stats[customer_type]['order_amount'] += amount
+                customer_type_stats[customer_type]['quotation_count'] += 1
+                customer_type_stats[customer_type]['quotation_amount'] += amount
+            elif is_quotation:
+                customer_type_stats[customer_type]['quotation_count'] += 1
+                customer_type_stats[customer_type]['quotation_amount'] += amount
+    
+    # 准备图表数据
+    labels = []
+    order_amounts = []
+    quotation_amounts = []
+    order_counts = []
+    quotation_counts = []
+    count_conversion_rates = []
+    amount_conversion_rates = []
+    
+    for customer_type, stats in customer_type_stats.items():
+        labels.append(customer_type)
+        order_amounts.append(round(stats['order_amount'], 2))
+        quotation_amounts.append(round(stats['quotation_amount'], 2))
+        order_counts.append(stats['order_count'])
+        quotation_counts.append(stats['quotation_count'])
+        
+        # 计算数量转化率
+        total_count = stats['order_count'] + stats['quotation_count']
+        if total_count > 0:
+            count_conversion_rate = (stats['order_count'] / total_count) * 100
+        else:
+            count_conversion_rate = 0
+        count_conversion_rates.append(round(count_conversion_rate, 2))
+        
+        # 计算金额转化率
+        total_amount = stats['order_amount'] + stats['quotation_amount']
+        if total_amount > 0:
+            amount_conversion_rate = (stats['order_amount'] / total_amount) * 100
+        else:
+            amount_conversion_rate = 0
+        amount_conversion_rates.append(round(amount_conversion_rate, 2))
+    
+    return {
+        'labels': labels,
+        'order_amounts': order_amounts,
+        'quotation_amounts': quotation_amounts,
+        'order_counts': order_counts,
+        'quotation_counts': quotation_counts,
+        'count_conversion_rates': count_conversion_rates,
+        'amount_conversion_rates': amount_conversion_rates
     }
 
 def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=None, amount_range=None):
