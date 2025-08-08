@@ -1,0 +1,5 @@
+[33mdc901f7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;33mtag: [m[1;33mv2.2.0-release3[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m 修复上传价格表按钮样式统一问题 - 将未定义的btn-purple类替换为Bootstrap标准样式btn-primary，确保所有页面按钮显示一致
+[33m0084cca[m 修复端口配置：将gunicorn.conf.py和start.py的默认端口从5000改为999
+[33m53c981a[m 调整系统颜色方案：参考Odoo CSS风格，更新颜色变量和组件样式
+[33md183433[m 更新.gitignore：添加upload目录忽略规则
+[33m4053f70[m 更新系统名称为多语言版本：OCCW报价与销售分析系统

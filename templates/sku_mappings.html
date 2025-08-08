@@ -117,9 +117,9 @@
                         <div id="mappingTableEmpty" class="text-center py-5" style="display: none;">
                             <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">暂无SKU映射数据</h5>
-                            <p class="text-muted">映射关系会在上传PDF报价单后自动生成</p>
+                            <p class="text-muted">映射关系会在上传PDF{{ _("quotation_order") }}后自动生成</p>
                             <a href="/" class="btn btn-primary">
-                                <i class="fas fa-upload me-1"></i>去上传报价单
+                                <i class="fas fa-upload me-1"></i>去上传{{ _("quotation_order") }}
                             </a>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                                 </label>
                                 <input type="text" class="form-control" id="editOriginalSku" 
                                        placeholder="输入原始SKU">
-                                <div class="form-text">来自PDF报价单的SKU</div>
+                                <div class="form-text">来自PDF{{ _("quotation_order") }}的SKU</div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -198,7 +198,7 @@
                         <div class="col-12">
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                <strong>提示：</strong>您可以直接输入SKU，或使用下拉菜单选择，或使用搜索助手快速查找匹配的SKU。
+                                <strong>{{ _("tip") }}：</strong>您可以直接输入SKU，或使用下拉菜单选择，或使用搜索助手快速查找匹配的SKU。
                             </div>
                         </div>
                     </div>
@@ -336,7 +336,7 @@ function loadMappingData(page = 1, search = '') {
                 
                 updateStats(allMappings);
             } else {
-                showAlert('加载映射数据失败: ' + (response.error || '未知错误'), 'danger');
+                showAlert('{{ _("load_mapping_data_failed") }}: ' + (response.error || '{{ _("unknown_error") }}'), 'danger');
                 $('#mappingTableEmpty').show();
             }
         },
@@ -345,7 +345,7 @@ function loadMappingData(page = 1, search = '') {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('加载映射数据失败', 'danger');
+                showAlert('{{ _("load_mapping_data_failed") }}', 'danger');
                 $('#mappingTableEmpty').show();
             }
         }
@@ -518,7 +518,7 @@ function updatePagination(total, perPage) {
     // 上一页
     pagination.append(`
         <li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">上一页</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">{{ _("previous_page") }}</a>
         </li>
     `);
     
@@ -537,7 +537,7 @@ function updatePagination(total, perPage) {
     // 下一页
     pagination.append(`
         <li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">下一页</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">{{ _("next_page") }}</a>
         </li>
     `);
 }
@@ -643,17 +643,17 @@ function saveMappingForm() {
         success: function(response) {
             if (response.success) {
                 $('#editMappingModal').modal('hide');
-                showAlert('SKU映射保存成功', 'success');
+                showAlert('{{ _("sku_mapping_save_success") }}', 'success');
                 loadMappingData(currentPage, currentSearch);
             } else {
-                showAlert(response.error || '保存失败', 'danger');
+                showAlert(response.error || '{{ _("save_failed") }}', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('保存SKU映射失败', 'danger');
+                showAlert('{{ _("save_sku_mapping_failed") }}', 'danger');
             }
         }
     });
@@ -677,14 +677,14 @@ function confirmDeleteMapping() {
         success: function(response) {
             if (response.success) {
                 $('#confirmDeleteModal').modal('hide');
-                showAlert('SKU映射删除成功', 'success');
+                showAlert('{{ _("sku_mapping_delete_success") }}', 'success');
                 loadMappingData(currentPage, currentSearch);
             } else {
-                showAlert(response.error || '删除失败', 'danger');
+                showAlert(response.error || '{{ _("delete_failed") }}', 'danger');
             }
         },
         error: function() {
-            showAlert('删除SKU映射失败', 'danger');
+            showAlert('{{ _("delete_sku_mapping_failed") }}', 'danger');
         }
     });
 }
@@ -703,14 +703,14 @@ function clearAllMappings() {
                 showAlert(response.message, 'success');
                 loadMappingData(1, ''); // 重新加载数据
             } else {
-                showAlert(response.error || '清空失败', 'danger');
+                showAlert(response.error || '{{ _("clear_failed") }}', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('清空SKU映射失败', 'danger');
+                showAlert('{{ _("clear_sku_mapping_failed") }}', 'danger');
             }
         }
     });
@@ -748,7 +748,7 @@ function filterSkuDropdown(query) {
     ).slice(0, 20);
     
     if (filtered.length === 0) {
-        menu.append('<li><span class="dropdown-item-text text-muted">未找到匹配的SKU</span></li>');
+        menu.append('<li><span class="dropdown-item-text text-muted">{{ _("no_matching_sku_found") }}</span></li>');
         return;
     }
     
@@ -781,7 +781,7 @@ function searchOCCWSku() {
     ).slice(0, 10);
     
     if (matches.length === 0) {
-        resultsDiv.html('<div class="alert alert-info">未找到匹配的SKU</div>').show();
+        resultsDiv.html('<div class="alert alert-info">{{ _("no_matching_sku_found") }}</div>').show();
         return;
     }
     
@@ -833,16 +833,16 @@ function exportMappings() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                showAlert(`成功导出 ${response.count} 个SKU映射关系`, 'success');
+                showAlert('{{ _("export_sku_mapping_success").format(count="${response.count}") }}', 'success');
             } else {
-                showAlert(response.error || '导出失败', 'danger');
+                showAlert(response.error || '{{ _("export_failed") }}', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('导出SKU映射失败', 'danger');
+                showAlert('{{ _("export_sku_mapping_failed") }}', 'danger');
             }
         }
     });

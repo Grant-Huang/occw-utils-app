@@ -268,127 +268,127 @@
                             </h2>
                             <div id="collapseDataImport" class="accordion-collapse collapse show" data-bs-parent="#salesAnalysisAccordion">
                                 <div class="accordion-body">
-                                    <h6><i class="fas fa-cog me-2"></i>导入过滤设置（管理员功能）</h6>
-                                    <p>管理员可以在"导入数据过滤"页面配置过滤条件：</p>
+                                    <h6><i class="fas fa-cog me-2"></i>{{ t("help_import_filter_settings") }}</h6>
+                                    <p>{{ t("help_import_filter_desc") }}</p>
                                     <ul>
-                                        <li><strong>最小导入金额阈值</strong>：只导入总计金额大于等于设定值的数据</li>
-                                        <li><strong>销售人员过滤</strong>：多个销售人员用逗号分隔，留空表示不过滤</li>
-                                        <li><strong>客户过滤</strong>：多个客户用逗号分隔，留空表示不过滤</li>
-                                        <li><strong>日期范围</strong>：设置开始和结束日期，只导入指定时间范围的数据</li>
-                                        <li><strong>订单状态过滤</strong>：动态多选，系统自动提取数据中的所有订单状态</li>
+                                        <li><strong>{{ t("help_min_amount_threshold") }}</strong>：{{ t("help_min_amount_desc") }}</li>
+                                        <li><strong>{{ t("help_sales_person_filter") }}</strong>：{{ t("help_sales_person_desc") }}</li>
+                                        <li><strong>{{ t("help_customer_filter") }}</strong>：{{ t("help_customer_desc") }}</li>
+                                        <li><strong>{{ t("help_date_range") }}</strong>：{{ t("help_date_range_desc") }}</li>
+                                        <li><strong>{{ t("help_order_status_filter") }}</strong>：{{ t("help_order_status_desc") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-file-excel me-2"></i>数据导入步骤</h6>
+                                    <h6><i class="fas fa-file-excel me-2"></i>{{ t("help_data_import_steps") }}</h6>
                                     <ol>
-                                        <li>准备标准格式的 Excel 文件（销售订单.xlsx）</li>
-                                        <li>在主页面点击"选择销售订单文件"</li>
-                                        <li>上传文件，系统会自动应用预设的过滤条件</li>
-                                        <li>查看"导入数据过滤后剩余的行数"确认过滤结果</li>
-                                        <li>点击"更新分析表格"开始分析</li>
+                                        <li>{{ t("help_prepare_excel") }}</li>
+                                        <li>{{ t("help_select_file") }}</li>
+                                        <li>{{ t("help_upload_file") }}</li>
+                                        <li>{{ t("help_check_filter_result") }}</li>
+                                        <li>{{ t("help_update_analysis") }}</li>
                                     </ol>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 数据查看功能 -->
+                        <!-- {{ t("help_data_viewing_features") }} -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="dataViewing">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataViewing">
-                                    <i class="fas fa-table me-2"></i>数据查看功能
+                                    <i class="fas fa-table me-2"></i>{{ t("help_data_viewing_features") }}
                                 </button>
                             </h2>
                             <div id="collapseDataViewing" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
                                 <div class="accordion-body">
-                                    <h6><i class="fas fa-eye me-2"></i>查看导入数据</h6>
-                                    <p>点击"查看导入数据"按钮可以：</p>
+                                    <h6><i class="fas fa-eye me-2"></i>{{ t("help_view_imported_data") }}</h6>
+                                    <p>{{ t("help_view_imported_desc") }}</p>
                                     <ul>
-                                        <li>查看原始导入的销售数据</li>
-                                        <li>支持列排序（点击列标题）</li>
-                                        <li>支持搜索和过滤</li>
-                                        <li>支持分页显示</li>
-                                        <li>支持导出为Excel文件</li>
+                                        <li>{{ t("help_view_original_data") }}</li>
+                                        <li>{{ t("help_column_sort") }}</li>
+                                        <li>{{ t("help_search_filter") }}</li>
+                                        <li>{{ t("help_pagination") }}</li>
+                                        <li>{{ t("help_export_excel") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-exchange-alt me-2"></i>查看转换数据</h6>
-                                    <p>点击"查看转换数据"按钮可以：</p>
+                                    <h6><i class="fas fa-exchange-alt me-2"></i>{{ t("help_view_converted_data") }}</h6>
+                                    <p>点击"{{ t("help_view_converted_data") }}"按钮可以：</p>
                                     <ul>
-                                        <li>查看系统转换后的标准化数据</li>
-                                        <li>包含新增字段：订单金额、报价单金额、订单数量、报价单数量</li>
-                                        <li>支持所有查看导入数据的功能</li>
+                                        <li>{{ t("help_standardized_data") }}</li>
+                                        <li>{{ t("help_new_fields") }}</li>
+                                        <li>{{ t("help_view_imported_desc") }}</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 分析表格 -->
+                        <!-- {{ t("help_analysis_tables") }} -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="analysisTables">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalysisTables">
-                                    <i class="fas fa-table me-2"></i>分析表格
+                                    <i class="fas fa-table me-2"></i>{{ t("help_analysis_tables") }}
                                 </button>
                             </h2>
                             <div id="collapseAnalysisTables" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
                                 <div class="accordion-body">
-                                    <h6><i class="fas fa-user-tie me-2"></i>销售员业绩分析表</h6>
-                                    <p>显示每个销售员的业绩统计：</p>
+                                    <h6><i class="fas fa-user-tie me-2"></i>{{ t("help_sales_performance_table") }}</h6>
+                                    <p>{{ t("help_sales_performance_desc") }}</p>
                                     <ul>
-                                        <li><strong>订单数量</strong>：成功转化的订单数</li>
-                                        <li><strong>总报价数量</strong>：总报价单数量</li>
-                                        <li><strong>订单金额</strong>：订单总金额</li>
-                                        <li><strong>总报价金额</strong>：报价单总金额</li>
-                                        <li><strong>数量转化率</strong>：订单数量/总报价数量</li>
-                                        <li><strong>金额转化率</strong>：订单金额/总报价金额</li>
+                                        <li><strong>{{ t("help_order_quantity") }}</strong>：{{ t("help_order_quantity_desc") }}</li>
+                                        <li><strong>{{ t("help_total_quotation_quantity") }}</strong>：{{ t("help_total_quotation_quantity") }}</li>
+                                        <li><strong>{{ t("help_order_amount") }}</strong>：{{ t("help_order_amount") }}</li>
+                                        <li><strong>{{ t("help_total_quotation_amount") }}</strong>：{{ t("help_total_quotation_amount") }}</li>
+                                        <li><strong>{{ t("help_quantity_conversion_y_axis") }}</strong>：{{ t("help_order_quantity") }}/{{ t("help_total_quotation_quantity") }}</li>
+                                        <li><strong>{{ t("help_amount_conversion_rate") }}</strong>：{{ t("help_order_amount") }}/{{ t("help_total_quotation_amount") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-users me-2"></i>客户订单分析表</h6>
-                                    <p>显示每个客户的订单统计和转化率，默认显示10条记录。</p>
+                                    <h6><i class="fas fa-users me-2"></i>{{ t("help_customer_order_table") }}</h6>
+                                    <p>{{ t("help_customer_order_desc") }}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 图表分析 -->
+                        <!-- {{ t("help_chart_analysis") }} -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="chartAnalysis">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChartAnalysis">
-                                    <i class="fas fa-chart-bar me-2"></i>图表分析
+                                    <i class="fas fa-chart-bar me-2"></i>{{ t("help_chart_analysis") }}
                                 </button>
                             </h2>
                             <div id="collapseChartAnalysis" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
                                 <div class="accordion-body">
-                                    <h6><i class="fas fa-dollar-sign me-2"></i>订单金额转化率分析</h6>
-                                    <p>双Y轴折线图：</p>
+                                    <h6><i class="fas fa-dollar-sign me-2"></i>{{ t("help_order_amount_conversion_chart") }}</h6>
+                                    <p>{{ t("help_dual_y_axis_line") }}</p>
                                     <ul>
-                                        <li><strong>主Y轴（实线）</strong>：订单金额、总报价金额</li>
-                                        <li><strong>副Y轴（虚线）</strong>：金额转化率</li>
-                                        <li>支持按销售人员过滤</li>
+                                        <li><strong>{{ t("help_primary_y_axis") }}</strong>：{{ t("help_order_amount") }}、{{ t("help_total_quotation_amount") }}</li>
+                                        <li><strong>{{ t("help_secondary_y_axis") }}</strong>：{{ t("help_amount_conversion_rate") }}</li>
+                                        <li>{{ t("help_sales_person_filter_chart") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-sort-numeric-up me-2"></i>订单数量转化率分析</h6>
-                                    <p>双Y轴折线图：</p>
+                                    <h6><i class="fas fa-sort-numeric-up me-2"></i>{{ t("help_order_quantity_conversion_chart") }}</h6>
+                                    <p>{{ t("help_dual_y_axis_line") }}</p>
                                     <ul>
-                                        <li><strong>主Y轴（实线）</strong>：订单数、总报价数量</li>
-                                        <li><strong>副Y轴（虚线）</strong>：数量转化率</li>
-                                        <li>支持按销售人员过滤</li>
+                                        <li><strong>{{ t("help_primary_y_axis") }}</strong>：订单数、{{ t("help_total_quotation_quantity") }}</li>
+                                        <li><strong>{{ t("help_secondary_y_axis") }}</strong>：{{ t("help_quantity_conversion_y_axis") }}</li>
+                                        <li>{{ t("help_sales_person_filter_chart") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-balance-scale me-2"></i>销售人员对比图表</h6>
-                                    <p>包含三个对比图表：</p>
+                                    <h6><i class="fas fa-balance-scale me-2"></i>{{ t("help_sales_comparison_charts") }}</h6>
+                                    <p>{{ t("help_sales_comparison_desc") }}</p>
                                     <ul>
-                                        <li><strong>数量对比</strong>：对比不同销售人员的订单数量和报价数量</li>
-                                        <li><strong>金额对比</strong>：对比不同销售人员的订单金额和报价金额</li>
-                                        <li><strong>转化率对比</strong>：对比数量转化率和金额转化率</li>
-                                        <li>支持图表最大化显示</li>
-                                        <li>销售员业绩表格增加汇总行，显示全员统计</li>
+                                        <li><strong>{{ t("help_quantity_comparison") }}</strong>：对比不同销售人员的{{ t("help_order_quantity") }}和报价数量</li>
+                                        <li><strong>{{ t("help_amount_comparison") }}</strong>：对比不同销售人员的{{ t("help_order_amount") }}和报价金额</li>
+                                        <li><strong>{{ t("help_conversion_rate_comparison") }}</strong>：对比{{ t("help_quantity_conversion_y_axis") }}和{{ t("help_amount_conversion_rate") }}</li>
+                                        <li>{{ t("help_maximize_chart") }}</li>
+                                        <li>{{ t("help_summary_row") }}</li>
                                     </ul>
                                     
-                                    <h6><i class="fas fa-globe me-2"></i>多语言支持</h6>
-                                    <p>系统完整支持三种语言：</p>
+                                    <h6><i class="fas fa-globe me-2"></i>{{ t("help_multilingual_support") }}</h6>
+                                    <p>{{ t("help_multilingual_desc") }}</p>
                                     <ul>
-                                        <li><strong>中文</strong>：简体中文界面，适合国内用户</li>
-                                        <li><strong>英文</strong>：标准英语界面，面向国际用户</li>
-                                        <li><strong>法文</strong>：法语界面支持，适合加拿大法语区</li>
-                                        <li>实时语言切换，无需重新登录</li>
-                                        <li>所有界面元素完整翻译</li>
+                                        <li><strong>{{ t("help_chinese_support") }}</strong>：简体{{ t("help_chinese_support") }}界面，适合国内用户</li>
+                                        <li><strong>{{ t("help_english_support") }}</strong>：{{ t("help_english_desc") }}</li>
+                                        <li><strong>{{ t("help_french_support") }}</strong>：{{ t("help_french_desc") }}</li>
+                                        <li>{{ t("help_real_time_switch") }}</li>
+                                        <li>{{ t("help_complete_translation") }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -409,9 +409,9 @@
                                     <div class="alert alert-info">
                                         <strong>销售订单</strong>：
                                         <ul>
-                                            <li>订单金额 = 总计金额</li>
+                                            <li>{{ t("help_order_amount") }} = 总计金额</li>
                                             <li>报价单金额 = 总计金额</li>
-                                            <li>订单数量 = 1</li>
+                                            <li>{{ t("help_order_quantity") }} = 1</li>
                                             <li>报价单数量 = 1</li>
                                         </ul>
                                     </div>
@@ -419,9 +419,9 @@
                                     <div class="alert alert-warning">
                                         <strong>报价单</strong>：
                                         <ul>
-                                            <li>订单金额 = 0</li>
+                                            <li>{{ t("help_order_amount") }} = 0</li>
                                             <li>报价单金额 = 总计金额</li>
-                                            <li>订单数量 = 0</li>
+                                            <li>{{ t("help_order_quantity") }} = 0</li>
                                             <li>报价单数量 = 1</li>
                                         </ul>
                                     </div>
@@ -429,9 +429,9 @@
                                     <div class="alert alert-secondary">
                                         <strong>已发送报价单</strong>：
                                         <ul>
-                                            <li>订单金额 = 0</li>
+                                            <li>{{ t("help_order_amount") }} = 0</li>
                                             <li>报价单金额 = 总计金额</li>
-                                            <li>订单数量 = 0</li>
+                                            <li>{{ t("help_order_quantity") }} = 0</li>
                                             <li>报价单数量 = 1</li>
                                         </ul>
                                     </div>
@@ -445,8 +445,8 @@
                                     
                                     <h6><i class="fas fa-calculator me-2"></i>转化率计算</h6>
                                     <ul>
-                                        <li><strong>数量转化率</strong> = 订单数量 ÷ 报价单数量 × 100%</li>
-                                        <li><strong>金额转化率</strong> = 订单金额 ÷ 报价单金额 × 100%</li>
+                                        <li><strong>{{ t("help_quantity_conversion_y_axis") }}</strong> = {{ t("help_order_quantity") }} ÷ 报价单数量 × 100%</li>
+                                        <li><strong>{{ t("help_amount_conversion_rate") }}</strong> = {{ t("help_order_amount") }} ÷ 报价单金额 × 100%</li>
                                     </ul>
                                     
                                     <h6><i class="fas fa-filter me-2"></i>金额区间过滤</h6>

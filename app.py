@@ -12,8 +12,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 from functools import wraps
+from flask_babel import Babel, gettext as _, lazy_gettext as _l
 from version import VERSION, VERSION_NAME, COMPANY_NAME_ZH, COMPANY_NAME_EN, SYSTEM_NAME_ZH, SYSTEM_NAME_EN, SYSTEM_NAME_FR
-from translations import TRANSLATIONS, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, get_text
 from typing import Dict, List, Tuple, Any
 from io import BytesIO
 import xlsxwriter
@@ -24,6 +24,18 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Babel配置
+app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+app.config['LANGUAGES'] = {
+    'zh': '中文',
+    'en': 'English',
+    'fr': 'Français'
+}
+
+# 初始化Babel
+babel = Babel(app)
 
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -37,16 +49,27 @@ ADMIN_SESSION_KEY = "is_admin"
 # 语言支持
 def get_current_language():
     """获取当前语言"""
-    return session.get('language', DEFAULT_LANGUAGE)
+    return session.get('language', app.config['BABEL_DEFAULT_LOCALE'])
 
 def set_language(lang):
     """设置语言"""
-    if lang in SUPPORTED_LANGUAGES:
+    if lang in app.config['LANGUAGES']:
         session['language'] = lang
         # 清除自动检测标记，表示用户已手动设置语言
         session.pop('auto_detected', None)
         return True
     return False
+
+def get_locale():
+    """获取当前语言环境"""
+    # 优先使用session中保存的语言
+    if 'language' in session:
+        return session['language']
+    
+    # 如果没有设置，使用浏览器语言
+    return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+
+babel.init_app(app, locale_selector=get_locale)
 
 @app.context_processor
 def inject_globals():
@@ -54,7 +77,7 @@ def inject_globals():
     current_lang = get_current_language()
     return {
         'current_language': current_lang,
-        'supported_languages': SUPPORTED_LANGUAGES,
+        'supported_languages': app.config['LANGUAGES'],
         'version': VERSION,
         'version_name': VERSION_NAME,
         'company_name_zh': COMPANY_NAME_ZH,
@@ -63,7 +86,7 @@ def inject_globals():
         'system_name_en': SYSTEM_NAME_EN,
         'system_name_fr': SYSTEM_NAME_FR,
         'system_settings': system_settings,
-        't': lambda key: get_text(key, current_lang)
+        't': lambda key: _(key)  # 使用Flask-Babel的gettext
     }
 
 def admin_required(f):
@@ -85,7 +108,7 @@ def admin_required(f):
             
             if is_ajax:
                 # 对Ajax请求返回401状态码
-                return jsonify({'error': get_text('admin_required'), 'redirect': '/admin_login'}), 401
+                return jsonify({'error': _('admin_required'), 'redirect': '/admin_login'}), 401
             else:
                 # 对普通请求进行重定向
                 next_page = request.url if request.method == 'GET' else None
@@ -437,13 +460,13 @@ def parse_quotation_pdf(pdf_content):
     if pdf_total is not None:
         if abs(calc_total - pdf_total) < 0.01:
             compare_result = True
-            compare_message = f"✅ {get_text('parsing_total_matches_pdf', get_current_language())}: {calc_total:.2f}"
+            compare_message = f"✅ {_('parsing_total_matches_pdf')}: {calc_total:.2f}"
         else:
             compare_result = False
-            compare_message = f"❌ {get_text('parsing_total_mismatch_pdf', get_current_language()).format(calc_total=calc_total, pdf_total=pdf_total)}"
+            compare_message = f"❌ {_('parsing_total_mismatch_pdf').format(calc_total=calc_total, pdf_total=pdf_total)}"
     else:
         compare_result = None
-        compare_message = "⚠️ 未识别到PDF合计金额，无法比对！"
+        compare_message = _("⚠️ 未识别到PDF合计金额，无法比对！")
     def extract_seq_num(seq_str):
         try:
             return int(seq_str.replace('*', ''))
@@ -1244,11 +1267,11 @@ def detect_user_language():
 def upload_quotation():
     """上传报价单PDF"""
     if 'file' not in request.files:
-        return jsonify({'error': get_text('no_file_selected')}), 400
+        return jsonify({'error': _('no_file_selected')}), 400
     
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': get_text('no_file_selected')}), 400
+        return jsonify({'error': _('no_file_selected')}), 400
     
     if file and file.filename.endswith('.pdf'):
         filename = secure_filename(file.filename)
@@ -1282,17 +1305,17 @@ def upload_quotation():
             'compare_message': compare_message
         })
     
-    return jsonify({'error': get_text('upload_pdf_file')}), 400
+    return jsonify({'error': _('upload_pdf_file')}), 400
 
 @app.route('/upload_prices', methods=['POST'])
 def upload_prices():
     """上传标准价格表"""
     if 'file' not in request.files:
-        return jsonify({'error': get_text('no_file_selected')}), 400
+        return jsonify({'error': _('no_file_selected')}), 400
     
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': get_text('no_file_selected')}), 400
+        return jsonify({'error': _('no_file_selected')}), 400
     
     try:
         if file.filename.endswith('.xlsx'):
@@ -1300,7 +1323,7 @@ def upload_prices():
         elif file.filename.endswith('.csv'):
             df = pd.read_csv(file)
         else:
-            return jsonify({'error': get_text('upload_excel_csv')}), 400
+            return jsonify({'error': _('upload_excel_csv')}), 400
         
         # 假设第一列是SKU，第二列是价格
         for _, row in df.iterrows():
@@ -1316,7 +1339,7 @@ def upload_prices():
         })
         
     except Exception as e:
-        return jsonify({'error': f'{get_text("file_processing_failed")}: {str(e)}'}), 400
+        return jsonify({'error': f'{_("file_processing_failed")}: {str(e)}'}), 400
 
 @app.route('/upload_occw_prices', methods=['POST'])
 @admin_required 
@@ -1503,7 +1526,7 @@ def get_occw_skus():
                 'skus': sku_list
             })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_sku_list_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_sku_list_failed")}: {str(e)}'}), 500
 
 @app.route('/save_sku_mapping', methods=['POST'])
 @admin_required
@@ -1515,7 +1538,7 @@ def save_sku_mapping():
         mapped_sku = data.get('mapped_sku')
         
         if not original_sku or not mapped_sku:
-            return jsonify({'error': get_text('missing_required_params')}), 400
+            return jsonify({'error': _('missing_required_params')}), 400
         
         global sku_mappings
         sku_mappings[original_sku] = mapped_sku
@@ -1548,14 +1571,14 @@ def save_sku_mapping():
             
             return jsonify({
                 'success': True,
-                'message': '映射关系保存成功',
+                'message': _('映射关系保存成功'),
                 'occw_price': occw_price
             })
         else:
-            return jsonify({'error': get_text('save_mapping_failed')}), 500
+            return jsonify({'error': _('save_mapping_failed')}), 500
             
     except Exception as e:
-        return jsonify({'error': f'{get_text("save_mapping_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("save_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_price', methods=['GET'])
 def get_occw_price():
@@ -1563,7 +1586,7 @@ def get_occw_price():
     try:
         sku = request.args.get('sku')
         if not sku:
-            return jsonify({'error': get_text('missing_sku_param')}), 400
+            return jsonify({'error': _('missing_sku_param')}), 400
         
         # 首先检查是否有映射关系
         mapped_sku = sku_mappings.get(sku, sku)
@@ -1593,7 +1616,7 @@ def get_occw_price():
         })
         
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_price_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_price_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_stats', methods=['GET'])
 @admin_required
@@ -1605,7 +1628,7 @@ def get_occw_stats():
             'count': len(occw_prices)
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_stats_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_stats_failed")}: {str(e)}'}), 500
 
 @app.route('/get_sku_mappings', methods=['GET'])
 @admin_required
@@ -1617,7 +1640,7 @@ def get_sku_mappings():
             'mappings': sku_mappings
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_mapping_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/delete_sku_mapping', methods=['POST'])
 @admin_required
@@ -1628,7 +1651,7 @@ def delete_sku_mapping():
         original_sku = data.get('original_sku')
         
         if not original_sku:
-            return jsonify({'error': get_text('missing_original_sku')}), 400
+            return jsonify({'error': _('missing_original_sku')}), 400
         
         global sku_mappings
         if original_sku in sku_mappings:
@@ -1637,15 +1660,15 @@ def delete_sku_mapping():
             if save_sku_mappings():
                 return jsonify({
                     'success': True,
-                    'message': '映射关系已删除'
+                    'message': _('映射关系已删除')
                 })
             else:
-                return jsonify({'error': '保存映射关系失败'}), 500
+                return jsonify({'error': _('保存映射关系失败')}), 500
         else:
-            return jsonify({'error': get_text('mapping_not_exists')}), 404
+            return jsonify({'error': _('mapping_not_exists')}), 404
             
     except Exception as e:
-        return jsonify({'error': f'{get_text("delete_mapping_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("delete_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/clear_all_sku_mappings', methods=['POST'])
 @admin_required
@@ -1662,10 +1685,10 @@ def clear_all_sku_mappings():
                 'message': f'已清空 {original_count} 个SKU映射关系'
             })
         else:
-            return jsonify({'error': '保存映射关系失败'}), 500
+            return jsonify({'error': _('保存映射关系失败')}), 500
             
     except Exception as e:
-        return jsonify({'error': f'{get_text("clear_mapping_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("clear_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/export_sku_mappings', methods=['GET'])
 @admin_required
@@ -1679,7 +1702,7 @@ def export_sku_mappings():
             'export_time': datetime.now().isoformat()
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("export_mapping_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("export_mapping_failed")}: {str(e)}'}), 500
 
 @app.route('/sku_mappings')
 @admin_required
@@ -1689,7 +1712,7 @@ def sku_mappings_page():
 
 @app.route('/export/occw_excel')
 def export_occw_excel():
-    """导出OCCW格式的Excel文件 - 新6列格式"""
+    """导出OCCW格式的Excel文件 - 新5列格式（移除单价列）"""
     try:
         occw_data = request.args.get('occw_data')
         export_date = request.args.get('export_date')
@@ -1705,7 +1728,7 @@ def export_occw_excel():
                 export_sales_person = get_default_sales_person()
         
         if not occw_data:
-            return jsonify({'error': 'No data provided'}), 400
+            return jsonify({'error': _('No data provided')}), 400
         
         occw_data = json.loads(occw_data)
         
@@ -1714,8 +1737,8 @@ def export_occw_excel():
         workbook = xlsxwriter.Workbook(output)
         worksheet = workbook.add_worksheet()
         
-        # 设置标题行 - 新6列格式
-        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量', '订单行/单价']
+        # 设置标题行 - 新5列格式（移除单价列）
+        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量']
         for col, header in enumerate(headers):
             worksheet.write(0, col, header)
         
@@ -1735,7 +1758,6 @@ def export_occw_excel():
             # 产品信息
             worksheet.write(row, 3, item['occw_sku'])  # 订单行/产品 (SKU)
             worksheet.write(row, 4, item['qty'])  # 订单行/数量
-            worksheet.write(row, 5, item['unit_price'])  # 订单行/单价
         
         workbook.close()
         output.seek(0)
@@ -1754,7 +1776,7 @@ def export_occw_excel():
 
 @app.route('/export/manual_excel', methods=['GET', 'POST'])
 def export_manual_excel():
-    """导出手动创建的报价单 - 新6列格式"""
+    """导出手动创建的报价单 - 新5列格式（移除单价列）"""
     try:
         # 支持GET和POST请求
         if request.method == 'POST':
@@ -1779,7 +1801,7 @@ def export_manual_excel():
                 export_sales_person = get_default_sales_person()
         
         if not manual_data:
-            return jsonify({'error': 'No data provided'}), 400
+            return jsonify({'error': _('No data provided')}), 400
         
         manual_data = json.loads(manual_data)
         
@@ -1788,8 +1810,8 @@ def export_manual_excel():
         workbook = xlsxwriter.Workbook(output)
         worksheet = workbook.add_worksheet()
         
-        # 设置标题行 - 新6列格式
-        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量', '订单行/单价']
+        # 设置标题行 - 新5列格式（移除单价列）
+        headers = ['订单日期', '客户', '销售人员', '订单行/产品', '订单行/数量']
         for col, header in enumerate(headers):
             worksheet.write(0, col, header)
         
@@ -1809,7 +1831,6 @@ def export_manual_excel():
             # 产品信息（每行都有完整数据）
             worksheet.write(row, 3, item['sku'])  # 订单行/产品 (SKU)
             worksheet.write(row, 4, item['qty'])  # 订单行/数量
-            worksheet.write(row, 5, float(item['price'].replace('$', '')))  # 订单行/单价
         
         workbook.close()
         output.seek(0)
@@ -1895,7 +1916,7 @@ def export_quotation(format):
         
         return send_file(filepath, as_attachment=True, download_name=filename)
     
-    return jsonify({'error': get_text('unsupported_export_format')}), 400
+    return jsonify({'error': _('unsupported_export_format')}), 400
 
 
 
@@ -1926,7 +1947,7 @@ def admin_login():
             next_page = request.args.get('next')
             return redirect(next_page or url_for('admin_dashboard'))
         else:
-            return render_template('admin_login.html', error='密码错误')
+            return render_template('admin_login.html', error=_('密码错误'))
     return render_template('admin_login.html')
 
 @app.route('/admin_logout')
@@ -1945,10 +1966,10 @@ def user_register():
         email = data.get('email', '').strip()
         
         if not username or not password or not email:
-            return jsonify({'success': False, 'error': get_text('all_fields_required')})
+            return jsonify({'success': False, 'error': _('all_fields_required')})
         
         if username in users:
-            return jsonify({'success': False, 'error': get_text('username_exists')})
+            return jsonify({'success': False, 'error': _('username_exists')})
         
         # 创建新用户
         users[username] = {
@@ -1958,9 +1979,9 @@ def user_register():
         }
         
         if save_users():
-            return jsonify({'success': True, 'message': get_text('registration_success')})
+            return jsonify({'success': True, 'message': _('registration_success')})
         else:
-            return jsonify({'success': False, 'error': get_text('registration_failed')})
+            return jsonify({'success': False, 'error': _('registration_failed')})
     
     return render_template('user_register.html')
 
@@ -1973,16 +1994,16 @@ def user_login():
         password = data.get('password', '')
         
         if not username or not password:
-            return jsonify({'success': False, 'error': get_text('username_password_required')})
+            return jsonify({'success': False, 'error': _('username_password_required')})
         
         if username not in users:
-            return jsonify({'success': False, 'error': get_text('invalid_credentials')})
+            return jsonify({'success': False, 'error': _('invalid_credentials')})
         
         if not verify_password(password, users[username]['password_hash']):
-            return jsonify({'success': False, 'error': get_text('invalid_credentials')})
+            return jsonify({'success': False, 'error': _('invalid_credentials')})
         
         session['username'] = username
-        return jsonify({'success': True, 'message': get_text('login_success')})
+        return jsonify({'success': True, 'message': _('login_success')})
     
     return render_template('user_login.html')
 
@@ -2002,21 +2023,21 @@ def update_user_profile():
         username = session.get('username')
         
         if not username or username not in users:
-            return jsonify({'success': False, 'error': get_text('user_not_found')})
+            return jsonify({'success': False, 'error': _('user_not_found')})
         
         # 如果提供了新密码，则更新密码
         if new_password:
             if len(new_password) < 6:
-                return jsonify({'success': False, 'error': get_text('password_too_short')})
+                return jsonify({'success': False, 'error': _('password_too_short')})
             
             users[username]['password_hash'] = hash_password(new_password)
             
             if save_users():
-                return jsonify({'success': True, 'message': get_text('password_updated_success')})
+                return jsonify({'success': True, 'message': _('password_updated_success')})
             else:
-                return jsonify({'success': False, 'error': get_text('save_failed')})
+                return jsonify({'success': False, 'error': _('save_failed')})
         else:
-            return jsonify({'success': False, 'error': get_text('no_changes_made')})
+            return jsonify({'success': False, 'error': _('no_changes_made')})
             
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
@@ -2032,7 +2053,7 @@ def set_language_route(lang):
             save_users()
         return jsonify({'success': True, 'language': lang})
     else:
-        return jsonify({'success': False, 'error': 'Unsupported language'}), 400
+        return jsonify({'success': False, 'error': _('Unsupported language')}), 400
 
 
 
@@ -2071,7 +2092,7 @@ def save_settings():
         if save_system_settings():
             return jsonify({'success': True})
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2090,7 +2111,7 @@ def reset_settings():
         if save_system_settings():
             return jsonify({'success': True})
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2104,7 +2125,7 @@ def update_system_settings():
         if save_system_settings():
             return jsonify({'success': True})
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2129,9 +2150,9 @@ def save_import_filter_settings():
                 system_settings[key] = value
         
         if save_system_settings():
-            return jsonify({'success': True, 'message': '导入过滤设定保存成功'})
+            return jsonify({'success': True, 'message': _('导入过滤设定保存成功')})
         else:
-            return jsonify({'success': False, 'error': '保存失败'})
+            return jsonify({'success': False, 'error': _('保存失败')})
     except Exception as e:
         print(f"保存导入过滤设定时出错: {e}")
         return jsonify({'success': False, 'error': str(e)})
@@ -2180,9 +2201,9 @@ def save_import_filters():
                     system_settings[key] = value
         
         if save_system_settings():
-            return jsonify({'success': True, 'message': '导入过滤设置保存成功'})
+            return jsonify({'success': True, 'message': _('导入过滤设置保存成功')})
         else:
-            return jsonify({'success': False, 'error': '保存失败'})
+            return jsonify({'success': False, 'error': _('保存失败')})
     except Exception as e:
         print(f"保存导入过滤设置时出错: {e}")
         return jsonify({'success': False, 'error': str(e)})
@@ -2197,24 +2218,24 @@ def change_admin_password():
         new_password = data.get('new_password', '')
         
         if not current_password or not new_password:
-            return jsonify({'success': False, 'error': get_text('all_fields_required')})
+            return jsonify({'success': False, 'error': _('all_fields_required')})
         
         # 验证当前密码
         admin_password = system_settings.get('admin_password', ADMIN_PASSWORD)
         if current_password != admin_password:
-            return jsonify({'success': False, 'error': get_text('current_password_incorrect')})
+            return jsonify({'success': False, 'error': _('current_password_incorrect')})
         
         # 验证新密码长度
         if len(new_password) < 6:
-            return jsonify({'success': False, 'error': get_text('password_too_short')})
+            return jsonify({'success': False, 'error': _('password_too_short')})
         
         # 更新管理员密码
         system_settings['admin_password'] = new_password
         
         if save_system_settings():
-            return jsonify({'success': True, 'message': get_text('admin_password_changed_success')})
+            return jsonify({'success': True, 'message': _('admin_password_changed_success')})
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2282,13 +2303,13 @@ def add_sales_person():
         email = data.get('email', '').strip()
         
         if not name or not email:
-            return jsonify({'success': False, 'error': get_text('name_and_email_required')})
+            return jsonify({'success': False, 'error': _('name_and_email_required')})
         
         # 检查是否已存在
         sales_persons = system_settings.get('sales_persons', [])
         for person in sales_persons:
             if person['name'] == name or person['email'] == email:
-                return jsonify({'success': False, 'error': get_text('sales_person_already_exists')})
+                return jsonify({'success': False, 'error': _('sales_person_already_exists')})
         
         # 添加新销售人员
         sales_persons.append({
@@ -2300,10 +2321,10 @@ def add_sales_person():
         if save_system_settings():
             return jsonify({
                 'success': True,
-                'message': get_text('sales_person_added_success')
+                'message': _('sales_person_added_success')
             })
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2316,7 +2337,7 @@ def delete_sales_person():
         name = data.get('name', '').strip()
         
         if not name:
-            return jsonify({'success': False, 'error': get_text('name_required')})
+            return jsonify({'success': False, 'error': _('name_required')})
         
         # 删除销售人员
         sales_persons = system_settings.get('sales_persons', [])
@@ -2326,10 +2347,10 @@ def delete_sales_person():
         if save_system_settings():
             return jsonify({
                 'success': True,
-                'message': get_text('sales_person_deleted_success')
+                'message': _('sales_person_deleted_success')
             })
         else:
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2347,7 +2368,7 @@ def save_quotation():
         print(f"报价单数据: {quotation_data}")
         
         if not title:
-            return jsonify({'success': False, 'error': get_text('quotation_title_required')})
+            return jsonify({'success': False, 'error': _('quotation_title_required')})
         
         # 生成报价单编号
         quotation_id = generate_quotation_id()
@@ -2409,12 +2430,12 @@ def save_quotation():
             print(f"报价单已保存到文件")
             return jsonify({
                 'success': True, 
-                'message': get_text('quotation_saved_success'),
+                'message': _('quotation_saved_success'),
                 'quotation_id': quotation_id
             })
         else:
             print(f"保存报价单到文件失败")
-            return jsonify({'success': False, 'error': get_text('save_failed')})
+            return jsonify({'success': False, 'error': _('save_failed')})
     except Exception as e:
         print(f"保存报价单异常: {e}")
         return jsonify({'success': False, 'error': str(e)})
@@ -2433,7 +2454,7 @@ def get_user_quotations():
         
         if not username:
             print(f"错误: session中没有username")
-            return jsonify({'success': False, 'error': '用户未登录'})
+            return jsonify({'success': False, 'error': _('用户未登录')})
         
         if username not in quotations:
             print(f"错误: 用户 {username} 在quotations中不存在")
@@ -2475,7 +2496,7 @@ def load_quotation(quotation_id):
         
         # 检查用户是否登录（管理员或普通用户）
         if not username and not is_admin_user:
-            return jsonify({'success': False, 'error': get_text('login_required')})
+            return jsonify({'success': False, 'error': _('login_required')})
         
         # 管理员可以加载所有报价单，普通用户只能加载自己的
         if is_admin_user:
@@ -2497,7 +2518,7 @@ def load_quotation(quotation_id):
                         'quotation': quotation
                     })
         
-        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+        return jsonify({'success': False, 'error': _('quotation_not_found')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2513,10 +2534,10 @@ def update_quotation(quotation_id):
         
         # 检查用户是否登录（管理员或普通用户）
         if not username and not is_admin_user:
-            return jsonify({'success': False, 'error': get_text('login_required')})
+            return jsonify({'success': False, 'error': _('login_required')})
         
         if not title:
-            return jsonify({'success': False, 'error': get_text('quotation_title_required')})
+            return jsonify({'success': False, 'error': _('quotation_title_required')})
         
         # 管理员可以更新所有报价单，普通用户只能更新自己的
         if is_admin_user:
@@ -2531,10 +2552,10 @@ def update_quotation(quotation_id):
                         if save_quotations():
                             return jsonify({
                                 'success': True, 
-                                'message': get_text('quotation_updated_success')
+                                'message': _('quotation_updated_success')
                             })
                         else:
-                            return jsonify({'success': False, 'error': get_text('save_failed')})
+                            return jsonify({'success': False, 'error': _('save_failed')})
         else:
             # 普通用户只能更新自己的报价单
             user_quotations = quotations.get(username, [])
@@ -2547,12 +2568,12 @@ def update_quotation(quotation_id):
                     if save_quotations():
                         return jsonify({
                             'success': True, 
-                            'message': get_text('quotation_updated_success')
+                            'message': _('quotation_updated_success')
                         })
                     else:
-                        return jsonify({'success': False, 'error': get_text('save_failed')})
+                        return jsonify({'success': False, 'error': _('save_failed')})
         
-        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+        return jsonify({'success': False, 'error': _('quotation_not_found')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2565,7 +2586,7 @@ def delete_quotation(quotation_id):
         
         # 检查用户是否登录（管理员或普通用户）
         if not username and not is_admin_user:
-            return jsonify({'success': False, 'error': get_text('login_required')})
+            return jsonify({'success': False, 'error': _('login_required')})
         
         # 管理员可以删除所有报价单，普通用户只能删除自己的
         if is_admin_user:
@@ -2578,10 +2599,10 @@ def delete_quotation(quotation_id):
                         if save_quotations():
                             return jsonify({
                                 'success': True, 
-                                'message': get_text('quotation_deleted_success')
+                                'message': _('quotation_deleted_success')
                             })
                         else:
-                            return jsonify({'success': False, 'error': get_text('delete_failed')})
+                            return jsonify({'success': False, 'error': _('delete_failed')})
         else:
             # 普通用户只能删除自己的报价单
             user_quotations = quotations.get(username, [])
@@ -2592,12 +2613,12 @@ def delete_quotation(quotation_id):
                     if save_quotations():
                         return jsonify({
                             'success': True, 
-                            'message': get_text('quotation_deleted_success')
+                            'message': _('quotation_deleted_success')
                         })
                     else:
-                        return jsonify({'success': False, 'error': get_text('delete_failed')})
+                        return jsonify({'success': False, 'error': _('delete_failed')})
         
-        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+        return jsonify({'success': False, 'error': _('quotation_not_found')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -2630,7 +2651,7 @@ def view_quotation_detail(quotation_id):
                     cleaned_quotation = clean_quotation_data(quotation)
                     return render_template('quotation_detail.html', quotation=cleaned_quotation)
         
-        return render_template('quotation_detail.html', quotation=None, error=get_text('quotation_not_found'))
+        return render_template('quotation_detail.html', quotation=None, error=_('quotation_not_found'))
     except Exception as e:
         return render_template('quotation_detail.html', quotation=None, error=str(e))
 
@@ -2746,7 +2767,7 @@ def export_quotation_detail(quotation_id):
                             # 手动创建的报价单导出
                             return export_manual_quotation(quotation_data)
         
-        return jsonify({'success': False, 'error': get_text('quotation_not_found')})
+        return jsonify({'success': False, 'error': _('quotation_not_found')})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -3319,7 +3340,7 @@ def view_imported_data():
     # 检查session中是否有导入数据文件的信息
     if 'imported_data_file' not in session:
         print("错误：Session中没有找到 imported_data_file 键")
-        return render_template('imported_data.html', error="没有找到导入的销售数据，请先导入数据。", system_settings=system_settings)
+        return render_template('imported_data.html', error=_("没有找到导入的销售数据，请先导入数据。"), system_settings=system_settings)
     
     try:
         # 获取临时文件路径
@@ -3331,7 +3352,7 @@ def view_imported_data():
             session.pop('imported_data_file', None)
             session.pop('imported_data_count', None)
             session.pop('imported_data_timestamp', None)
-            return render_template('imported_data.html', error="导入的数据文件已过期，请重新导入数据。", system_settings=system_settings)
+            return render_template('imported_data.html', error=_("导入的数据文件已过期，请重新导入数据。"), system_settings=system_settings)
         
         # 从临时文件读取数据
         with open(temp_filepath, 'r', encoding='utf-8') as f:
@@ -3343,7 +3364,7 @@ def view_imported_data():
                              system_settings=system_settings)
     except Exception as e:
         print(f"读取导入数据时出错: {str(e)}")
-        return render_template('imported_data.html', error=f"显示数据时出错: {str(e)}", system_settings=system_settings)
+        return render_template('imported_data.html', error=f"{_(str(e))}", system_settings=system_settings)
 
 @app.route('/view_converted_data')
 def view_converted_data():
@@ -3355,7 +3376,7 @@ def view_converted_data():
     # 检查session中是否有转换数据文件的信息
     if 'converted_data_file' not in session:
         print("错误：Session中没有找到 converted_data_file 键")
-        return render_template('converted_data.html', error="没有找到转换后的销售数据，请先导入数据。", system_settings=system_settings)
+        return render_template('converted_data.html', error=_("没有找到转换后的销售数据，请先导入数据。"), system_settings=system_settings)
     
     try:
         # 获取临时文件路径
@@ -3366,7 +3387,7 @@ def view_converted_data():
             # 清除过期的session信息
             session.pop('converted_data_file', None)
             session.pop('converted_data_count', None)
-            return render_template('converted_data.html', error="转换后的数据文件已过期，请重新导入数据。", system_settings=system_settings)
+            return render_template('converted_data.html', error=_("转换后的数据文件已过期，请重新导入数据。"), system_settings=system_settings)
         
         # 从临时文件读取数据
         with open(temp_filepath, 'r', encoding='utf-8') as f:
@@ -3378,18 +3399,18 @@ def view_converted_data():
                              system_settings=system_settings)
     except Exception as e:
         print(f"读取转换数据时出错: {str(e)}")
-        return render_template('converted_data.html', error=f"显示数据时出错: {str(e)}", system_settings=system_settings)
+        return render_template('converted_data.html', error=f"{_(str(e))}", system_settings=system_settings)
 
 @app.route('/get_pdf_text')
 def get_pdf_text():
     """获取PDF识别的原始文本"""
     filename = request.args.get('filename')
     if not filename:
-        return jsonify({'error': get_text('no_filename_specified')}), 400
+        return jsonify({'error': _('no_filename_specified')}), 400
     
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     if not os.path.exists(filepath):
-        return jsonify({'error': get_text('file_not_exists')}), 404
+        return jsonify({'error': _('file_not_exists')}), 404
     
     try:
         # 返回原始PDF文本（不添加页面分隔符）
@@ -3399,7 +3420,7 @@ def get_pdf_text():
             'text': pdf_content
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("read_pdf_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("read_pdf_failed")}: {str(e)}'}), 500
 
 @app.route('/get_product_categories', methods=['GET'])
 def get_product_categories():
@@ -3428,7 +3449,7 @@ def get_product_categories():
             'categories': default_categories
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_categories_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_categories_failed")}: {str(e)}'}), 500
 
 @app.route('/get_products_by_category', methods=['GET'])
 def get_products_by_category():
@@ -3436,7 +3457,7 @@ def get_products_by_category():
     try:
         category = request.args.get('category')
         if not category:
-            return jsonify({'error': get_text('missing_category_param')}), 400
+            return jsonify({'error': _('missing_category_param')}), 400
         
         products = set()
         box_variants = set()
@@ -3500,7 +3521,7 @@ def get_products_by_category():
             'door_variants': sorted(list(door_variants))
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_products_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_products_failed")}: {str(e)}'}), 500
 
 @app.route('/search_sku_price', methods=['GET'])
 def search_sku_price():
@@ -3563,7 +3584,7 @@ def search_sku_price():
             'possible_skus': possible_skus  # 调试信息
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("search_sku_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("search_sku_failed")}: {str(e)}'}), 500
 
 @app.route('/get_occw_price_table', methods=['GET'])
 @admin_required
@@ -3668,7 +3689,7 @@ def get_occw_price_table():
             'total_pages': (total + per_page - 1) // per_page
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_price_table_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_price_table_failed")}: {str(e)}'}), 500
 
 @app.route('/get_price_filter_options', methods=['GET'])
 @admin_required
@@ -3701,7 +3722,7 @@ def get_price_filter_options():
             }
         })
     except Exception as e:
-        return jsonify({'error': f'{get_text("get_filter_options_failed")}: {str(e)}'}), 500
+        return jsonify({'error': f'{_("get_filter_options_failed")}: {str(e)}'}), 500
 
 # 销售分析相关路由
 @app.route('/upload_sales_data', methods=['POST'])
@@ -3709,18 +3730,18 @@ def upload_sales_data():
     """上传销售数据Excel文件"""
     try:
         if 'file' not in request.files:
-            response = jsonify({'success': False, 'error': get_text('file_required')})
+            response = jsonify({'success': False, 'error': _('file_required')})
             response.headers['Content-Type'] = 'application/json'
             return response
         
         file = request.files['file']
         if file.filename == '':
-            response = jsonify({'success': False, 'error': get_text('file_required')})
+            response = jsonify({'success': False, 'error': _('file_required')})
             response.headers['Content-Type'] = 'application/json'
             return response
         
         if not file.filename.endswith(('.xlsx', '.xls')):
-            response = jsonify({'success': False, 'error': get_text('invalid_file_format')})
+            response = jsonify({'success': False, 'error': _('invalid_file_format')})
             response.headers['Content-Type'] = 'application/json'
             return response
         
@@ -3853,7 +3874,7 @@ def upload_sales_data():
         import traceback
         print(f"销售数据上传错误: {str(e)}")
         print(f"错误详情: {traceback.format_exc()}")
-        response = jsonify({'success': False, 'error': f'数据处理失败: {str(e)}'})
+        response = jsonify({'success': False, 'error': f'{_(str(e))}'})
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -3868,7 +3889,7 @@ def update_sales_analysis():
         data = json.loads(request.form.get('data', '{}'))
         
         if not data:
-            return jsonify({'success': False, 'error': get_text('no_data_found')})
+            return jsonify({'success': False, 'error': _('no_data_found')})
         
         # 重新分析数据（根据时间周期、日期范围和金额区间）
         analysis_data = analyze_sales_data_by_period(data, time_period, start_date, end_date, amount_range)
@@ -3889,7 +3910,7 @@ def export_sales_analysis():
         data = json.loads(request.form.get('data', '{}'))
         
         if not data:
-            return jsonify({'success': False, 'error': get_text('no_data_found')})
+            return jsonify({'success': False, 'error': _('no_data_found')})
         
         # 生成Excel报告
         filename = f'sales_analysis_{time_period}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
@@ -3924,7 +3945,7 @@ def get_sales_raw_data():
         # 读取Excel文件
         file_path = os.path.join('upload', '销售订单.xlsx')
         if not os.path.exists(file_path):
-            return jsonify({'success': False, 'error': '数据文件不存在'})
+            return jsonify({'success': False, 'error': _('数据文件不存在')})
         
         df = pd.read_excel(file_path)
         
@@ -3949,10 +3970,10 @@ def download_sample_file():
             return send_file(
                 sample_file_path,
                 as_attachment=True,
-                download_name='销售数据样本.xlsx'
+                download_name=_('销售数据样本.xlsx')
             )
         else:
-            return jsonify({'error': '样本文件不存在'}), 404
+            return jsonify({'error': _('样本文件不存在')}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 404
 
@@ -4001,7 +4022,7 @@ def analyze_converted_data(converted_data_file, amount_range=None):
         print(f"分析转换后数据时出错: {e}")
         import traceback
         print(f"错误详情: {traceback.format_exc()}")
-        raise Exception(f'转换后数据分析失败: {str(e)}')
+        raise Exception(f'{_(str(e))}')
 
 def analyze_sales_data(df):
     """分析销售数据（数据预处理已在调用前完成）"""
@@ -4031,7 +4052,7 @@ def analyze_sales_data(df):
         }
         
     except Exception as e:
-        raise Exception(f'数据分析失败: {str(e)}')
+        raise Exception(f'{_(str(e))}')
 
 def adjust_quotation_amounts(df):
     """调整报价单金额：如果同一编号的报价单金额小于订单金额，则将报价单金额调整为订单金额"""

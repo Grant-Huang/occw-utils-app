@@ -101,7 +101,7 @@
     
     <!-- 功能内容区域 -->
     <div id="adminContent">
-        <!-- 全部报价单 -->
+        <!-- {{ _("all_quotations") }} -->
         <div id="all-quotations-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     
-                    <!-- 报价单表格 -->
+                    <!-- {{ _("quotation_table") }} -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="allQuotationsTable">
                             <thead class="table-dark">
@@ -152,7 +152,7 @@
                                 </tr>
                             </thead>
                             <tbody id="allQuotationsTableBody">
-                                <!-- 报价单数据将在这里动态加载 -->
+                                <!-- {{ _("quotation_data_will_load_here") }} -->
                             </tbody>
                         </table>
                     </div>
@@ -352,7 +352,7 @@
                 </div>
                 <div class="card-body">
                     
-                    <!-- 导入说明 -->
+                    <!-- {{ _("import_description") }} -->
                     <div class="alert alert-info mb-4">
                         <h5 class="alert-heading">
                             <i class="fas fa-info-circle me-2"></i>{{ t('excel_format_requirements') }}
@@ -541,7 +541,7 @@
             </div>
         </div>
         
-        <!-- 销售订单导入过滤设置 -->
+        <!-- {{ _("sales_order_import_filter_settings") }} -->
         <div id="import-filters-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
@@ -555,45 +555,45 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="fas fa-info-circle me-2"></i>过滤设置说明
+                            <i class="fas fa-info-circle me-2"></i>{{ _("filter_settings_description") }}
                         </h6>
-                        <p class="mb-0">这些设置将在销售订单数据导入时自动应用，过滤掉不符合条件的数据。所有过滤条件为可选，留空表示不限制该条件。</p>
+                        <p class="mb-0">{{ _("filter_settings_help") }}</p>
                     </div>
                     
                     <form id="importFiltersForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3">
-                                    <i class="fas fa-dollar-sign me-2"></i>金额过滤
+                                    <i class="fas fa-dollar-sign me-2"></i>{{ _("amount_filter") }}
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="minAmount" class="form-label">最小导入金额阈值</label>
+                                    <label for="minAmount" class="form-label">{{ _("min_import_amount_threshold") }}</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control" id="minAmount" 
                                                placeholder="例如：1000" min="0" step="0.01">
                                     </div>
-                                    <small class="form-text text-muted">只导入总计金额大于等于此值的数据</small>
+                                    <small class="form-text text-muted">{{ _("min_amount_help") }}</small>
                                 </div>
                                 
                                 <h6 class="text-primary mb-3 mt-4">
-                                    <i class="fas fa-calendar me-2"></i>日期过滤
+                                    <i class="fas fa-calendar me-2"></i>{{ _("date_filter") }}
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="startDate" class="form-label">开始日期</label>
+                                    <label for="startDate" class="form-label">{{ _("start_date") }}</label>
                                     <input type="date" class="form-control" id="startDate">
-                                    <small class="form-text text-muted">只导入此日期之后的数据</small>
+                                    <small class="form-text text-muted">{{ _("start_date_help") }}</small>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="endDate" class="form-label">结束日期</label>
+                                    <label for="endDate" class="form-label">{{ _("end_date") }}</label>
                                     <input type="date" class="form-control" id="endDate">
-                                    <small class="form-text text-muted">只导入此日期之前的数据</small>
+                                    <small class="form-text text-muted">{{ _("end_date_help") }}</small>
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3">
-                                    <i class="fas fa-users me-2"></i>人员和客户过滤
+                                    <i class="fas fa-users me-2"></i>{{ _("person_customer_filter") }}
                                 </h6>
                                 <div class="mb-3">
                                     <label for="salesPersonFilter" class="form-label">销售人员过滤</label>
@@ -602,36 +602,36 @@
                                     <small class="form-text text-muted">多个销售人员用逗号分隔，留空表示不过滤</small>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="customerFilter" class="form-label">客户过滤</label>
+                                    <label for="customerFilter" class="form-label">{{ _("customer_filter") }}</label>
                                     <input type="text" class="form-control" id="customerFilter" 
                                            placeholder="例如：客户A,客户B">
-                                    <small class="form-text text-muted">多个客户用逗号分隔，留空表示不过滤</small>
+                                    <small class="form-text text-muted">{{ _("customer_filter_help") }}</small>
                                 </div>
                                 
                                 <h6 class="text-primary mb-3 mt-4">
-                                    <i class="fas fa-tags me-2"></i>状态过滤
+                                    <i class="fas fa-tags me-2"></i>{{ _("status_filter") }}
                                 </h6>
                                 <div class="mb-3">
-                                    <label class="form-label">订单状态过滤</label>
+                                    <label class="form-label">订单{{ _("status_filter") }}</label>
                                     <div id="orderStatusFilters">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="销售订单" id="status_销售订单" checked>
-                                            <label class="form-check-label" for="status_销售订单">销售订单</label>
+                                            <input class="form-check-input" type="checkbox" value="{{ _("sales_order") }}" id="status_{{ _("sales_order") }}" checked>
+                                            <label class="form-check-label" for="status_{{ _("sales_order") }}">{{ _("sales_order") }}</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="报价单" id="status_报价单" checked>
-                                            <label class="form-check-label" for="status_报价单">报价单</label>
+                                            <input class="form-check-input" type="checkbox" value="{{ _("quotation_order") }}" id="status_{{ _("quotation_order") }}" checked>
+                                            <label class="form-check-label" for="status_{{ _("quotation_order") }}">{{ _("quotation_order") }}</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="已发送报价单" id="status_已发送报价单" checked>
-                                            <label class="form-check-label" for="status_已发送报价单">已发送报价单</label>
+                                            <input class="form-check-input" type="checkbox" value="已发送{{ _("quotation_order") }}" id="status_已发送{{ _("quotation_order") }}" checked>
+                                            <label class="form-check-label" for="status_已发送{{ _("quotation_order") }}">已发送{{ _("quotation_order") }}</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="已取消" id="status_已取消">
                                             <label class="form-check-label" for="status_已取消">已取消</label>
                                         </div>
                                     </div>
-                                    <small class="form-text text-muted">选择要导入的订单状态类型</small>
+                                    <small class="form-text text-muted">{{ _("status_filter_help") }}</small>
                                 </div>
                             </div>
                         </div>
@@ -877,7 +877,7 @@ function showAdminDashboard() {
     $('.admin-content').hide();
 }
 
-// 显示全部报价单
+// 显示全部{{ _("quotation_order") }}
 function showAllQuotations() {
     console.log('showAllQuotations called');
     try {
@@ -969,7 +969,7 @@ function updateSystemStatus(userLoginEnabled) {
     lastUpdatedElement.text(new Date().toLocaleString());
 }
 
-// 加载全部报价单
+// 加载全部{{ _("quotation_order") }}
 function loadAllQuotations() {
     console.log('loadAllQuotations called');
     try {
@@ -994,13 +994,13 @@ function loadAllQuotations() {
     }
 }
 
-// 全局变量存储所有报价单数据
+// 全局变量存储所有{{ _("quotation_order") }}数据
 let allQuotationsData = [];
 let filteredQuotationsData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
-// 显示全部报价单列表
+// 显示全部{{ _("quotation_order") }}列表
 function displayAllQuotationsList(allQuotations) {
     // 转换数据格式为扁平化数组
     allQuotationsData = [];
@@ -1032,7 +1032,7 @@ function initializeFilters() {
     });
 }
 
-// 过滤报价单
+// 过滤{{ _("quotation_order") }}
 function filterQuotations() {
     const searchTerm = $('#quotationSearchInput').val().toLowerCase();
     const userFilter = $('#userFilterSelect').val();
@@ -1049,7 +1049,7 @@ function filterQuotations() {
         // 用户过滤
         const matchesUser = !userFilter || quotation.username === userFilter;
         
-        // 日期过滤
+        // {{ _("date_filter") }}
         let matchesDate = true;
         if (dateFilter && quotation.data && quotation.data.order_date) {
             const orderDate = new Date(quotation.data.order_date);
@@ -1085,7 +1085,7 @@ function clearFilters() {
     filterQuotations();
 }
 
-// 显示报价单表格
+// 显示{{ _("quotation_order") }}表格
 function displayQuotationsTable() {
     const tbody = $('#allQuotationsTableBody');
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -1141,18 +1141,18 @@ function displayQuotationsTable() {
     displayPagination();
 }
 
-// 查看报价单详情
+// 查看{{ _("quotation_order") }}详情
 function viewQuotationDetail(quotationId) {
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// 编辑报价单
+// 编辑{{ _("quotation_order") }}
 function editQuotation(quotationId) {
-    // 直接打开报价单详情页面
+    // 直接打开{{ _("quotation_order") }}详情页面
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// 删除报价单
+// 删除{{ _("quotation_order") }}
 function deleteQuotation(quotationId) {
     if (confirm('{{ t("confirm_delete_quotation") }}')) {
         $.ajax({
@@ -1162,7 +1162,7 @@ function deleteQuotation(quotationId) {
             success: function(response) {
                 if (response.success) {
                     showAlert(response.message, 'success');
-                    loadAllQuotations(); // 重新加载报价单列表
+                    loadAllQuotations(); // 重新加载{{ _("quotation_order") }}列表
                 } else {
                     showAlert(response.error, 'danger');
                 }
@@ -1469,7 +1469,7 @@ function exportSkuMappings() {
     window.open('/export_sku_mappings', '_blank');
 }
 
-// 导出报价单
+// 导出{{ _("quotation_order") }}
 function exportQuotation(quotationId) {
     window.open(`/export_quotation/${quotationId}`, '_blank');
 }
@@ -1908,7 +1908,7 @@ function populateFilterForm(filters) {
     // 设置订单状态复选框
     const orderStatuses = filters.import_filter_order_status ? 
         filters.import_filter_order_status.split(',') : 
-        ['销售订单', '报价单', '已发送报价单'];
+        ['{{ _("sales_order") }}', '{{ _("quotation_order") }}', '已发送{{ _("quotation_order") }}'];
     
     // 重置所有复选框
     $('#orderStatusFilters input[type="checkbox"]').prop('checked', false);
@@ -1929,9 +1929,9 @@ function setDefaultFilters() {
     $('#customerFilter').val('');
     
     // 默认选中常用状态
-    $('#status_销售订单').prop('checked', true);
-    $('#status_报价单').prop('checked', true);
-    $('#status_已发送报价单').prop('checked', true);
+    $('#status_{{ _("sales_order") }}').prop('checked', true);
+    $('#status_{{ _("quotation_order") }}').prop('checked', true);
+    $('#status_已发送{{ _("quotation_order") }}').prop('checked', true);
     $('#status_已取消').prop('checked', false);
 }
 
@@ -1958,7 +1958,7 @@ $(document).ready(function() {
         // 验证日期
         if (filterData.import_filter_start_date && filterData.import_filter_end_date) {
             if (filterData.import_filter_start_date > filterData.import_filter_end_date) {
-                showAlert('开始日期不能晚于结束日期', 'warning');
+                showAlert('{{ _("start_date_after_end_date") }}', 'warning');
                 return;
             }
         }
@@ -1971,13 +1971,13 @@ $(document).ready(function() {
             data: JSON.stringify(filterData),
             success: function(response) {
                 if (response.success) {
-                    showAlert('过滤设置保存成功', 'success');
+                    showAlert('{{ _("filter_settings_save_success") }}', 'success');
                 } else {
                     showAlert(response.error, 'danger');
                 }
             },
             error: function() {
-                showAlert('保存过滤设置失败', 'danger');
+                showAlert('{{ _("save_filter_settings_failed") }}', 'danger');
             }
         });
     });

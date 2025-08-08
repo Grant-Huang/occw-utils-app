@@ -1,0 +1,3121 @@
+# FR translations for OCCW报价系统.
+# Copyright (C) 2025 OCCW报价系统
+# This file is distributed under the same license as the OCCW报价系统 package.
+# OCCW报价系统 <info@oppeincabinet.ca>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OCCW报价系统 2.2.0\n"
+"Report-Msgid-Bugs-To: info@oppeincabinet.ca\n"
+"POT-Creation-Date: 2025-08-08 10:30+0800\n"
+"PO-Revision-Date: 2025-08-08 10:30+0800\n"
+"Last-Translator: OCCW报价系统 <info@oppeincabinet.ca>\n"
+"Language-Team: FR <info@oppeincabinet.ca>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "system_name"
+msgstr "Système de Devis et d'Analyse des Ventes OCCW"
+
+msgid "company_name"
+msgstr "Oppein Ouest"
+
+msgid "company_full_name"
+msgstr "Oppein Cabinet Canada West Ltd."
+
+msgid "copyright"
+msgstr "© 2025 Système de Devis OCCW - Oppein Cabinet Canada West Ltd."
+
+msgid "nav_home"
+msgstr "Accueil"
+
+msgid "nav_prices"
+msgstr "Gestion des Prix"
+
+msgid "nav_config"
+msgstr "Configuration"
+
+msgid "nav_mappings"
+msgstr "Mappages SKU"
+
+msgid "nav_settings"
+msgstr "Paramètres"
+
+msgid "nav_help"
+msgstr "Aide"
+
+msgid "nav_admin_login"
+msgstr "Connexion Admin"
+
+msgid "nav_admin_logout"
+msgstr "Déconnexion"
+
+msgid "nav_language"
+msgstr "Langue"
+
+msgid "language"
+msgstr "Langue"
+
+msgid "home_title"
+msgstr "Accueil"
+
+msgid "home_subtitle"
+msgstr "Plateforme de Devis OCCW"
+
+msgid "system_status_ready"
+msgstr "Système Prêt"
+
+msgid "back_to_home"
+msgstr "Retour à l'Accueil"
+
+msgid "upload_pdf_title"
+msgstr "Télécharger PDF de Devis 2020"
+
+msgid "upload_pdf_desc"
+msgstr "Veuillez sélectionner le fichier PDF de devis 2020 à convertir"
+
+msgid "select_file"
+msgstr "Sélectionner Fichier"
+
+msgid "upload_button"
+msgstr "Télécharger et Analyser"
+
+msgid "quotation_table_title"
+msgstr "Tableau de Devis"
+
+msgid "export_excel"
+msgstr "Exporter Excel"
+
+msgid "export_csv"
+msgstr "Exporter CSV"
+
+msgid "export_pdf"
+msgstr "Exporter PDF"
+
+msgid "show_raw_text"
+msgstr "Afficher Texte PDF Brut"
+
+msgid "export_date"
+msgstr "Date d'Export"
+
+msgid "export_username"
+msgstr "Nom d'Utilisateur"
+
+msgid "enter_username"
+msgstr "Entrer le nom d'utilisateur"
+
+msgid "export_quote"
+msgstr "Exporter Devis"
+
+msgid "occw_excel"
+msgstr "OCCW Excel"
+
+msgid "pdf_text"
+msgstr "Texte PDF"
+
+msgid "pdf_import_quote"
+msgstr "Import PDF Devis"
+
+msgid "pdf_import_desc"
+msgstr ""
+"Téléchargez le fichier PDF de devis 2020, le système analysera "
+"automatiquement le contenu PDF, identifiera les informations produit, fera "
+"correspondre les SKU et prix, et générera des devis au format standard. "
+"Prend en charge le traitement par lots pour une génération rapide et précise"
+" de devis."
+
+msgid "manual_create_quote"
+msgstr "Créer Devis Manuel"
+
+msgid "manual_create_desc"
+msgstr ""
+"Créer manuellement des devis par catégories de produits et sélection de "
+"modèles. Prend en charge les combinaisons de produits personnalisées, la "
+"configuration flexible des quantités et spécifications, adapté aux besoins "
+"de devis personnalisés."
+
+msgid "quote_result"
+msgstr "Résultat Devis"
+
+msgid "processing_pdf"
+msgstr "Traitement du fichier PDF..."
+
+msgid "no_file_selected"
+msgstr "Aucun fichier sélectionné"
+
+msgid "close"
+msgstr "Fermer"
+
+msgid "copy_text"
+msgstr "Copier Texte"
+
+msgid "settings_title"
+msgstr "Paramètres Système"
+
+msgid "settings_subtitle"
+msgstr "Gérer la configuration système et les paramètres par défaut"
+
+msgid "sales_person_settings"
+msgstr "Paramètres Vendeur"
+
+msgid "default_sales_person"
+msgstr "Vendeur par Défaut"
+
+msgid "enter_sales_person"
+msgstr "Entrer le nom du vendeur"
+
+msgid "default_sales_person_help"
+msgstr ""
+"Définir le vendeur par défaut pour le remplissage automatique dans les devis"
+" exportés"
+
+msgid "save_settings"
+msgstr "Enregistrer Paramètres"
+
+msgid "reset_settings"
+msgstr "Réinitialiser les Paramètres"
+
+msgid "settings_saved_success"
+msgstr "Paramètres enregistrés avec succès"
+
+msgid "confirm_reset_settings"
+msgstr "Êtes-vous sûr de vouloir réinitialiser tous les paramètres ?"
+
+msgid "reset_failed"
+msgstr "Échec de la réinitialisation"
+
+msgid "discount_calculator"
+msgstr "Calculateur de Remise"
+
+msgid "discount_price_estimate"
+msgstr "Estimation de Prix avec Remise"
+
+msgid "discount_rate"
+msgstr "Taux de Remise"
+
+msgid "discount_unit"
+msgstr "% de réduction"
+
+msgid "original_price"
+msgstr "Prix Original"
+
+msgid "discounted_price"
+msgstr "Prix Remisé"
+
+msgid "plus_tax"
+msgstr "Plus Taxes"
+
+msgid "export_instruction"
+msgstr ""
+"Après avoir exporté le prix, veuillez envoyer le fichier Excel exporté au "
+"personnel de vente OCCW"
+
+msgid "date"
+msgstr "Date"
+
+msgid "sales_person"
+msgstr "Vendeur"
+
+msgid "select_sales_person"
+msgstr "Sélectionner Vendeur"
+
+msgid "sales_person_management"
+msgstr "Gestion des Vendeurs"
+
+msgid "sales_person_name"
+msgstr "Nom du Vendeur"
+
+msgid "sales_person_email"
+msgstr "Email du Vendeur"
+
+msgid "add_sales_person"
+msgstr "Ajouter Vendeur"
+
+msgid "enter_sales_person_name"
+msgstr "Entrer le nom du vendeur"
+
+msgid "enter_sales_person_email"
+msgstr "Entrer l'email du vendeur"
+
+msgid "discount_estimate_note"
+msgstr ""
+"Cette remise est uniquement pour l'auto-estimation du prix remisé par le "
+"client, pas comme base de devis officiel"
+
+msgid "export_success"
+msgstr "Export Réussi"
+
+msgid "export_success_message"
+msgstr ""
+"Le devis a été exporté avec succès ! Veuillez envoyer le fichier Excel "
+"exporté au personnel de vente OCCW."
+
+msgid "user_register_title"
+msgstr "Inscription Utilisateur"
+
+msgid "user_login_title"
+msgstr "Connexion Utilisateur"
+
+msgid "username"
+msgstr "Nom d'utilisateur"
+
+msgid "email"
+msgstr "Email"
+
+msgid "password"
+msgstr "Mot de passe"
+
+msgid "confirm_password"
+msgstr "Confirmer le mot de passe"
+
+msgid "register"
+msgstr "S'inscrire"
+
+msgid "login"
+msgstr "Connexion"
+
+msgid "logout"
+msgstr "Se déconnecter"
+
+msgid "user_login"
+msgstr "Connexion Utilisateur"
+
+msgid "user_register"
+msgstr "Inscription Utilisateur"
+
+msgid "already_have_account"
+msgstr "Vous avez déjà un compte ? Cliquez pour vous connecter"
+
+msgid "admin"
+msgstr "Admin"
+
+msgid "admin_dashboard"
+msgstr "Tableau de Bord Admin"
+
+msgid "admin_dashboard_subtitle"
+msgstr "Gérer les fonctions système et les données"
+
+msgid "admin_mode"
+msgstr "Mode Admin"
+
+msgid "back_to_dashboard"
+msgstr "Retour au Tableau de Bord"
+
+msgid "all_quotations"
+msgstr "Tous les Devis"
+
+msgid "all_quotations_desc"
+msgstr "Voir et gérer tous les devis utilisateurs"
+
+msgid "sales_person_settings_desc"
+msgstr "Gérer les informations des vendeurs"
+
+msgid "price_management"
+msgstr "Gestion des Prix"
+
+msgid "price_management_desc"
+msgstr "Télécharger et gérer les tableaux de prix OCCW"
+
+msgid "sku_mappings"
+msgstr "Mappages SKU 2020-OCCW"
+
+msgid "sku_mappings_desc"
+msgstr "Gérer les relations de mappage SKU"
+
+msgid "system_settings"
+msgstr "Paramètres Système"
+
+msgid "system_settings_desc"
+msgstr "Gérer la configuration système et les basculements de fonctionnalités"
+
+msgid "import_filter_settings"
+msgstr "Paramètres de Filtre d'Importation de Commandes"
+
+msgid "import_filter_settings_desc"
+msgstr ""
+"Configurer les conditions de filtre pour l'importation de données de vente"
+
+msgid "feature_controls"
+msgstr "Contrôles de Fonctionnalités"
+
+msgid "enable_user_login"
+msgstr "Activer la Connexion Utilisateur"
+
+msgid "user_login_description"
+msgstr ""
+"Contrôler l'activation/désactivation de la fonction de connexion utilisateur"
+
+msgid "admin_password_settings"
+msgstr "Paramètres de Mot de Passe Admin"
+
+msgid "current_admin_password"
+msgstr "Mot de Passe Admin Actuel"
+
+msgid "new_admin_password"
+msgstr "Nouveau Mot de Passe Admin"
+
+msgid "confirm_new_password"
+msgstr "Confirmer le Nouveau Mot de Passe"
+
+msgid "change_admin_password"
+msgstr "Modifier le Mot de Passe Admin"
+
+msgid "system_info"
+msgstr "Informations Système"
+
+msgid "current_status"
+msgstr "Statut Actuel"
+
+msgid "enabled"
+msgstr "Activé"
+
+msgid "disabled"
+msgstr "Désactivé"
+
+msgid "import_data_filter"
+msgstr "Filtre de Données d'Importation"
+
+msgid "import_data_filter_desc"
+msgstr ""
+"Configurer les conditions de filtre et les seuils pour l'importation de "
+"données"
+
+msgid "import_data_filter_settings"
+msgstr "Paramètres de Filtre de Données d'Importation"
+
+msgid "amount_threshold_settings"
+msgstr "Paramètres de Seuil de Montant"
+
+msgid "min_import_amount_threshold"
+msgstr "Seuil de Montant d'Importation Minimum"
+
+msgid "min_import_amount_desc"
+msgstr ""
+"Importer uniquement les données avec un montant total supérieur ou égal à "
+"cette valeur (USD)"
+
+msgid "data_filter_conditions"
+msgstr "Conditions de Filtre de Données"
+
+msgid "sales_person_filter"
+msgstr "Filtre Vendeur"
+
+msgid "customer_filter"
+msgstr "Filtre Client"
+
+msgid "filter_empty_desc"
+msgstr "Laisser vide pour aucun filtre"
+
+msgid "sales_person_filter_desc"
+msgstr ""
+"Importer uniquement les données pour les vendeurs spécifiés (multiples, "
+"séparés par des virgules)"
+
+msgid "customer_filter_desc"
+msgstr ""
+"Importer uniquement les données pour les clients spécifiés (multiples, "
+"séparés par des virgules)"
+
+msgid "start_date"
+msgstr "Date de Début"
+
+msgid "end_date"
+msgstr "Date de Fin"
+
+msgid "start_date_desc"
+msgstr "Importer uniquement les données après cette date"
+
+msgid "end_date_desc"
+msgstr "Importer uniquement les données avant cette date"
+
+msgid "order_status_filter"
+msgstr "Filtre de Statut de Commande"
+
+msgid "select_all_none"
+msgstr "Sélectionner Tout/Aucun"
+
+msgid "order_status_filter_desc"
+msgstr ""
+"Sélectionner les types de statut de commande à importer (sélection multiple)"
+
+msgid "save_filter_settings"
+msgstr "Enregistrer les Paramètres de Filtre"
+
+msgid "loading_text"
+msgstr "Chargement..."
+
+msgid "no_data_import_first"
+msgstr "Aucune donnée, veuillez d'abord télécharger les données de vente"
+
+msgid "load_failed_retry"
+msgstr "Échec du chargement, veuillez réessayer"
+
+msgid "sales_analysis"
+msgstr "Analyse des Ventes"
+
+msgid "sales_analysis_features"
+msgstr "Fonctionnalités d'Analyse des Ventes"
+
+msgid "data_import"
+msgstr "Importation de Données"
+
+msgid "upload_sales_data_button"
+msgstr "Télécharger Données de Vente"
+
+msgid "upload_odoo_sales_data"
+msgstr "Télécharger Données de Vente Exportées d'Odoo"
+
+msgid "view_imported_data"
+msgstr "Voir Données Importées"
+
+msgid "view_converted_data"
+msgstr "Voir Données Converties"
+
+msgid "data_import_filter"
+msgstr "Paramètres d'Importation et de Filtre de Données"
+
+msgid "data_viewing"
+msgstr "Fonctionnalités de Visualisation de Données"
+
+msgid "analysis_tables"
+msgstr "Tableaux d'Analyse"
+
+msgid "chart_analysis"
+msgstr "Analyse de Graphiques"
+
+msgid "data_conversion_logic"
+msgstr "Logique de Conversion de Données"
+
+msgid "current_password_required"
+msgstr "Veuillez entrer le mot de passe admin actuel"
+
+msgid "new_password_requirements"
+msgstr "Le nouveau mot de passe doit contenir au moins 6 caractères"
+
+msgid "confirm_password_help"
+msgstr "Veuillez entrer le nouveau mot de passe à nouveau pour confirmer"
+
+msgid "add"
+msgstr "Ajouter"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "operation"
+msgstr "Opération"
+
+msgid "no_sales_persons"
+msgstr "Aucun Vendeur"
+
+msgid "no_sales_persons_desc"
+msgstr "Veuillez ajouter des informations de vendeur"
+
+msgid "upload_occw_prices"
+msgstr "Télécharger Tableau de Prix OCCW"
+
+msgid "upload"
+msgstr "Télécharger"
+
+msgid "price_statistics"
+msgstr "Statistiques de Prix"
+
+msgid "view_price_table"
+msgstr "Voir Tableau de Prix"
+
+msgid "add_sku_mapping"
+msgstr "Ajouter Mappage SKU"
+
+msgid "original_sku"
+msgstr "SKU Original"
+
+msgid "mapped_sku"
+msgstr "SKU Mappé"
+
+msgid "clear_all_mappings"
+msgstr "Effacer Tous les Mappages"
+
+msgid "export_mappings"
+msgstr "Exporter Mappages"
+
+msgid "no_sku_mappings"
+msgstr "Aucun Mappage SKU"
+
+msgid "no_sku_mappings_desc"
+msgstr "Veuillez ajouter des relations de mappage SKU"
+
+msgid "view"
+msgstr "Voir"
+
+msgid "export"
+msgstr "Exporter"
+
+msgid "total_prices"
+msgstr "Total des Prix"
+
+msgid "last_updated"
+msgstr "Dernière Mise à Jour"
+
+msgid "name_and_email_required"
+msgstr "Le nom et l'email sont requis"
+
+msgid "sales_person_already_exists"
+msgstr "Le vendeur existe déjà"
+
+msgid "sales_person_added_success"
+msgstr "Vendeur ajouté avec succès"
+
+msgid "name_required"
+msgstr "Le nom est requis"
+
+msgid "sales_person_deleted_success"
+msgstr "Vendeur supprimé avec succès"
+
+msgid "confirm_delete_sales_person"
+msgstr "Êtes-vous sûr de vouloir supprimer ce vendeur ?"
+
+msgid "add_sales_person_failed"
+msgstr "Échec de l'ajout du vendeur"
+
+msgid "delete_sales_person_failed"
+msgstr "Échec de la suppression du vendeur"
+
+msgid "load_sales_persons_failed"
+msgstr "Échec du chargement de la liste des vendeurs"
+
+msgid "load_all_quotations_failed"
+msgstr "Échec du chargement de tous les devis"
+
+msgid "load_sku_mappings_failed"
+msgstr "Échec du chargement des mappages SKU"
+
+msgid "add_sku_mapping_failed"
+msgstr "Échec de l'ajout du mappage SKU"
+
+msgid "delete_sku_mapping_failed"
+msgstr "Échec de la suppression du mappage SKU"
+
+msgid "clear_sku_mappings_failed"
+msgstr "Échec de l'effacement des mappages SKU"
+
+msgid "upload_prices_failed"
+msgstr "Échec du téléchargement du tableau de prix"
+
+msgid "confirm_delete_sku_mapping"
+msgstr "Êtes-vous sûr de vouloir supprimer ce mappage SKU ?"
+
+msgid "confirm_clear_all_sku_mappings"
+msgstr "Êtes-vous sûr de vouloir effacer tous les mappages SKU ?"
+
+msgid "search_quotations"
+msgstr "Rechercher des devis..."
+
+msgid "all_users"
+msgstr "Tous les Utilisateurs"
+
+msgid "all_dates"
+msgstr "Toutes les Dates"
+
+msgid "today"
+msgstr "Aujourd'hui"
+
+msgid "this_week"
+msgstr "Cette Semaine"
+
+msgid "this_month"
+msgstr "Ce Mois"
+
+msgid "clear_filters"
+msgstr "Effacer les Filtres"
+
+msgid "total_quotations"
+msgstr "Total des Devis"
+
+msgid "quotation_detail"
+msgstr "Détail du Devis"
+
+msgid "quotation_detail_subtitle"
+msgstr "Voir les détails du devis"
+
+msgid "back"
+msgstr "Retour"
+
+msgid "quotation_info"
+msgstr "Info Devis"
+
+msgid "title"
+msgstr "Titre"
+
+msgid "type"
+msgstr "Type"
+
+msgid "pdf_import"
+msgstr "Import PDF"
+
+msgid "manual_create"
+msgstr "Création Manuelle"
+
+msgid "actions"
+msgstr "Actions"
+
+msgid "export_quotation"
+msgstr "Exporter le Devis"
+
+msgid "edit_quotation"
+msgstr "Modifier le Devis"
+
+msgid "delete_quotation"
+msgstr "Supprimer le Devis"
+
+msgid "products"
+msgstr "Produits"
+
+msgid "manufacturer_code"
+msgstr "Code Fabricant"
+
+msgid "2020_price"
+msgstr "Prix 2020"
+
+msgid "2020_total"
+msgstr "Total 2020"
+
+msgid "occw_sku"
+msgstr "SKU OCCW"
+
+msgid "occw_price"
+msgstr "Prix OCCW"
+
+msgid "occw_total"
+msgstr "Total OCCW"
+
+msgid "total"
+msgstr "Total"
+
+msgid "no_products"
+msgstr "Aucun Produit"
+
+msgid "no_products_desc"
+msgstr "Aucun produit dans ce devis"
+
+msgid "export_info"
+msgstr "Info Export"
+
+msgid "confirm_export_quotation"
+msgstr "Êtes-vous sûr de vouloir exporter ce devis ?"
+
+msgid "confirm_edit_quotation"
+msgstr "Êtes-vous sûr de vouloir modifier ce devis ?"
+
+msgid "confirm_delete_quotation"
+msgstr "Êtes-vous sûr de vouloir supprimer ce devis ?"
+
+msgid "create_new_account"
+msgstr "Créer un nouveau compte"
+
+msgid "passwords_not_match"
+msgstr "Les mots de passe ne correspondent pas"
+
+msgid "all_fields_required"
+msgstr "Veuillez remplir tous les champs requis"
+
+msgid "username_exists"
+msgstr "Le nom d'utilisateur existe déjà"
+
+msgid "registration_success"
+msgstr "Inscription réussie ! Redirection vers la page de connexion..."
+
+msgid "registration_failed"
+msgstr "Échec de l'inscription"
+
+msgid "username_password_required"
+msgstr "Veuillez entrer le nom d'utilisateur et le mot de passe"
+
+msgid "invalid_credentials"
+msgstr "Nom d'utilisateur ou mot de passe invalide"
+
+msgid "login_success"
+msgstr "Connexion réussie"
+
+msgid "login_failed"
+msgstr "Échec de connexion"
+
+msgid "my_quotations"
+msgstr "Mes Devis"
+
+msgid "quotation_title_required"
+msgstr "Veuillez entrer la description du devis"
+
+msgid "quotation_saved_success"
+msgstr "Devis sauvegardé avec succès"
+
+msgid "quotation_updated_success"
+msgstr "Devis mis à jour avec succès"
+
+msgid "quotation_deleted_success"
+msgstr "Devis supprimé avec succès"
+
+msgid "quotation_not_found"
+msgstr "Devis introuvable"
+
+msgid "delete_failed"
+msgstr "Échec de la suppression"
+
+msgid "not_registered"
+msgstr "Pas encore inscrit ?"
+
+msgid "register_here"
+msgstr "Cliquez ici pour vous inscrire"
+
+msgid "my_quotations_desc"
+msgstr "Afficher et gérer vos devis sauvegardés"
+
+msgid "view_my_quotations"
+msgstr "Voir Mes Devis"
+
+msgid "save_to_my_quotations"
+msgstr "Sauvegarder dans Mes Devis"
+
+msgid "no_quotations"
+msgstr "Aucun Devis"
+
+msgid "no_quotations_desc"
+msgstr "Vous n'avez pas encore sauvegardé de devis"
+
+msgid "quotation_id"
+msgstr "ID du Devis"
+
+msgid "created_at"
+msgstr "Créé Le"
+
+msgid "updated_at"
+msgstr "Mis à Jour Le"
+
+msgid "edit"
+msgstr "Modifier"
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "load_quotations_failed"
+msgstr "Échec du chargement de la liste des devis"
+
+msgid "load_quotation_failed"
+msgstr "Échec du chargement des détails du devis"
+
+msgid "user"
+msgstr "Utilisateur"
+
+msgid "quotation_loaded_success"
+msgstr "Devis chargé avec succès"
+
+msgid "delete_quotation_failed"
+msgstr "Échec de la suppression du devis"
+
+msgid "save_changes"
+msgstr "Enregistrer les Modifications"
+
+msgid "save_changes_failed"
+msgstr "Échec de l'enregistrement des modifications"
+
+msgid "confirm_remove_product"
+msgstr "Êtes-vous sûr de vouloir supprimer ce produit ?"
+
+msgid "login_required_to_save"
+msgstr "Veuillez vous connecter pour sauvegarder des devis"
+
+msgid "enter_sku"
+msgstr "Entrez le SKU"
+
+msgid "save_quotation"
+msgstr "Sauvegarder le Devis"
+
+msgid "quotation_title"
+msgstr "Description"
+
+msgid "enter_quotation_title"
+msgstr "Entrez la description du devis"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "save"
+msgstr "Enregistrer"
+
+msgid "save_quotation_failed"
+msgstr "Échec de la sauvegarde du devis"
+
+msgid "col_seq"
+msgstr "Seq"
+
+msgid "col_code"
+msgstr "Code"
+
+msgid "col_sku"
+msgstr "SKU"
+
+msgid "col_qty"
+msgstr "Qté"
+
+msgid "col_color"
+msgstr "Couleur"
+
+msgid "col_2020_price"
+msgstr "Prix 2020"
+
+msgid "col_2020_total"
+msgstr "Total 2020"
+
+msgid "col_occw_sku"
+msgstr "SKU OCCW"
+
+msgid "col_occw_price"
+msgstr "Prix OCCW"
+
+msgid "col_occw_total"
+msgstr "Total OCCW"
+
+msgid "total_2020"
+msgstr "Total 2020"
+
+msgid "total_occw"
+msgstr "Total OCCW"
+
+msgid "loading"
+msgstr "Chargement..."
+
+msgid "confirm"
+msgstr "Confirmer"
+
+msgid "success"
+msgstr "Succès"
+
+msgid "error"
+msgstr "Erreur"
+
+msgid "warning"
+msgstr "Avertissement"
+
+msgid "info"
+msgstr "Information"
+
+msgid "admin_required"
+msgstr "Privilèges administrateur requis"
+
+msgid "password_error"
+msgstr "Mot de passe incorrect"
+
+msgid "sku_mappings_title"
+msgstr "Gestion des Mappages SKU"
+
+msgid "mapping_list"
+msgstr "Liste des Mappages"
+
+msgid "no_mappings"
+msgstr "Aucun mappage SKU trouvé"
+
+msgid "loading_mappings"
+msgstr "Chargement des données de mappage..."
+
+msgid "upload_success"
+msgstr "Fichier téléchargé avec succès"
+
+msgid "upload_failed"
+msgstr "Échec du téléchargement"
+
+msgid "please_select_file"
+msgstr "Veuillez sélectionner un fichier"
+
+msgid "parse_success"
+msgstr "Analyse réussie"
+
+msgid "parse_failed"
+msgstr "Échec de l'analyse"
+
+msgid "partial_success"
+msgstr "Succès partiel"
+
+msgid "parse_error_details"
+msgstr "Détails des erreurs d'analyse"
+
+msgid "partial_import_success"
+msgstr "Import partiel réussi - Détails des erreurs"
+
+msgid "import_error_details"
+msgstr "Détails des erreurs d'import"
+
+msgid "error_count"
+msgstr "Nombre d'erreurs"
+
+msgid "continue_with_errors"
+msgstr "Erreurs trouvées mais traitement continué"
+
+msgid "save_success"
+msgstr "Enregistré avec succès"
+
+msgid "save_failed"
+msgstr "Échec de la sauvegarde"
+
+msgid "select_type"
+msgstr "Sélectionner Type..."
+
+msgid "select_product"
+msgstr "Sélectionner Produit..."
+
+msgid "select_box_variant"
+msgstr "Sélectionner Variante Boîtier..."
+
+msgid "select_door_variant"
+msgstr "Sélectionner Variante Porte..."
+
+msgid "not_selected"
+msgstr "Non Sélectionné"
+
+msgid "add_product"
+msgstr "Ajouter Produit"
+
+msgid "parsing_total_matches_pdf"
+msgstr "Total analysé correspond au montant total PDF"
+
+msgid "parsing_total_mismatch_pdf"
+msgstr ""
+"Total analysé ({calc_total:.2f}) ne correspond pas au montant total PDF "
+"({pdf_total:.2f}), vérifiez la logique d'analyse ou le contenu PDF !"
+
+msgid "quotation_parsed_success"
+msgstr ""
+"Devis analysé avec succès ! Cliquez sur le bouton \"Texte PDF\" pour voir le"
+" contenu PDF original"
+
+msgid "section_data_summary"
+msgstr "Partie 1: Résumé des Données"
+
+msgid "section_chart_analysis"
+msgstr "Partie 2: Graphiques Statistiques"
+
+msgid "section_sales_comparison"
+msgstr "Partie 3: Comparaison des Vendeurs"
+
+msgid "chart_time_dimension"
+msgstr "Dimension Temporelle du Graphique"
+
+msgid "all_sales_persons"
+msgstr "Tous les Vendeurs"
+
+msgid "update_charts"
+msgstr "Mettre à jour les Graphiques"
+
+msgid "order_amount_conversion_analysis"
+msgstr "Analyse de Conversion des Montants de Commande"
+
+msgid "order_quantity_conversion_analysis"
+msgstr "Analyse de Conversion des Quantités de Commande"
+
+msgid "sales_person_1"
+msgstr "Vendeur 1"
+
+msgid "sales_person_2"
+msgstr "Vendeur 2"
+
+msgid "please_select_sales_person"
+msgstr "Veuillez Sélectionner un Vendeur"
+
+msgid "update_comparison_charts"
+msgstr "Mettre à jour les Graphiques de Comparaison"
+
+msgid "quantity_comparison"
+msgstr "Comparaison des Quantités"
+
+msgid "amount_comparison"
+msgstr "Comparaison des Montants"
+
+msgid "quantity_comparison_chart"
+msgstr "Graphique de Comparaison des Quantités"
+
+msgid "amount_comparison_chart"
+msgstr "Graphique de Comparaison des Montants"
+
+msgid "conversion_rate_comparison"
+msgstr "Comparaison des Taux de Conversion"
+
+msgid "conversion_rate_comparison_chart"
+msgstr "Graphique de Comparaison des Taux de Conversion"
+
+msgid "upload_pdf_quote"
+msgstr "Télécharger Devis PDF Logiciel 2020"
+
+msgid "clear_list"
+msgstr "Effacer Liste"
+
+msgid "sequence_number"
+msgstr "Seq"
+
+msgid "product_type"
+msgstr "Type de Produit"
+
+msgid "product_name"
+msgstr "Nom Produit"
+
+msgid "box_variant"
+msgstr "Variant de Boîtier"
+
+msgid "door_variant"
+msgstr "Variant de Porte"
+
+msgid "unit_price"
+msgstr "Prix Unitaire"
+
+msgid "quantity"
+msgstr "Qté"
+
+msgid "total_price"
+msgstr "Prix Total"
+
+msgid "order_date"
+msgstr "Date de Commande"
+
+msgid "not_found"
+msgstr "Non Trouvé"
+
+msgid "sku_rules_config"
+msgstr "Configuration Règles SKU"
+
+msgid "sku_rules_management"
+msgstr "Gestion Règles SKU"
+
+msgid "sku_rules_desc"
+msgstr ""
+"Gérer les règles de génération SKU pour l'analyse PDF, l'import OCCW et la "
+"création manuelle"
+
+msgid "save_config"
+msgstr "Sauvegarder Configuration"
+
+msgid "reset_default"
+msgstr "Réinitialiser par Défaut"
+
+msgid "download_config"
+msgstr "Télécharger Configuration"
+
+msgid "pdf_parsing_rules"
+msgstr "Règles Analyse PDF"
+
+msgid "pdf_parsing_rules_desc"
+msgstr "Règles de génération SKU pour l'analyse PDF"
+
+msgid "occw_import_rules"
+msgstr "Règles Import OCCW"
+
+msgid "occw_import_rules_desc"
+msgstr "Règles de génération SKU pour l'import liste de prix OCCW"
+
+msgid "manual_create_rules"
+msgstr "Règles Création Manuelle"
+
+msgid "manual_create_rules_desc"
+msgstr "Règles de génération SKU pour la création manuelle de devis"
+
+msgid "json_editor"
+msgstr "Éditeur JSON"
+
+msgid "json_editor_desc"
+msgstr "Éditer directement le fichier de configuration JSON"
+
+msgid "rule_id"
+msgstr "ID Règle"
+
+msgid "rule_name"
+msgstr "Nom de Règle"
+
+msgid "rule_condition"
+msgstr "Condition"
+
+msgid "rule_pattern"
+msgstr "Modèle"
+
+msgid "rule_format"
+msgstr "Format"
+
+msgid "rule_enabled"
+msgstr "Activé"
+
+msgid "rule_disabled"
+msgstr "Désactivé"
+
+msgid "add_rule"
+msgstr "Ajouter Règle"
+
+msgid "delete_rule"
+msgstr "Supprimer Règle"
+
+msgid "rule_validation"
+msgstr "Validation Règle"
+
+msgid "validation_success"
+msgstr "Validation Réussie"
+
+msgid "validation_error"
+msgstr "Erreur Validation"
+
+msgid "config_saved"
+msgstr "Configuration sauvegardée"
+
+msgid "config_reset"
+msgstr "Configuration réinitialisée par défaut"
+
+msgid "config_downloaded"
+msgstr "Fichier de configuration téléchargé"
+
+msgid "help_documentation"
+msgstr "Documentation d'Aide"
+
+msgid "help_system_introduction"
+msgstr "Introduction Système"
+
+msgid "help_main_functionality"
+msgstr "Fonctionnalité Principale"
+
+msgid "help_usage_instructions"
+msgstr "Instructions d'Utilisation"
+
+msgid "help_permission_description"
+msgstr "Description Permissions"
+
+msgid "help_technical_support"
+msgstr "Support Technique"
+
+msgid "help_company_information"
+msgstr "Information Entreprise"
+
+msgid "help_version_information"
+msgstr "Information Version"
+
+msgid "help_current_version"
+msgstr "Version Actuelle"
+
+msgid "help_contact_information"
+msgstr "Information Contact"
+
+msgid "help_email_support"
+msgstr "Support par Email"
+
+msgid "help_phone_support"
+msgstr "Support Téléphonique"
+
+msgid "help_normal_user_permissions"
+msgstr "Permissions Utilisateur Normal"
+
+msgid "help_admin_user_permissions"
+msgstr "Permissions Administrateur"
+
+msgid "help_step_by_step_guide"
+msgstr "Guide Étape par Étape"
+
+msgid "help_step_1"
+msgstr "Étape 1: Télécharger Fichier PDF"
+
+msgid "help_step_2"
+msgstr "Étape 2: Vérifier Résultats Analyse"
+
+msgid "help_step_3"
+msgstr "Étape 3: Ajuster Mappages SKU"
+
+msgid "help_step_4"
+msgstr "Étape 4: Exporter Résultats"
+
+msgid "help_step_1_desc"
+msgstr ""
+"Cliquez sur le bouton \"Sélectionner Fichier\" sur la page d'accueil, "
+"sélectionnez le fichier PDF de devis généré par le logiciel 2020, puis "
+"cliquez sur \"Télécharger et Analyser\"."
+
+msgid "help_step_2_desc"
+msgstr ""
+"Le système analysera automatiquement le contenu PDF et affichera le tableau "
+"des produits. Veuillez vérifier si les résultats d'analyse sont corrects."
+
+msgid "help_step_3_desc"
+msgstr ""
+"Si nécessaire, vous pouvez ajuster les relations de mappage SKU pour les "
+"produits dans la page de gestion des mappages SKU."
+
+msgid "help_step_4_desc"
+msgstr ""
+"Après avoir confirmé que tout est correct, vous pouvez exporter les "
+"résultats au format Excel, CSV ou PDF."
+
+msgid "help_normal_user_desc"
+msgstr ""
+"Peut télécharger et analyser des PDF, voir les résultats, exporter des "
+"fichiers, voir la documentation d'aide"
+
+msgid "help_admin_user_desc"
+msgstr ""
+"En plus des permissions utilisateur normal, peut également gérer les listes "
+"de prix OCCW, configurer les règles SKU, gérer les relations de mappage SKU"
+
+msgid "column_name"
+msgstr "Nom de Colonne"
+
+msgid "column_type"
+msgstr "Type"
+
+msgid "column_description"
+msgstr "Description"
+
+msgid "internal_reference"
+msgstr "Référence Interne"
+
+msgid "text_type"
+msgstr "Texte"
+
+msgid "sales_price"
+msgstr "Prix de Vente"
+
+msgid "number_type"
+msgstr "Nombre"
+
+msgid "variant_value"
+msgstr "Valeur de Variante"
+
+msgid "name_col"
+msgstr "Nom"
+
+msgid "import_mode"
+msgstr "Mode d'Import"
+
+msgid "append_mode"
+msgstr "Mode d'Ajout"
+
+msgid "door_variant_col"
+msgstr "Variante de Porte"
+
+msgid "all_options"
+msgstr "Tout"
+
+msgid "box_variant_col"
+msgstr "Variante de Boîtier"
+
+msgid "product_category_col"
+msgstr "Catégorie de Produit"
+
+msgid "product_name_col"
+msgstr "Nom de Produit"
+
+msgid "category_col"
+msgstr "Catégorie"
+
+msgid "price_col"
+msgstr "Prix"
+
+msgid "no_price_data"
+msgstr "Aucune Donnée de Prix"
+
+msgid "price_records"
+msgstr "Enregistrements de Prix"
+
+msgid "file_format"
+msgstr "Format de Fichier"
+
+msgid "load_stats_failed"
+msgstr "Échec du Chargement des Statistiques"
+
+msgid "previous_page"
+msgstr "Précédent"
+
+msgid "next_page"
+msgstr "Suivant"
+
+msgid "variant_extraction_rules"
+msgstr "Règles d'Extraction de Variantes"
+
+msgid "edit_common_variants"
+msgstr "Modifier les Variantes Communes"
+
+msgid "save_variants"
+msgstr "Sauvegarder les Variantes"
+
+msgid "matching_pattern"
+msgstr "Modèle de Correspondance"
+
+msgid "rule_status"
+msgstr "Statut"
+
+msgid "condition_description"
+msgstr "Description de Condition"
+
+msgid "preprocessing"
+msgstr "Prétraitement"
+
+msgid "door_variant_pattern"
+msgstr "Modèle de Variante de Porte"
+
+msgid "box_variant_pattern"
+msgstr "Modèle de Variante de Boîtier"
+
+msgid "special_handling"
+msgstr "Traitement Spécial"
+
+msgid "trigger_condition"
+msgstr "Condition de Déclenchement"
+
+msgid "fallback_format"
+msgstr "Format de Secours"
+
+msgid "product_information"
+msgstr "Informations Produit"
+
+msgid "quantity_data"
+msgstr "Données de Quantité"
+
+msgid "price_information"
+msgstr "Informations de Prix"
+
+msgid "door_color"
+msgstr "Couleur de Porte"
+
+msgid "total_price_calculation"
+msgstr "Calcul du Prix Total"
+
+msgid "smart_distinguish_codes"
+msgstr ""
+"Distinguer intelligemment les codes produit commençant par des chiffres et "
+"des lettres"
+
+msgid "auto_handle_pages"
+msgstr "Gérer automatiquement les sauts de page et les changements de format"
+
+msgid "judgment_condition"
+msgstr "Condition de Jugement"
+
+msgid "example"
+msgstr "Exemple"
+
+msgid "other_category"
+msgstr "Autre"
+
+msgid "not_match_conditions"
+msgstr "Ne correspond pas aux conditions ci-dessus"
+
+msgid "batch_import"
+msgstr "Import en Lot"
+
+msgid "manual_add"
+msgstr "Ajout Manuel"
+
+msgid "real_time_update"
+msgstr "Mise à Jour en Temps Réel"
+
+msgid "data_export"
+msgstr "Export de Données"
+
+msgid "data_validation"
+msgstr "Validation de Données"
+
+msgid "dropdown_selection"
+msgstr "Sélection Déroulante"
+
+msgid "manual_input"
+msgstr "Saisie Manuelle"
+
+msgid "mapping_save"
+msgstr "Sauvegarde de Mappage"
+
+msgid "view_all_mappings"
+msgstr "Voir Tous les Mappages"
+
+msgid "edit_mapping"
+msgstr "Modifier Mappage"
+
+msgid "delete_mapping"
+msgstr "Supprimer Mappage"
+
+msgid "batch_management"
+msgstr "Gestion par Lots"
+
+msgid "auto_add_totals"
+msgstr ""
+"Ajouter automatiquement les lignes de total et les informations de résumé"
+
+msgid "keep_number_format"
+msgstr "Maintenir le format de nombre et les symboles de devise"
+
+msgid "support_chinese_filename"
+msgstr "Prendre en charge les noms de fichiers chinois"
+
+msgid "common_problem_solving"
+msgstr "Résolution de Problèmes Courants"
+
+msgid "performance_optimization"
+msgstr "Suggestions d'Optimisation des Performances"
+
+msgid "parse_content"
+msgstr "Contenu d'Analyse"
+
+msgid "product_code_desc_seq"
+msgstr "Code produit, description, numéro de séquence"
+
+msgid "smart_extract_qty_user"
+msgstr ""
+"Extraction intelligente de la quantité et du code utilisateur depuis les "
+"colonnes fusionnées"
+
+msgid "unit_price_total_price"
+msgstr ""
+"Prix unitaire, prix total (supporte le format de montant avec virgules)"
+
+msgid "auto_recognize_door_style"
+msgstr "Reconnaissance automatique du style et de la couleur de porte"
+
+msgid "total_price_verification"
+msgstr "Vérification du Prix Total"
+
+msgid "compare_with_pdf_total"
+msgstr "Comparaison avec le prix total dans le PDF pour vérification"
+
+msgid "special_processing"
+msgstr "Traitement Spécial"
+
+msgid "smart_distinguish_product_codes"
+msgstr ""
+"Distinction intelligente des codes produit commençant par des chiffres et "
+"des lettres"
+
+msgid "auto_handle_page_separators"
+msgstr ""
+"Gestion automatique des séparateurs de page et des changements de format"
+
+msgid "support_multi_page_pdf"
+msgstr "Support de l'analyse continue de documents PDF multi-pages"
+
+msgid "sku_generation_rules"
+msgstr "Règles de Génération SKU"
+
+msgid "sku_generation_rule"
+msgstr "Règle de Génération SKU"
+
+msgid "cabinet"
+msgstr "Cabinet"
+
+msgid "description_contains_cabinet"
+msgstr "La description contient \"Cabinet\""
+
+msgid "occw_code_ply_color"
+msgstr "Code OCCW + \"-PLY-\" + couleur"
+
+msgid "hardware"
+msgstr "Matériel"
+
+msgid "description_contains_hardware"
+msgstr "La description contient \"Matériel\""
+
+msgid "hw_user_code"
+msgstr "\"HW-\" + code utilisateur"
+
+msgid "accessory"
+msgstr "Accessoire"
+
+msgid "description_contains_accessory"
+msgstr "La description contient \"Accessoire\""
+
+msgid "color_user_code"
+msgstr "Couleur + \"-\" + code utilisateur"
+
+msgid "other"
+msgstr "Autre"
+
+msgid "not_meet_above_conditions"
+msgstr "Ne répond pas aux conditions ci-dessus"
+
+msgid "note"
+msgstr "Note"
+
+msgid "sku_rules_customizable"
+msgstr ""
+"Les règles de génération SKU peuvent être personnalisées dans la page "
+"\"Configuration\""
+
+msgid "occw_price_table_management"
+msgstr "Gestion de la Liste de Prix OCCW"
+
+msgid "occw_price_table"
+msgstr "Tableau de Prix OCCW"
+
+msgid "category"
+msgstr "Catégorie"
+
+msgid "all_categories"
+msgstr "Toutes les Catégories"
+
+msgid "support_excel_batch_import"
+msgstr "Support de l'import en lot de données de prix via fichier Excel"
+
+msgid "manually_add_single_sku"
+msgstr ""
+"Peut ajouter manuellement les informations de prix pour des SKU individuels"
+
+msgid "modify_price_immediately_effective"
+msgstr ""
+"Les modifications de prix prennent effet immédiatement sans redémarrage du "
+"système"
+
+msgid "export_price_table_excel_csv"
+msgstr "Support de l'export de la table de prix vers Excel ou CSV"
+
+msgid "auto_check_duplicate_sku"
+msgstr "Vérification automatique des SKU en double et des prix invalides"
+
+msgid "excel_import_format_requirements"
+msgstr "Exigences de Format d'Import Excel"
+
+msgid "data_type"
+msgstr "Type de Données"
+
+msgid "description"
+msgstr "Description"
+
+msgid "internal_reference_number"
+msgstr "Numéro de Référence Interne"
+
+msgid "text"
+msgstr "Texte"
+
+msgid "system_sku_identifier"
+msgstr "Identifiant SKU système, ne peut pas être vide"
+
+msgid "selling_price"
+msgstr "Prix de Vente"
+
+msgid "number"
+msgstr "Nombre"
+
+msgid "product_price_must_be_positive"
+msgstr "Prix du produit, doit être positif"
+
+msgid "door_or_box_variant_format"
+msgstr ""
+"Variante de porte ou de boîte, peut être vide. Format: Porte: XXX ou Boîte: "
+"XXX"
+
+msgid "product_name_cannot_be_empty"
+msgstr "Nom du produit, ne peut pas être vide"
+
+msgid "product_category_name"
+msgstr "Catégorie/Nom du Produit"
+
+msgid "product_classification_support"
+msgstr ""
+"Classification des produits, prend en charge: RTA Assm. Assemblage, Porte, "
+"BOX, Panneau de Finition, Moulure, Plinthe, Remplissage, etc."
+
+msgid "sku_mapping_management"
+msgstr "Gestion des Relations de Mappage SKU"
+
+msgid "mapping_mechanism"
+msgstr "Mécanisme de Mappage"
+
+msgid "when_system_generated_sku_not_found"
+msgstr ""
+"Lorsque le SKU généré par le système n'est pas trouvé dans la table de prix "
+"OCCW, les options suivantes seront fournies:"
+
+msgid "display_related_sku_list"
+msgstr "Afficher la liste SKU connexe contenant les codes utilisateur"
+
+msgid "provide_text_input_when_no_related_sku"
+msgstr ""
+"Lorsqu'il n'y a pas de SKU connexes, fournir une zone de saisie de texte"
+
+msgid "auto_save_mapping_relationship"
+msgstr ""
+"Sauvegarder automatiquement la relation de mappage après la sélection de "
+"l'utilisateur, appliquer automatiquement la prochaine fois"
+
+msgid "mapping_management_features"
+msgstr "Fonctionnalités de Gestion du Mappage"
+
+msgid "view_all_saved_mappings"
+msgstr ""
+"Voir toutes les relations de mappage sauvegardées dans la page \"Mappage "
+"SKU\""
+
+msgid "modify_existing_mapping_relationship"
+msgstr "Peut modifier les relations de mappage existantes"
+
+msgid "delete_unnecessary_mapping_relationship"
+msgstr "Supprimer les relations de mappage inutiles"
+
+msgid "support_batch_delete_and_modify"
+msgstr ""
+"Prend en charge les opérations de suppression et de modification par lots"
+
+msgid "tip"
+msgstr "Conseil"
+
+msgid "mapping_relationship_display_note"
+msgstr ""
+"Après la sauvegarde de la relation de mappage, le SKU mappé sera affiché "
+"dans le tableau au lieu du SKU généré à l'origine"
+
+msgid "export_features"
+msgstr "Fonctionnalités d'Export"
+
+msgid "supported_export_formats"
+msgstr "Formats d'Export Pris en Charge"
+
+msgid "format_2020_export"
+msgstr "Export Format 2020"
+
+msgid "excel_xlsx"
+msgstr "Excel (.xlsx)"
+
+msgid "contains_all_column_information"
+msgstr "Contient toutes les informations de colonne"
+
+msgid "csv_format"
+msgstr "CSV (.csv)"
+
+msgid "plain_text_format"
+msgstr "Format texte brut, facile pour d'autres systèmes à importer"
+
+msgid "pdf_format"
+msgstr "PDF (.pdf)"
+
+msgid "professional_print_format"
+msgstr "Format d'impression professionnel"
+
+msgid "contains_sequence_code_quantity"
+msgstr ""
+"Contient: Séquence, Code, Quantité, Couleur, Prix Unitaire 2020, Prix Total "
+"2020, SKU OCCW, Prix Unitaire OCCW, Prix Total OCCW"
+
+msgid "occw_format_export"
+msgstr "Export Format OCCW"
+
+msgid "special_occw_quote_format"
+msgstr "Format de devis OCCW spécial"
+
+msgid "contains_sequence_occw_sku"
+msgstr ""
+"Contient: Séquence, SKU OCCW, Quantité, Prix Unitaire OCCW, Prix Total OCCW"
+
+msgid "export_features_title"
+msgstr "Fonctionnalités d'Export"
+
+msgid "auto_add_total_row"
+msgstr ""
+"Ajouter automatiquement les lignes de total et les informations de résumé"
+
+msgid "maintain_number_format"
+msgstr "Maintenir le format numérique et les symboles monétaires"
+
+msgid "file_size_optimization"
+msgstr "Optimisation de la taille de fichier, vitesse d'export rapide"
+
+msgid "common_problem_solving_title"
+msgstr "Résolution de Problèmes Courants"
+
+msgid "pdf_parsing_issues"
+msgstr "Problèmes d'Analyse PDF"
+
+msgid "pdf_upload_parse_error_question"
+msgstr ""
+"Q: Le PDF ne peut pas être analysé ou erreur d'analyse après téléchargement?"
+
+msgid "solution"
+msgstr "Solution"
+
+msgid "confirm_pdf_from_2020"
+msgstr ""
+"1. Confirmer que le PDF est un devis standard généré par le logiciel 2020"
+
+msgid "check_pdf_corruption"
+msgstr "2. Vérifier si le fichier PDF est corrompu"
+
+msgid "use_show_raw_text"
+msgstr ""
+"3. Utiliser le bouton \"Afficher le Texte PDF Brut\" pour voir le contenu "
+"analysé"
+
+msgid "confirm_complete_product_list"
+msgstr ""
+"4. Confirmer que le PDF contient une liste de produits complète et des "
+"informations de prix"
+
+msgid "product_quantity_price_error_question"
+msgstr "Q: Erreur d'analyse de quantité ou de prix du produit?"
+
+msgid "check_pdf_format"
+msgstr ""
+"1. Vérifier si le format de quantité et de prix dans le PDF est standard"
+
+msgid "confirm_merged_column_format"
+msgstr ""
+"2. Confirmer que le format de colonne fusionnée répond aux attentes "
+"(quantité + code utilisateur)"
+
+msgid "view_total_price_comparison"
+msgstr ""
+"3. Voir les informations de comparaison de prix total affichées par le "
+"système"
+
+msgid "manually_correct_data"
+msgstr "4. Corriger manuellement les données si nécessaire"
+
+msgid "sku_and_price_issues"
+msgstr "Problèmes SKU et Prix"
+
+msgid "occw_price_zero_question"
+msgstr "Q: Le prix OCCW affiche $0.00?"
+
+msgid "check_occw_price_table"
+msgstr "1. Vérifier si la table de prix OCCW est correctement importée"
+
+msgid "confirm_sku_mapping"
+msgstr "2. Confirmer que le mappage SKU est correct"
+
+msgid "manually_add_missing_sku"
+msgstr ""
+"3. Ajouter manuellement les prix SKU manquants dans la page \"Gestion des "
+"Prix\""
+
+msgid "check_sku_format"
+msgstr "4. Vérifier si le format SKU répond aux normes OCCW"
+
+msgid "sku_no_match_question"
+msgstr "Q: Le SKU ne peut pas trouver d'éléments correspondants?"
+
+msgid "use_similar_sku_dropdown"
+msgstr "1. Utiliser les SKU similaires dans la liste déroulante"
+
+msgid "manually_input_correct_sku"
+msgstr "2. Saisir manuellement le SKU OCCW correct"
+
+msgid "adjust_sku_generation_rules"
+msgstr "3. Ajuster les règles de génération SKU dans la page \"Configuration\""
+
+msgid "contact_admin_update_price"
+msgstr "4. Contacter l'administrateur pour mettre à jour la table de prix"
+
+msgid "performance_optimization_title"
+msgstr "Suggestions d'Optimisation des Performances"
+
+msgid "regularly_clean_sku_mappings"
+msgstr "Nettoyer régulièrement les relations de mappage SKU inutiles"
+
+msgid "keep_occw_price_table_updated"
+msgstr ""
+"Maintenir la table de prix OCCW à jour, réduire les exigences de mappage "
+"manuel"
+
+msgid "use_standard_pdf_format"
+msgstr ""
+"Utiliser des fichiers PDF au format standard pour améliorer la précision "
+"d'analyse"
+
+msgid "large_file_processing_patience"
+msgstr ""
+"Veuillez être patient lors du traitement de gros fichiers, éviter les "
+"opérations répétées"
+
+msgid "price_management_status"
+msgstr "Gestion des Prix"
+
+msgid "rules_configuration"
+msgstr "Configuration des Règles"
+
+msgid "mapping_status"
+msgstr "Statut de Mappage"
+
+msgid "config_title"
+msgstr "Configuration du Système"
+
+msgid "config_subtitle"
+msgstr "Règles de Génération SKU et Paramètres Système"
+
+msgid "config_status"
+msgstr "Gestion de Configuration"
+
+msgid "sku_mapping_desc"
+msgstr ""
+"Gérer les relations de mappage SKU, optimiser la correspondance des prix"
+
+msgid "browse_files"
+msgstr "Parcourir les Fichiers"
+
+msgid "drag_drop_files"
+msgstr "Glissez et déposez les fichiers ici ou cliquez pour parcourir"
+
+msgid "file_selected"
+msgstr "Fichier Sélectionné"
+
+msgid "file_size_limit"
+msgstr "Limite de taille de fichier"
+
+msgid "file_type_not_supported"
+msgstr "Type de fichier non supporté"
+
+msgid "file_upload_success"
+msgstr "Téléchargement de fichier réussi"
+
+msgid "file_upload_failed"
+msgstr "Échec du téléchargement de fichier"
+
+msgid "file_processing"
+msgstr "Traitement de fichier..."
+
+msgid "upload_pdf_file"
+msgstr "Veuillez télécharger un fichier PDF"
+
+msgid "upload_excel_csv"
+msgstr "Veuillez télécharger un fichier Excel ou CSV"
+
+msgid "file_processing_failed"
+msgstr "Échec du traitement de fichier"
+
+msgid "missing_required_params"
+msgstr "Paramètres requis manquants"
+
+msgid "save_mapping_failed"
+msgstr "Échec de la sauvegarde de la relation de mappage"
+
+msgid "missing_sku_param"
+msgstr "Paramètre SKU manquant"
+
+msgid "get_price_failed"
+msgstr "Échec de l'obtention du prix"
+
+msgid "get_stats_failed"
+msgstr "Échec de l'obtention des statistiques"
+
+msgid "get_mapping_failed"
+msgstr "Échec de l'obtention de la relation de mappage"
+
+msgid "missing_original_sku"
+msgstr "Paramètre SKU original manquant"
+
+msgid "mapping_not_exists"
+msgstr "La relation de mappage n'existe pas"
+
+msgid "delete_mapping_failed"
+msgstr "Échec de la suppression de la relation de mappage"
+
+msgid "clear_mapping_failed"
+msgstr "Échec de l'effacement des relations de mappage"
+
+msgid "export_mapping_failed"
+msgstr "Échec de l'export des relations de mappage"
+
+msgid "unsupported_export_format"
+msgstr "Format d'export non supporté"
+
+msgid "config_save_success"
+msgstr "Configuration sauvegardée avec succès"
+
+msgid "sku_rules_save_success"
+msgstr "Règles SKU sauvegardées avec succès"
+
+msgid "reset_default_success"
+msgstr "Configuration par défaut restaurée"
+
+msgid "default_config_not_exists"
+msgstr "Le fichier de configuration par défaut n'existe pas"
+
+msgid "no_filename_specified"
+msgstr "Aucun nom de fichier spécifié"
+
+msgid "file_not_exists"
+msgstr "Le fichier n'existe pas"
+
+msgid "read_pdf_failed"
+msgstr "Échec de la lecture du PDF"
+
+msgid "get_categories_failed"
+msgstr "Échec de l'obtention des catégories de produits"
+
+msgid "missing_category_param"
+msgstr "Paramètre de catégorie manquant"
+
+msgid "get_products_failed"
+msgstr "Échec de l'obtention de la liste des produits"
+
+msgid "search_sku_failed"
+msgstr "Échec de la recherche SKU"
+
+msgid "search_sku"
+msgstr "Rechercher SKU"
+
+msgid "all_box_variants"
+msgstr "Toutes les Variantes de Boîte"
+
+msgid "all_door_variants"
+msgstr "Toutes les Variantes de Porte"
+
+msgid "get_price_table_failed"
+msgstr "Échec de l'obtention de la table de prix"
+
+msgid "get_filter_options_failed"
+msgstr "Échec de l'obtention des options de filtre"
+
+msgid "get_sku_list_failed"
+msgstr "Échec de l'obtention de la liste SKU"
+
+msgid "help_title"
+msgstr "Documentation d'Aide"
+
+msgid "help_system_intro"
+msgstr "Introduction du Système"
+
+msgid "help_system_intro_desc"
+msgstr ""
+"Le Système de Devis OCCW est un outil professionnel de traitement de devis "
+"PDF conçu spécifiquement pour Oppein Cabinet Canada West Ltd., utilisé pour "
+"convertir les devis générés par le logiciel 2020 en format OCCW standardisé."
+
+msgid "help_main_features"
+msgstr "Fonctionnalités Principales"
+
+msgid "help_pdf_upload"
+msgstr "Téléchargement de Fichier PDF"
+
+msgid "help_pdf_upload_desc"
+msgstr ""
+"Prend en charge le téléchargement de fichiers de devis PDF générés par le "
+"logiciel 2020"
+
+msgid "help_auto_parse"
+msgstr "Analyse Intelligente"
+
+msgid "help_auto_parse_desc"
+msgstr ""
+"Reconnaît automatiquement les informations produit, quantités, prix et "
+"autres données dans les PDF"
+
+msgid "help_sku_generation"
+msgstr "Génération de SKU"
+
+msgid "help_sku_generation_desc"
+msgstr ""
+"Génère automatiquement des codes SKU standard OCCW selon des règles "
+"prédéfinies"
+
+msgid "help_price_management"
+msgstr "Gestion des Prix"
+
+msgid "help_price_management_desc"
+msgstr ""
+"Gère les listes de prix standard OCCW, prend en charge l'importation au "
+"format Excel"
+
+msgid "help_multi_export"
+msgstr "Export Multi-format"
+
+msgid "help_multi_export_desc"
+msgstr "Prend en charge l'export vers Excel, CSV, PDF et autres formats"
+
+msgid "help_multilang"
+msgstr "Support Multilingue"
+
+msgid "help_multilang_desc"
+msgstr ""
+"Prend en charge les langues d'interface chinoise, anglaise et française"
+
+msgid "help_system_settings_desc"
+msgstr ""
+"Gestion des paramètres système, y compris le basculement de connexion "
+"utilisateur, la modification du mot de passe admin, etc."
+
+msgid "help_admin_password_desc"
+msgstr ""
+"Fonction de modification du mot de passe admin avec mises à jour sécurisées"
+
+msgid "help_usage_guide"
+msgstr "Guide d'Utilisation"
+
+msgid "help_step1"
+msgstr "Étape 1: Télécharger le Fichier PDF"
+
+msgid "help_step1_desc"
+msgstr "Sélectionner le fichier de devis PDF exporté du logiciel 2020"
+
+msgid "help_step2"
+msgstr "Étape 2: Vérifier les Résultats d'Analyse"
+
+msgid "help_step2_desc"
+msgstr "Le système reconnaît automatiquement les informations produit et prix"
+
+msgid "help_step3"
+msgstr "Étape 3: Ajuster les Mappages SKU"
+
+msgid "help_step3_desc"
+msgstr "Générer automatiquement SKU standard et appliquer le mappage"
+
+msgid "help_step4"
+msgstr "Étape 4: Exporter les Résultats"
+
+msgid "help_step4_desc"
+msgstr "Sélectionner le format pour exporter le devis final"
+
+msgid "help_permissions"
+msgstr "Instructions de Permissions"
+
+msgid "help_normal_users"
+msgstr "Permissions Utilisateur Régulier"
+
+msgid "help_normal_users_desc"
+msgstr ""
+"Peut télécharger et analyser des PDF, voir les résultats, exporter des "
+"fichiers et consulter la documentation d'aide"
+
+msgid "help_admin_users"
+msgstr "Permissions Administrateur"
+
+msgid "help_admin_users_desc"
+msgstr ""
+"En plus des permissions utilisateur régulier, peut également gérer les "
+"listes de prix OCCW, configurer les règles SKU et gérer les relations de "
+"mappage SKU"
+
+msgid "help_contact_info"
+msgstr "Informations de Contact"
+
+msgid "help_company_info"
+msgstr "Informations sur l'Entreprise"
+
+msgid "help_company_name"
+msgstr "Oppein Ouest"
+
+msgid "help_company_full"
+msgstr "Oppein Cabinet Canada West Ltd."
+
+msgid "help_version_info"
+msgstr "Informations sur la Version"
+
+msgid "admin_login_title"
+msgstr "Connexion Administrateur"
+
+msgid "admin_password"
+msgstr "Mot de Passe Admin"
+
+msgid "admin_password_placeholder"
+msgstr "Veuillez entrer le mot de passe admin"
+
+msgid "admin_login_button"
+msgstr "Connexion"
+
+msgid "return_home"
+msgstr "Retour Accueil"
+
+msgid "admin_login_desc"
+msgstr ""
+"Les privilèges administrateur sont requis pour accéder à la gestion des "
+"prix, la configuration et les fonctions de mappage SKU"
+
+msgid "conversion_rate"
+msgstr "Taux de Conversion"
+
+msgid "order_conversion_rate"
+msgstr "Taux de Conversion des Commandes"
+
+msgid "customer_order_analysis"
+msgstr "Analyse des Commandes Clients"
+
+msgid "sales_person_performance"
+msgstr "Performance des Vendeurs"
+
+msgid "order_count"
+msgstr "Nombre de Commandes"
+
+msgid "quotation_count"
+msgstr "Total des Devis"
+
+msgid "count_conversion_rate"
+msgstr "Taux de Conversion Quantité"
+
+msgid "amount_conversion_rate"
+msgstr "Taux de Conversion Montant"
+
+msgid "amount_range"
+msgstr "Plage de Montant"
+
+msgid "update_analysis_table"
+msgstr "Mettre à Jour le Tableau d'Analyse"
+
+msgid "interval_conversion_rate"
+msgstr "Taux de Conversion par Intervalle"
+
+msgid "amount_range_conversion_analysis"
+msgstr "Analyse du Taux de Conversion par Plage de Montant"
+
+msgid "items_per_page"
+msgstr "Éléments par page"
+
+msgid "showing_items"
+msgstr "Affichage"
+
+msgid "total_items"
+msgstr "Total Articles"
+
+msgid "records"
+msgstr "enregistrements"
+
+msgid "hide"
+msgstr "Masquer"
+
+msgid "please_select_start_end_date"
+msgstr "Veuillez sélectionner les dates de début et de fin"
+
+msgid "start_date_cannot_be_later"
+msgstr "La date de début ne peut pas être postérieure à la date de fin"
+
+msgid "all_time"
+msgstr "Toute la Période"
+
+msgid "custom_time_range"
+msgstr "Période Personnalisée"
+
+msgid "all_amounts"
+msgstr "Tous les Montants"
+
+msgid "total_orders"
+msgstr "Total des Commandes"
+
+msgid "order_amount"
+msgstr "Montant des Commandes"
+
+msgid "quotation_amount"
+msgstr "Montant des Devis"
+
+msgid "total_amount"
+msgstr "Montant Total"
+
+msgid "profit_margin"
+msgstr "Marge Bénéficiaire"
+
+msgid "customer_name"
+msgstr "Nom du Client"
+
+msgid "normal_user_can_use"
+msgstr "Les Utilisateurs Réguliers Peuvent Utiliser"
+
+msgid "admin_only_features"
+msgstr "Fonctionnalités Réservées aux Administrateurs"
+
+msgid "upload_parse_pdf"
+msgstr "Télécharger et analyser les devis PDF"
+
+msgid "view_export_results"
+msgstr "Voir et exporter les résultats de devis"
+
+msgid "view_help_docs"
+msgstr "Consulter la documentation d'aide"
+
+msgid "occw_price_management"
+msgstr "Gestion de la Liste de Prix OCCW"
+
+msgid "sku_rule_config"
+msgstr "Configuration des Règles de Génération SKU"
+
+msgid "system_config_modify"
+msgstr "Modification de Configuration Système"
+
+msgid "sku_mapping_title"
+msgstr "Gestion des Mappages SKU"
+
+msgid "loading_data"
+msgstr "Chargement des données de mappage..."
+
+msgid "no_mappings_found"
+msgstr "Aucun mappage SKU trouvé"
+
+msgid "no_mappings_desc"
+msgstr ""
+"Les relations de mappage SKU seront automatiquement sauvegardées lorsque "
+"vous traitez des devis sur la page d'accueil."
+
+msgid "go_upload_quote"
+msgstr "Aller Télécharger Devis"
+
+msgid "price"
+msgstr "Prix"
+
+msgid "getting_price"
+msgstr "Obtention du prix..."
+
+msgid "price_error"
+msgstr "Échec"
+
+msgid "just_now"
+msgstr "À l'instant"
+
+msgid "edit_sku_mapping"
+msgstr "Modifier Mappage SKU"
+
+msgid "select_occw_sku"
+msgstr "Sélectionner SKU OCCW..."
+
+msgid "or_enter_manually"
+msgstr "Ou saisir manuellement"
+
+msgid "confirm_delete"
+msgstr "Confirmer Suppression"
+
+msgid "delete_mapping_confirm"
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer la relation de mappage SKU suivante?"
+
+msgid "operation_irreversible"
+msgstr "Cette opération ne peut pas être annulée."
+
+msgid "update_success"
+msgstr "Mappage SKU mis à jour avec succès"
+
+msgid "delete_success"
+msgstr "Mappage SKU supprimé avec succès"
+
+msgid "clear_all_success"
+msgstr "Toutes les relations de mappage effacées"
+
+msgid "export_table"
+msgstr "Exporter Tableau"
+
+msgid "download"
+msgstr "Télécharger"
+
+msgid "processing"
+msgstr "Traitement..."
+
+msgid "completed"
+msgstr "Terminé"
+
+msgid "failed"
+msgstr "Échec"
+
+msgid "price_management_title"
+msgstr "Gestion des Prix"
+
+msgid "select_occw_price_file"
+msgstr "Sélectionner Fichier de Liste de Prix OCCW"
+
+msgid "excel_format_only"
+msgstr ""
+"Seul le format Excel (.xlsx) est supporté. Première ligne comme en-tête, "
+"première colonne pour SKU, deuxième colonne pour prix de vente"
+
+msgid "upload_occw_price_table"
+msgstr "Télécharger Liste de Prix OCCW"
+
+msgid "file_requirements"
+msgstr "Exigences du Fichier"
+
+msgid "excel_xlsx_format"
+msgstr "Format Excel (.xlsx)"
+
+msgid "first_row_header"
+msgstr "Première ligne comme en-tête"
+
+msgid "first_col_sku"
+msgstr "Première colonne: Code SKU"
+
+msgid "second_col_price"
+msgstr "Deuxième colonne: Prix de vente"
+
+msgid "max_file_size"
+msgstr "Taille de fichier ne dépassant pas 10MB"
+
+msgid "current_price_count"
+msgstr "Nombre de Prix Actuel"
+
+msgid "prices_loaded"
+msgstr "prix chargés"
+
+msgid "query_filter"
+msgstr "Filtre de Requête"
+
+msgid "advanced_filter"
+msgstr "Filtre Avancé"
+
+msgid "search_by_sku"
+msgstr "Rechercher par SKU..."
+
+msgid "product_category"
+msgstr "Catégorie de Produit"
+
+msgid "apply_filter"
+msgstr "Appliquer Filtre"
+
+msgid "clear_all_filters"
+msgstr "Effacer Tous les Filtres"
+
+msgid "search"
+msgstr "Rechercher"
+
+msgid "clear"
+msgstr "Effacer"
+
+msgid "help_pdf_import"
+msgstr "Importer Devis 2020"
+
+msgid "help_manual_create"
+msgstr "Créer Devis Manuel"
+
+msgid "help_troubleshooting"
+msgstr "Problèmes Courants et Solutions"
+
+msgid "help_system_overview"
+msgstr "Aperçu du Système"
+
+msgid "help_manual_create_desc"
+msgstr "Fonctionnalité de création manuelle de devis"
+
+msgid "help_sku_mapping_desc"
+msgstr "Gestion des Mappages SKU (Admin)"
+
+msgid "help_price_query_desc"
+msgstr "Requête de Prix en Temps Réel"
+
+msgid "help_operation_steps"
+msgstr "Étapes d'Opération"
+
+msgid "help_step1_title"
+msgstr "Télécharger Fichier PDF"
+
+msgid "help_step2_title"
+msgstr "Analyse Intelligente"
+
+msgid "help_step3_title"
+msgstr "Génération SKU"
+
+msgid "help_step4_title"
+msgstr "Exporter Devis"
+
+msgid "help_supported_formats"
+msgstr "Formats de Fichier Supportés"
+
+msgid "help_pdf_format"
+msgstr "Format PDF"
+
+msgid "help_pdf_format_desc"
+msgstr "Devis PDF standard exporté du logiciel 2020"
+
+msgid "help_file_size"
+msgstr "Taille de Fichier"
+
+msgid "help_file_size_desc"
+msgstr "Support maximum 16MB"
+
+msgid "help_language_support"
+msgstr "Support Linguistique"
+
+msgid "help_language_support_desc"
+msgstr "Supporte les PDF multilingues chinois, anglais, français et autres"
+
+msgid "help_parsing_features"
+msgstr "Description des Fonctionnalités d'Analyse"
+
+msgid "help_content_parsing"
+msgstr "Analyse de Contenu"
+
+msgid "help_auto_recognize_products"
+msgstr ""
+"Reconnaître automatiquement les descriptions et spécifications produit"
+
+msgid "help_extract_quantity_price"
+msgstr "Extraire les informations de quantité et prix unitaire"
+
+msgid "help_recognize_door_color"
+msgstr "Reconnaître les couleurs et variantes de panneaux de porte"
+
+msgid "help_handle_multiline"
+msgstr "Gérer les informations produit multi-lignes"
+
+msgid "help_special_processing"
+msgstr "Traitement Spécial"
+
+msgid "help_smart_merge_lines"
+msgstr "Fusionner intelligemment les informations produit inter-lignes"
+
+msgid "help_auto_handle_variants"
+msgstr "Gérer automatiquement les combinaisons de variantes produit"
+
+msgid "help_support_components"
+msgstr "Supporter la reconnaissance de composants et matériel"
+
+msgid "help_handle_special_chars"
+msgstr "Gérer les caractères spéciaux et formats"
+
+msgid "help_function_description"
+msgstr "Description de Fonction"
+
+msgid "help_add_product"
+msgstr "Ajouter Produit"
+
+msgid "help_click_add_product"
+msgstr "Cliquer sur le bouton \"Ajouter Produit\""
+
+msgid "help_select_product_type"
+msgstr ""
+"Sélectionner le type de produit (composants, panneaux de porte, armoires, "
+"etc.)"
+
+msgid "help_fill_product_info"
+msgstr "Remplir le nom et les spécifications du produit"
+
+msgid "help_select_variants"
+msgstr "Sélectionner les variantes de panneau de porte et d'armoire"
+
+msgid "help_input_price_quantity"
+msgstr "Saisir le prix unitaire et la quantité"
+
+msgid "help_edit_management"
+msgstr "Gestion de Modification"
+
+msgid "help_edit_product_info"
+msgstr "Peut modifier les informations produit à tout moment"
+
+msgid "help_delete_single_product"
+msgstr "Supporter la suppression de produits individuels"
+
+msgid "help_clear_quotation"
+msgstr "Peut effacer le devis entier"
+
+msgid "help_real_time_total"
+msgstr "Calcul total en temps réel"
+
+msgid "help_supported_product_types"
+msgstr "Types de Produit Supportés"
+
+msgid "help_product_type_assm"
+msgstr "RTA Assm. Composants"
+
+msgid "help_product_type_door"
+msgstr "Panneaux de Porte"
+
+msgid "help_product_type_box"
+msgstr "Armoires BOX"
+
+msgid "help_product_type_ending"
+msgstr "Panneaux de Finition"
+
+msgid "help_product_type_molding"
+msgstr "Moulures"
+
+msgid "help_product_type_toe_kick"
+msgstr "Plinthes"
+
+msgid "help_product_type_filler"
+msgstr "Panneaux de Remplissage"
+
+msgid "help_product_type_hardware"
+msgstr "Matériel"
+
+msgid "help_pdf_parsing_issues"
+msgstr "Problèmes d'Analyse PDF"
+
+msgid "help_pdf_upload_parse_error_question"
+msgstr "Le téléchargement PDF ne peut pas être analysé"
+
+msgid "help_possible_causes"
+msgstr "Causes Possibles"
+
+msgid "help_pdf_not_standard_format"
+msgstr "Le fichier PDF n'est pas au format standard exporté du logiciel 2020"
+
+msgid "help_file_corrupted_encrypted"
+msgstr "Le fichier est corrompu ou chiffré"
+
+msgid "help_file_size_exceeded"
+msgstr "La taille du fichier dépasse la limite de 16MB"
+
+msgid "help_solutions"
+msgstr "Solutions"
+
+msgid "help_use_2020_standard_export"
+msgstr ""
+"S'assurer d'utiliser la fonction d'export PDF standard du logiciel 2020"
+
+msgid "help_check_file_integrity"
+msgstr "Vérifier si le fichier est complet et non chiffré"
+
+msgid "help_try_re_export_pdf"
+msgstr "Essayer de ré-exporter le fichier PDF"
+
+msgid "help_product_info_recognition_error"
+msgstr "Erreur de reconnaissance d'information produit"
+
+msgid "help_pdf_format_irregular"
+msgstr "Le format PDF est irrégulier"
+
+msgid "help_product_desc_special_chars"
+msgstr "La description produit contient des caractères spéciaux"
+
+msgid "help_multiline_format_abnormal"
+msgstr "Le format d'information produit multi-lignes est anormal"
+
+msgid "help_use_standard_pdf_format"
+msgstr "Utiliser un fichier PDF au format standard"
+
+msgid "help_check_product_desc_standard"
+msgstr "Vérifier si la description produit est standard"
+
+msgid "help_manual_create_correction"
+msgstr "Peut créer manuellement un devis pour correction"
+
+msgid "help_sku_and_price_issues"
+msgstr "Problèmes SKU et Prix"
+
+msgid "help_sku_no_match_question"
+msgstr "Le SKU affiche 0 ou ne peut pas correspondre"
+
+msgid "help_sku_not_in_price_table"
+msgstr "Aucun SKU correspondant dans la table de prix"
+
+msgid "help_sku_mapping_not_configured"
+msgstr "Relation de mappage SKU non configurée"
+
+msgid "help_product_type_not_supported"
+msgstr "Type de produit non dans la plage supportée"
+
+msgid "help_contact_admin_check_price_table"
+msgstr "Contacter l'administrateur pour vérifier la table de prix"
+
+msgid "help_confirm_sku_mapping_configured"
+msgstr "Confirmer que la relation de mappage SKU est configurée"
+
+msgid "help_check_product_type_supported"
+msgstr "Vérifier si le type de produit est supporté"
+
+msgid "help_price_display_abnormal"
+msgstr "Affichage de prix anormal"
+
+msgid "help_price_table_incomplete"
+msgstr "Données de table de prix incomplètes"
+
+msgid "help_sku_format_mismatch"
+msgstr "Incompatibilité de format SKU"
+
+msgid "help_variant_info_missing"
+msgstr "Informations de variante manquantes"
+
+msgid "help_contact_admin_update_price_table"
+msgstr "Contacter l'administrateur pour mettre à jour la table de prix"
+
+msgid "help_check_sku_format_correct"
+msgstr "Vérifier si le format SKU est correct"
+
+msgid "help_confirm_variant_info_complete"
+msgstr "Confirmer que les informations de variante sont complètes"
+
+msgid "help_export_issues"
+msgstr "Problèmes d'Export"
+
+msgid "help_export_format_issues"
+msgstr "Problèmes de format de fichier d'export"
+
+msgid "help_format_2020"
+msgstr "Format 2020"
+
+msgid "help_format_2020_desc"
+msgstr "Format Excel compatible avec le logiciel 2020"
+
+msgid "help_format_occw"
+msgstr "Format OCCW"
+
+msgid "help_format_occw_desc"
+msgstr "Format système OCCW standard"
+
+msgid "help_format_pdf"
+msgstr "Format PDF"
+
+msgid "help_format_pdf_desc"
+msgstr "Devis PDF imprimable"
+
+msgid "help_export_failed"
+msgstr "Export échoué"
+
+msgid "help_browser_download_settings"
+msgstr "Problème de paramètres de téléchargement du navigateur"
+
+msgid "help_file_generation_error"
+msgstr "Erreur de processus de génération de fichier"
+
+msgid "help_network_connection_issue"
+msgstr "Problème de connexion réseau"
+
+msgid "help_check_browser_download_settings"
+msgstr "Vérifier les paramètres de téléchargement du navigateur"
+
+msgid "help_refresh_page_retry"
+msgstr "Actualiser la page et réessayer"
+
+msgid "help_check_network_connection"
+msgstr "Vérifier la connexion réseau"
+
+msgid "help_email_response_time"
+msgstr "Réponse 24h les jours ouvrables"
+
+msgid "help_phone_service_time"
+msgstr "9h00-18h00 les jours ouvrables"
+
+msgid "help_system_name"
+msgstr "Nom du Système"
+
+msgid "help_update_date"
+msgstr "Date de Mise à Jour"
+
+msgid "help_usage_suggestions"
+msgstr "Suggestions d'Utilisation"
+
+msgid "help_regular_backup_data"
+msgstr "Sauvegarder régulièrement les données de devis importantes"
+
+msgid "help_check_troubleshooting_first"
+msgstr ""
+"Si vous rencontrez des problèmes, vérifiez d'abord les solutions aux "
+"problèmes courants"
+
+msgid "search_number_customer_salesperson"
+msgstr "Rechercher par numéro, client ou vendeur"
+
+msgid "time_period"
+msgstr "Période"
+
+msgid "load_product_list_failed"
+msgstr "Échec du chargement de la liste des produits"
+
+msgid "search_placeholder"
+msgstr "Rechercher..."
+
+msgid "data_pagination"
+msgstr "Pagination des données"
+
+msgid "no_matching_sku_found"
+msgstr "Aucun SKU correspondant trouvé"
+
+msgid "enter_occw_sku"
+msgstr "Entrer SKU OCCW"
+
+msgid "showing_records"
+msgstr "Affichage de {start}-{end} sur {total} enregistrements"
+
+msgid "enter_valid_sku"
+msgstr "Veuillez entrer un SKU valide"
+
+msgid "customer_order_analysis_pagination"
+msgstr "Pagination de l'analyse des commandes clients"
+
+msgid "quotation_order"
+msgstr "Devis"
+
+msgid "customer_count"
+msgstr "Nombre de clients"
+
+msgid "load_product_failed"
+msgstr "Échec du chargement du produit"
+
+msgid "toast_system"
+msgstr "Système de toast"
+
+msgid "load_variant_failed"
+msgstr "Échec du chargement de la variante"
+
+msgid "toast_container"
+msgstr "Conteneur de toast"
+
+msgid "import_description"
+msgstr "Description de l'importation"
+
+msgid "date_filter"
+msgstr "Filtre de date"
+
+msgid "current_filter_settings_tip"
+msgstr "Conseil sur les paramètres de filtre actuels"
+
+msgid "tooltip_styles"
+msgstr "Styles de tooltip"
+
+msgid "status_filter_help"
+msgstr "Sélectionner les types de statut de commande à importer"
+
+msgid "import_failed_with_errors"
+msgstr ""
+"Échec de l'importation : {count} erreurs trouvées, veuillez vérifier les "
+"détails"
+
+msgid "quotation_data_will_load_here"
+msgstr "Les données de devis se chargeront ici dynamiquement"
+
+msgid "get_data_failed"
+msgstr "Échec de l'obtention des données"
+
+msgid "sales_order"
+msgstr "Commande de vente"
+
+msgid "amount_filter"
+msgstr "Filtre de montant"
+
+msgid "sku_mapping_delete_success"
+msgstr "Mapping SKU supprimé avec succès"
+
+msgid "upload_failed_retry"
+msgstr "Échec du téléchargement, veuillez réessayer"
+
+msgid "end_date_help"
+msgstr "Importer uniquement les données avant cette date"
+
+msgid "start_date_after_end_date"
+msgstr "La date de début ne peut pas être postérieure à la date de fin"
+
+msgid "min_amount_threshold"
+msgstr "Seuil de montant minimum"
+
+msgid "save_filter_settings_failed"
+msgstr "Échec de la sauvegarde des paramètres de filtre"
+
+msgid "warning_tip_color_adjustment"
+msgstr "Ajustement des couleurs d'avertissement et de conseil"
+
+msgid "filter_settings_save_success"
+msgstr "Paramètres de filtre sauvegardés avec succès"
+
+msgid "clear_sku_mapping_failed"
+msgstr "TODO: clear_sku_mapping_failed"
+
+msgid "load_product_category_failed"
+msgstr "Échec du chargement de la catégorie de produit"
+
+msgid "min_amount_help"
+msgstr ""
+"Importer uniquement les données avec un montant total supérieur ou égal à "
+"cette valeur"
+
+msgid "clear_failed"
+msgstr "Échec de l'effacement"
+
+msgid "export_sku_mapping_success"
+msgstr "Exportation réussie de {count} mappings SKU"
+
+msgid "error_message"
+msgstr "Message d'erreur"
+
+msgid "load_mapping_data_failed"
+msgstr "Échec du chargement des données de mapping"
+
+msgid "save_sku_mapping_failed"
+msgstr "Échec de la sauvegarde du mapping SKU"
+
+msgid "sku_mapping_save_success"
+msgstr "Mapping SKU sauvegardé avec succès"
+
+msgid "chart_download_success"
+msgstr "Téléchargement du graphique réussi"
+
+msgid "date_range"
+msgstr "Plage de dates"
+
+msgid "copy_failed_manual"
+msgstr "Échec de la copie, veuillez sélectionner le texte manuellement"
+
+msgid "warning_box_styles"
+msgstr "Styles de boîte d'avertissement"
+
+msgid "export_sku_mapping_failed"
+msgstr "Échec de l'exportation du mapping SKU"
+
+msgid "load_price_table_failed"
+msgstr "Échec du chargement de la table des prix"
+
+msgid "customer_filter_help"
+msgstr ""
+"Plusieurs clients séparés par des virgules, laisser vide pour aucun filtre"
+
+msgid "filter_settings_help"
+msgstr ""
+"Ces paramètres seront automatiquement appliqués lors de l'importation des "
+"données de commande, filtrant les données qui ne répondent pas aux "
+"conditions. Toutes les conditions de filtre sont optionnelles, laisser vide "
+"signifie aucune restriction sur cette condition."
+
+msgid "sales_order_import_filter_settings"
+msgstr "Paramètres de filtre d'importation des commandes"
+
+msgid "start_date_help"
+msgstr "Importer uniquement les données après cette date"
+
+msgid "person_customer_filter"
+msgstr "Filtre de personne et client"
+
+msgid "filter_settings_description"
+msgstr "Description des paramètres de filtre"
+
+msgid "no_monthly_data_found"
+msgstr "Aucune donnée mensuelle trouvée"
+
+msgid "chart_data_incomplete_skip_display"
+msgstr "Données de graphique incomplètes, saut de l'affichage du graphique"
+
+msgid "sales_analysis_desc"
+msgstr ""
+"Téléchargez les données de vente pour générer des rapports d'analyse de "
+"performance et des graphiques avec des statistiques multidimensionnelles et "
+"l'analyse des taux de conversion"
+
+msgid "help_import_filter_settings"
+msgstr "Paramètres de filtre d'importation (Fonction administrateur)"
+
+msgid "help_import_filter_desc"
+msgstr ""
+"Les administrateurs peuvent configurer les conditions de filtre sur la page "
+"\"Filtre de données d'importation\" :"
+
+msgid "help_min_amount_threshold"
+msgstr "Seuil de montant d'importation minimum"
+
+msgid "help_min_amount_desc"
+msgstr ""
+"Importer uniquement les données avec un montant total supérieur ou égal à la"
+" valeur définie"
+
+msgid "help_sales_person_filter"
+msgstr "Filtre du personnel de vente"
+
+msgid "help_sales_person_desc"
+msgstr ""
+"Plusieurs personnes de vente séparées par des virgules, laissez vide pour "
+"aucun filtre"
+
+msgid "help_customer_filter"
+msgstr "Filtre client"
+
+msgid "help_customer_desc"
+msgstr ""
+"Plusieurs clients séparés par des virgules, laissez vide pour aucun filtre"
+
+msgid "help_date_range"
+msgstr "Plage de dates"
+
+msgid "help_date_range_desc"
+msgstr ""
+"Définir les dates de début et de fin pour importer uniquement les données "
+"dans la plage de temps spécifiée"
+
+msgid "help_order_status_filter"
+msgstr "Filtre de statut de commande"
+
+msgid "help_order_status_desc"
+msgstr ""
+"Sélection multiple dynamique, le système extrait automatiquement tous les "
+"statuts de commande des données"
+
+msgid "help_data_import_steps"
+msgstr "Étapes d'importation des données"
+
+msgid "help_prepare_excel"
+msgstr ""
+"Préparer le fichier Excel au format standard (Commandes de vente.xlsx)"
+
+msgid "help_select_file"
+msgstr ""
+"Cliquez sur \"Sélectionner le fichier de commande de vente\" sur la page "
+"principale"
+
+msgid "help_upload_file"
+msgstr ""
+"Téléchargez le fichier, le système appliquera automatiquement les conditions"
+" de filtre prédéfinies"
+
+msgid "help_check_filter_result"
+msgstr ""
+"Vérifiez \"Lignes restantes après filtrage des données d'importation\" pour "
+"confirmer les résultats du filtre"
+
+msgid "help_update_analysis"
+msgstr ""
+"Cliquez sur \"Mettre à jour le tableau d'analyse\" pour commencer l'analyse"
+
+msgid "help_data_viewing_features"
+msgstr "Fonctionnalités de visualisation des données"
+
+msgid "help_view_imported_data"
+msgstr "Afficher les données importées"
+
+msgid "help_view_imported_desc"
+msgstr "Cliquez sur le bouton \"Afficher les données importées\" pour :"
+
+msgid "help_view_original_data"
+msgstr "Afficher les données de vente importées originales"
+
+msgid "help_column_sort"
+msgstr ""
+"Prise en charge du tri des colonnes (cliquez sur l'en-tête de colonne)"
+
+msgid "help_search_filter"
+msgstr "Prise en charge de la recherche et du filtrage"
+
+msgid "help_pagination"
+msgstr "Prise en charge de l'affichage de la pagination"
+
+msgid "help_export_excel"
+msgstr "Prise en charge de l'exportation vers un fichier Excel"
+
+msgid "help_view_converted_data"
+msgstr "Afficher les données converties"
+
+msgid "help_view_converted_desc"
+msgstr "Cliquez sur le bouton \"Afficher les données converties\" pour :"
+
+msgid "help_standardized_data"
+msgstr "Afficher les données standardisées après conversion du système"
+
+msgid "help_new_fields"
+msgstr ""
+"Inclut de nouveaux champs : montant de commande, montant de devis, quantité "
+"de commande, quantité de devis"
+
+msgid "help_analysis_tables"
+msgstr "Tableaux d'analyse"
+
+msgid "help_sales_performance_table"
+msgstr "Tableau d'analyse de performance du personnel de vente"
+
+msgid "help_sales_performance_desc"
+msgstr ""
+"Afficher les statistiques de performance pour chaque personne de vente :"
+
+msgid "help_order_quantity"
+msgstr "Quantité de commande"
+
+msgid "help_order_quantity_desc"
+msgstr "Nombre de commandes converties avec succès"
+
+msgid "help_total_quotation_quantity"
+msgstr "Quantité totale de devis"
+
+msgid "help_order_amount"
+msgstr "Montant de commande"
+
+msgid "help_total_quotation_amount"
+msgstr "Montant total du devis"
+
+msgid "help_quantity_conversion_rate"
+msgstr "Taux de conversion de quantité"
+
+msgid "help_quantity_conversion_desc"
+msgstr "Quantité de commande / Quantité totale de devis"
+
+msgid "help_amount_conversion_rate"
+msgstr "Taux de conversion du montant"
+
+msgid "help_amount_conversion_desc"
+msgstr "Montant de commande / Montant total du devis"
+
+msgid "help_customer_order_table"
+msgstr "Tableau d'analyse des commandes clients"
+
+msgid "help_customer_order_desc"
+msgstr ""
+"Afficher les statistiques de commande et les taux de conversion pour chaque "
+"client, affiche par défaut 10 enregistrements."
+
+msgid "help_chart_analysis"
+msgstr "Analyse des graphiques"
+
+msgid "help_order_amount_conversion_chart"
+msgstr "Analyse du taux de conversion du montant de commande"
+
+msgid "help_dual_y_axis_line"
+msgstr "Graphique linéaire à double axe Y :"
+
+msgid "help_primary_y_axis"
+msgstr "Axe Y principal (ligne pleine)"
+
+msgid "help_primary_y_axis_desc"
+msgstr "Montant de commande, montant total du devis"
+
+msgid "help_secondary_y_axis"
+msgstr "Axe Y secondaire (ligne pointillée)"
+
+msgid "help_secondary_y_axis_desc"
+msgstr "Taux de conversion du montant"
+
+msgid "help_sales_person_filter_chart"
+msgstr "Prise en charge du filtrage par personne de vente"
+
+msgid "help_order_quantity_conversion_chart"
+msgstr "Analyse du taux de conversion de la quantité de commande"
+
+msgid "help_quantity_y_axis_desc"
+msgstr "Nombre de commandes, quantité totale de devis"
+
+msgid "help_quantity_conversion_y_axis"
+msgstr "Taux de conversion de quantité"
+
+msgid "help_sales_comparison_charts"
+msgstr "Graphiques de comparaison du personnel de vente"
+
+msgid "help_sales_comparison_desc"
+msgstr "Inclut trois graphiques de comparaison :"
+
+msgid "help_quantity_comparison"
+msgstr "Comparaison de quantité"
+
+msgid "help_quantity_comparison_desc"
+msgstr ""
+"Comparer les quantités de commande et les quantités de devis de différentes "
+"personnes de vente"
+
+msgid "help_amount_comparison"
+msgstr "Comparaison de montant"
+
+msgid "help_amount_comparison_desc"
+msgstr ""
+"Comparer les montants de commande et les montants de devis de différentes "
+"personnes de vente"
+
+msgid "help_conversion_rate_comparison"
+msgstr "Comparaison des taux de conversion"
+
+msgid "help_conversion_rate_comparison_desc"
+msgstr ""
+"Comparer le taux de conversion de quantité et le taux de conversion de "
+"montant"
+
+msgid "help_maximize_chart"
+msgstr "Prise en charge de l'affichage de maximisation du graphique"
+
+msgid "help_summary_row"
+msgstr ""
+"Le tableau de performance du personnel de vente ajoute une ligne de résumé "
+"montrant les statistiques globales"
+
+msgid "help_multilingual_support"
+msgstr "Support multilingue"
+
+msgid "help_multilingual_desc"
+msgstr "Le système prend entièrement en charge trois langues :"
+
+msgid "help_chinese_support"
+msgstr "Chinois"
+
+msgid "help_chinese_desc"
+msgstr "Interface chinoise simplifiée, adaptée aux utilisateurs nationaux"
+
+msgid "help_english_support"
+msgstr "Anglais"
+
+msgid "help_english_desc"
+msgstr "Interface anglaise standard pour les utilisateurs internationaux"
+
+msgid "help_french_support"
+msgstr "Français"
+
+msgid "help_french_desc"
+msgstr ""
+"Support d'interface française, adapté aux régions francophones canadiennes"
+
+msgid "help_real_time_switch"
+msgstr "Changement de langue en temps réel sans reconnexion requise"
+
+msgid "help_complete_translation"
+msgstr "Tous les éléments d'interface entièrement traduits"

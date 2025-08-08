@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     
-                    <!-- 导入说明 -->
+                    <!-- {{ _("import_description") }} -->
                     <div class="alert alert-info mb-4">
                         <h5 class="alert-heading">
                             <i class="fas fa-info-circle me-2"></i>{{ t('excel_format_requirements') }}
@@ -306,7 +306,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _("close") }}</button>
             </div>
         </div>
     </div>
@@ -439,7 +439,7 @@ function handleUpload(e) {
             if (response) {
                 handleUploadError(response);
             } else {
-                showAlert('上传失败，请重试', 'danger');
+                showAlert('{{ _("upload_failed_retry") }}', 'danger');
             }
         },
         complete: function() {
@@ -451,7 +451,7 @@ function handleUpload(e) {
 function handleUploadError(response) {
     if (response.has_errors && response.error_details) {
         showErrorDetails(response.error_details, 'failed');
-        showAlert(`导入失败：发现 ${response.error_details.length} 个错误，请查看详情`, 'danger');
+        showAlert('{{ _("import_failed_with_errors").format(count="${response.error_details.length}") }}', 'danger');
     } else {
         showAlert(response.error || '导入失败', 'danger');
     }
@@ -583,7 +583,7 @@ function loadPriceTable(page = 1, search = '') {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('加载价格表失败', 'danger');
+                showAlert('{{ _("load_price_table_failed") }}', 'danger');
                 $('#priceTableEmpty').show();
             }
         }
@@ -634,7 +634,7 @@ function updatePagination(response) {
     // 上一页
     pagination.append(`
         <li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">上一页</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">{{ _("previous_page") }}</a>
         </li>
     `);
     
@@ -653,7 +653,7 @@ function updatePagination(response) {
     // 下一页
     pagination.append(`
         <li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">下一页</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">{{ _("next_page") }}</a>
         </li>
     `);
 }

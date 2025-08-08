@@ -3,6 +3,11 @@
 Flask==2.3.3
 Werkzeug==2.3.7
 
+# 国际化支持
+Flask-Babel==4.0.0
+Babel==2.13.1
+polib==1.2.0
+
 # PDF处理
 PyPDF2==3.0.1
 

@@ -14,7 +14,7 @@
                             <i class="fas fa-table me-3 page-icon"></i>
                             导入的销售数据
                         </h1>
-                        <p class="page-subtitle">查看最近导入的销售订单数据</p>
+                        <p class="page-subtitle">查看最近导入的{{ _("sales_order") }}数据</p>
                     </div>
                     <div>
                         <button type="button" class="btn btn-outline-secondary" onclick="window.close()">
@@ -28,13 +28,13 @@
             </div>
 
             {% if error %}
-            <!-- 错误消息 -->
+            <!-- {{ _("error_message") }} -->
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 {{ error }}
             </div>
             {% elif data %}
-            <!-- 当前过滤设定提示 -->
+            <!-- {{ _("current_filter_settings_tip") }} -->
             {% if system_settings.get('import_filter_min_amount') or system_settings.get('import_filter_sales_person') or system_settings.get('import_filter_customer') or system_settings.get('import_filter_start_date') or system_settings.get('import_filter_end_date') or system_settings.get('import_filter_order_status') %}
             <div class="alert alert-warning" role="alert">
                 <h6 class="alert-heading">
@@ -44,7 +44,7 @@
                     <div class="col-md-12">
                         <ul class="mb-2">
                             {% if system_settings.get('import_filter_min_amount') %}
-                            <li><strong>最小金额阈值:</strong> ≥ ${{ system_settings.get('import_filter_min_amount') }}</li>
+                            <li><strong>{{ _("min_amount_threshold") }}:</strong> ≥ ${{ system_settings.get('import_filter_min_amount') }}</li>
                             {% endif %}
                             {% if system_settings.get('import_filter_sales_person') %}
                             <li><strong>销售人员:</strong> {{ system_settings.get('import_filter_sales_person') }}</li>
@@ -53,10 +53,10 @@
                             <li><strong>客户:</strong> {{ system_settings.get('import_filter_customer') }}</li>
                             {% endif %}
                             {% if system_settings.get('import_filter_start_date') %}
-                            <li><strong>开始日期:</strong> {{ system_settings.get('import_filter_start_date') }}</li>
+                            <li><strong>{{ _("start_date") }}:</strong> {{ system_settings.get('import_filter_start_date') }}</li>
                             {% endif %}
                             {% if system_settings.get('import_filter_end_date') %}
-                            <li><strong>结束日期:</strong> {{ system_settings.get('import_filter_end_date') }}</li>
+                            <li><strong>{{ _("end_date") }}:</strong> {{ system_settings.get('import_filter_end_date') }}</li>
                             {% endif %}
                             {% if system_settings.get('import_filter_order_status') %}
                             <li><strong>订单状态:</strong> {{ system_settings.get('import_filter_order_status') }}</li>
@@ -103,7 +103,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-building text-warning me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">客户数</div>
+                                    <div class="fw-bold">{{ _("customer_count") }}</div>
                                     <div class="h4 mb-0 text-warning">{{ data | map(attribute='客户') | select | list | unique | list | length }}</div>
                                 </div>
                             </div>
@@ -112,12 +112,12 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-calendar text-info me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">日期范围</div>
+                                    <div class="fw-bold">{{ _("date_range") }}</div>
                                     <div class="small text-muted">
                                         {% set valid_dates = [] %}
                                         {% for record in data %}
-                                            {% if record['订单日期'] and record['订单日期'] != 'None' %}
-                                                {% set _ = valid_dates.append(record['订单日期']) %}
+                                            {% if record['{{ _("order_date") }}'] and record['{{ _("order_date") }}'] != 'None' %}
+                                                {% set _ = valid_dates.append(record['{{ _("order_date") }}']) %}
                                             {% endif %}
                                         {% endfor %}
                                         {% if valid_dates %}
@@ -141,8 +141,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="searchInput" class="form-label">搜索</label>
-                            <input type="text" class="form-control" id="searchInput" placeholder="搜索编号、客户或销售人员" onkeyup="filterData()">
+                            <label for="searchInput" class="form-label">{{ _("search") }}</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="{{ _("search_number_customer_salesperson") }}" onkeyup="filterData()">
                         </div>
                         <div class="col-md-2">
                             <label for="salesPersonFilter" class="form-label">销售人员</label>
@@ -163,11 +163,11 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="startDate" class="form-label">开始日期</label>
+                            <label for="startDate" class="form-label">{{ _("start_date") }}</label>
                             <input type="date" class="form-control" id="startDate" onchange="filterData()">
                         </div>
                         <div class="col-md-2">
-                            <label for="endDate" class="form-label">结束日期</label>
+                            <label for="endDate" class="form-label">{{ _("end_date") }}</label>
                             <input type="date" class="form-control" id="endDate" onchange="filterData()">
                         </div>
                         <div class="col-md-1">
@@ -198,7 +198,7 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th style="width: 10%; cursor: pointer;" onclick="sortData('编号')">编号 <i id="sort-编号" class="fas fa-sort"></i></th>
-                                    <th style="width: 12%; cursor: pointer;" onclick="sortData('订单日期')">订单日期 <i id="sort-订单日期" class="fas fa-sort"></i></th>
+                                    <th style="width: 12%; cursor: pointer;" onclick="sortData('{{ _("order_date") }}')">{{ _("order_date") }} <i id="sort-{{ _("order_date") }}" class="fas fa-sort"></i></th>
                                     <th style="width: 10%; cursor: pointer;" onclick="sortData('销售人员')">销售人员 <i id="sort-销售人员" class="fas fa-sort"></i></th>
                                     <th style="width: 15%; cursor: pointer;" onclick="sortData('客户')">客户 <i id="sort-客户" class="fas fa-sort"></i></th>
                                     <th style="width: 12%; cursor: pointer;" onclick="sortData('总计')">总计 <i id="sort-总计" class="fas fa-sort"></i></th>
@@ -211,7 +211,7 @@
                                 {% for record in data %}
                                 <tr data-record="{{ record | tojson | e }}">
                                     <td>{{ record['编号'] }}</td>
-                                    <td>{{ record['订单日期'] }}</td>
+                                    <td>{{ record['{{ _("order_date") }}'] }}</td>
                                     <td>{{ record['销售人员'] }}</td>
                                     <td>{{ record['客户'] }}</td>
                                     <td class="text-end">
@@ -229,9 +229,9 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if record['订单状态'] == '销售订单' %}
+                                        {% if record['订单状态'] == '{{ _("sales_order") }}' %}
                                         <span class="badge bg-success">{{ record['订单状态'] }}</span>
-                                        {% elif record['订单状态'] == '报价单' %}
+                                        {% elif record['订单状态'] == '{{ _("quotation_order") }}' %}
                                         <span class="badge bg-warning">{{ record['订单状态'] }}</span>
                                         {% else %}
                                         <span class="badge bg-secondary">{{ record['订单状态'] }}</span>
@@ -260,7 +260,7 @@
                             </select>
                             <span class="ms-3 text-muted" id="pageInfo">显示 1-25 条，共 {{ total_records }} 条</span>
                         </div>
-                        <nav aria-label="数据分页">
+                        <nav aria-label="{{ _("data_pagination") }}">
                             <ul class="pagination pagination-sm mb-0" id="pagination">
                                 <!-- 分页按钮将在这里动态生成 -->
                             </ul>
@@ -285,7 +285,7 @@
                 <!-- 详情内容将在这里动态加载 -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _("close") }}</button>
             </div>
         </div>
     </div>
@@ -317,13 +317,13 @@ function filterData() {
         // 销售人员过滤
         const matchesSalesPerson = !salesPersonFilter || record['销售人员'] === salesPersonFilter;
         
-        // 状态过滤
+        // {{ _("status_filter") }}
         const matchesStatus = !statusFilter || record['订单状态'] === statusFilter;
         
-        // 日期过滤
+        // {{ _("date_filter") }}
         let matchesDate = true;
         if (startDate || endDate) {
-            const orderDate = record['订单日期'];
+            const orderDate = record['{{ _("order_date") }}'];
             // 检查日期是否有效
             if (orderDate && orderDate !== 'None' && orderDate !== null) {
                 const recordDate = new Date(orderDate);
@@ -393,17 +393,17 @@ function displayData() {
         const profitMargin = record['毛利率（%）'] ? `${parseFloat(record['毛利率（%）']).toFixed(1)}%` : '-';
         
         let statusBadge = '';
-        if (record['订单状态'] === '销售订单') {
-            statusBadge = '<span class="badge bg-success">销售订单</span>';
-        } else if (record['订单状态'] === '报价单') {
-            statusBadge = '<span class="badge bg-warning">报价单</span>';
+        if (record['订单状态'] === '{{ _("sales_order") }}') {
+            statusBadge = '<span class="badge bg-success">{{ _("sales_order") }}</span>';
+        } else if (record['订单状态'] === '{{ _("quotation_order") }}') {
+            statusBadge = '<span class="badge bg-warning">{{ _("quotation_order") }}</span>';
         } else {
             statusBadge = `<span class="badge bg-secondary">${record['订单状态']}</span>`;
         }
         
         row.innerHTML = `
             <td>${record['编号']}</td>
-            <td>${record['订单日期']}</td>
+            <td>${record['{{ _("order_date") }}']}</td>
             <td>${record['销售人员']}</td>
             <td>${record['客户']}</td>
             <td class="text-end">${totalAmount}</td>
@@ -452,7 +452,7 @@ function updatePagination() {
     // 上一页
     const prevLi = document.createElement('li');
     prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-    prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">上一页</a>`;
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">{{ _("previous_page") }}</a>`;
     pagination.appendChild(prevLi);
     
     // 页码
@@ -469,7 +469,7 @@ function updatePagination() {
     // 下一页
     const nextLi = document.createElement('li');
     nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">下一页</a>`;
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">{{ _("next_page") }}</a>`;
     pagination.appendChild(nextLi);
 }
 
@@ -540,7 +540,7 @@ function sortData(column) {
         if (column === '总计' || column === '毛利率（%）') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
-        } else if (column === '订单日期') {
+        } else if (column === '{{ _("order_date") }}') {
             valueA = new Date(valueA || '1900-01-01');
             valueB = new Date(valueB || '1900-01-01');
         } else {
@@ -563,7 +563,7 @@ function sortData(column) {
 // 导出到Excel
 function exportToExcel() {
     // 创建CSV内容
-    const headers = ['编号', '订单日期', '销售人员', '客户', '总计', '毛利率（%）', '订单状态'];
+    const headers = ['编号', '{{ _("order_date") }}', '销售人员', '客户', '总计', '毛利率（%）', '订单状态'];
     let csvContent = headers.join(',') + '\n';
     
     filteredRecords.forEach(record => {
