@@ -252,7 +252,7 @@
                                                 <tr>
                                                     <th width="5%">#</th>
                                                     <th width="20%">SKU</th>
-                                                    <th width="25%">产品名称</th>
+                                                    <th width="25%">{{ t('product_name') }}</th>
                                                     <th width="10%">门板变体</th>
                                                     <th width="10%">柜身变体</th>
                                                     <th width="15%">类别</th>
@@ -328,7 +328,7 @@ let currentFilters = {
 };
 
 $(document).ready(function() {
-    console.log('OCCW价格表管理页面初始化...');
+    // console.log('OCCW价格表管理页面初始化...');
     
     // 初始化页面
     loadStats();
@@ -618,7 +618,7 @@ function displayPriceTable(response) {
     const end = Math.min(startIndex + response.per_page, response.total);
     $('#tableStats').html(`
         <i class="fas fa-info-circle me-1"></i>
-        显示第 ${start}-${end} 条，共 ${response.total.toLocaleString()} 条记录
+        {{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', response.total.toLocaleString())
     `);
 }
 

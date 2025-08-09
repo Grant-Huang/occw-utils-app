@@ -268,7 +268,7 @@ let occwSkuList = [];
 let currentEditingSku = '';
 
 $(document).ready(function() {
-    console.log('SKU映射管理页面初始化...');
+    // console.log('SKU映射管理页面初始化...');
     
     // 初始化页面
     loadMappingData();
@@ -504,7 +504,7 @@ function updateTableStats(start, end, total) {
     
     $('#statsInfo').html(`
         <i class="fas fa-info-circle me-1"></i>
-        显示第 ${start}-${end} 条，共 ${total} 条映射关系
+        {{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', total)
     `);
 }
 

@@ -8,6 +8,7 @@
   "grant": {
     "password_hash": "ffbabbeec1ff8313db27b2844f2e306d3654246bef62230c7d7fc06b46180d0d",
     "email": "grant.huang@oppeincabinet.ca",
-    "created_at": "2025-08-05T22:25:46.780912"
+    "created_at": "2025-08-05T22:25:46.780912",
+    "preferred_language": "zh"
   }
 }

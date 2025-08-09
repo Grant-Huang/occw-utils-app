@@ -14,6 +14,7 @@ from reportlab.lib import colors
 from functools import wraps
 from flask_babel import Babel, gettext as _, lazy_gettext as _l
 from version import VERSION, VERSION_NAME, COMPANY_NAME_ZH, COMPANY_NAME_EN, SYSTEM_NAME_ZH, SYSTEM_NAME_EN, SYSTEM_NAME_FR
+from translations import get_text
 from typing import Dict, List, Tuple, Any
 from io import BytesIO
 import xlsxwriter
@@ -86,7 +87,7 @@ def inject_globals():
         'system_name_en': SYSTEM_NAME_EN,
         'system_name_fr': SYSTEM_NAME_FR,
         'system_settings': system_settings,
-        't': lambda key: _(key)  # 使用Flask-Babel的gettext
+        't': lambda key: get_text(key, current_lang)  # 使用自定义翻译函数
     }
 
 def admin_required(f):
@@ -157,7 +158,7 @@ def load_occw_prices():
         if os.path.exists('data/occw_prices.json'):
             with open('data/occw_prices.json', 'r', encoding='utf-8') as f:
                 occw_prices = json.load(f)
-                print(f"已加载 {len(occw_prices)} 个OCCW价格")
+                # print(f"已加载 {len(occw_prices)} 个OCCW价格")
     except Exception as e:
         print(f"加载OCCW价格表失败: {e}")
         occw_prices = {}
@@ -179,7 +180,7 @@ def load_sku_mappings():
         if os.path.exists('data/sku_mappings.json'):
             with open('data/sku_mappings.json', 'r', encoding='utf-8') as f:
                 sku_mappings = json.load(f)
-                print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
+                # print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
     except Exception as e:
         print(f"加载SKU映射关系失败: {e}")
         sku_mappings = {}
@@ -1345,8 +1346,8 @@ def upload_prices():
 @admin_required 
 def upload_occw_prices():
     """上传OCCW价格表 - 完全重写版本"""
-    print("=" * 50)
-    print("开始处理OCCW价格表上传...")
+    # print("=" * 50)
+    # print("开始处理OCCW价格表上传...")
     
     try:
         # 1. 验证文件
@@ -1366,26 +1367,26 @@ def upload_occw_prices():
             print(f"错误: {error_msg}")
             return jsonify({'success': False, 'error': error_msg}), 400
         
-        print(f"接收到文件: {file.filename}")
+        # print(f"接收到文件: {file.filename}")
         
         # 2. 获取导入模式
         import_mode = request.form.get('import_mode', 'create')
         clear_existing = import_mode == 'create'
-        print(f"导入模式: {import_mode} ({'清空现有数据' if clear_existing else '追加模式'})")
+        # print(f"导入模式: {import_mode} ({'清空现有数据' if clear_existing else '追加模式'})")
         
         # 3. 保存临时文件
         filename = secure_filename(file.filename)
         temp_path = os.path.join(tempfile.gettempdir(), f"occw_upload_{filename}")
         file.save(temp_path)
-        print(f"临时文件保存到: {temp_path}")
+        # print(f"临时文件保存到: {temp_path}")
         
         try:
             # 4. 使用转换器处理Excel文件
-            print("开始转换Excel文件...")
+            # print("开始转换Excel文件...")
             transformer = OCCWPriceTransformer()
             transformed_data, errors = transformer.transform_excel_file(temp_path)
             
-            print(f"转换完成: 成功 {len(transformed_data)} 条，错误 {len(errors)} 个")
+            # print(f"转换完成: 成功 {len(transformed_data)} 条，错误 {len(errors)} 个")
             
             # 5. 如果没有有效数据（全部行都解析失败）
             if not transformed_data:
@@ -1409,11 +1410,11 @@ def upload_occw_prices():
             added_count = 0
             updated_count = 0
             
-            print(f"开始更新价格数据，原有记录: {original_count}")
+            # print(f"开始更新价格数据，原有记录: {original_count}")
             
             if clear_existing:
                 occw_prices.clear()
-                print("已清空现有价格数据")
+                # print("已清空现有价格数据")
             
             # 处理转换后的数据
             for item in transformed_data:
@@ -1435,11 +1436,11 @@ def upload_occw_prices():
                 }
             
             final_count = len(occw_prices)
-            print(f"价格数据更新完成: 新增 {added_count} 条，更新 {updated_count} 条，总计 {final_count} 条")
+            # print(f"价格数据更新完成: 新增 {added_count} 条，更新 {updated_count} 条，总计 {final_count} 条")
             
             # 8. 保存到文件
             if save_occw_prices():
-                print("价格数据保存成功")
+                # print("价格数据保存成功")
                 
                 # 构建成功消息
                 if clear_existing:
@@ -1475,7 +1476,7 @@ def upload_occw_prices():
             # 9. 清理临时文件
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                print(f"已删除临时文件: {temp_path}")
+                # print(f"已删除临时文件: {temp_path}")
                 
     except Exception as e:
         error_msg = f'处理文件时发生错误: {str(e)}'
@@ -1483,10 +1484,6 @@ def upload_occw_prices():
         import traceback
         traceback.print_exc()
         return jsonify({'success': False, 'error': error_msg}), 500
-    
-    finally:
-        print("OCCW价格表上传处理完成")
-        print("=" * 50)
 
 @app.route('/get_occw_skus', methods=['GET'])
 def get_occw_skus():
@@ -1548,18 +1545,18 @@ def save_sku_mapping():
             price_data = occw_prices.get(mapped_sku, 0.0)
             
             # 调试：打印价格数据信息
-            print(f"SKU映射调试 - 原始SKU: {original_sku}, 映射SKU: {mapped_sku}")
-            print(f"价格数据类型: {type(price_data)}, 价格数据: {price_data}")
+            # print(f"SKU映射调试 - 原始SKU: {original_sku}, 映射SKU: {mapped_sku}")
+            # print(f"价格数据类型: {type(price_data)}, 价格数据: {price_data}")
             
             # 处理新旧数据格式兼容性
             if isinstance(price_data, dict):
                 # 新格式：完整产品信息
                 occw_price = price_data.get('unit_price', 0.0)
-                print(f"新格式 - 提取的价格: {occw_price}")
+                # print(f"新格式 - 提取的价格: {occw_price}")
             else:
                 # 旧格式：只有价格
                 occw_price = price_data
-                print(f"旧格式 - 直接价格: {occw_price}")
+                # print(f"旧格式 - 直接价格: {occw_price}")
             
             # 确保价格是数字类型
             try:
@@ -1567,7 +1564,7 @@ def save_sku_mapping():
             except (ValueError, TypeError):
                 occw_price = 0.0
             
-            print(f"最终返回价格: {occw_price}, 类型: {type(occw_price)}")
+            # print(f"最终返回价格: {occw_price}, 类型: {type(occw_price)}")
             
             return jsonify({
                 'success': True,
@@ -2364,15 +2361,15 @@ def save_quotation():
         title = data.get('title', '')
         quotation_data = data.get('data', {})
         
-        print(f"保存报价单 - 用户: {username}, 标题: {title}")
-        print(f"报价单数据: {quotation_data}")
+        # print(f"保存报价单 - 用户: {username}, 标题: {title}")
+        # print(f"报价单数据: {quotation_data}")
         
         if not title:
             return jsonify({'success': False, 'error': _('quotation_title_required')})
         
         # 生成报价单编号
         quotation_id = generate_quotation_id()
-        print(f"生成的报价单ID: {quotation_id}")
+        # print(f"生成的报价单ID: {quotation_id}")
         
         # 简化数据结构，只保存6个核心信息
         simplified_data = {
@@ -2424,10 +2421,10 @@ def save_quotation():
         }
         
         quotations[username].append(quotation)
-        print(f"已添加报价单到内存，当前用户报价单数量: {len(quotations[username])}")
+        # print(f"已添加报价单到内存，当前用户报价单数量: {len(quotations[username])}")
         
         if save_quotations():
-            print(f"报价单已保存到文件")
+            # print(f"报价单已保存到文件")
             return jsonify({
                 'success': True, 
                 'message': _('quotation_saved_success'),
@@ -3764,6 +3761,9 @@ def upload_sales_data():
             response.headers['Content-Type'] = 'application/json'
             return response
         
+        # 预处理客户类型数据
+        df = preprocess_customer_type_data(df)
+        
         # 清理旧的临时文件
         cleanup_old_imported_data_files()
         
@@ -3880,19 +3880,39 @@ def upload_sales_data():
 
 @app.route('/update_sales_analysis', methods=['POST'])
 def update_sales_analysis():
-    """更新销售分析（根据时间周期）"""
+    """更新销售分析（根据时间周期和其他过滤条件）"""
     try:
         time_period = request.form.get('time_period', 'monthly')
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
-        amount_range = request.form.get('amount_range')  # 🆕 获取金额区间参数
+        amount_range = request.form.get('amount_range')
+        customer_company_type = request.form.get('customer_company_type')
+        customer_types = request.form.get('customer_types')
+        sales_person = request.form.get('sales_person')
         data = json.loads(request.form.get('data', '{}'))
         
         if not data:
             return jsonify({'success': False, 'error': _('no_data_found')})
         
-        # 重新分析数据（根据时间周期、日期范围和金额区间）
-        analysis_data = analyze_sales_data_by_period(data, time_period, start_date, end_date, amount_range)
+        # 解析客户类型列表
+        customer_types_list = []
+        if customer_types:
+            try:
+                customer_types_list = json.loads(customer_types)
+            except:
+                customer_types_list = [customer_types] if customer_types else []
+        
+        # 重新分析数据（根据所有过滤条件）
+        analysis_data = analyze_sales_data_by_period(
+            data, 
+            time_period, 
+            start_date, 
+            end_date, 
+            amount_range,
+            customer_company_type,
+            customer_types_list,
+            sales_person
+        )
         
         return jsonify({
             'success': True,
@@ -4010,12 +4030,23 @@ def analyze_converted_data(converted_data_file, amount_range=None):
         conversion_data = analyze_converted_conversion_rates(df, 'monthly')
         sales_person_monthly_analysis = analyze_converted_sales_person_performance_by_month(df)
         
+        # 🔧 添加客户类型相关分析
+        customer_type_analysis = analyze_customer_type_performance(df)
+        customer_type_trends = analyze_customer_type_trends(df, 'monthly')
+        customer_type_distribution = analyze_customer_type_distribution(df)
+        company_type_comparison = analyze_company_type_comparison(df, 'monthly')
+        
         return {
             'sales_person_analysis': sales_person_analysis,
             'customer_analysis': customer_analysis,
             'trend_data': trend_data,
             'conversion_data': conversion_data,
-            'sales_person_monthly_analysis': sales_person_monthly_analysis
+            'sales_person_monthly_analysis': sales_person_monthly_analysis,
+            'customer_type_analysis': customer_type_analysis,
+            'customer_type_trends': customer_type_trends,
+            'customer_type_distribution': customer_type_distribution,
+            'company_type_comparison': company_type_comparison,
+            'converted_data': converted_records  # 添加转换后的数据供前端使用
         }
         
     except Exception as e:
@@ -4043,16 +4074,500 @@ def analyze_sales_data(df):
         # 按月的销售员业绩分析
         sales_person_monthly_analysis = analyze_sales_person_performance_by_month(df)
         
+        # 客户类型相关分析
+        customer_type_analysis = analyze_customer_type_performance(df)
+        customer_type_trends = analyze_customer_type_trends(df, 'monthly')
+        customer_type_distribution = analyze_customer_type_distribution(df)
+        company_type_comparison = analyze_company_type_comparison(df, 'monthly')
+        
         return {
             'sales_person_analysis': sales_person_analysis,
             'customer_analysis': customer_analysis,
             'trend_data': trend_data,
             'conversion_data': conversion_data,
-            'sales_person_monthly_analysis': sales_person_monthly_analysis
+            'sales_person_monthly_analysis': sales_person_monthly_analysis,
+            'customer_type_analysis': customer_type_analysis,
+            'customer_type_trends': customer_type_trends,
+            'customer_type_distribution': customer_type_distribution,
+            'company_type_comparison': company_type_comparison
         }
         
     except Exception as e:
         raise Exception(f'{_(str(e))}')
+
+def analyze_customer_type_performance(df):
+    """分析客户类型业绩"""
+    try:
+        print(f"🔍 开始分析客户类型业绩，数据形状: {df.shape}")
+        
+        # 检查客户/类型列是否存在，如果不存在则添加默认列
+        if '客户/类型' not in df.columns:
+            print("⚠️ 客户/类型列不存在，添加默认列")
+            df['客户/类型'] = '未设置'
+        else:
+            print(f"✅ 客户/类型列存在，唯一值: {df['客户/类型'].unique()}")
+        
+        customer_type_stats = {}
+        
+        # 按客户类型分组处理数据
+        for customer_type, group in df.groupby('客户/类型'):
+            if pd.isna(customer_type) or customer_type == '' or str(customer_type).lower() == 'nan':
+                customer_type = '未设置'
+            
+            print(f"🔍 处理客户类型: {customer_type}，记录数量: {len(group)}")
+            
+            if customer_type not in customer_type_stats:
+                customer_type_stats[customer_type] = {
+                    'order_amount': 0,
+                    'quotation_amount': 0,
+                    'order_count': 0,
+                    'quotation_count': 0
+                }
+            
+            # 处理每个客户类型下的所有记录
+            for _, row in group.iterrows():
+                # 检查是否存在转换后的字段，如果不存在则使用原始字段
+                if '订单金额' in row and '报价单金额' in row and '订单数量' in row and '报价单数量' in row:
+                    # 使用转换后数据的字段名
+                    order_amount = row.get('订单金额', 0)
+                    quotation_amount = row.get('报价单金额', 0)
+                    order_count = row.get('订单数量', 0)
+                    quotation_count = row.get('报价单数量', 0)
+                    print(f"  📊 使用转换后字段 - 订单金额: {order_amount}, 报价单金额: {quotation_amount}")
+                else:
+                    # 使用原始字段进行计算
+                    order_status = str(row.get('订单状态', '')).strip()
+                    amount = float(row.get('总计', 0)) if pd.notna(row.get('总计', 0)) else 0.0
+                    
+                    print(f"  🔄 使用原始字段计算 - 订单状态: {order_status}, 总计: {amount}")
+                    
+                    # 根据订单状态计算转换后的字段
+                    if order_status == '报价单' or order_status == '已发送报价单':
+                        order_amount = 0
+                        quotation_amount = amount
+                        order_count = 0
+                        quotation_count = 1
+                    elif order_status == '订单' or '销售订单' in order_status:
+                        order_amount = amount
+                        quotation_amount = amount
+                        order_count = 1
+                        quotation_count = 1
+                    else:
+                        # 其他状态按报价单处理
+                        order_amount = 0
+                        quotation_amount = amount
+                        order_count = 0
+                        quotation_count = 1
+                
+                if pd.isna(order_amount):
+                    order_amount = 0
+                if pd.isna(quotation_amount):
+                    quotation_amount = 0
+                if pd.isna(order_count):
+                    order_count = 0
+                if pd.isna(quotation_count):
+                    quotation_count = 0
+                
+                customer_type_stats[customer_type]['order_amount'] += float(order_amount)
+                customer_type_stats[customer_type]['quotation_amount'] += float(quotation_amount)
+                customer_type_stats[customer_type]['order_count'] += int(order_count)
+                customer_type_stats[customer_type]['quotation_count'] += int(quotation_count)
+        
+        # 转换为列表格式
+        result = []
+        for customer_type, stats in customer_type_stats.items():
+            count_conversion_rate = (stats['order_count'] / stats['quotation_count'] * 100) if stats['quotation_count'] > 0 else 0
+            amount_conversion_rate = (stats['order_amount'] / stats['quotation_amount'] * 100) if stats['quotation_amount'] > 0 else 0
+            
+            result.append({
+                'customer_type': customer_type,
+                'order_count': stats['order_count'],
+                'quotation_count': stats['quotation_count'],
+                'order_amount': round(stats['order_amount'], 2),
+                'quotation_amount': round(stats['quotation_amount'], 2),
+                'count_conversion_rate': round(count_conversion_rate, 1),
+                'amount_conversion_rate': round(amount_conversion_rate, 1)
+            })
+            
+            print(f"📊 客户类型 {customer_type} 统计结果:")
+            print(f"  - 订单数量: {stats['order_count']}")
+            print(f"  - 报价单数量: {stats['quotation_count']}")
+            print(f"  - 订单金额: {stats['order_amount']}")
+            print(f"  - 报价单金额: {stats['quotation_amount']}")
+            print(f"  - 数量转化率: {round(count_conversion_rate, 1)}%")
+            print(f"  - 金额转化率: {round(amount_conversion_rate, 1)}%")
+        
+        # 按订单金额排序
+        result.sort(key=lambda x: x['order_amount'], reverse=True)
+        
+        print(f"✅ 客户类型业绩分析完成，找到 {len(result)} 个客户类型")
+        return result
+        
+    except Exception as e:
+        print(f"❌ 分析客户类型业绩时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return []
+
+def analyze_customer_type_trends(df, time_period='monthly'):
+    """分析客户类型时间趋势"""
+    try:
+        print(f"🔍 开始分析客户类型时间趋势，数据形状: {df.shape}")
+        
+        # 检查必要的列是否存在，如果不存在则添加默认列
+        if '客户/类型' not in df.columns:
+            print("⚠️ 客户/类型列不存在，添加默认列")
+            df['客户/类型'] = '未设置'
+        
+        if '订单日期' not in df.columns:
+            print("❌ 客户类型趋势分析：缺少订单日期列")
+            return {'labels': [], 'datasets': []}
+        
+        print(f"✅ 客户/类型列存在，唯一值: {df['客户/类型'].unique()}")
+        
+        # 确保订单日期是datetime类型
+        df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+        df = df.dropna(subset=['订单日期'])
+        print(f"📅 订单日期处理完成，剩余 {len(df)} 条有效记录")
+        
+        # 按时间周期分组
+        if time_period == 'monthly':
+            df['time_group'] = df['订单日期'].dt.to_period('M')
+        elif time_period == 'weekly':
+            df['time_group'] = df['订单日期'].dt.to_period('W')
+        else:
+            df['time_group'] = df['订单日期'].dt.to_period('M')
+        
+        # 获取所有客户类型
+        customer_types = df['客户/类型'].unique()
+        customer_types = [ct for ct in customer_types if not pd.isna(ct) and ct != '' and str(ct).lower() != 'nan']
+        
+        # 如果没有客户类型数据，使用默认值
+        if not customer_types:
+            customer_types = ['未设置']
+        
+        print(f"✅ 客户类型趋势分析：找到客户类型 {customer_types}")
+        
+        # 获取所有时间组
+        time_groups = sorted(df['time_group'].unique())
+        time_labels = [str(tg) for tg in time_groups]
+        
+        print(f"✅ 客户类型趋势分析：时间标签 {time_labels}")
+        
+        # 为每个客户类型创建数据集
+        datasets = []
+        colors = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 
+                 'rgb(75, 192, 192)', 'rgb(153, 102, 255)', 'rgb(255, 159, 64)']
+        
+        for i, customer_type in enumerate(customer_types):
+            print(f"🔍 处理客户类型 {customer_type} 的时间趋势...")
+            order_amounts = []
+            quotation_amounts = []
+            order_counts = []
+            quotation_counts = []
+            
+            for time_group in time_groups:
+                group_data = df[(df['客户/类型'] == customer_type) & (df['time_group'] == time_group)]
+                print(f"  📊 时间组 {time_group}：{len(group_data)} 条记录")
+                
+                # 计算该时间组的订单和报价单数据
+                order_amount = 0
+                quotation_amount = 0
+                order_count = 0
+                quotation_count = 0
+                
+                for _, row in group_data.iterrows():
+                    # 检查是否存在转换后的字段，如果不存在则使用原始字段
+                    if '订单金额' in row and '报价单金额' in row and '订单数量' in row and '报价单数量' in row:
+                        # 使用转换后数据的字段名
+                        order_amount += float(row.get('订单金额', 0) or 0)
+                        quotation_amount += float(row.get('报价单金额', 0) or 0)
+                        order_count += int(row.get('订单数量', 0) or 0)
+                        quotation_count += int(row.get('报价单数量', 0) or 0)
+                    else:
+                        # 使用原始字段进行计算
+                        order_status = str(row.get('订单状态', '')).strip()
+                        amount = float(row.get('总计', 0)) if pd.notna(row.get('总计', 0)) else 0.0
+                        
+                        # 根据订单状态计算转换后的字段
+                        if order_status == '报价单' or order_status == '已发送报价单':
+                            quotation_amount += amount
+                            quotation_count += 1
+                        elif order_status == '订单' or '销售订单' in order_status:
+                            order_amount += amount
+                            quotation_amount += amount
+                            order_count += 1
+                            quotation_count += 1
+                        else:
+                            # 其他状态按报价单处理
+                            quotation_amount += amount
+                            quotation_count += 1
+                
+                order_amounts.append(round(float(order_amount), 2))
+                quotation_amounts.append(round(float(quotation_amount), 2))
+                order_counts.append(int(order_count))
+                quotation_counts.append(int(quotation_count))
+                
+                print(f"    💰 订单金额: {order_amount}, 报价单金额: {quotation_amount}")
+                print(f"    📊 订单数量: {order_count}, 报价单数量: {quotation_count}")
+            
+            # 添加订单金额数据集
+            datasets.append({
+                'label': f'{customer_type}-订单金额',
+                'data': order_amounts,
+                'borderColor': colors[i % len(colors)],
+                'backgroundColor': colors[i % len(colors)].replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                'tension': 0.1
+            })
+            
+            # 添加报价单金额数据集
+            datasets.append({
+                'label': f'{customer_type}-报价单金额',
+                'data': quotation_amounts,
+                'borderColor': colors[i % len(colors)],
+                'backgroundColor': colors[i % len(colors)].replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                'borderDash': [5, 5],
+                'tension': 0.1
+            })
+            
+            print(f"✅ 客户类型 {customer_type} 时间趋势处理完成")
+        
+        result = {
+            'labels': time_labels,
+            'datasets': datasets
+        }
+        
+        print(f"✅ 客户类型趋势分析完成，返回 {len(datasets)} 个数据集")
+        return result
+        
+    except Exception as e:
+        print(f"❌ 分析客户类型趋势时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return {'labels': [], 'datasets': []}
+
+def analyze_customer_type_distribution(df):
+    """分析客户类型分布（饼图数据）"""
+    try:
+        print(f"🔍 开始分析客户类型分布，数据形状: {df.shape}")
+        
+        # 检查客户/类型列是否存在，如果不存在则添加默认列
+        if '客户/类型' not in df.columns:
+            print("⚠️ 客户/类型列不存在，添加默认列")
+            df['客户/类型'] = '未设置'
+        else:
+            print(f"✅ 客户/类型列存在，唯一值: {df['客户/类型'].unique()}")
+        
+        # 按客户类型统计订单金额和数量
+        customer_type_stats = {}
+        
+        for _, row in df.iterrows():
+            customer_type = row.get('客户/类型', '未设置')
+            if pd.isna(customer_type) or customer_type == '' or str(customer_type).lower() == 'nan':
+                customer_type = '未设置'
+            
+            # 检查是否存在转换后的字段，如果不存在则使用原始字段
+            if '订单金额' in row and '订单数量' in row:
+                # 使用转换后数据的字段名
+                order_amount = row.get('订单金额', 0)
+                order_count = row.get('订单数量', 0)
+                print(f"📊 使用转换后字段 - 客户类型: {customer_type}, 订单金额: {order_amount}, 订单数量: {order_count}")
+            else:
+                # 使用原始字段进行计算
+                order_status = str(row.get('订单状态', '')).strip()
+                amount = float(row.get('总计', 0)) if pd.notna(row.get('总计', 0)) else 0.0
+                
+                print(f"🔄 使用原始字段计算 - 客户类型: {customer_type}, 订单状态: {order_status}, 总计: {amount}")
+                
+                # 根据订单状态计算转换后的字段
+                if order_status == '订单' or '销售订单' in order_status:
+                    order_amount = amount
+                    order_count = 1
+                else:
+                    # 其他状态按0处理（只统计订单，不统计报价单）
+                    order_amount = 0
+                    order_count = 0
+            
+            if pd.isna(order_amount):
+                order_amount = 0
+            if pd.isna(order_count):
+                order_count = 0
+            
+            if customer_type not in customer_type_stats:
+                customer_type_stats[customer_type] = {
+                    'order_amount': 0,
+                    'order_count': 0
+                }
+            
+            customer_type_stats[customer_type]['order_amount'] += float(order_amount)
+            customer_type_stats[customer_type]['order_count'] += int(order_count)
+        
+        print(f"📊 客户类型分布分析：统计结果 {customer_type_stats}")
+        
+        # 转换为饼图数据格式
+        labels = list(customer_type_stats.keys())
+        amount_values = [round(stats['order_amount'], 2) for stats in customer_type_stats.values()]
+        count_values = [stats['order_count'] for stats in customer_type_stats.values()]
+        
+        result = {
+            'amount_distribution': {
+                'labels': labels,
+                'values': amount_values
+            },
+            'count_distribution': {
+                'labels': labels,
+                'values': count_values
+            }
+        }
+        
+        print(f"✅ 客户类型分布分析完成，返回标签数量 {len(labels)}")
+        print(f"📊 金额分布: {dict(zip(labels, amount_values))}")
+        print(f"📊 数量分布: {dict(zip(labels, count_values))}")
+        
+        return result
+        
+    except Exception as e:
+        print(f"❌ 分析客户类型分布时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return {'amount_distribution': {'labels': [], 'values': []}, 'count_distribution': {'labels': [], 'values': []}}
+
+def analyze_company_type_comparison(df, time_period='monthly'):
+    """分析公司类型对比（零售vs批发）"""
+    try:
+        print(f"🔍 开始分析公司类型对比，数据形状: {df.shape}")
+        
+        # 检查必要的列是否存在，如果不存在则添加默认列
+        if '客户/公司类型' not in df.columns:
+            print("⚠️ 客户/公司类型列不存在，添加默认列")
+            df['客户/公司类型'] = '未设置'
+        
+        if '订单日期' not in df.columns:
+            print("❌ 公司类型对比分析：缺少订单日期列")
+            return {'labels': [], 'datasets': []}
+        
+        print(f"✅ 客户/公司类型列存在，唯一值: {df['客户/公司类型'].unique()}")
+        
+        # 确保订单日期是datetime类型
+        df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+        df = df.dropna(subset=['订单日期'])
+        print(f"📅 订单日期处理完成，剩余 {len(df)} 条有效记录")
+        
+        # 按时间周期分组
+        if time_period == 'monthly':
+            df['time_group'] = df['订单日期'].dt.to_period('M')
+        elif time_period == 'weekly':
+            df['time_group'] = df['订单日期'].dt.to_period('W')
+        else:
+            df['time_group'] = df['订单日期'].dt.to_period('M')
+        
+        # 获取所有公司类型
+        company_types = df['客户/公司类型'].unique()
+        company_types = [ct for ct in company_types if not pd.isna(ct) and ct != '' and str(ct).lower() != 'nan']
+        
+        # 如果没有公司类型数据，使用默认值
+        if not company_types:
+            company_types = ['未设置']
+        
+        print(f"✅ 公司类型对比分析：找到公司类型 {company_types}")
+        
+        # 获取所有时间组
+        time_groups = sorted(df['time_group'].unique())
+        time_labels = [str(tg) for tg in time_groups]
+        
+        print(f"✅ 公司类型对比分析：时间标签 {time_labels}")
+        
+        # 为每个公司类型创建数据集
+        datasets = []
+        colors = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 
+                 'rgb(75, 192, 192)', 'rgb(153, 102, 255)', 'rgb(255, 159, 64)']
+        
+        for i, company_type in enumerate(company_types):
+            print(f"🔍 处理公司类型 {company_type} 的时间对比...")
+            order_amounts = []
+            quotation_amounts = []
+            order_counts = []
+            quotation_counts = []
+            
+            for time_group in time_groups:
+                group_data = df[(df['客户/公司类型'] == company_type) & (df['time_group'] == time_group)]
+                print(f"  📊 时间组 {time_group}：{len(group_data)} 条记录")
+                
+                # 计算该时间组的订单和报价单数据
+                order_amount = 0
+                quotation_amount = 0
+                order_count = 0
+                quotation_count = 0
+                
+                for _, row in group_data.iterrows():
+                    # 检查是否存在转换后的字段，如果不存在则使用原始字段
+                    if '订单金额' in row and '报价单金额' in row and '订单数量' in row and '报价单数量' in row:
+                        # 使用转换后数据的字段名
+                        order_amount += float(row.get('订单金额', 0) or 0)
+                        quotation_amount += float(row.get('报价单金额', 0) or 0)
+                        order_count += int(row.get('订单数量', 0) or 0)
+                        quotation_count += int(row.get('报价单数量', 0) or 0)
+                    else:
+                        # 使用原始字段进行计算
+                        order_status = str(row.get('订单状态', '')).strip()
+                        amount = float(row.get('总计', 0)) if pd.notna(row.get('总计', 0)) else 0.0
+                        
+                        # 根据订单状态计算转换后的字段
+                        if order_status == '报价单' or order_status == '已发送报价单':
+                            quotation_amount += amount
+                            quotation_count += 1
+                        elif order_status == '订单' or '销售订单' in order_status:
+                            order_amount += amount
+                            quotation_amount += amount
+                            order_count += 1
+                            quotation_count += 1
+                        else:
+                            # 其他状态按报价单处理
+                            quotation_amount += amount
+                            quotation_count += 1
+                
+                order_amounts.append(round(float(order_amount), 2))
+                quotation_amounts.append(round(float(quotation_amount), 2))
+                order_counts.append(int(order_count))
+                quotation_counts.append(int(quotation_count))
+                
+                print(f"    💰 订单金额: {order_amount}, 报价单金额: {quotation_amount}")
+                print(f"    📊 订单数量: {order_count}, 报价单数量: {quotation_count}")
+            
+            # 添加订单金额数据集
+            datasets.append({
+                'label': f'{company_type}-订单金额',
+                'data': order_amounts,
+                'borderColor': colors[i % len(colors)],
+                'backgroundColor': colors[i % len(colors)].replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                'tension': 0.1
+            })
+            
+            # 添加报价单金额数据集
+            datasets.append({
+                'label': f'{company_type}-报价单金额',
+                'data': quotation_amounts,
+                'borderColor': colors[i % len(colors)],
+                'backgroundColor': colors[i % len(colors)].replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                'borderDash': [5, 5],
+                'tension': 0.1
+            })
+            
+            print(f"✅ 公司类型 {company_type} 时间对比处理完成")
+        
+        result = {
+            'labels': time_labels,
+            'datasets': datasets
+        }
+        
+        print(f"✅ 公司类型对比分析完成，返回 {len(datasets)} 个数据集")
+        return result
+        
+    except Exception as e:
+        print(f"❌ 分析公司类型对比时出错: {str(e)}")
+        import traceback
+        print(f"错误详情: {traceback.format_exc()}")
+        return {'labels': [], 'datasets': []}
 
 def adjust_quotation_amounts(df):
     """调整报价单金额：如果同一编号的报价单金额小于订单金额，则将报价单金额调整为订单金额"""
@@ -4085,6 +4600,7 @@ def analyze_sales_person_performance(df):
     """
     ⚠️ 废弃函数：分析销售员业绩 - 基于原始数据
     
+    TODO: 此函数已被废弃，应在下一个版本中移除
     注意：此函数基于原始数据和旧的转换逻辑，已被废弃。
     请使用 analyze_converted_sales_person_performance() 函数，该函数基于最新的转换后数据。
     
@@ -4357,43 +4873,87 @@ def analyze_conversion_rates(df, time_period='monthly'):
         'quotation_counts': quotation_counts
     }
 
-def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=None, amount_range=None):
-    """根据时间周期重新分析数据（从转换后数据集读取）"""
+def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=None, amount_range=None, customer_company_type=None, customer_types=None, sales_person=None):
+    """根据时间周期和其他过滤条件重新分析数据（从转换后数据集读取）"""
     try:
         # 🎯 遵循规则3：从转换后数据集读取数据
         from flask import session
         
+        print(f"=== 开始重新分析数据 ===")
+        print(f"时间周期: {time_period}")
+        print(f"开始日期: {start_date}")
+        print(f"结束日期: {end_date}")
+        print(f"金额范围: {amount_range}")
+        print(f"客户公司类型: {customer_company_type}")
+        print(f"客户类型: {customer_types}")
+        print(f"销售人员: {sales_person}")
+        
         # 检查是否有转换后数据文件
         if 'converted_data_file' not in session or not os.path.exists(session['converted_data_file']):
-            print("没有找到转换后数据文件，返回原数据")
+            print("❌ 没有找到转换后数据文件，返回原数据")
             return data
+        
+        print(f"✅ 找到转换后数据文件: {session['converted_data_file']}")
         
         # 从转换后数据文件读取数据
         with open(session['converted_data_file'], 'r', encoding='utf-8') as f:
             converted_records = json.load(f)
         
+        print(f"📊 读取到 {len(converted_records)} 条转换后的记录")
+        
         df = pd.DataFrame(converted_records)
+        print(f"📋 DataFrame形状: {df.shape}")
+        print(f"📋 DataFrame列名: {list(df.columns)}")
+        
+        # 检查关键列是否存在
+        required_columns = ['客户/类型', '订单日期', '总计', '订单状态']
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            print(f"⚠️ 缺少关键列: {missing_columns}")
+        else:
+            print(f"✅ 所有关键列都存在")
         
         # 数据预处理
         df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
         for col in ['总计', '订单金额', '报价单金额', '订单数量', '报价单数量']:
-            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
         
         # 根据日期范围过滤数据
         if start_date and end_date:
             start_date = pd.to_datetime(start_date)
             end_date = pd.to_datetime(end_date)
             df = df[(df['订单日期'] >= start_date) & (df['订单日期'] <= end_date)]
+            print(f"📅 日期过滤后剩余 {len(df)} 条记录")
         
-        # 🆕 根据金额区间过滤数据
+        # 根据金额区间过滤数据
         if amount_range:
             df = apply_amount_range_filter(df, amount_range)
+            print(f"💰 金额过滤后剩余 {len(df)} 条记录")
         
-
+        # 根据客户公司类型过滤数据
+        if customer_company_type:
+            df = df[df['客户/公司类型'] == customer_company_type]
+            print(f"🏢 客户公司类型过滤后剩余 {len(df)} 条记录")
+        
+        # 根据客户类型过滤数据
+        if customer_types and isinstance(customer_types, list) and len(customer_types) > 0:
+            df = df[df['客户/类型'].isin(customer_types)]
+            print(f"👥 客户类型过滤后剩余 {len(df)} 条记录")
+        
+        # 根据销售人员过滤数据
+        if sales_person:
+            df = df[df['销售人员'] == sales_person]
+            print(f"👤 销售人员过滤后剩余 {len(df)} 条记录")
         
         # 使用转换后数据的专门分析函数
+        print("🔍 开始分析销售员业绩...")
         sales_person_analysis = analyze_converted_sales_person_performance(df)
+        print(f"✅ 销售员业绩分析完成，共 {len(sales_person_analysis)} 条记录")
+        
+        print("🔍 开始分析客户订单...")
         customer_analysis = analyze_converted_customer_orders(df)
+        print(f"✅ 客户订单分析完成，共 {len(customer_analysis)} 条记录")
         
         # 根据时间周期分析图表数据
         if time_period in ['monthly', 'weekly']:
@@ -4404,17 +4964,43 @@ def analyze_sales_data_by_period(data, time_period, start_date=None, end_date=No
             trend_data = analyze_converted_time_trends(df, 'monthly')
             conversion_data = analyze_converted_conversion_rates(df, 'monthly')
         
+        print(f"✅ 时间趋势分析完成，时间点数量: {len(trend_data.get('labels', []))}")
+        print(f"✅ 转化率分析完成，时间点数量: {len(conversion_data.get('labels', []))}")
+        
+        # 客户类型相关分析
+        print("🔍 开始分析客户类型业绩...")
+        customer_type_analysis = analyze_customer_type_performance(df)
+        print(f"✅ 客户类型业绩分析完成，共 {len(customer_type_analysis)} 条记录")
+        
+        print("🔍 开始分析客户类型趋势...")
+        customer_type_trends = analyze_customer_type_trends(df, time_period)
+        print(f"✅ 客户类型趋势分析完成")
+        
+        print("🔍 开始分析客户类型分布...")
+        customer_type_distribution = analyze_customer_type_distribution(df)
+        print(f"✅ 客户类型分布分析完成")
+        
+        print("🔍 开始分析公司类型对比...")
+        company_type_comparison = analyze_company_type_comparison(df, time_period)
+        print(f"✅ 公司类型对比分析完成")
+        
+        # 返回完整的分析结果
         return {
             'sales_person_analysis': sales_person_analysis,
             'customer_analysis': customer_analysis,
             'trend_data': trend_data,
-            'conversion_data': conversion_data
+            'conversion_data': conversion_data,
+            'customer_type_analysis': customer_type_analysis,
+            'customer_type_trends': customer_type_trends,
+            'customer_type_distribution': customer_type_distribution,
+            'company_type_comparison': company_type_comparison,
+            'converted_data': converted_records  # 添加转换后的数据供前端使用
         }
         
     except Exception as e:
-        print(f"重新分析数据时出错: {str(e)}")
+        print(f"❌ 分析数据时出错: {str(e)}")
         import traceback
-        print(f"错误详情: {traceback.format_exc()}")
+        traceback.print_exc()
         return data
 
 def export_sales_analysis_to_excel(data, filepath, time_period):
@@ -4454,6 +5040,86 @@ load_occw_prices()
 load_sku_mappings()
 print(f"已加载 {len(occw_prices)} 个OCCW价格")
 print(f"已加载 {len(sku_mappings)} 个SKU映射关系")
+
+def preprocess_customer_type_data(df):
+    """预处理客户类型数据"""
+    try:
+        # 处理客户/公司类型列
+        if '客户/公司类型' in df.columns:
+            df['客户/公司类型'] = df['客户/公司类型'].fillna('未设置')
+            df['客户/公司类型'] = df['客户/公司类型'].replace('', '未设置')
+            df['客户/公司类型'] = df['客户/公司类型'].replace('nan', '未设置')
+            df['客户/公司类型'] = df['客户/公司类型'].replace('NaN', '未设置')
+        else:
+            df['客户/公司类型'] = '未设置'
+        
+        # 处理客户/类型列
+        if '客户/类型' in df.columns:
+            df['客户/类型'] = df['客户/类型'].fillna('未设置')
+            df['客户/类型'] = df['客户/类型'].replace('', '未设置')
+            df['客户/类型'] = df['客户/类型'].replace('nan', '未设置')
+            df['客户/类型'] = df['客户/类型'].replace('NaN', '未设置')
+        else:
+            df['客户/类型'] = '未设置'
+        
+        return df
+        
+    except Exception as e:
+        print(f"预处理客户类型数据时出错: {str(e)}")
+        # 如果出错，设置默认值
+        df['客户/公司类型'] = '未设置'
+        df['客户/类型'] = '未设置'
+        return df
+
+@app.route('/get_customer_type_options', methods=['GET'])
+def get_customer_type_options():
+    """获取客户类型选项（动态从数据中提取）"""
+    try:
+        # 从session中获取当前导入的数据文件路径
+        imported_data_file = session.get('imported_data_file')
+        if not imported_data_file or not os.path.exists(imported_data_file):
+            return jsonify({
+                'success': False,
+                'error': _('no_data_found')
+            })
+        
+        # 读取导入的数据
+        with open(imported_data_file, 'r', encoding='utf-8') as f:
+            imported_data = json.load(f)
+        
+        if not imported_data:
+            return jsonify({
+                'success': False,
+                'error': _('no_data_found')
+            })
+        
+        # 提取唯一的客户类型和公司类型
+        customer_types = set()
+        company_types = set()
+        
+        for record in imported_data:
+            # 提取客户类型
+            customer_type = record.get('客户/类型', '未设置')
+            if customer_type and customer_type != '未设置':
+                customer_types.add(customer_type)
+            
+            # 提取公司类型
+            company_type = record.get('客户/公司类型', '未设置')
+            if company_type and company_type != '未设置':
+                company_types.add(company_type)
+        
+        return jsonify({
+            'success': True,
+            'customer_types': sorted(list(customer_types)),
+            'company_types': sorted(list(company_types))
+        })
+        
+    except Exception as e:
+        print(f"获取客户类型选项时出错: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
 
 if __name__ == '__main__':
     # 加载数据

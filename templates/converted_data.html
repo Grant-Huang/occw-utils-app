@@ -446,7 +446,7 @@ function updatePagination() {
     // 更新页面信息
     const start = (currentPage - 1) * pageSize + 1;
     const end = Math.min(currentPage * pageSize, filteredRecords.length);
-    pageInfo.textContent = `显示 ${start}-${end} 条，共 ${filteredRecords.length} 条记录`;
+    pageInfo.textContent = `{{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', filteredRecords.length);
     
     // 更新分页按钮
     pagination.innerHTML = '';

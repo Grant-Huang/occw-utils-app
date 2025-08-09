@@ -14,11 +14,11 @@
                 </h1>
                 <p class="page-subtitle">{{ t('quotation_detail_subtitle') }}</p>
             </div>
-            <div class="col-md-4 text-end">
-                <a href="javascript:history.back()" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>{{ t('back') }}
-                </a>
-            </div>
+                         <div class="col-md-4 text-end">
+                 <a href="/" class="btn btn-outline-secondary">
+                     <i class="fas fa-arrow-left me-1"></i>{{ t('back') }}
+                 </a>
+             </div>
         </div>
     </div>
 </div>
@@ -29,186 +29,170 @@
         <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
     </div>
     {% elif quotation %}
-    <!-- 报价单信息 -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-info-circle me-2"></i>{{ t('quotation_info') }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                                         <table class="table table-borderless">
-                         <tr>
-                             <td><strong>{{ t('quotation_id') }}:</strong></td>
-                             <td><code>{{ quotation.quotation_id }}</code></td>
-                         </tr>
-                         <tr>
-                             <td><strong>{{ t('title') }}:</strong></td>
-                             <td>{{ quotation.title }}</td>
-                         </tr>
-                         <tr>
-                             <td><strong>{{ t('order_date') }}:</strong></td>
-                             <td>{{ quotation.data.order_date }}</td>
-                         </tr>
-                         <tr>
-                             <td><strong>{{ t('user') }}:</strong></td>
-                             <td>{{ quotation.data.user }}</td>
-                         </tr>
-                         <tr>
-                             <td><strong>{{ t('sales_person') }}:</strong></td>
-                             <td>{{ quotation.data.sales_person }}</td>
-                         </tr>
-                         <tr>
-                             <td><strong>{{ t('type') }}:</strong></td>
-                             <td>
-                                 {% if quotation.data.type == 'pdf' %}
-                                 <span class="badge bg-primary">{{ t('pdf_import') }}</span>
-                                 {% else %}
-                                 <span class="badge bg-success">{{ t('manual_create') }}</span>
-                                 {% endif %}
-                             </td>
-                         </tr>
-                     </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i>{{ t('actions') }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" onclick="exportQuotation('{{ quotation.quotation_id }}')">
-                            <i class="fas fa-download me-1"></i>{{ t('export_quotation') }}
-                        </button>
-                        <button type="button" class="btn btn-outline-warning" onclick="editQuotation('{{ quotation.quotation_id }}')">
-                            <i class="fas fa-edit me-1"></i>{{ t('edit_quotation') }}
-                        </button>
-                        <button type="button" class="btn btn-outline-danger" onclick="deleteQuotation('{{ quotation.quotation_id }}')">
-                            <i class="fas fa-trash me-1"></i>{{ t('delete_quotation') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 产品列表 -->
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">
-                <i class="fas fa-list me-2"></i>{{ t('products') }}
-            </h5>
-            <div id="editControls" style="display: none;">
-                <button type="button" class="btn btn-success btn-sm" onclick="saveChanges()">
-                    <i class="fas fa-save me-1"></i>{{ t('save_changes') }}
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm ms-2" onclick="cancelEdit()">
-                    <i class="fas fa-times me-1"></i>{{ t('cancel') }}
-                </button>
-            </div>
-        </div>
-        <div class="card-body">
-            {% if quotation.data.products %}
-            <div class="table-responsive">
-                <table class="table table-striped table-hover" id="productsTable">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>{{ t('sequence_number') }}</th>
-                            <th>{{ t('sku') }}</th>
-                            <th>{{ t('quantity') }}</th>
-                            <th>{{ t('unit_price') }}</th>
-                            <th>{{ t('total') }}</th>
-                            <th id="actionColumn" style="display: none;">{{ t('operation') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody">
-                        {% for product in quotation.data.products %}
-                        <tr data-product-index="{{ loop.index0 }}">
-                            <td>{{ loop.index }}</td>
-                            <td><code>{{ product.sku }}</code></td>
-                            <td>
-                                <span class="view-mode">{{ product.qty }}</span>
-                                <input type="number" class="form-control form-control-sm edit-mode" value="{{ product.qty }}" min="1" style="display: none;" onchange="updateProductTotal(this)">
-                            </td>
-                            <td>${{ "%.2f"|format(product.price|float) }}</td>
-                            <td class="product-total">${{ "%.2f"|format(product.line_total|float) }}</td>
-                            <td class="edit-mode" style="display: none;">
-                                <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct({{ loop.index0 }})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot class="table-info">
-                        <tr>
-                            <td colspan="4" class="text-end"><strong>{{ t('total') }}：</strong></td>
-                            <td>
-                                <strong id="grandTotal">
-                                    ${{ "%.2f"|format(quotation.data.total_amount|float) }}
-                                </strong>
-                            </td>
-                            <td class="edit-mode" style="display: none;"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            {% else %}
-            <div class="text-center py-5">
-                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">{{ t('no_products') }}</h5>
-                <p class="text-muted">{{ t('no_products_desc') }}</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- 添加新产品区域 -->
-    <div id="addProductSection" class="card mt-3">
-        <div class="card-header bg-primary text-white">
-            <h6 class="card-title mb-0">
-                <i class="fas fa-plus me-2"></i>{{ t('add_new_product') }}
-            </h6>
-        </div>
-        <div class="card-body">
-            <!-- 添加产品按钮 -->
-            <div class="mb-3">
-                <button type="button" class="btn btn-purple" onclick="addNewProduct()">
-                    <i class="fas fa-plus me-1"></i>{{ t('add_product') }}
-                </button>
-                <button type="button" class="btn btn-secondary ms-2" onclick="clearEditProductList()">
-                    <i class="fas fa-trash me-1"></i>{{ t('clear_list') }}
-                </button>
-            </div>
-            
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="addProductTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%;">{{ t('sequence_number') }}</th>
-                            <th style="width: 15%;">{{ t('product_type') }}</th>
-                            <th style="width: 15%;">{{ t('product_name') }}</th>
-                            <th style="width: 12%;">{{ t('box_variant') }}</th>
-                            <th style="width: 12%;">{{ t('door_variant') }}</th>
-                            <th style="width: 15%;">SKU</th>
-                            <th style="width: 10%;">{{ t('unit_price') }}</th>
-                            <th style="width: 8%;">{{ t('quantity') }}</th>
-                            <th style="width: 8%;">{{ t('operation') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="addProductTableBody">
-                        <!-- 动态添加的产品行将在这里显示 -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+         <!-- 报价单信息 -->
+     <div class="row mb-4">
+         <div class="col-md-12">
+             <div class="card">
+                 <div class="card-header">
+                     <h5 class="card-title mb-0">
+                         <i class="fas fa-info-circle me-2"></i>{{ t('quotation_info') }}
+                     </h5>
+                 </div>
+                 <div class="card-body">
+                     <div class="row">
+                         <div class="col-md-6">
+                             <table class="table table-borderless">
+                                 <tr>
+                                     <td><strong>{{ t('quotation_id') }}:</strong></td>
+                                     <td><code>{{ quotation.quotation_id }}</code></td>
+                                 </tr>
+                                 <tr>
+                                     <td><strong>{{ t('title') }}:</strong></td>
+                                     <td>{{ quotation.title }}</td>
+                                 </tr>
+                                 <tr>
+                                     <td><strong>{{ t('order_date') }}:</strong></td>
+                                     <td>{{ quotation.data.order_date }}</td>
+                                 </tr>
+                             </table>
+                         </div>
+                         <div class="col-md-6">
+                             <table class="table table-borderless">
+                                 <tr>
+                                     <td><strong>{{ t('user') }}:</strong></td>
+                                     <td>{{ quotation.data.user }}</td>
+                                 </tr>
+                                 <tr>
+                                     <td><strong>{{ t('sales_person') }}:</strong></td>
+                                     <td>{{ quotation.data.sales_person }}</td>
+                                 </tr>
+                                 <tr>
+                                     <td><strong>{{ t('type') }}:</strong></td>
+                                     <td>
+                                         {% if quotation.data.type == 'pdf' %}
+                                         {{ t('pdf_import') }}
+                                         {% else %}
+                                         {{ t('manual_create') }}
+                                         {% endif %}
+                                     </td>
+                                 </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+          </div>
+ 
+     <!-- 添加新产品区域 -->
+     <div id="addProductSection" class="card mt-3">
+         <div class="card-header bg-primary text-white">
+             <h6 class="card-title mb-0">
+                 <i class="fas fa-plus me-2"></i>{{ t('add_new_product') }}
+             </h6>
+         </div>
+         <div class="card-body">
+                          <!-- 添加产品按钮 -->
+              <div class="mb-3">
+                  <!-- 按钮已移除 -->
+              </div>
+             
+             <div class="table-responsive">
+                 <table class="table table-bordered table-hover" id="addProductTable">
+                                          <thead>
+                          <tr>
+                              <th style="width: 15%;">{{ t('product_type') }}</th>
+                              <th style="width: 15%;">{{ t('product_name') }}</th>
+                              <th style="width: 12.5%;">{{ t('box_variant') }}</th>
+                              <th style="width: 12.5%;">{{ t('door_variant') }}</th>
+                              <th style="width: 15%;">{{ t('add_product') }}</th>
+                              <th style="width: 10%;">{{ t('unit_price') }}</th>
+                              <th style="width: 10%;">{{ t('quantity') }}</th>
+                              <th style="width: 10%;">{{ t('operation') }}</th>
+                          </tr>
+                      </thead>
+                     <tbody id="addProductTableBody">
+                         <!-- 动态添加的产品行将在这里显示 -->
+                     </tbody>
+                 </table>
+             </div>
+             <div class="mt-3 text-end">
+                 <button type="button" class="btn btn-success" onclick="addCurrentProduct()">
+                     <i class="fas fa-plus me-1"></i>{{ t('add_product') }}
+                 </button>
+             </div>
+         </div>
+     </div>
+ 
+          <!-- 产品列表 -->
+      <div class="card mt-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">
+                  <i class="fas fa-list me-2"></i>{{ t('products') }}
+              </h5>
+              <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="exportQuotation('{{ quotation.quotation_id }}')">
+                      <i class="fas fa-download me-1"></i>{{ t('export_quotation') }}
+                  </button>
+                  <button type="button" class="btn btn-success btn-sm" onclick="saveChanges()">
+                      <i class="fas fa-save me-1"></i>{{ t('save_changes') }}
+                  </button>
+              </div>
+          </div>
+         <div class="card-body">
+             {% if quotation.data.products %}
+             <div class="table-responsive">
+                                  <table class="table table-striped table-hover" id="productsTable">
+                      <thead class="table-dark">
+                          <tr>
+                              <th style="width: 6%;">{{ t('sequence_number') }}</th>
+                              <th style="width: 36%;">{{ t('sku') }}</th>
+                              <th style="width: 10%;">{{ t('quantity') }}</th>
+                              <th style="width: 15%;">{{ t('unit_price') }}</th>
+                              <th style="width: 15%;">{{ t('total') }}</th>
+                              <th style="width: 9%;">{{ t('operation') }}</th>
+                          </tr>
+                      </thead>
+                     <tbody id="productsTableBody">
+                                                  {% for product in quotation.data.products %}
+                          <tr data-product-index="{{ loop.index0 }}">
+                              <td>{{ loop.index }}</td>
+                              <td><code>{{ product.sku }}</code></td>
+                              <td>
+                                  <input type="number" class="form-control form-control-sm" value="{{ product.qty }}" min="1" onchange="updateProductTotal(this)">
+                              </td>
+                              <td>${{ "%.2f"|format(product.price|float) }}</td>
+                              <td class="product-total">${{ "%.2f"|format(product.line_total|float) }}</td>
+                              <td>
+                                  <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct({{ loop.index0 }})">
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     </tbody>
+                                          <tfoot class="table-info">
+                          <tr>
+                              <td colspan="4" class="text-end"><strong>{{ t('total') }}：</strong></td>
+                              <td>
+                                  <strong id="grandTotal">
+                                      ${{ "%.2f"|format(quotation.data.total_amount|float) }}
+                                  </strong>
+                              </td>
+                              <td></td>
+                          </tr>
+                      </tfoot>
+                 </table>
+             </div>
+             {% else %}
+             <div class="text-center py-5">
+                 <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                 <h5 class="text-muted">{{ t('no_products') }}</h5>
+                 <p class="text-muted">{{ t('no_products_desc') }}</p>
+             </div>
+             {% endif %}
+         </div>
+     </div>
 
     <!-- 导出信息 -->
     {% if quotation.data.export_date or quotation.data.export_username or quotation.data.export_sales_person %}
@@ -357,83 +341,64 @@ function exportQuotation(quotationId) {
     }
 }
 
-function editQuotation(quotationId) {
-    // 进入编辑模式
-    enterEditMode();
-}
-
-// 进入编辑模式
-function enterEditMode() {
-    // 显示编辑控件
-    $('#editControls').show();
-    $('#actionColumn').show();
-    
-    // 切换到编辑模式
-    $('.view-mode').hide();
-    $('.edit-mode').show();
-    
-    // 隐藏编辑按钮
-    $('button[onclick*="editQuotation"]').hide();
-}
+ function editQuotation(quotationId) {
+     // 此函数已不再需要，保留以避免错误
+ }
 
 // 添加新产品
 let editProductCounter = 1;
 
-function addNewProduct() {
-    // 添加产品行到添加产品表格
-    const tbody = document.getElementById('addProductTableBody');
-    const rowId = `add-row-${editProductCounter}`;
-    
-    const row = document.createElement('tr');
-    row.id = rowId;
-    row.innerHTML = `
-        <td>${editProductCounter}</td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onCategoryChange(${editProductCounter})" id="category-${editProductCounter}">
-                <option value="">{{ t('select_type') }}</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onProductChange(${editProductCounter})" id="product-${editProductCounter}" disabled>
-                <option value="">{{ t('select_product') }}</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="box-variant-${editProductCounter}" disabled>
-                <option value="">{{ t('select_box_variant') }}</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="door-variant-${editProductCounter}" disabled>
-                <option value="">{{ t('select_door_variant') }}</option>
-            </select>
-        </td>
-        <td>
-            <span id="sku-${editProductCounter}" class="badge bg-secondary">{{ t('not_selected') }}</span>
-        </td>
-        <td>
-            <span id="price-${editProductCounter}">$0.00</span>
-        </td>
-        <td>
-            <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateEditTotal()" id="qty-${editProductCounter}">
-        </td>
-        <td>
-            <button class="btn btn-sm btn-success" onclick="addToProductList(${editProductCounter})">
-                <i class="fas fa-plus"></i>
-            </button>
-            <button class="btn btn-sm btn-danger" onclick="removeEditProduct(${editProductCounter})">
-                <i class="fas fa-trash"></i>
-            </button>
-        </td>
-    `;
-    
-    tbody.appendChild(row);
-    
-    // 加载产品类别
-    loadProductCategories(editProductCounter);
-    
-    editProductCounter++;
-}
+ function addNewProduct() {
+     // 添加产品行到添加产品表格
+     const tbody = document.getElementById('addProductTableBody');
+     const rowId = `add-row-${editProductCounter}`;
+     
+     const row = document.createElement('tr');
+     row.id = rowId;
+     row.innerHTML = `
+         <td>
+             <select class="form-select form-select-sm" onchange="onCategoryChange(${editProductCounter})" id="category-${editProductCounter}">
+                 <option value="">{{ t('select_type') }}</option>
+             </select>
+         </td>
+         <td>
+             <select class="form-select form-select-sm" onchange="onProductChange(${editProductCounter})" id="product-${editProductCounter}" disabled>
+                 <option value="">{{ t('select_product') }}</option>
+             </select>
+         </td>
+         <td>
+             <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="box-variant-${editProductCounter}" disabled>
+                 <option value="">{{ t('select_box_variant') }}</option>
+             </select>
+         </td>
+         <td>
+             <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="door-variant-${editProductCounter}" disabled>
+                 <option value="">{{ t('select_door_variant') }}</option>
+             </select>
+         </td>
+         <td>
+             <span id="sku-${editProductCounter}" class="badge bg-secondary">{{ t('not_selected') }}</span>
+         </td>
+         <td>
+             <span id="price-${editProductCounter}">$0.00</span>
+         </td>
+         <td>
+             <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateEditTotal()" id="qty-${editProductCounter}">
+         </td>
+         <td>
+             <button type="button" class="btn btn-sm btn-danger" onclick="removeEditProduct(${editProductCounter})">
+                 <i class="fas fa-trash"></i>
+             </button>
+         </td>
+     `;
+     
+     tbody.appendChild(row);
+     
+     // 加载产品类别
+     loadProductCategories(editProductCounter);
+     
+     editProductCounter++;
+ }
 
 function loadProductCategories(rowNum) {
     // 加载产品类别
@@ -487,19 +452,57 @@ function onCategoryChange(rowNum) {
 
 function loadProducts(rowNum, category) {
     $.ajax({
-        url: `/get_products/${category}`,
+        url: '/get_products_by_category',
         type: 'GET',
+        data: { category: category },
         success: function(response) {
             if (response.success) {
-                const select = document.getElementById(`product-${rowNum}`);
-                select.innerHTML = '<option value="">{{ t("select_product") }}</option>';
+                const productSelect = document.getElementById(`product-${rowNum}`);
+                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
+                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
+                
+                // 填充产品选择
+                productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
                     option.textContent = product;
-                    select.appendChild(option);
+                    productSelect.appendChild(option);
                 });
-                select.disabled = false;
+                productSelect.disabled = false;
+                
+                // 填充柜身变体选择
+                boxVariantSelect.innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
+                response.box_variants.forEach(variant => {
+                    const option = document.createElement('option');
+                    option.value = variant;
+                    option.textContent = variant;
+                    boxVariantSelect.appendChild(option);
+                });
+                
+                // 填充门板变体选择
+                doorVariantSelect.innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
+                response.door_variants.forEach(variant => {
+                    const option = document.createElement('option');
+                    option.value = variant;
+                    option.textContent = variant;
+                    doorVariantSelect.appendChild(option);
+                });
+                
+                // 根据类别启用/禁用变体选择
+                if (category === 'BOX') {
+                    boxVariantSelect.disabled = false;
+                    doorVariantSelect.disabled = false;
+                } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
+                    boxVariantSelect.disabled = true;
+                    doorVariantSelect.disabled = false;
+                } else if (category === 'Assm.组合件') {
+                    boxVariantSelect.disabled = false;
+                    doorVariantSelect.disabled = false;
+                } else if (category === 'HARDWARE') {
+                    boxVariantSelect.disabled = true;
+                    doorVariantSelect.disabled = true;
+                }
             }
         },
         error: function() {
@@ -512,145 +515,147 @@ function onProductChange(rowNum) {
     // 产品选择改变时的处理
     const category = document.getElementById(`category-${rowNum}`).value;
     const product = document.getElementById(`product-${rowNum}`).value;
-    const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-    const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-    
-    // 清空变体选择
-    boxVariantSelect.innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
-    doorVariantSelect.innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
     
     // 重置SKU和价格
     document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
     document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
     document.getElementById(`price-${rowNum}`).textContent = '$0.00';
     
-    // 禁用变体选择
-    boxVariantSelect.disabled = true;
-    doorVariantSelect.disabled = true;
-    
     if (product) {
-        // 加载变体
-        loadVariants(rowNum, category, product);
+        // 搜索SKU和价格
+        searchSkuAndPrice(rowNum);
     }
 }
 
-function loadVariants(rowNum, category, product) {
+
+
+function searchSkuAndPrice(rowNum) {
+    // 搜索SKU和价格
+    const category = document.getElementById(`category-${rowNum}`).value;
+    const product = document.getElementById(`product-${rowNum}`).value;
+    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
+    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
+    
+    if (!category || !product) {
+        return;
+    }
+    
     $.ajax({
-        url: `/get_variants/${category}/${product}`,
+        url: '/search_sku_price',
         type: 'GET',
+        data: {
+            category: category,
+            product: product,
+            box_variant: boxVariant,
+            door_variant: doorVariant
+        },
         success: function(response) {
             if (response.success) {
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
+                const skuElement = document.getElementById(`sku-${rowNum}`);
+                const priceElement = document.getElementById(`price-${rowNum}`);
                 
-                // 加载柜身变体
-                boxVariantSelect.innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
-                response.box_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    boxVariantSelect.appendChild(option);
-                });
-                boxVariantSelect.disabled = false;
-                
-                // 加载门板变体
-                doorVariantSelect.innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    doorVariantSelect.appendChild(option);
-                });
-                doorVariantSelect.disabled = false;
+                if (response.found) {
+                    skuElement.textContent = response.sku;
+                    skuElement.className = 'badge bg-success';
+                    priceElement.textContent = `$${response.price.toFixed(2)}`;
+                } else {
+                    skuElement.textContent = '{{ t("not_found") }}';
+                    skuElement.className = 'badge bg-danger';
+                    priceElement.textContent = '$0.00';
+                }
             }
         },
         error: function() {
-            showToast('加载变体失败', 'warning');
+            showToast('{{ t("search_sku_failed") }}', 'warning');
         }
     });
 }
 
 function onVariantChange(rowNum) {
     // 变体选择改变时的处理
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const product = document.getElementById(`product-${rowNum}`).value;
-    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
-    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
-    
-    if (boxVariant && doorVariant) {
-        // 生成SKU
-        const sku = `${product}-${boxVariant}-${doorVariant}`;
-        document.getElementById(`sku-${rowNum}`).textContent = sku;
-        document.getElementById(`sku-${rowNum}`).className = 'badge bg-primary';
-        
-        // 获取价格
-        getProductPrice(rowNum, sku);
-    }
+    searchSkuAndPrice(rowNum);
 }
 
-function getProductPrice(rowNum, sku) {
-    $.ajax({
-        url: `/get_occw_price?sku=${sku}`,
-        type: 'GET',
-        success: function(response) {
-            if (response.success && response.price) {
-                document.getElementById(`price-${rowNum}`).textContent = `$${response.price.toFixed(2)}`;
-            } else {
-                document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-            }
-        },
-        error: function() {
-            document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-        }
-    });
+
+
+function addCurrentProduct() {
+    // 获取当前添加产品表格中的产品信息
+    const tbody = document.getElementById('addProductTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    if (rows.length === 0) {
+        showToast('请先添加产品行', 'warning');
+        return;
+    }
+    
+    // 获取第一行的产品信息（假设只有一行）
+    const row = rows[0];
+    const rowNum = row.id.replace('add-row-', '');
+    
+    addToProductList(rowNum);
 }
 
 function addToProductList(rowNum) {
     const sku = document.getElementById(`sku-${rowNum}`).textContent;
-    const price = parseFloat(document.getElementById(`price-${rowNum}`).textContent.replace('$', '')) || 0;
+    const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = parseInt(document.getElementById(`qty-${rowNum}`).value) || 1;
     
-    if (sku === '{{ t("not_selected") }}') {
+    if (sku === '{{ t("not_selected") }}' || sku === '{{ t("not_found") }}' || price === '$0.00') {
         showToast('请先选择完整的产品信息', 'warning');
         return;
     }
     
-    if (price <= 0) {
-        showToast('产品价格不能为0', 'warning');
-        return;
-    }
-    
-    const total = qty * price;
     const currentRowCount = $('#productsTableBody tr').length;
     const newIndex = currentRowCount;
     
-    const newRow = `
-        <tr data-product-index="${newIndex}">
-            <td>${newIndex + 1}</td>
-            <td><code>${sku}</code></td>
-            <td>
-                <span class="view-mode">${qty}</span>
-                <input type="number" class="form-control form-control-sm edit-mode" value="${qty}" min="1" style="display: none;" onchange="updateProductTotal(this)">
-            </td>
-            <td>$${price.toFixed(2)}</td>
-            <td class="product-total">$${total.toFixed(2)}</td>
-            <td class="edit-mode" style="display: none;">
-                <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct(${newIndex})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        </tr>
-    `;
+         const newRow = `
+         <tr data-product-index="${newIndex}">
+             <td>${newIndex + 1}</td>
+             <td><code>${sku}</code></td>
+             <td>
+                 <input type="number" class="form-control form-control-sm" value="${qty}" min="1" onchange="updateProductTotal(this)">
+             </td>
+             <td>${price}</td>
+             <td class="product-total">$${(parseFloat(price.replace('$', '')) * qty).toFixed(2)}</td>
+             <td>
+                 <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct(${newIndex})">
+                     <i class="fas fa-trash"></i>
+                 </button>
+             </td>
+         </tr>
+     `;
     
     $('#productsTableBody').append(newRow);
     
-    // 移除添加产品行
-    removeEditProduct(rowNum);
+    // 清空当前行并重新加载产品类别
+    clearCurrentEditRow(rowNum);
     
     // 更新总计
     updateGrandTotal();
     
     showToast('产品添加成功', 'success');
+}
+
+function clearCurrentEditRow(rowNum) {
+    // 清空当前行并重新加载产品类别
+    const row = document.getElementById(`add-row-${rowNum}`);
+    if (row) {
+        // 清空所有选择框和输入框
+        document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">{{ t("select_type") }}</option>';
+        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">{{ t("select_product") }}</option>';
+        document.getElementById(`product-${rowNum}`).disabled = true;
+        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
+        document.getElementById(`box-variant-${rowNum}`).disabled = true;
+        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
+        document.getElementById(`door-variant-${rowNum}`).disabled = true;
+        document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
+        document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
+        document.getElementById(`price-${rowNum}`).textContent = '$0.00';
+        document.getElementById(`qty-${rowNum}`).value = '1';
+        
+        // 重新加载产品类别
+        loadProductCategories(rowNum);
+    }
 }
 
 function removeEditProduct(rowNum) {
@@ -664,35 +669,26 @@ function updateEditTotal() {
     // 这里可以添加更新编辑区域总计的逻辑
 }
 
-function clearEditProductList() {
-    // 清空编辑产品列表
-    if (confirm('确定要清空所有产品吗？')) {
-        $('#addProductTableBody').empty();
-        editProductCounter = 1;
-        showToast('产品列表已清空', 'success');
-    }
-}
+ function clearEditProductList() {
+     // 清空编辑产品列表
+     if (confirm('确定要清空所有产品吗？')) {
+         $('#addProductTableBody').empty();
+         editProductCounter = 1;
+         // 添加一个空行并加载产品类别
+         addNewProduct();
+         showToast('产品列表已清空', 'success');
+     }
+ }
+ 
+ // 页面加载时自动添加第一行
+ $(document).ready(function() {
+     addNewProduct();
+ });
 
-// 取消编辑
-function cancelEdit() {
-    // 隐藏编辑控件
-    $('#editControls').hide();
-    $('#actionColumn').hide();
-    
-    // 切换回查看模式
-    $('.view-mode').show();
-    $('.edit-mode').hide();
-    
-    // 显示编辑按钮
-    $('button[onclick*="editQuotation"]').show();
-    
-    // 清空添加产品表格
-    $('#addProductTableBody').empty();
-    editProductCounter = 1;
-    
-    // 重新加载页面以恢复原始数据
-    location.reload();
-}
+ // 取消编辑
+ function cancelEdit() {
+     // 此函数已不再需要，保留以避免错误
+ }
 
 // 更新产品小计
 function updateProductTotal(input) {
@@ -800,6 +796,6 @@ function deleteQuotation(quotationId) {
             }
         });
     }
-}
-</script>
-{% endblock %} 
+ }
+ </script>
+ {% endblock %} 

@@ -258,7 +258,7 @@
                                 <option value="100">100</option>
                                 <option value="all">全部</option>
                             </select>
-                            <span class="ms-3 text-muted" id="pageInfo">显示 1-25 条，共 {{ total_records }} 条</span>
+                            <span class="ms-3 text-muted" id="pageInfo">{{ _("showing_records").format(start="1", end="25", total=total_records) }}</span>
                         </div>
                         <nav aria-label="{{ _("data_pagination") }}">
                             <ul class="pagination pagination-sm mb-0" id="pagination">
@@ -435,7 +435,7 @@ function updatePageInfo() {
     }
     
     document.getElementById('pageInfo').textContent = 
-        `显示 ${startRecord}-${endRecord} 条，共 ${totalRecords} 条`;
+        `{{ _("showing_records") }}`.replace('{start}', startRecord).replace('{end}', endRecord).replace('{total}', totalRecords);
 }
 
 // 更新分页

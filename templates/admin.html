@@ -838,12 +838,12 @@
 <script>
 // 页面初始化
 $(document).ready(function() {
-    console.log('Admin page loaded');
+    // console.log('Admin page loaded');
     
     // 添加点击事件监听器
     $('.admin-card').on('click', function() {
         const action = $(this).data('action');
-        console.log('Admin card clicked:', $(this).find('.card-title').text(), 'Action:', action);
+        // console.log('Admin card clicked:', $(this).find('.card-title').text(), 'Action:', action);
         
         // 根据data-action属性调用相应的函数
         switch(action) {
@@ -866,7 +866,7 @@ $(document).ready(function() {
                 showImportFilters();
                 break;
             default:
-                console.log('Unknown action:', action);
+                // console.log('Unknown action:', action);
         }
     });
 });
@@ -879,7 +879,7 @@ function showAdminDashboard() {
 
 // 显示全部{{ _("quotation_order") }}
 function showAllQuotations() {
-    console.log('showAllQuotations called');
+    // console.log('showAllQuotations called');
     try {
         $('.admin-card').hide();
         $('.admin-content').hide();
@@ -971,13 +971,13 @@ function updateSystemStatus(userLoginEnabled) {
 
 // 加载全部{{ _("quotation_order") }}
 function loadAllQuotations() {
-    console.log('loadAllQuotations called');
+    // console.log('loadAllQuotations called');
     try {
         $.ajax({
             url: '/get_all_quotations',
             type: 'GET',
             success: function(response) {
-                console.log('loadAllQuotations response:', response);
+                // console.log('loadAllQuotations response:', response);
                 if (response.success) {
                     displayAllQuotationsList(response.quotations);
                 } else {
@@ -1686,7 +1686,7 @@ function displayOccwPrices(prices) {
 function updatePaginationInfo() {
     const start = (currentPage - 1) * perPage + 1;
     const end = Math.min(currentPage * perPage, totalItems);
-    const info = `显示第 ${start} 到 ${end} 条，共 ${totalItems} 条记录`;
+    const info = `{{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', totalItems);
     $('#priceTableInfo').text(info);
 }
 

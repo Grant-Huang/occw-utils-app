@@ -276,7 +276,7 @@
                                 </div>
                             </div>
 
-                            <!-- 第一部分：数据{{ _("summary") }} -->
+                            <!-- 第一部分：数据{{ t("summary") }} -->
                             <div id="dataSummarySection" style="display: none;">
                                 <div class="card mb-4">
                                     <div class="card-header bg-success text-white">
@@ -288,7 +288,7 @@
                                         <!-- 表格查询控制区域 -->
                                         <div class="row mb-3">
                                             <div class="col-md-2">
-                                                <label for="tableTimePeriodSelect" class="form-label">{{ _("time_period") }}</label>
+                                                <label for="tableTimePeriodSelect" class="form-label">{{ t("time_period") }}</label>
                                                 <select class="form-control" id="tableTimePeriodSelect" onchange="updateTableTimePeriod()">
                                                     <option value="all">{{ t('all_time') }}</option>
                                                     <option value="custom">{{ t('custom_time_range') }}</option>
@@ -311,6 +311,19 @@
                                                     <option value="1000-5000">1000-5000</option>
                                                     <option value="5000-10000">5000-10000</option>
                                                     <option value="10000+">≥10000</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="customerCompanyTypeFilter" class="form-label">{{ t('customer_company_type') }}</label>
+                                                <select class="form-control" id="customerCompanyTypeFilter" onchange="updateTableAnalysis()">
+                                                    <option value="">{{ t('all_company_types') }}</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="customerTypeFilter" class="form-label">{{ t('customer_type') }}</label>
+                                                <select class="form-control" id="customerTypeFilter" multiple onchange="updateTableAnalysis()">
                                                 </select>
                                             </div>
 
@@ -361,6 +374,51 @@
                                                                 </thead>
                                                                 <tbody id="salesPersonTableBody">
                                                                     <!-- 销售员数据将在这里动态加载 -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 客户类型分析 -->
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">{{ t('customer_type_analysis') }}</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped" id="customerTypeTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="sortable" data-sort="customer_type" onclick="sortTable('customerTypeTable', 'customer_type', this)">
+                                                                            {{ t('customer_type') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_count" onclick="sortTable('customerTypeTable', 'order_count', this)">
+                                                                            {{ t('order_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_count" onclick="sortTable('customerTypeTable', 'quotation_count', this)">
+                                                                            {{ t('quotation_count') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="order_amount" onclick="sortTable('customerTypeTable', 'order_amount', this)">
+                                                                            {{ t('order_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="quotation_amount" onclick="sortTable('customerTypeTable', 'quotation_amount', this)">
+                                                                            {{ t('quotation_amount') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="count_conversion_rate" onclick="sortTable('customerTypeTable', 'count_conversion_rate', this)">
+                                                                            {{ t('count_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                        <th class="sortable" data-sort="amount_conversion_rate" onclick="sortTable('customerTypeTable', 'amount_conversion_rate', this)">
+                                                                            {{ t('amount_conversion_rate') }} <i class="fas fa-sort"></i>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="customerTypeTableBody">
+                                                                    <!-- 客户类型数据将在这里动态加载 -->
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -444,31 +502,61 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
-                                                                <!-- 图表过滤控制 -->
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="chartTimePeriodSelect" class="form-label">{{ t('chart_time_dimension') }}</label>
-                                <select class="form-control" id="chartTimePeriodSelect" onchange="updateChartTimePeriod()">
-                                    <option value="monthly">{{ t('monthly') }}</option>
-                                    <option value="weekly">{{ t('weekly') }}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="chartSalesPersonSelect" class="form-label">{{ t('sales_person_filter') }}</label>
-                                <select class="form-control" id="chartSalesPersonSelect" onchange="updateChartsByPerson()">
-                                    <option value="">{{ t('all_sales_persons') }}</option>
-                                    <!-- 选项将通过JavaScript动态填充 -->
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">&nbsp;</label>
-                                <div>
-                                    <button type="button" class="btn btn-info" onclick="updateChartAnalysis()">
-                                        <i class="fas fa-chart-line me-1"></i>{{ t('update_charts') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                                        <!-- 图表过滤控制 -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-2">
+                                                <label for="chartTimePeriodSelect" class="form-label">{{ t("time_period") }}</label>
+                                                <select class="form-control" id="chartTimePeriodSelect" onchange="updateChartTimePeriod()">
+                                                    <option value="all">{{ t('all_time') }}</option>
+                                                    <option value="custom">{{ t('custom_time_range') }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2" id="chartCustomDateRange" style="display: none;">
+                                                <label for="chartStartDate" class="form-label">{{ t('start_date') }}：</label>
+                                                <input type="date" class="form-control" id="chartStartDate">
+                                            </div>
+                                            <div class="col-md-2" id="chartCustomDateRange2" style="display: none;">
+                                                <label for="chartEndDate" class="form-label">{{ t('end_date') }}：</label>
+                                                <input type="date" class="form-control" id="chartEndDate">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="chartSalesPersonSelect" class="form-label">{{ t('sales_person_filter') }}</label>
+                                                <select class="form-control" id="chartSalesPersonSelect" onchange="updateChartAnalysis()">
+                                                    <option value="">{{ t('all_sales_persons') }}</option>
+                                                    <!-- 选项将通过JavaScript动态填充 -->
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="chartAmountRangeSelect" class="form-label">{{ t('amount_range') }}</label>
+                                                <select class="form-control" id="chartAmountRangeSelect" onchange="updateChartAnalysis()">
+                                                    <option value="">{{ t('all_amounts') }}</option>
+                                                    <!-- 选项将通过JavaScript动态填充 -->
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="chartCustomerCompanyTypeFilter" class="form-label">{{ t('customer_company_type') }}</label>
+                                                <select class="form-control" id="chartCustomerCompanyTypeFilter" onchange="updateChartAnalysis()">
+                                                    <option value="">{{ t('all_company_types') }}</option>
+                                                    <!-- 选项将通过JavaScript动态填充 -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-2">
+                                                <label for="chartCustomerTypeFilter" class="form-label">{{ t('customer_type') }}</label>
+                                                <select class="form-control" id="chartCustomerTypeFilter" multiple onchange="updateChartAnalysis()">
+                                                    <!-- 选项将通过JavaScript动态填充 -->
+                                                </select>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <label class="form-label">&nbsp;</label>
+                                                <div>
+                                                    <button type="button" class="btn btn-info" onclick="updateChartAnalysis()">
+                                                        <i class="fas fa-chart-line me-1"></i>{{ t('update_charts') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <!-- 时间趋势图表 -->
                                         <div class="row">
@@ -488,13 +576,103 @@
                                             <div class="col-md-6 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                                                <h6 class="mb-0">{{ t('order_quantity_conversion_analysis') }}</h6>
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '{{ t('order_quantity_conversion_analysis') }}')">
+                                                        <h6 class="mb-0">{{ t('order_quantity_conversion_analysis') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '{{ t('order_quantity_conversion_analysis') }}')">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
                                                     <div class="card-body">
                                                         <canvas id="conversionRateChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 客户类型趋势图表 -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('customer_type_amount_trend') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountTrendChart', '{{ t('customer_type_amount_trend') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="customerTypeAmountTrendChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('customer_type_count_trend') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountTrendChart', '{{ t('customer_type_count_trend') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="customerTypeCountTrendChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 客户类型分布图表 -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('customer_type_amount_distribution') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountPieChart', '{{ t('customer_type_amount_distribution') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="customerTypeAmountPieChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('customer_type_count_distribution') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountPieChart', '{{ t('customer_type_count_distribution') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="customerTypeCountPieChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 零售vs批发对比图表 -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('retail_vs_wholesale_amount') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleAmountChart', '{{ t('retail_vs_wholesale_amount') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="retailWholesaleAmountChart" width="400" height="200"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                        <h6 class="mb-0">{{ t('retail_vs_wholesale_count') }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleCountChart', '{{ t('retail_vs_wholesale_count') }}')">
+                                                            <i class="fas fa-expand"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="retailWholesaleCountChart" width="400" height="200"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1081,7 +1259,7 @@ function setLanguage(langCode) {
             }
         })
         .catch(error => {
-            console.log('Language detection failed:', error);
+            // console.log('Language detection failed:', error);
         });
 }
 
@@ -1420,12 +1598,7 @@ function saveSkuMapping(originalSku, mappedSku, seqNum) {
                 const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
                 const qty = parseInt(qtyCell.text()) || 1;
                 
-                // 调试：检查返回的价格数据
-                console.log('SKU映射响应:', response);
-                console.log('返回的价格:', response.occw_price, '类型:', typeof response.occw_price);
-                
                 const unitPrice = parseFloat(response.occw_price) || 0;
-                console.log('解析后的价格:', unitPrice);
                 
                 const totalPrice = unitPrice * qty;
                 
@@ -1672,18 +1845,15 @@ function updatePriceForSKU(seqNum, sku) {
 
 function updatePriceDisplay(seqNum, unitPrice) {
     // 调试：检查输入参数
-    console.log(`updatePriceDisplay - seqNum: ${seqNum}, unitPrice: ${unitPrice}, 类型: ${typeof unitPrice}`);
+    // console.log(`updatePriceDisplay - seqNum: ${seqNum}, unitPrice: ${unitPrice}, 类型: ${typeof unitPrice}`);
     
     // 确保unitPrice是有效数字
     const validPrice = parseFloat(unitPrice) || 0;
-    console.log(`updatePriceDisplay - 有效价格: ${validPrice}`);
     
     // 获取数量
     const qtyCell = $(`#sku-cell-${seqNum}`).closest('tr').find('td:nth-child(3)');
     const qty = parseInt(qtyCell.text()) || 1;
     const totalPrice = validPrice * qty;
-    
-    console.log(`updatePriceDisplay - 数量: ${qty}, 总价: ${totalPrice}`);
     
     const priceCell = $(`#occw-price-${seqNum}`);
     const totalCell = $(`#occw-total-${seqNum}`);
@@ -2200,7 +2370,7 @@ function loadSalesPersons() {
             }
         },
         error: function() {
-            console.log('加载销售人员列表失败');
+            // console.log('加载销售人员列表失败');
         }
     });
 }
@@ -2260,22 +2430,18 @@ function showAllQuotationsApp() {
 }
 
 function loadUserQuotations() {
-    console.log('开始加载用户{{ _("quotation_order") }}...');
+            // console.log('开始加载用户{{ _("quotation_order") }}...');
     $.ajax({
         url: '/get_user_quotations',
         type: 'GET',
         success: function(response) {
-            console.log('获取用户{{ _("quotation_order") }}响应:', response);
             if (response.success) {
-                console.log('{{ _("quotation_order") }}数据:', response.quotations);
                 displayQuotationsList(response.quotations);
             } else {
-                console.error('获取{{ _("quotation_order") }}失败:', response.error);
                 showAlert(response.error, 'danger');
             }
         },
-        error: function(xhr, status, error) {
-            console.error('AJAX请求失败:', {xhr, status, error});
+        error: function() {
             showAlert('{{ t("load_quotations_failed") }}', 'danger');
         }
     });
@@ -2305,10 +2471,8 @@ let userCurrentPage = 1;
 const userItemsPerPage = 20;
 
 function displayQuotationsList(quotations) {
-    console.log('displayQuotationsList 被调用，{{ _("quotation_order") }}数据:', quotations);
     // 存储用户{{ _("quotation_order") }}数据
     userQuotationsData = quotations;
-    console.log('userQuotationsData 已设置:', userQuotationsData);
     
     // 初始化显示
     filterUserQuotations();
@@ -2316,13 +2480,8 @@ function displayQuotationsList(quotations) {
 
 // 过滤用户{{ _("quotation_order") }}
 function filterUserQuotations() {
-    console.log('filterUserQuotations 被调用');
-    console.log('userQuotationsData:', userQuotationsData);
-    
     const searchTerm = $('#userQuotationSearchInput').val().toLowerCase();
     const dateFilter = $('#userDateFilterSelect').val();
-    
-    console.log('搜索条件:', { searchTerm, dateFilter });
     
     filteredUserQuotationsData = userQuotationsData.filter(quotation => {
         // 搜索过滤
@@ -2354,8 +2513,6 @@ function filterUserQuotations() {
         return matchesSearch && matchesDate;
     });
     
-    console.log('过滤后的数据:', filteredUserQuotationsData);
-    
     userCurrentPage = 1;
     displayUserQuotationsTable();
 }
@@ -2369,7 +2526,7 @@ function clearUserFilters() {
 
 // 显示用户{{ _("quotation_order") }}表格
 function displayUserQuotationsTable() {
-    console.log('displayUserQuotationsTable 被调用');
+    // console.log('displayUserQuotationsTable 被调用');
     console.log('filteredUserQuotationsData:', filteredUserQuotationsData);
     
     const tbody = $('#userQuotationsTableBody');
@@ -2932,7 +3089,7 @@ function loadQuotationData(quotation) {
     // 加载{{ _("quotation_order") }}数据到手动创建页面
     const data = quotation.data;
     
-    console.log('加载{{ _("quotation_order") }}数据:', quotation);
+            // console.log('加载{{ _("quotation_order") }}数据:', quotation);
     
     // 设置导出表单字段
     $('#manualExportDate').val(data.order_date || '{{ today_date }}');
@@ -2946,7 +3103,7 @@ function loadQuotationData(quotation) {
     // 加载产品数据到产品列表
     if (data.products && data.products.length > 0) {
         data.products.forEach(function(product, index) {
-            console.log('处理产品:', product);
+            // console.log('处理产品:', product);
             
             // 添加到产品列表表格（简化结构，隐藏类别等列）
             const tbody = document.getElementById('manualProductsTableBody');
@@ -3479,7 +3636,7 @@ function createExcelFromManualData(products) {
     // 从手动数据创建Excel文件
     // 这里可以使用SheetJS或其他库来创建Excel文件
     // 暂时使用简单的CSV格式
-    let csvContent = "序号,类型,产品名称,柜身变体,门板变体,SKU,单价,数量,小计\n";
+            let csvContent = "序号,类型,{{ t('product_name') }},柜身变体,门板变体,SKU,单价,数量,小计\n";
     
     products.forEach(product => {
         const price = parseFloat(product.price.replace('$', '')) || 0;
@@ -3608,7 +3765,7 @@ function showRawDataModal(data) {
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <div>
-                                显示 <span id="showingInfo">0-0</span> 条，共 <span id="totalInfo">0</span> 条记录
+                                {{ _("showing_records").format(start="0", end="0", total="0") }}
                             </div>
                             <nav>
                                 <ul class="pagination pagination-sm" id="pagination">
@@ -3980,6 +4137,8 @@ function sortTable(tableId, column, element) {
         data = window.salesAnalysisData ? window.salesAnalysisData.sales_person_analysis : [];
     } else if (tableId === 'customerTable') {
         data = window.salesAnalysisData ? window.salesAnalysisData.customer_analysis : [];
+    } else if (tableId === 'customerTypeTable') {
+        data = window.salesAnalysisData ? window.salesAnalysisData.customer_type_analysis : [];
     } else {
         return;
     }
@@ -3992,6 +4151,8 @@ function sortTable(tableId, column, element) {
         displaySalesPersonAnalysis(sortedData);
     } else if (tableId === 'customerTable') {
         displayCustomerAnalysis(sortedData);
+    } else if (tableId === 'customerTypeTable') {
+        updateCustomerTypeTable(sortedData);
     }
 }
 
@@ -4096,6 +4257,18 @@ function copyChartToModal(originalChartId) {
         originalChart = window.comparisonAmountChart;
     } else if (originalChartId === 'comparisonConversionChart' && window.comparisonConversionChart) {
         originalChart = window.comparisonConversionChart;
+    } else if (originalChartId === 'customerTypeAmountTrendChart' && window.customerTypeAmountTrendChart) {
+        originalChart = window.customerTypeAmountTrendChart;
+    } else if (originalChartId === 'customerTypeCountTrendChart' && window.customerTypeCountTrendChart) {
+        originalChart = window.customerTypeCountTrendChart;
+    } else if (originalChartId === 'customerTypeAmountPieChart' && window.customerTypeAmountPieChart) {
+        originalChart = window.customerTypeAmountPieChart;
+    } else if (originalChartId === 'customerTypeCountPieChart' && window.customerTypeCountPieChart) {
+        originalChart = window.customerTypeCountPieChart;
+    } else if (originalChartId === 'retailWholesaleAmountChart' && window.retailWholesaleAmountChart) {
+        originalChart = window.retailWholesaleAmountChart;
+    } else if (originalChartId === 'retailWholesaleCountChart' && window.retailWholesaleCountChart) {
+        originalChart = window.retailWholesaleCountChart;
     }
     
     if (!originalChart) {
@@ -4172,11 +4345,15 @@ function updateNavigationButtons(activeSectionId) {
 
 // 初始化销售人员下拉框
 function initializeSalesPersonDropdowns() {
+    console.log('初始化销售人员下拉框，salesAnalysisData:', window.salesAnalysisData);
+    
     if (!window.salesAnalysisData || !window.salesAnalysisData.sales_person_analysis) {
+        console.log('没有找到sales_person_analysis数据');
         return;
     }
     
     const salesPersons = window.salesAnalysisData.sales_person_analysis.map(item => item.sales_person);
+    console.log('提取到的销售人员列表:', salesPersons);
     
     // 更新销售人员对比下拉框
     const salesPerson1 = $('#salesPerson1');
@@ -4217,7 +4394,7 @@ function updateComparisonCharts() {
 // 创建对比图表
 function createComparisonCharts(salesPerson1, salesPerson2) {
     // 获取按月分组的销售数据
-    console.log('创建对比图表，销售员:', salesPerson1, salesPerson2);
+    // console.log('创建对比图表，销售员:', salesPerson1, salesPerson2);
     console.log('window.salesAnalysisData:', window.salesAnalysisData);
     
     const monthlyData = window.salesAnalysisData ? window.salesAnalysisData.sales_person_monthly_analysis : {};
@@ -4526,16 +4703,18 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 $('#salesUploadProgress').hide();
-                console.log('销售数据上传响应:', response);
+                // console.log('销售数据上传响应:', response);
                 if (response.success) {
                     salesAnalysisData = response.data;
                     
                     // 显示分析结果
                     try {
                         displaySalesAnalysis(salesAnalysisData);
+                        // 加载客户类型选项
+                        loadCustomerTypeOptions();
                         showAlert('{{ t("data_import_success") }}', 'success');
                     } catch (displayError) {
-                        console.error('显示分析结果时出错:', displayError);
+                        console.error('{{ t("display_analysis_result_error") }}:', displayError);
                         // 即使显示失败，数据导入本身是成功的
                         showAlert('{{ t("data_import_success_display_failed") }}', 'warning');
                     }
@@ -4558,7 +4737,7 @@ $(document).ready(function() {
 // 显示销售分析结果
 function displaySalesAnalysis(data) {
     try {
-        console.log('开始显示销售分析结果:', data);
+        // console.log('开始显示销售分析结果:', data);
         
         // 显示数据导入服务
         $('#dataImportService').show();
@@ -4574,11 +4753,14 @@ function displaySalesAnalysis(data) {
         // 保存数据到全局变量供排序使用
         window.salesAnalysisData = data;
         
-        // 初始化销售人员下拉框
-        initializeSalesPersonDropdowns();
+        // 初始化第一部分过滤选项
+        initializeTableFilters();
         
-        // 初始化图表区域的销售人员下拉框
-        initializeChartSalesPersonDropdown();
+        // 初始化图表区域的过滤选项
+        initializeChartFilters();
+        
+        // 初始化第三部分销售人员对比下拉框
+        initializeSalesPersonDropdowns();
         
         // 显示销售员业绩分析
         if (data.sales_person_analysis) {
@@ -4590,6 +4772,11 @@ function displaySalesAnalysis(data) {
             displayCustomerAnalysis(data.customer_analysis);
         }
         
+        // 显示客户类型分析
+        if (data.customer_type_analysis) {
+            updateCustomerTypeTable(data.customer_type_analysis);
+        }
+        
         // 显示图表（即使失败也不影响其他功能）
         try {
             if (data.trend_data && data.conversion_data) {
@@ -4597,15 +4784,46 @@ function displaySalesAnalysis(data) {
             } else {
                 console.warn('{{ _("chart_data_incomplete_skip_display") }}');
             }
+            
+            // 显示客户类型相关图表
+            console.log('检查客户类型图表数据:', {
+                customer_type_trends: data.customer_type_trends,
+                customer_type_distribution: data.customer_type_distribution,
+                company_type_comparison: data.company_type_comparison
+            });
+            
+            if (data.customer_type_trends) {
+                console.log('渲染客户类型趋势图表');
+                renderCustomerTypeAmountTrendChart(data.customer_type_trends);
+                renderCustomerTypeCountTrendChart(data.customer_type_trends);
+            } else {
+                console.log('客户类型趋势数据不存在');
+            }
+            
+            if (data.customer_type_distribution) {
+                console.log('渲染客户类型分布图表');
+                renderCustomerTypeAmountPieChart(data.customer_type_distribution);
+                renderCustomerTypeCountPieChart(data.customer_type_distribution);
+            } else {
+                console.log('客户类型分布数据不存在');
+            }
+            
+            if (data.company_type_comparison) {
+                console.log('渲染公司类型对比图表');
+                renderRetailWholesaleAmountChart(data.company_type_comparison);
+                renderRetailWholesaleCountChart(data.company_type_comparison);
+            } else {
+                console.log('公司类型对比数据不存在');
+            }
         } catch (chartError) {
             console.error('图表显示失败，但不影响其他功能:', chartError);
             // 不显示错误{{ _("tip") }}，因为表格数据已经成功显示
         }
         
-        console.log('销售分析结果显示完成');
+        // console.log('销售分析结果显示完成');
     } catch (error) {
-        console.error('显示销售分析结果时出错:', error);
-        showAlert('显示分析结果时出错: ' + error.message, 'danger');
+        console.error('{{ t("display_sales_analysis_result_error") }}:', error);
+        showAlert('{{ t("display_sales_analysis_result_error") }}: ' + error.message, 'danger');
     }
 }
 
@@ -4620,7 +4838,7 @@ function displaySalesPersonAnalysis(salesPersonData) {
             window.salesAnalysisData.sales_person_analysis = salesPersonData;
         }
         
-        // 🆕 计算{{ _("summary") }}数据
+        // 🆕 计算{{ t("summary") }}数据
         let totalOrderCount = 0;
         let totalQuotationCount = 0;
         let totalOrderAmount = 0;
@@ -4628,7 +4846,7 @@ function displaySalesPersonAnalysis(salesPersonData) {
         
         salesPersonData.forEach(person => {
             // 处理NaN值
-            const salesPerson = person.sales_person || '未知';
+            const salesPerson = person.sales_person || '{{ t("unknown") }}';
             const orderCount = isNaN(person.order_count) ? 0 : person.order_count;
             const quotationCount = isNaN(person.quotation_count) ? 0 : person.quotation_count;
             const orderAmount = isNaN(person.order_amount) ? 0 : person.order_amount;
@@ -4636,7 +4854,7 @@ function displaySalesPersonAnalysis(salesPersonData) {
             const countConversionRate = isNaN(person.count_conversion_rate) ? 0 : person.count_conversion_rate;
             const amountConversionRate = isNaN(person.amount_conversion_rate) ? 0 : person.amount_conversion_rate;
             
-            // 累计{{ _("summary") }}数据
+            // 累计{{ t("summary") }}数据
             totalOrderCount += orderCount;
             totalQuotationCount += quotationCount;
             totalOrderAmount += orderAmount;
@@ -4656,14 +4874,14 @@ function displaySalesPersonAnalysis(salesPersonData) {
             tbody.append(row);
         });
         
-        // 🆕 添加{{ _("summary") }}行
+        // 🆕 添加{{ t("summary") }}行
         if (salesPersonData.length > 0) {
             const totalCountConversionRate = totalQuotationCount > 0 ? (totalOrderCount / totalQuotationCount) * 100 : 0;
             const totalAmountConversionRate = totalQuotationAmount > 0 ? (totalOrderAmount / totalQuotationAmount) * 100 : 0;
             
             const summaryRow = `
                 <tr class="table-warning border-top border-3">
-                    <td><strong>{{ _("summary") }} (${salesPersonData.length}人)</strong></td>
+                    <td><strong>{{ t("summary") }} (${salesPersonData.length}{{ t("people") }})</strong></td>
                     <td><strong>${totalOrderCount}</strong></td>
                     <td><strong>${totalQuotationCount}</strong></td>
                     <td><strong>$${totalOrderAmount.toFixed(2)}</strong></td>
@@ -4676,8 +4894,8 @@ function displaySalesPersonAnalysis(salesPersonData) {
         }
         
     } catch (error) {
-        console.error('显示销售员业绩分析时出错:', error);
-        showAlert('显示销售员业绩分析时出错: ' + error.message, 'danger');
+        console.error('{{ t("display_sales_person_analysis_error") }}:', error);
+        showAlert('{{ t("display_sales_person_analysis_error") }}: ' + error.message, 'danger');
     }
 }
 
@@ -4704,8 +4922,8 @@ function displayCustomerAnalysis(customerData) {
         displayCustomerTablePage(customerData);
         
     } catch (error) {
-        console.error('显示客户订单分析时出错:', error);
-        showAlert('显示客户订单分析时出错: ' + error.message, 'danger');
+        console.error('{{ t("display_customer_analysis_error") }}:', error);
+        showAlert('{{ t("display_customer_analysis_error") }}: ' + error.message, 'danger');
     }
 }
 
@@ -4755,8 +4973,8 @@ function displayCustomerTablePage(data) {
         updateCustomerTablePagination(data.length);
         
     } catch (error) {
-        console.error('显示客户表格分页数据时出错:', error);
-        showAlert('显示客户表格分页数据时出错: ' + error.message, 'danger');
+        console.error('{{ t("display_customer_table_error") }}:', error);
+        showAlert('{{ t("display_customer_table_error") }}: ' + error.message, 'danger');
     }
 }
 
@@ -4769,7 +4987,7 @@ function updateCustomerTablePagination(totalItems) {
     // 更新信息显示
     const startItem = (customerTableCurrentPage - 1) * customerTablePageSize + 1;
     const endItem = Math.min(customerTableCurrentPage * customerTablePageSize, totalItems);
-    info.text(`显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`);
+    info.text(`{{ _("showing_records") }}`.replace('{start}', startItem).replace('{end}', endItem).replace('{total}', totalItems));
     
     // 生成分页按钮
     pagination.empty();
@@ -4844,8 +5062,6 @@ function changeCustomerTablePageSize() {
 // 显示图表
 function displayCharts(data) {
     try {
-        console.log('开始创建图表，数据:', data);
-        
         // 检查Chart.js是否可用
         if (typeof Chart === 'undefined') {
             throw new Error('Chart.js 库未加载');
@@ -5110,6 +5326,392 @@ function displayCharts(data) {
     }
 }
 
+// 加载客户类型选项
+function loadCustomerTypeOptions() {
+    $.ajax({
+        url: '/get_customer_type_options',
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                populateCustomerCompanyTypeFilter(response.company_types);
+                populateCustomerTypeFilter(response.customer_types);
+            } else {
+                console.log('加载客户类型选项失败:', response.error);
+            }
+        },
+        error: function() {
+            console.log('加载客户类型选项失败');
+        }
+    });
+}
+
+// 填充客户公司类型过滤器
+function populateCustomerCompanyTypeFilter(companyTypes) {
+    const select = $('#customerCompanyTypeFilter');
+    select.find('option:not(:first)').remove(); // 保留第一个"全部"选项
+    
+    if (companyTypes && companyTypes.length > 0) {
+        companyTypes.forEach(type => {
+            select.append(`<option value="${type}">${type}</option>`);
+        });
+    }
+}
+
+// 填充客户类型过滤器
+function populateCustomerTypeFilter(customerTypes) {
+    const select = $('#customerTypeFilter');
+    select.empty(); // 清空所有选项
+    
+    if (customerTypes && customerTypes.length > 0) {
+        customerTypes.forEach(type => {
+            select.append(`<option value="${type}">${type}</option>`);
+        });
+    }
+}
+
+// 更新客户类型分析表格
+function updateCustomerTypeTable(data) {
+    // console.log('🔄 开始更新客户类型表格，数据:', data);
+    
+    if (!data || !Array.isArray(data)) {
+        console.log('❌ 没有找到客户类型分析数据或数据格式不正确');
+        // console.log('数据类型:', typeof data);
+        // console.log('数据内容:', data);
+        return;
+    }
+    
+    // console.log(`📊 找到 ${data.length} 条客户类型分析数据`);
+    
+    const tbody = $('#customerTypeTableBody');
+    if (tbody.length === 0) {
+        console.log('❌ 找不到客户类型表格体元素 #customerTypeTableBody');
+        return;
+    }
+    
+    tbody.empty();
+    // console.log('🧹 清空表格体');
+    
+    data.forEach((item, index) => {
+        // console.log(`📋 处理第 ${index + 1} 条数据:`, item);
+        
+        const customerType = item.customer_type || '{{ t("not_set") }}';
+        const orderCount = item.order_count || 0;
+        const quotationCount = item.quotation_count || 0;
+        const orderAmount = item.order_amount || 0;
+        const quotationAmount = item.quotation_amount || 0;
+        const countConversionRate = item.count_conversion_rate || 0;
+        const amountConversionRate = item.amount_conversion_rate || 0;
+        
+        const row = `
+            <tr>
+                <td>${customerType}</td>
+                <td>${orderCount}</td>
+                <td>${quotationCount}</td>
+                <td>$${orderAmount}</td>
+                <td>$${quotationAmount}</td>
+                <td>${countConversionRate}%</td>
+                <td>${amountConversionRate}%</td>
+            </tr>
+        `;
+        
+        // console.log(`✅ 添加行: ${customerType} - 订单数量: ${orderCount}, 报价单数量: ${quotationCount}`);
+        tbody.append(row);
+    });
+    
+    // console.log(`✅ 客户类型表格更新完成，共添加 ${data.length} 行数据`);
+}
+
+// 渲染客户类型金额趋势图
+function renderCustomerTypeAmountTrendChart(data) {
+    // console.log('渲染客户类型金额趋势图，数据:', data);
+    if (!data || !data.labels || !data.datasets) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('customerTypeAmountTrendChart');
+    if (!canvas) {
+        console.log('找不到客户类型金额趋势图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.customerTypeAmountTrendChart && typeof window.customerTypeAmountTrendChart.destroy === 'function') {
+        window.customerTypeAmountTrendChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    window.customerTypeAmountTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("customer_type_amount_trend") }}'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 渲染客户类型数量趋势图
+function renderCustomerTypeCountTrendChart(data) {
+    // console.log('渲染客户类型数量趋势图，数据:', data);
+    if (!data || !data.labels || !data.datasets) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('customerTypeCountTrendChart');
+    if (!canvas) {
+        console.log('找不到客户类型数量趋势图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.customerTypeCountTrendChart && typeof window.customerTypeCountTrendChart.destroy === 'function') {
+        window.customerTypeCountTrendChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    window.customerTypeCountTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("customer_type_count_trend") }}'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// 渲染客户类型金额分布饼图
+function renderCustomerTypeAmountPieChart(data) {
+    console.log('渲染客户类型金额分布饼图，数据:', data);
+    if (!data || !data.amount_distribution || !data.amount_distribution.labels || !data.amount_distribution.values) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('customerTypeAmountPieChart');
+    if (!canvas) {
+        console.log('找不到客户类型金额分布饼图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.customerTypeAmountPieChart && typeof window.customerTypeAmountPieChart.destroy === 'function') {
+        window.customerTypeAmountPieChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    const chartData = {
+        labels: data.amount_distribution.labels,
+        datasets: [{
+            data: data.amount_distribution.values,
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)'
+            ]
+        }]
+    };
+    
+    window.customerTypeAmountPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("customer_type_amount_distribution") }}'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return context.label + ': $' + context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 渲染客户类型数量分布饼图
+function renderCustomerTypeCountPieChart(data) {
+    if (!data || !data.count_distribution || !data.count_distribution.labels || !data.count_distribution.values) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('customerTypeCountPieChart');
+    if (!canvas) {
+        console.log('找不到客户类型数量分布饼图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.customerTypeCountPieChart && typeof window.customerTypeCountPieChart.destroy === 'function') {
+        window.customerTypeCountPieChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    const chartData = {
+        labels: data.count_distribution.labels,
+        datasets: [{
+            data: data.count_distribution.values,
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)'
+            ]
+        }]
+    };
+    
+    window.customerTypeCountPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("customer_type_count_distribution") }}'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 渲染零售vs批发金额对比图
+function renderRetailWholesaleAmountChart(data) {
+    if (!data || !data.labels || !data.datasets) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('retailWholesaleAmountChart');
+    if (!canvas) {
+        console.log('找不到零售vs批发金额对比图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.retailWholesaleAmountChart && typeof window.retailWholesaleAmountChart.destroy === 'function') {
+        window.retailWholesaleAmountChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    window.retailWholesaleAmountChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("retail_vs_wholesale_amount") }}'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 渲染零售vs批发数量对比图
+function renderRetailWholesaleCountChart(data) {
+    if (!data || !data.labels || !data.datasets) {
+        console.log('图表数据不完整，跳过图表显示');
+        return;
+    }
+    
+    const canvas = document.getElementById('retailWholesaleCountChart');
+    if (!canvas) {
+        console.log('找不到零售vs批发数量对比图canvas元素');
+        return;
+    }
+    
+    // 销毁现有图表
+    if (window.retailWholesaleCountChart && typeof window.retailWholesaleCountChart.destroy === 'function') {
+        window.retailWholesaleCountChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    window.retailWholesaleCountChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ t("retail_vs_wholesale_count") }}'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
 // 更新表格时间周期选择
 function updateTableTimePeriod() {
     const timePeriod = $('#tableTimePeriodSelect').val();
@@ -5127,8 +5729,17 @@ function updateTableTimePeriod() {
 
 // 更新图表时间周期选择
 function updateChartTimePeriod() {
-    // 图表时间周期选择不需要显示/隐藏其他控件，直接更新图表即可
-    updateChartAnalysis();
+    const timePeriod = $('#chartTimePeriodSelect').val();
+    const customDateRange = $('#chartCustomDateRange');
+    const customDateRange2 = $('#chartCustomDateRange2');
+    
+    if (timePeriod === 'custom') {
+        customDateRange.show();
+        customDateRange2.show();
+    } else {
+        customDateRange.hide();
+        customDateRange2.hide();
+    }
 }
 
 // 更新表格分析（根据时间周期和金额区间）
@@ -5174,6 +5785,9 @@ function updateTableAnalysis() {
                 if (response.data.customer_analysis) {
                     displayCustomerAnalysis(response.data.customer_analysis);
                 }
+                if (response.data.customer_type_analysis) {
+                    updateCustomerTypeTable(response.data.customer_type_analysis);
+                }
                 // 重新初始化销售人员下拉框
                 initializeSalesPersonDropdowns();
                 // 更新全局数据
@@ -5186,19 +5800,6 @@ function updateTableAnalysis() {
             showAlert('{{ t("data_import_failed") }}', 'danger');
         }
     });
-}
-
-// 初始化图表区域的销售人员下拉框
-function initializeChartSalesPersonDropdown() {
-    const chartSelect = $('#chartSalesPersonSelect');
-    chartSelect.empty().append('<option value="">{{ _("all_sales_persons") }}</option>');
-    
-    if (window.salesAnalysisData && window.salesAnalysisData.sales_person_analysis) {
-        const salesPersons = window.salesAnalysisData.sales_person_analysis;
-        salesPersons.forEach(person => {
-            chartSelect.append(`<option value="${person.sales_person}">${person.sales_person}</option>`);
-        });
-    }
 }
 
 // 根据销售人员过滤更新图表
@@ -5278,19 +5879,45 @@ function filterConversionDataByPerson(conversionData, selectedPerson) {
     return filteredData;
 }
 
-// 更新图表分析（根据时间周期）
+// 更新图表分析（支持新的过滤条件）
 function updateChartAnalysis() {
     if (!salesAnalysisData) return;
     
     const timePeriod = $('#chartTimePeriodSelect').val();
+    const salesPerson = $('#chartSalesPersonSelect').val();
+    let startDate = null;
+    let endDate = null;
+    
+    if (timePeriod === 'custom') {
+        startDate = $('#chartStartDate').val();
+        endDate = $('#chartEndDate').val();
+        
+        if (!startDate || !endDate) {
+            showAlert('{{ t("please_select_start_end_date") }}', 'warning');
+            return;
+        }
+        
+        if (startDate > endDate) {
+            showAlert('{{ t("start_date_cannot_be_later") }}', 'warning');
+            return;
+        }
+    }
+    
+    const amountRange = $('#chartAmountRangeSelect').val();
+    const customerCompanyType = $('#chartCustomerCompanyTypeFilter').val();
+    const customerTypes = Array.from($('#chartCustomerTypeFilter').val() || []);
     
     $.ajax({
         url: '/update_sales_analysis',
         type: 'POST',
         data: {
-            time_period: timePeriod,
-            start_date: null,
-            end_date: null,
+            time_period: timePeriod === 'custom' ? 'monthly' : timePeriod, // 自定义时间范围时默认按月分析
+            start_date: startDate,
+            end_date: endDate,
+            amount_range: amountRange,
+            customer_company_type: customerCompanyType,
+            customer_types: JSON.stringify(customerTypes),
+            sales_person: salesPerson,
             data: JSON.stringify(salesAnalysisData)
         },
         success: function(response) {
@@ -5298,24 +5925,29 @@ function updateChartAnalysis() {
                 // 更新全局数据
                 window.salesAnalysisData.trend_data = response.data.trend_data;
                 window.salesAnalysisData.conversion_data = response.data.conversion_data;
+                window.salesAnalysisData.customer_type_trends = response.data.customer_type_trends;
+                window.salesAnalysisData.customer_type_distribution = response.data.customer_type_distribution;
+                window.salesAnalysisData.company_type_comparison = response.data.company_type_comparison;
                 
-                // 应用销售人员过滤
-                const selectedPerson = $('#chartSalesPersonSelect').val();
-                let chartData = response.data;
-                
-                if (selectedPerson) {
-                    chartData = { ...response.data };
-                    if (chartData.trend_data) {
-                        chartData.trend_data = filterTrendDataByPerson(chartData.trend_data, selectedPerson);
-                    }
-                    if (chartData.conversion_data) {
-                        chartData.conversion_data = filterConversionDataByPerson(chartData.conversion_data, selectedPerson);
-                    }
+                // 更新图表
+                if (response.data.trend_data && response.data.conversion_data) {
+                    displayCharts(response.data);
                 }
                 
-                // 只更新图表，不更新表格
-                if (chartData.trend_data && chartData.conversion_data) {
-                    displayCharts(chartData);
+                // 更新客户类型相关图表
+                if (response.data.customer_type_trends) {
+                    renderCustomerTypeAmountTrendChart(response.data.customer_type_trends);
+                    renderCustomerTypeCountTrendChart(response.data.customer_type_trends);
+                }
+                
+                if (response.data.customer_type_distribution) {
+                    renderCustomerTypeAmountPieChart(response.data.customer_type_distribution);
+                    renderCustomerTypeCountPieChart(response.data.customer_type_distribution);
+                }
+                
+                if (response.data.company_type_comparison) {
+                    renderRetailWholesaleAmountChart(response.data.company_type_comparison);
+                    renderRetailWholesaleCountChart(response.data.company_type_comparison);
                 }
             } else {
                 showAlert(response.error, 'danger');
@@ -5364,7 +5996,176 @@ function exportAnalysisReport() {
     });
 }
 
+// 初始化图表区域的过滤选项
+function initializeChartFilters() {
+    if (!window.salesAnalysisData) return;
+    
+    // console.log('初始化图表过滤选项，数据:', window.salesAnalysisData);
+    
+    // 初始化销售人员选项
+    initializeChartSalesPersonDropdown();
+    
+    // 初始化金额区间选项
+    initializeChartAmountRangeOptions();
+    
+    // 初始化客户公司类型选项
+    initializeChartCustomerCompanyTypeOptions();
+    
+    // 初始化客户类型选项
+    initializeChartCustomerTypeOptions();
+}
 
+// 初始化图表区域的销售人员下拉框
+function initializeChartSalesPersonDropdown() {
+    const chartSelect = $('#chartSalesPersonSelect');
+    chartSelect.empty().append('<option value="">{{ t("all_sales_persons") }}</option>');
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.sales_person_analysis) {
+        const salesPersons = window.salesAnalysisData.sales_person_analysis;
+        salesPersons.forEach(person => {
+            chartSelect.append(`<option value="${person.sales_person}">${person.sales_person}</option>`);
+        });
+    }
+}
+
+// 初始化图表区域的金额区间选项
+function initializeChartAmountRangeOptions() {
+    const chartAmountSelect = $('#chartAmountRangeSelect');
+    chartAmountSelect.empty().append('<option value="">{{ t("all_amounts") }}</option>');
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        const amounts = window.salesAnalysisData.converted_data.map(record => parseFloat(record['总计'] || 0)).filter(amount => amount > 0);
+        
+        if (amounts.length > 0) {
+            const ranges = [
+                { value: '0-1000', label: '≤1000' },
+                { value: '1000-5000', label: '1000-5000' },
+                { value: '5000-10000', label: '5000-10000' },
+                { value: '10000+', label: '≥10000' }
+            ];
+            
+            ranges.forEach(range => {
+                chartAmountSelect.append(`<option value="${range.value}">${range.label}</option>`);
+            });
+        }
+    }
+}
+
+// 初始化图表区域的客户公司类型选项
+function initializeChartCustomerCompanyTypeOptions() {
+    const chartCompanyTypeSelect = $('#chartCustomerCompanyTypeFilter');
+    chartCompanyTypeSelect.empty().append('<option value="">{{ t("all_company_types") }}</option>');
+    
+    // console.log('初始化图表客户公司类型选项，salesAnalysisData:', window.salesAnalysisData);
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        // console.log('找到转换后数据，数量:', window.salesAnalysisData.converted_data.length);
+        const companyTypes = [...new Set(window.salesAnalysisData.converted_data.map(record => record['客户/公司类型'] || '').filter(Boolean))];
+        // console.log('提取到的客户公司类型:', companyTypes);
+        
+        companyTypes.sort().forEach(companyType => {
+            if (companyType && companyType !== '' && companyType !== '{{ t("not_set") }}') {
+                chartCompanyTypeSelect.append(`<option value="${companyType}">${companyType}</option>`);
+            }
+        });
+    } else {
+        // console.log('没有找到转换后数据或salesAnalysisData不存在');
+    }
+}
+
+// 初始化图表区域的客户类型选项
+function initializeChartCustomerTypeOptions() {
+    const chartCustomerTypeSelect = $('#chartCustomerTypeFilter');
+    chartCustomerTypeSelect.empty();
+    
+    // console.log('初始化图表客户类型选项，salesAnalysisData:', window.salesAnalysisData);
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        // console.log('找到转换后数据，数量:', window.salesAnalysisData.converted_data.length);
+        const customerTypes = [...new Set(window.salesAnalysisData.converted_data.map(record => record['客户/类型'] || '').filter(Boolean))];
+        // console.log('提取到的客户类型:', customerTypes);
+        
+        customerTypes.sort().forEach(customerType => {
+            if (customerType && customerType !== '' && customerType !== '{{ t("not_set") }}') {
+                chartCustomerTypeSelect.append(`<option value="${customerType}">${customerType}</option>`);
+            }
+        });
+    } else {
+        // console.log('没有找到转换后数据或salesAnalysisData不存在');
+    }
+}
+
+// 初始化第一部分的过滤选项
+function initializeTableFilters() {
+    if (!window.salesAnalysisData) return;
+    
+    // console.log('初始化第一部分过滤选项，数据:', window.salesAnalysisData);
+    
+    // 初始化销售人员选项
+    initializeTableSalesPersonOptions();
+    
+    // 初始化客户公司类型选项
+    initializeTableCustomerCompanyTypeOptions();
+    
+    // 初始化客户类型选项
+    initializeTableCustomerTypeOptions();
+}
+
+// 初始化第一部分的销售人员选项
+function initializeTableSalesPersonOptions() {
+    const tableSalesPersonSelect = $('#customerCompanyTypeFilter').siblings('select[id="salesPersonFilter"]');
+    if (tableSalesPersonSelect.length === 0) return;
+    
+    tableSalesPersonSelect.empty().append('<option value="">{{ t("all_sales_persons") }}</option>');
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        const salesPersons = [...new Set(window.salesAnalysisData.converted_data.map(record => record['销售人员'] || '').filter(Boolean))];
+        
+        salesPersons.sort().forEach(person => {
+            if (person && person !== '') {
+                tableSalesPersonSelect.append(`<option value="${person}">${person}</option>`);
+            }
+        });
+    } else if (window.salesAnalysisData && window.salesAnalysisData.sales_person_analysis) {
+        // 备用方案：从分析结果中提取
+        const salesPersons = window.salesAnalysisData.sales_person_analysis;
+        salesPersons.forEach(person => {
+            tableSalesPersonSelect.append(`<option value="${person.sales_person}">${person.sales_person}</option>`);
+        });
+    }
+}
+
+// 初始化第一部分的客户公司类型选项
+function initializeTableCustomerCompanyTypeOptions() {
+    const tableCompanyTypeSelect = $('#customerCompanyTypeFilter');
+    tableCompanyTypeSelect.empty().append('<option value="">{{ t("all_company_types") }}</option>');
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        const companyTypes = [...new Set(window.salesAnalysisData.converted_data.map(record => record['客户/公司类型'] || '').filter(Boolean))];
+        
+        companyTypes.sort().forEach(companyType => {
+            if (companyType && companyType !== '' && companyType !== '{{ t("not_set") }}') {
+                tableCompanyTypeSelect.append(`<option value="${companyType}">${companyType}</option>`);
+            }
+        });
+    }
+}
+
+// 初始化第一部分的客户类型选项
+function initializeTableCustomerTypeOptions() {
+    const tableCustomerTypeSelect = $('#customerTypeFilter');
+    tableCustomerTypeSelect.empty();
+    
+    if (window.salesAnalysisData && window.salesAnalysisData.converted_data) {
+        const customerTypes = [...new Set(window.salesAnalysisData.converted_data.map(record => record['客户/类型'] || '').filter(Boolean))];
+        
+        customerTypes.sort().forEach(customerType => {
+            if (customerType && customerType !== '' && customerType !== '{{ t("not_set") }}') {
+                tableCustomerTypeSelect.append(`<option value="${customerType}">${customerType}</option>`);
+            }
+        });
+    }
+}
 
 </script>
 {% endblock %} 
