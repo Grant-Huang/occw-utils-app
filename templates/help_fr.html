@@ -1,0 +1,425 @@
+[% extends "base.html" %]
+
+[% block title %]Documentation d'Aide - Système d'Outils OCCW[% endblock %]
+
+[% block content %]
+<!-- En-tête de Page -->
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="fas fa-question-circle me-3 page-icon"></i>
+                    Documentation d'Aide
+                </h1>
+                <p class="page-subtitle">Guide Utilisateur du Système d'Outils OCCW</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <!-- Navigation Rapide -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-map me-2"></i>Navigation Rapide</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="#overview" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-info-circle me-1"></i>Aperçu du Système
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#pdf-import" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-file-pdf me-1"></i>Importer Devis 2020
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#manual-create" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-edit me-1"></i>Création Manuelle de Devis
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#sales-analysis" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-chart-line me-1"></i>Analyse des Ventes
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#troubleshooting" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-tools me-1"></i>FAQ & Solutions
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#support" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="fas fa-headset me-1"></i>Support Technique
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aperçu du Système -->
+    <div class="row mb-4" id="overview">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Aperçu du Système</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Description du Système</h6>
+                    <p>Le Système de Devis OCCW est un outil professionnel de traitement de devis PDF conçu pour Oppein Cabinet Canada West Ltd., utilisé pour convertir les devis générés par le logiciel 2020 au format OCCW standardisé.</p>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading"><i class="fas fa-shield-alt me-2"></i>Description des Permissions</h6>
+                        <p class="mb-2"><strong>Permissions Utilisateur Régulier :</strong> Peut télécharger et analyser des PDF, voir les résultats, exporter des fichiers et consulter la documentation d'aide</p>
+                        <p class="mb-0"><strong>Permissions Administrateur :</strong> En plus des permissions utilisateur régulier, peut également gérer les tables de prix OCCW, configurer les règles SKU et gérer les relations de mappage SKU</p>
+                    </div>
+                    
+                    <h6 class="text-primary mt-4">Fonctionnalités Principales</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Support pour le téléchargement de fichiers de devis PDF générés par le logiciel 2020</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Génération automatique de codes SKU OCCW standard basés sur des règles prédéfinies</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestion des tables de prix OCCW standard avec support d'importation au format Excel</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Support d'exportation vers Excel, CSV, PDF et autres formats</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Support pour les langues d'interface chinoise, anglaise et française</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Fonctionnalité de création manuelle de devis</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestion du mappage SKU (administrateurs)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Requêtes de prix en temps réel</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestion des paramètres système, y compris la bascule de connexion utilisateur, la modification du mot de passe administrateur, etc.</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Fonctionnalité de modification du mot de passe administrateur avec support de mise à jour sécurisée du mot de passe</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importer Devis 2020 -->
+    <div class="row mb-4" id="pdf-import">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i>Importer Devis 2020</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Étapes d'Opération</h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">1</span>
+                                </div>
+                                <h6 class="text-primary mt-2">Télécharger Fichier PDF</h6>
+                                <p class="small text-muted">Sélectionner le fichier de devis PDF exporté du logiciel 2020</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">2</span>
+                                </div>
+                                <h6 class="text-info mt-2">Analyse Intelligente</h6>
+                                <p class="small text-muted">Le système reconnaît automatiquement les informations produit et la tarification</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">3</span>
+                                </div>
+                                <h6 class="text-warning mt-2">Génération SKU</h6>
+                                <p class="small text-muted">Génération automatique de SKU standard et application des mappages</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">4</span>
+                                </div>
+                                <h6 class="text-success mt-2">Exporter Devis</h6>
+                                <p class="small text-muted">Choisir le format pour exporter le devis final</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary mt-4">Formats de Fichiers Supportés</h6>
+                    <div class="alert alert-light">
+                        <ul class="mb-0">
+                            <li><strong>Format PDF :</strong> Devis PDF standard exportés du logiciel 2020</li>
+                            <li><strong>Taille de Fichier :</strong> Support maximum de 16MB</li>
+                            <li><strong>Support Linguistique :</strong> Support pour les PDF multilingues chinois, anglais, français et autres</li>
+                        </ul>
+                    </div>
+
+                    <h6 class="text-primary mt-4">Description de la Fonction d'Analyse</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-cog me-1"></i>Analyse de Contenu</h6>
+                            <ul class="small">
+                                <li>Reconnaissance automatique des descriptions et spécifications produit</li>
+                                <li>Extraction des informations de quantité et de prix unitaire</li>
+                                <li>Identification des couleurs et variantes de panneaux de porte</li>
+                                <li>Traitement des informations produit multi-lignes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-tags me-1"></i>Traitement Spécial</h6>
+                            <ul class="small">
+                                <li>Fusion intelligente des informations produit inter-lignes</li>
+                                <li>Traitement automatique des combinaisons de variantes produit</li>
+                                <li>Support d'identification des composants et du matériel</li>
+                                <li>Gestion des caractères spéciaux et formats</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Création Manuelle de Devis -->
+    <div class="row mb-4" id="manual-create">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Création Manuelle de Devis</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Description de la Fonction</h6>
+                    <p>Lorsque vous devez créer des devis manuellement ou modifier des devis existants, vous pouvez utiliser la fonction de création manuelle de devis. Cette fonction fournit un moyen flexible de construire des devis étape par étape.</p>
+                    
+                    <h6 class="text-primary mt-4">Étapes d'Opération</h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">1</span>
+                                </div>
+                                <h6 class="text-primary mt-2">Sélectionner Type Produit</h6>
+                                <p class="small text-muted">Choisir parmi les catégories de produits disponibles</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">2</span>
+                                </div>
+                                <h6 class="text-info mt-2">Ajouter Produits</h6>
+                                <p class="small text-muted">Ajouter les produits un par un avec leurs spécifications</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">3</span>
+                                </div>
+                                <h6 class="text-warning mt-2">Définir Tarification</h6>
+                                <p class="small text-muted">Configurer les informations de tarification et de quantité</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center mb-3">
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">4</span>
+                                </div>
+                                <h6 class="text-success mt-2">Générer Devis</h6>
+                                <p class="small text-muted">Générer et exporter le devis final</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary mt-4">Fonctionnalités de Sélection Produit</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-list me-1"></i>Catégories de Produits</h6>
+                            <ul class="small">
+                                <li>Composants d'Assemblage (Assm.)</li>
+                                <li>Panneaux de porte et variantes</li>
+                                <li>Corps de meuble et variantes</li>
+                                <li>Matériel et accessoires</li>
+                                <li>Moulures et matériaux de finition</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-cogs me-1"></i>Gestion des Variantes</h6>
+                            <ul class="small">
+                                <li>Sélection automatique des variantes basée sur le type de produit</li>
+                                <li>Calcul de prix en temps réel</li>
+                                <li>Génération de codes SKU</li>
+                                <li>Gestion des quantités et de la tarification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analyse des Ventes -->
+    <div class="row mb-4" id="sales-analysis">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Analyse des Ventes</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Fonctions d'Analyse</h6>
+                    <p>Le module d'analyse des ventes fournit des capacités d'analyse de données complètes pour vous aider à comprendre la performance des ventes et les tendances du marché.</p>
+                    
+                    <h6 class="text-primary mt-4">Dimensions d'Analyse Disponibles</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-chart-bar me-1"></i>Analyse de Performance</h6>
+                            <ul class="small">
+                                <li>Performance des ventes par période</li>
+                                <li>Analyse du type de client</li>
+                                <li>Comparaison de performance des vendeurs</li>
+                                <li>Analyse des ventes par catégorie de produit</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-chart-pie me-1"></i>Analyse des Tendances</h6>
+                            <ul class="small">
+                                <li>Tendances de ventes mensuelles/trimestrielles</li>
+                                <li>Analyse du taux de conversion des clients</li>
+                                <li>Distribution du montant des commandes</li>
+                                <li>Comparaison des ventes régionales</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary mt-4">Options d'Exportation de Données</h6>
+                    <div class="alert alert-light">
+                        <ul class="mb-0">
+                            <li><strong>Format Excel :</strong> Données détaillées avec graphiques et analyse</li>
+                            <li><strong>Format CSV :</strong> Données brutes pour traitement ultérieur</li>
+                            <li><strong>Format PDF :</strong> Rapports professionnels pour présentation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ & Solutions -->
+    <div class="row mb-4" id="troubleshooting">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>Questions Fréquemment Posées & Solutions</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Problèmes Courants et Solutions</h6>
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    Que faire si le téléchargement du fichier PDF échoue ?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>Veuillez vérifier les points suivants :</p>
+                                    <ul>
+                                        <li>Le format de fichier est-il PDF ?</li>
+                                        <li>La taille du fichier dépasse-t-elle 16MB ?</li>
+                                        <li>Le fichier est-il corrompu ou chiffré ?</li>
+                                        <li>La connexion réseau est-elle normale ?</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    Que faire si les résultats d'analyse sont inexacts ?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>Vous pouvez essayer les méthodes suivantes :</p>
+                                    <ul>
+                                        <li>Vérifier si le format de fichier PDF est standard</li>
+                                        <li>Ajuster les règles de mappage SKU</li>
+                                        <li>Éditer manuellement les résultats d'analyse</li>
+                                        <li>Contacter le support technique</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                    Comment modifier les paramètres système ?
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>Les paramètres système nécessitent des privilèges administrateur :</p>
+                                    <ul>
+                                        <li>Se connecter avec un compte administrateur</li>
+                                        <li>Entrer dans la page des paramètres système</li>
+                                        <li>Modifier les paramètres de configuration pertinents</li>
+                                        <li>Sauvegarder les paramètres et redémarrer le service</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Technique -->
+    <div class="row mb-4" id="support">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i>Support Technique</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Informations de Contact</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-envelope me-2 text-primary"></i>Support Email : support@occw.com</li>
+                                <li><i class="fas fa-phone me-2 text-primary"></i>Support Téléphonique : +1-604-555-0123</li>
+                                <li><i class="fas fa-clock me-2 text-primary"></i>Heures de Travail : Lundi à Vendredi 9:00-18:00</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Informations de l'Entreprise</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-building me-2 text-primary"></i>Nom de l'Entreprise : Oppein Cabinet Canada West Ltd.</li>
+                                <li><i class="fas fa-globe me-2 text-primary"></i>Nom Anglais : Oppein Cabinet Canada West Ltd.</li>
+                                <li><i class="fas fa-map-marker-alt me-2 text-primary"></i>Adresse : Colombie-Britannique, Canada</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h6 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Informations de Version</h6>
+                        <p class="mb-0"><strong>Version Actuelle :</strong> v2.1.0 | <strong>Date de Mise à Jour :</strong> Août 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+[% endblock %]
