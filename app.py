@@ -26,13 +26,36 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-# 配置Jinja2定界符，避免与JavaScript模板语法冲突
+# 立即配置Jinja2定界符，避免与JavaScript模板语法冲突
 app.jinja_env.variable_start_string = '[['
 app.jinja_env.variable_end_string = ']]'
 app.jinja_env.block_start_string = '[%'
 app.jinja_env.block_end_string = '%]'
 app.jinja_env.comment_start_string = '[#'
 app.jinja_env.comment_end_string = '#]'
+
+# 配置Jinja2定界符，避免与JavaScript模板语法冲突
+# 配置Jinja2定界符，避免与JavaScript模板语法冲突
+app.config['JINJA2_ENVIRONMENT_OPTIONS'] = {
+    'variable_start_string': '[[',
+    'variable_end_string': ']]',
+    'block_start_string': '[%',
+    'block_end_string': '%]',
+    'comment_start_string': '[#',
+    'comment_end_string': '#]'
+}
+
+def configure_jinja2_delimiters():
+    """配置Jinja2定界符（备用方法）"""
+    app.jinja_env.variable_start_string = '[['
+    app.jinja_env.variable_end_string = ']]'
+    app.jinja_env.block_start_string = '[%'
+    app.jinja_env.block_end_string = '%]'
+    app.jinja_env.comment_start_string = '[#'
+    app.jinja_env.comment_end_string = '#]'
+
+# 立即配置定界符
+configure_jinja2_delimiters()
 
 # Babel配置
 app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
@@ -45,6 +68,14 @@ app.config['LANGUAGES'] = {
 
 # 初始化Babel
 babel = Babel(app)
+
+# 应用启动后的回调，确保Jinja2定界符配置
+@app.before_request
+def ensure_jinja2_delimiters():
+    """确保Jinja2定界符配置正确"""
+    if not hasattr(app, '_jinja2_delimiters_configured'):
+        configure_jinja2_delimiters()
+        app._jinja2_delimiters_configured = True
 
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -5002,6 +5033,9 @@ def get_customer_type_options():
         })
 
 if __name__ == '__main__':
+    # 确保Jinja2定界符配置正确
+    configure_jinja2_delimiters()
+    
     # 加载数据
     load_standard_prices()
     load_occw_prices()
