@@ -1,22 +1,22 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}{{ t('admin_dashboard') }}{% endblock %}
+[% block title %][[ t('admin_dashboard') ]][% endblock %]
 
-{% block content %}
-<!-- 页面标题 -->
+[% block content %]
+<!-- Page Title -->
 <div class="admin-dashboard-header">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h1 class="admin-dashboard-title">
                     <i class="fas fa-tachometer-alt me-3 page-icon"></i>
-                    {{ t('admin_dashboard') }}
+                    [[ t('admin_dashboard') ]]
                 </h1>
-                <p class="admin-dashboard-subtitle">{{ t('admin_dashboard_subtitle') }}</p>
+                <p class="admin-dashboard-subtitle">[[ t('admin_dashboard_subtitle') ]]</p>
             </div>
             <div class="col-md-4 text-end">
                 <a href="/admin_logout" class="btn btn-outline-light">
-                    <i class="fas fa-sign-out-alt me-1"></i>{{ t('nav_admin_logout') }}
+                    <i class="fas fa-sign-out-alt me-1"></i>[[ t('nav_admin_logout') ]]
                 </a>
             </div>
         </div>
@@ -25,15 +25,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- 功能卡片 -->
+        <!-- Function Cards -->
         <div class="col-md-6 col-lg-3 mb-4">
             <div class="card h-100 admin-card" data-action="showAllQuotations">
                 <div class="card-body text-center">
                     <div class="admin-icon">
                         <i class="fas fa-list-alt"></i>
                     </div>
-                    <h5 class="card-title">{{ t('all_quotations') }}</h5>
-                    <p class="card-text">{{ t('all_quotations_desc') }}</p>
+                    <h5 class="card-title">[[ t('all_quotations') ]]</h5>
+                    <p class="card-text">[[ t('all_quotations_desc') ]]</p>
                 </div>
             </div>
         </div>
@@ -44,8 +44,8 @@
                     <div class="admin-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h5 class="card-title">{{ t('sales_person_settings') }}</h5>
-                    <p class="card-text">{{ t('sales_person_settings_desc') }}</p>
+                    <h5 class="card-title">[[ t('sales_person_settings') ]]</h5>
+                    <p class="card-text">[[ t('sales_person_settings_desc') ]]</p>
                 </div>
             </div>
         </div>
@@ -56,8 +56,8 @@
                     <div class="admin-icon">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
-                    <h5 class="card-title">{{ t('price_management') }}</h5>
-                    <p class="card-text">{{ t('price_management_desc') }}</p>
+                    <h5 class="card-title">[[ t('price_management') ]]</h5>
+                    <p class="card-text">[[ t('price_management_desc') ]]</p>
                 </div>
             </div>
         </div>
@@ -68,8 +68,8 @@
                     <div class="admin-icon">
                         <i class="fas fa-exchange-alt"></i>
                     </div>
-                    <h5 class="card-title">{{ t('sku_mappings') }}</h5>
-                    <p class="card-text">{{ t('sku_mappings_desc') }}</p>
+                    <h5 class="card-title">[[ t('sku_mappings') ]]</h5>
+                    <p class="card-text">[[ t('sku_mappings_desc') ]]</p>
                 </div>
             </div>
         </div>
@@ -80,8 +80,8 @@
                     <div class="admin-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h5 class="card-title">{{ t('system_settings') }}</h5>
-                    <p class="card-text">{{ t('system_settings_desc') }}</p>
+                    <h5 class="card-title">[[ t('system_settings') ]]</h5>
+                    <p class="card-text">[[ t('system_settings_desc') ]]</p>
                 </div>
             </div>
         </div>
@@ -92,79 +92,79 @@
                     <div class="admin-icon">
                         <i class="fas fa-filter"></i>
                     </div>
-                    <h5 class="card-title">{{ t('import_filter_settings') }}</h5>
-                    <p class="card-text">{{ t('import_filter_settings_desc') }}</p>
+                    <h5 class="card-title">[[ t('import_filter_settings') ]]</h5>
+                    <p class="card-text">[[ t('import_filter_settings_desc') ]]</p>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 功能内容区域 -->
+    <!-- Function Content Area -->
     <div id="adminContent">
-        <!-- {{ _("all_quotations") }} -->
+        <!-- [[ _("all_quotations") ]] -->
         <div id="all-quotations-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-list-alt me-2"></i>{{ t('all_quotations') }}
+                        <i class="fas fa-list-alt me-2"></i>[[ t('all_quotations') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
-                    <!-- 搜索和过滤区域 -->
+                    <!-- [[ _("search_and_filter_area") ]] -->
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="quotationSearchInput" placeholder="{{ t('search_quotations') }}" onkeyup="filterQuotations()">
+                            <input type="text" class="form-control" id="quotationSearchInput" placeholder="[[ t('search_quotations') ]]" onkeyup="filterQuotations()">
                         </div>
                         <div class="col-md-3">
                             <select class="form-control" id="userFilterSelect" onchange="filterQuotations()">
-                                <option value="">{{ t('all_users') }}</option>
+                                <option value="">[[ t('all_users') ]]</option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <select class="form-control" id="dateFilterSelect" onchange="filterQuotations()">
-                                <option value="">{{ t('all_dates') }}</option>
-                                <option value="today">{{ t('today') }}</option>
-                                <option value="week">{{ t('this_week') }}</option>
-                                <option value="month">{{ t('this_month') }}</option>
+                                <option value="">[[ t('all_dates') ]]</option>
+                                <option value="today">[[ t('today') ]]</option>
+                                <option value="week">[[ t('this_week') ]]</option>
+                                <option value="month">[[ t('this_month') ]]</option>
                             </select>
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
-                                <i class="fas fa-times me-1"></i>{{ t('clear_filters') }}
+                                <i class="fas fa-times me-1"></i>[[ t('clear_filters') ]]
                             </button>
                         </div>
                     </div>
                     
-                    <!-- {{ _("quotation_table") }} -->
+                    <!-- [[ _("quotation_table") ]] -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="allQuotationsTable">
                             <thead class="table-dark">
                                 <tr>
-                                    <th style="width: 12%;">{{ t('quotation_id') }}</th>
-                                    <th style="width: 20%;">{{ t('quotation_title') }}</th>
-                                    <th style="width: 12%;">{{ t('user') }}</th>
-                                    <th style="width: 12%;">{{ t('order_date') }}</th>
-                                    <th style="width: 12%;">{{ t('sales_person') }}</th>
-                                    <th style="width: 32%; text-align: right;">{{ t('operation') }}</th>
+                                    <th style="width: 12%;">[[ t('quotation_id') ]]</th>
+                                    <th style="width: 20%;">[[ t('quotation_title') ]]</th>
+                                    <th style="width: 12%;">[[ t('user') ]]</th>
+                                    <th style="width: 12%;">[[ t('order_date') ]]</th>
+                                    <th style="width: 12%;">[[ t('sales_person') ]]</th>
+                                    <th style="width: 32%; text-align: right;">[[ t('operation') ]]</th>
                                 </tr>
                             </thead>
                             <tbody id="allQuotationsTableBody">
-                                <!-- {{ _("quotation_data_will_load_here") }} -->
+                                <!-- [[ _("quotation_data_will_load_here") ]] -->
                             </tbody>
                         </table>
                     </div>
                     
-                    <!-- 分页控件 -->
+                    <!-- Pagination Controls -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div class="text-muted">
-                            <span id="quotationCount">{{ t('total_quotations') }}: 0</span>
+                            <span id="quotationCount">[[ t('total_quotations') ]]: 0</span>
                         </div>
                         <nav>
                             <ul class="pagination pagination-sm" id="quotationPagination">
-                                <!-- 分页按钮将在这里动态生成 -->
+                                <!-- Pagination buttons will be dynamically generated here -->
                             </ul>
                         </nav>
                     </div>
@@ -172,38 +172,38 @@
             </div>
         </div>
         
-        <!-- 销售人员设置 -->
+        <!-- Sales Person Settings -->
         <div id="sales-person-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-users me-2"></i>{{ t('sales_person_settings') }}
+                        <i class="fas fa-users me-2"></i>[[ t('sales_person_settings') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h6>{{ t('add_sales_person') }}</h6>
+                            <h6>[[ t('add_sales_person') ]]</h6>
                             <form id="addSalesPersonForm">
                                 <div class="row g-2">
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" id="salesPersonName" placeholder="{{ t('sales_person_name') }}" required>
+                                        <input type="text" class="form-control" id="salesPersonName" placeholder="[[ t('sales_person_name') ]]" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="email" class="form-control" id="salesPersonEmail" placeholder="{{ t('sales_person_email') }}" required>
+                                        <input type="email" class="form-control" id="salesPersonEmail" placeholder="[[ t('sales_person_email') ]]" required>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-success btn-sm mt-2">
-                                    <i class="fas fa-plus me-1"></i>{{ t('add') }}
+                                    <i class="fas fa-plus me-1"></i>[[ t('add') ]]
                                 </button>
                             </form>
                         </div>
                     </div>
                     <div id="salesPersonsList">
-                        <!-- 销售人员列表将在这里动态加载 -->
+                        <!-- Sales person list will be dynamically loaded here -->
                     </div>
                 </div>
             </div>
@@ -211,125 +211,125 @@
         
 
         
-        <!-- SKU映射 -->
+        <!-- SKU Mappings -->
         <div id="sku-mappings-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-exchange-alt me-2"></i>{{ t('sku_mappings') }}
+                        <i class="fas fa-exchange-alt me-2"></i>[[ t('sku_mappings') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h6>{{ t('add_sku_mapping') }}</h6>
+                            <h6>[[ t('add_sku_mapping') ]]</h6>
                             <form id="addSkuMappingForm">
                                 <div class="row g-2">
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" id="originalSku" placeholder="{{ t('original_sku') }}" required>
+                                        <input type="text" class="form-control" id="originalSku" placeholder="[[ t('original_sku') ]]" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" id="mappedSku" placeholder="{{ t('mapped_sku') }}" required>
+                                        <input type="text" class="form-control" id="mappedSku" placeholder="[[ t('mapped_sku') ]]" required>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-info btn-sm mt-2">
-                                    <i class="fas fa-plus me-1"></i>{{ t('add') }}
+                                    <i class="fas fa-plus me-1"></i>[[ t('add') ]]
                                 </button>
                             </form>
                         </div>
                         <div class="col-md-6 text-end">
                             <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearAllSkuMappings()">
-                                <i class="fas fa-trash me-1"></i>{{ t('clear_all_mappings') }}
+                                <i class="fas fa-trash me-1"></i>[[ t('clear_all_mappings') ]]
                             </button>
                             <button type="button" class="btn btn-outline-success btn-sm ms-2" onclick="exportSkuMappings()">
-                                <i class="fas fa-download me-1"></i>{{ t('export_mappings') }}
+                                <i class="fas fa-download me-1"></i>[[ t('export_mappings') ]]
                             </button>
                         </div>
                     </div>
                     <div id="skuMappingsList">
-                        <!-- SKU映射列表将在这里动态加载 -->
+                        <!-- SKU mappings list will be dynamically loaded here -->
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- 系统设置 -->
+        <!-- System Settings -->
         <div id="system-settings-content" class="admin-content" style="display: none;">
             <div class="card system-settings-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i>{{ t('system_settings') }}
+                        <i class="fas fa-cogs me-2"></i>[[ t('system_settings') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <h6 class="text-primary mb-3">
-                                <i class="fas fa-toggle-on me-2"></i>{{ t('feature_controls') }}
+                                <i class="fas fa-toggle-on me-2"></i>[[ t('feature_controls') ]]
                             </h6>
                             <div class="mb-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="userLoginEnabled" 
-                                           {% if system_settings.get('user_login_enabled', True) %}checked{% endif %}>
+                                           [% if system_settings.get('user_login_enabled', True) %]checked[% endif %]>
                                     <label class="form-check-label" for="userLoginEnabled">
-                                        <strong>{{ t('enable_user_login') }}</strong>
+                                        <strong>[[ t('enable_user_login') ]]</strong>
                                     </label>
                                     <small class="form-text text-muted d-block">
-                                        {{ t('user_login_description') }}
+                                        [[ t('user_login_description') ]]
                                     </small>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-warning" onclick="saveSystemSettings()">
-                                <i class="fas fa-save me-1"></i>{{ t('save_settings') }}
+                                <i class="fas fa-save me-1"></i>[[ t('save_settings') ]]
                             </button>
                             
                             <hr class="my-4">
                             
                             <h6 class="text-danger mb-3">
-                                <i class="fas fa-shield-alt me-2"></i>{{ t('admin_password_settings') }}
+                                <i class="fas fa-shield-alt me-2"></i>[[ t('admin_password_settings') ]]
                             </h6>
                             <form id="adminPasswordForm">
                                 <div class="mb-3">
-                                    <label for="currentAdminPassword" class="form-label">{{ t('current_admin_password') }}</label>
+                                    <label for="currentAdminPassword" class="form-label">[[ t('current_admin_password') ]]</label>
                                     <input type="password" class="form-control" id="currentAdminPassword" required>
-                                    <div class="form-text">{{ t('current_password_required') }}</div>
+                                    <div class="form-text">[[ t('current_password_required') ]]</div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="newAdminPassword" class="form-label">{{ t('new_admin_password') }}</label>
+                                    <label for="newAdminPassword" class="form-label">[[ t('new_admin_password') ]]</label>
                                     <input type="password" class="form-control" id="newAdminPassword" required>
-                                    <div class="form-text">{{ t('new_password_requirements') }}</div>
+                                    <div class="form-text">[[ t('new_password_requirements') ]]</div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="confirmAdminPassword" class="form-label">{{ t('confirm_new_password') }}</label>
+                                    <label for="confirmAdminPassword" class="form-label">[[ t('confirm_new_password') ]]</label>
                                     <input type="password" class="form-control" id="confirmAdminPassword" required>
-                                    <div class="form-text">{{ t('confirm_password_help') }}</div>
+                                    <div class="form-text">[[ t('confirm_password_help') ]]</div>
                                 </div>
                                 <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-key me-1"></i>{{ t('change_admin_password') }}
+                                    <i class="fas fa-key me-1"></i>[[ t('change_admin_password') ]]
                                 </button>
                             </form>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-info mb-3">
-                                <i class="fas fa-info-circle me-2"></i>{{ t('system_info') }}
+                                <i class="fas fa-info-circle me-2"></i>[[ t('system_info') ]]
                             </h6>
                             <div class="card bg-light">
                                 <div class="card-body">
                                     <p class="mb-2">
-                                        <strong>{{ t('current_status') }}:</strong>
-                                        <span id="userLoginStatus" class="badge {% if system_settings.get('user_login_enabled', True) %}bg-success{% else %}bg-danger{% endif %}">
-                                            {% if system_settings.get('user_login_enabled', True) %}{{ t('enabled') }}{% else %}{{ t('disabled') }}{% endif %}
+                                        <strong>[[ t('current_status') ]]:</strong>
+                                        <span id="userLoginStatus" class="badge [% if system_settings.get('user_login_enabled', True) %]bg-success[% else %]bg-danger[% endif %]">
+                                            [% if system_settings.get('user_login_enabled', True) %][[ t('enabled') ]][% else %][[ t('disabled') ]][% endif %]
                                         </span>
                                     </p>
                                     <p class="mb-2">
-                                        <strong>{{ t('last_updated') }}:</strong>
-                                        <span id="lastUpdated">{{ t('just_now') }}</span>
+                                        <strong>[[ t('last_updated') ]]:</strong>
+                                        <span id="lastUpdated">[[ t('just_now') ]]</span>
                                     </p>
                                 </div>
                             </div>
@@ -339,100 +339,100 @@
             </div>
         </div>
         
-        <!-- 价格管理 -->
+        <!-- Price Management -->
         <div id="price-management-content" class="admin-content" style="display: none;">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-dollar-sign me-2"></i>{{ t('price_management') }}
+                        <i class="fas fa-dollar-sign me-2"></i>[[ t('price_management') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
                     
-                    <!-- {{ _("import_description") }} -->
+                    <!-- [[ _("import_description") ]] -->
                     <div class="alert alert-info mb-4">
                         <h5 class="alert-heading">
-                            <i class="fas fa-info-circle me-2"></i>{{ t('excel_format_requirements') }}
+                            <i class="fas fa-info-circle me-2"></i>[[ t('excel_format_requirements') ]]
                         </h5>
                         <div class="row">
                             <div class="col-lg-8">
-                                <p class="mb-2"><strong>{{ t('required_columns') }}：</strong></p>
+                                <p class="mb-2"><strong>[[ t('required_columns') ]]：</strong></p>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-bordered mb-3">
                                         <thead>
                                             <tr>
-                                                <th width="20%">{{ t('column_name') }}</th>
-                                                <th width="15%">{{ t('column_type') }}</th>
-                                                <th width="65%">{{ t('column_description') }}</th>
+                                                <th width="20%">[[ t('column_name') ]]</th>
+                                                <th width="15%">[[ t('column_type') ]]</th>
+                                                <th width="65%">[[ t('column_description') ]]</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><code>{{ t('internal_reference') }}</code></td>
-                                                <td>{{ t('text_type') }}</td>
-                                                <td>{{ t('sku_identifier') }}</td>
+                                                <td><code>[[ t('internal_reference') ]]</code></td>
+                                                <td>[[ t('text_type') ]]</td>
+                                                <td>[[ t('sku_identifier') ]]</td>
                                             </tr>
                                             <tr>
-                                                <td><code>{{ t('sales_price') }}</code></td>
-                                                <td>{{ t('number_type') }}</td>
-                                                <td>{{ t('product_price') }}</td>
+                                                <td><code>[[ t('sales_price') ]]</code></td>
+                                                <td>[[ t('number_type') ]]</td>
+                                                <td>[[ t('product_price') ]]</td>
                                             </tr>
                                             <tr>
-                                                <td><code>{{ t('variant_value') }}</code></td>
-                                                <td>{{ t('text_type') }}</td>
-                                                <td>{{ t('variant_format') }}</td>
+                                                <td><code>[[ t('variant_value') ]]</code></td>
+                                                <td>[[ t('text_type') ]]</td>
+                                                <td>[[ t('variant_format') ]]</td>
                                             </tr>
                                             <tr>
-                                                <td><code>{{ t('name_col') }}</code></td>
-                                                <td>{{ t('text_type') }}</td>
-                                                <td>{{ t('product_name_desc') }}</td>
+                                                <td><code>[[ t('name_col') ]]</code></td>
+                                                <td>[[ t('text_type') ]]</td>
+                                                <td>[[ t('product_name_desc') ]]</td>
                                             </tr>
                                             <tr>
-                                                <td><code>{{ t('product_category_col') }}</code></td>
-                                                <td>{{ t('text_type') }}</td>
-                                                <td>{{ t('product_category_desc') }}</td>
+                                                <td><code>[[ t('product_category_col') ]]</code></td>
+                                                <td>[[ t('text_type') ]]</td>
+                                                <td>[[ t('product_category_desc') ]]</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="col-lg-4">
-                                <p class="mb-2"><strong>{{ t('supported_categories') }}：</strong></p>
+                                <p class="mb-2"><strong>[[ t('supported_categories') ]]：</strong></p>
                                 <ul class="list-unstyled">
-                                    <li><i class="fas fa-check text-success me-1"></i>RTA Assm.组合件</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>RTA Assm. Assembly Component</li>
                                     <li><i class="fas fa-check text-success me-1"></i>Door</li>
                                     <li><i class="fas fa-check text-success me-1"></i>BOX</li>
                                     <li><i class="fas fa-check text-success me-1"></i>Ending Panel</li>
                                     <li><i class="fas fa-check text-success me-1"></i>Molding</li>
                                     <li><i class="fas fa-check text-success me-1"></i>Toe Kick</li>
                                     <li><i class="fas fa-check text-success me-1"></i>Filler</li>
-                                    <li><i class="fas fa-check text-success me-1"></i>{{ t('other_hardware') }}</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>[[ t('other_hardware') ]]</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 文件上传区域 -->
+                    <!-- File Upload Area -->
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
-                                        <i class="fas fa-upload me-2"></i>{{ t('upload_occw_prices') }}
+                                        <i class="fas fa-upload me-2"></i>[[ t('upload_occw_prices') ]]
                                     </h5>
                                 </div>
                                 <div class="card-body">
                                     <form id="uploadOccwPricesForm" enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <label for="occwPricesFile" class="form-label">{{ t('select_excel_file') }}</label>
+                                            <label for="occwPricesFile" class="form-label">[[ t('select_excel_file') ]]</label>
                                             <input type="file" class="form-control" id="occwPricesFile" name="file" accept=".xlsx,.xls" required>
-                                            <div class="form-text">{{ t('excel_file_requirements') }}</div>
+                                            <div class="form-text">[[ t('excel_file_requirements') ]]</div>
                                         </div>
                                         <button type="submit" class="btn btn-warning">
-                                            <i class="fas fa-upload me-1"></i>{{ t('upload_prices') }}
+                                            <i class="fas fa-upload me-1"></i>[[ t('upload_prices') ]]
                                         </button>
                                     </form>
                                 </div>
@@ -442,53 +442,54 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
-                                        <i class="fas fa-search me-2"></i>{{ t('price_statistics') }}
+                                        <i class="fas fa-search me-2"></i>[[ t('price_statistics') ]]
                                     </h5>
                                 </div>
                                 <div class="card-body">
                                     <div id="priceStats">
-                                        <p class="text-muted">{{ t('upload_file_to_see_stats') }}</p>
+                                        <p class="text-muted">[[ t('upload_file_to_see_stats') ]]</p>
                                     </div>
                                     <button type="button" class="btn btn-info btn-sm" onclick="loadPriceStats()">
-                                        <i class="fas fa-refresh me-1"></i>{{ t('refresh_stats') }}
+                                        <i class="fas fa-refresh me-1"></i>[[ t('refresh_stats') ]]
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 价格表显示区域 -->
+                    <!-- Price Table Display Area -->
                     <div class="row mt-4">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
-                                        <i class="fas fa-table me-2"></i>{{ t('occw_price_table') }}
+                                        <i class="fas fa-table me-2"></i>[[ t('occw_price_table') ]]
                                     </h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-3 price-filter-row">
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control" id="skuFilterInput" placeholder="{{ t('search_sku') }}" onkeyup="filterPrices()">
+                                            <input type="text" class="form-control" id="skuFilterInput" placeholder="[[ t('search_sku') ]]" onkeyup="filterPrices()">
                                         </div>
+
                                         <div class="col-md-2">
                                             <select class="form-control" id="categoryFilterSelect" onchange="filterPrices()">
-                                                <option value="">{{ t('all_categories') }}</option>
+                                                <option value="">[[ t('all_categories') ]]</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
                                             <select class="form-control" id="boxVariantFilterSelect" onchange="filterPrices()">
-                                                <option value="">{{ t('all_box_variants') }}</option>
+                                                <option value="">[[ t('all_box_variants') ]]</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
                                             <select class="form-control" id="doorVariantFilterSelect" onchange="filterPrices()">
-                                                <option value="">{{ t('all_door_variants') }}</option>
+                                                <option value="">[[ t('all_door_variants') ]]</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
                                             <button type="button" class="btn btn-outline-primary" onclick="clearPriceFilters()">
-                                                <i class="fas fa-times me-1"></i>{{ t('clear_filters') }}
+                                                <i class="fas fa-times me-1"></i>[[ t('clear_filters') ]]
                                             </button>
                                         </div>
                                     </div>
@@ -496,39 +497,39 @@
                                         <table class="table table-striped table-hover" id="occwPricesTable">
                                             <thead class="table-dark">
                                                 <tr>
-                                                    <th>{{ t('sku') }}</th>
-                                                    <th>{{ t('product_name') }}</th>
-                                                    <th>{{ t('category') }}</th>
-                                                    <th>{{ t('box_variant') }}</th>
-                                                    <th>{{ t('door_variant') }}</th>
-                                                    <th>{{ t('price') }}</th>
+                                                    <th>[[ t('sku') ]]</th>
+                                                    <th>[[ t('product_name') ]]</th>
+                                                    <th>[[ t('category') ]]</th>
+                                                    <th>[[ t('box_variant') ]]</th>
+                                                    <th>[[ t('door_variant') ]]</th>
+                                                    <th>[[ t('price') ]]</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="occwPricesTableBody">
-                                                <!-- 价格数据将在这里动态加载 -->
+                                                <!-- Price data will be dynamically loaded here -->
                                             </tbody>
                                         </table>
                                     </div>
                                     
-                                    <!-- 分页控件 -->
+                                    <!-- Pagination Controls -->
                                     <div class="row mt-3">
                                         <div class="col-md-6">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-2">{{ t('show') }}</span>
+                                                <span class="me-2">[[ t('show') ]]</span>
                                                 <select class="form-select form-select-sm me-2" id="perPageSelect" style="width: auto;" onchange="changePerPage()">
                                                     <option value="25">25</option>
                                                     <option value="50" selected>50</option>
                                                     <option value="100">100</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <span class="me-2">{{ t('entries') }}</span>
+                                                <span class="me-2">[[ t('entries') ]]</span>
                                                 <span id="priceTableInfo" class="text-muted"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <nav aria-label="价格表分页">
+                                            <nav aria-label="Price Table Pagination">
                                                 <ul class="pagination pagination-sm justify-content-end mb-0" id="priceTablePagination">
-                                                    <!-- 分页按钮将在这里动态生成 -->
+                                                    <!-- Pagination buttons will be dynamically generated here -->
                                                 </ul>
                                             </nav>
                                         </div>
@@ -541,97 +542,97 @@
             </div>
         </div>
         
-        <!-- {{ _("sales_order_import_filter_settings") }} -->
+        <!-- [[ _("sales_order_import_filter_settings") ]] -->
         <div id="import-filters-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-filter me-2"></i>{{ t('import_filter_settings') }}
+                        <i class="fas fa-filter me-2"></i>[[ t('import_filter_settings') ]]
                     </h5>
                     <button type="button" class="btn btn-outline-light btn-sm" onclick="showAdminDashboard()">
-                        <i class="fas fa-arrow-left me-1"></i>{{ t('back_to_dashboard') }}
+                        <i class="fas fa-arrow-left me-1"></i>[[ t('back_to_dashboard') ]]
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="fas fa-info-circle me-2"></i>{{ _("filter_settings_description") }}
+                            <i class="fas fa-info-circle me-2"></i>[[ t('filter_settings_description') ]]
                         </h6>
-                        <p class="mb-0">{{ _("filter_settings_help") }}</p>
+                        <p class="mb-0">[[ t('filter_settings_help') ]]</p>
                     </div>
                     
                     <form id="importFiltersForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3">
-                                    <i class="fas fa-dollar-sign me-2"></i>{{ _("amount_filter") }}
+                                    <i class="fas fa-dollar-sign me-2"></i>[[ t('amount_filter') ]]
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="minAmount" class="form-label">{{ _("min_import_amount_threshold") }}</label>
+                                    <label for="minAmount" class="form-label">[[ t('min_import_amount_threshold') ]]</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control" id="minAmount" 
-                                               placeholder="例如：1000" min="0" step="0.01">
+                                               placeholder="e.g.: 1000" min="0" step="0.01">
                                     </div>
-                                    <small class="form-text text-muted">{{ _("min_amount_help") }}</small>
+                                    <small class="form-text text-muted">[[ t('min_amount_help') ]]</small>
                                 </div>
                                 
                                 <h6 class="text-primary mb-3 mt-4">
-                                    <i class="fas fa-calendar me-2"></i>{{ _("date_filter") }}
+                                    <i class="fas fa-calendar me-2"></i>[[ t('date_filter') ]]
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="startDate" class="form-label">{{ _("start_date") }}</label>
+                                    <label for="startDate" class="form-label">[[ t('start_date') ]]</label>
                                     <input type="date" class="form-control" id="startDate">
-                                    <small class="form-text text-muted">{{ _("start_date_help") }}</small>
+                                    <small class="form-text text-muted">[[ t('start_date_help') ]]</small>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="endDate" class="form-label">{{ _("end_date") }}</label>
+                                    <label for="endDate" class="form-label">[[ t('end_date') ]]</label>
                                     <input type="date" class="form-control" id="endDate">
-                                    <small class="form-text text-muted">{{ _("end_date_help") }}</small>
+                                    <small class="form-text text-muted">[[ t('end_date_help') ]]</small>
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3">
-                                    <i class="fas fa-users me-2"></i>{{ _("person_customer_filter") }}
+                                    <i class="fas fa-users me-2"></i>[[ t('person_customer_filter') ]]
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="salesPersonFilter" class="form-label">销售人员过滤</label>
+                                    <label for="salesPersonFilter" class="form-label">[[ _("sales_person_filter") ]]</label>
                                     <input type="text" class="form-control" id="salesPersonFilter" 
-                                           placeholder="例如：张三,李四,王五">
-                                    <small class="form-text text-muted">多个销售人员用逗号分隔，留空表示不过滤</small>
+                                           placeholder="e.g.: Zhang San, Li Si, Wang Wu">
+                                    <small class="form-text text-muted">Multiple sales persons separated by commas, leave empty for no filter</small>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="customerFilter" class="form-label">{{ _("customer_filter") }}</label>
+                                    <label for="customerFilter" class="form-label">[[ t('customer_filter') ]]</label>
                                     <input type="text" class="form-control" id="customerFilter" 
-                                           placeholder="例如：客户A,客户B">
-                                    <small class="form-text text-muted">{{ _("customer_filter_help") }}</small>
+                                           placeholder="e.g.: Customer A, Customer B">
+                                    <small class="form-text text-muted">[[ t('customer_filter_help') ]]</small>
                                 </div>
                                 
                                 <h6 class="text-primary mb-3 mt-4">
-                                    <i class="fas fa-tags me-2"></i>{{ _("status_filter") }}
+                                    <i class="fas fa-tags me-2"></i>[[ t('status_filter') ]]
                                 </h6>
                                 <div class="mb-3">
-                                    <label class="form-label">订单{{ _("status_filter") }}</label>
+                                    <label class="form-label">Order [[ t('status_filter') ]]</label>
                                     <div id="orderStatusFilters">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ _("sales_order") }}" id="status_{{ _("sales_order") }}" checked>
-                                            <label class="form-check-label" for="status_{{ _("sales_order") }}">{{ _("sales_order") }}</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ t('sales_order') ]]" id="status_[[ t('sales_order') ]]" checked>
+<label class="form-check-label" for="status_[[ t('sales_order') ]]">[[ t('sales_order') ]]</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ _("quotation_order") }}" id="status_{{ _("quotation_order") }}" checked>
-                                            <label class="form-check-label" for="status_{{ _("quotation_order") }}">{{ _("quotation_order") }}</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ t('quotation_order') ]]" id="status_[[ t('quotation_order') ]]" checked>
+<label class="form-check-label" for="status_[[ t('quotation_order') ]]">[[ t('quotation_order') ]]</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="已发送{{ _("quotation_order") }}" id="status_已发送{{ _("quotation_order") }}" checked>
-                                            <label class="form-check-label" for="status_已发送{{ _("quotation_order") }}">已发送{{ _("quotation_order") }}</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ _("sent_quotation_order") ]]" id="status_[[ _("sent_quotation_order") ]]" checked>
+                                            <label class="form-check-label" for="status_[[ _("sent_quotation_order") ]]">[[ _("sent_quotation_order") ]]</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="已取消" id="status_已取消">
-                                            <label class="form-check-label" for="status_已取消">已取消</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ _("cancelled") ]]" id="status_[[ _("cancelled") ]]">
+                                            <label class="form-check-label" for="status_[[ _("cancelled") ]]">[[ _("cancelled") ]]</label>
                                         </div>
                                     </div>
-                                    <small class="form-text text-muted">{{ _("status_filter_help") }}</small>
+                                    <small class="form-text text-muted">[[ t('status_filter_help') ]]</small>
                                 </div>
                             </div>
                         </div>
@@ -639,13 +640,13 @@
                         <div class="row mt-4">
                             <div class="col-12">
                                 <button type="submit" class="btn btn-warning me-2">
-                                    <i class="fas fa-save me-1"></i>保存过滤设置
+                                    <i class="fas fa-save me-1"></i>[[ _("save_filter_settings") ]]
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary me-2" onclick="resetFilters()">
-                                    <i class="fas fa-undo me-1"></i>重置设置
+                                    <i class="fas fa-undo me-1"></i>[[ _("reset_settings") ]]
                                 </button>
                                 <button type="button" class="btn btn-outline-info" onclick="loadCurrentFilters()">
-                                    <i class="fas fa-refresh me-1"></i>加载当前设置
+                                    <i class="fas fa-refresh me-1"></i>[[ _("load_current_settings") ]]
                                 </button>
                             </div>
                         </div>
@@ -655,11 +656,11 @@
         </div>
     </div>
 </div>
-{% endblock %}
+[% endblock %]
 
-{% block extra_css %}
+[% block extra_css %]
 <style>
-/* 管理员卡片样式 */
+/* Admin Card Styles */
 .admin-card {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -690,7 +691,7 @@
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* 功能卡片网格 */
+/* Function Card Grid */
 .admin-card .card-body {
     padding: 2.5rem 1.5rem;
     text-align: center;
@@ -709,7 +710,7 @@
     line-height: 1.6;
 }
 
-/* 管理员仪表板特殊样式 */
+/* Admin Dashboard Special Styles */
 .admin-dashboard-header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: var(--white);
@@ -732,7 +733,7 @@
     color: var(--white);
 }
 
-/* 统计卡片样式 */
+/* Statistics Card Styles */
 .stats-card {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: var(--white);
@@ -765,7 +766,7 @@
     color: var(--white);
 }
 
-/* 价格管理特殊样式 */
+/* Price Management Special Styles */
 .price-filter-row {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 0.75rem;
@@ -787,7 +788,7 @@
     box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
 }
 
-/* 系统设置特殊样式 */
+/* System Settings Special Styles */
 .system-settings-card {
     background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
     border: 2px solid var(--primary-color);
@@ -801,7 +802,7 @@
     border-radius: 0.75rem 0.75rem 0 0;
 }
 
-/* 表单开关样式 */
+/* Form Switch Styles */
 .form-check-input:checked {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -812,7 +813,7 @@
     box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
 }
 
-/* 响应式调整 */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .admin-card .card-body {
         padding: 1.5rem 1rem;
@@ -832,20 +833,29 @@
     }
 }
 </style>
-{% endblock %}
+[% endblock %]
 
-{% block extra_js %}
+[% block extra_js %]
 <script>
-// 页面初始化
+// Translation text variables
+const showingRecordsText = "[[ t('showing_records') ]]";
+const salesOrderText = "[[ t('sales_order') ]]";
+const quotationOrderText = "[[ t('quotation_order') ]]";
+const sentQuotationOrderText = "[[ t('sent_quotation_order') ]]";
+const startDateAfterEndDateText = "[[ t('start_date_after_end_date') ]]";
+const filterSettingsSaveSuccessText = "[[ t('filter_settings_save_success') ]]";
+const saveFilterSettingsFailedText = "[[ t('save_filter_settings_failed') ]]";
+
+// Page initialization
 $(document).ready(function() {
     // console.log('Admin page loaded');
     
-    // 添加点击事件监听器
+    // Add click event listeners
     $('.admin-card').on('click', function() {
         const action = $(this).data('action');
         // console.log('Admin card clicked:', $(this).find('.card-title').text(), 'Action:', action);
         
-        // 根据data-action属性调用相应的函数
+        // Call corresponding functions based on data-action attribute
         switch(action) {
             case 'showAllQuotations':
                 showAllQuotations();
@@ -871,13 +881,13 @@ $(document).ready(function() {
     });
 });
 
-// 显示管理员仪表板
+// Show admin dashboard
 function showAdminDashboard() {
     $('.admin-card').show();
     $('.admin-content').hide();
 }
 
-// 显示全部{{ _("quotation_order") }}
+// Show all [[ _("quotation_order") ]]
 function showAllQuotations() {
     // console.log('showAllQuotations called');
     try {
@@ -890,7 +900,7 @@ function showAllQuotations() {
     }
 }
 
-// 显示销售人员设置
+// Show sales person settings
 function showSalesPersonSettings() {
     $('.admin-card').hide();
     $('.admin-content').hide();
@@ -898,16 +908,16 @@ function showSalesPersonSettings() {
     loadSalesPersons();
 }
 
-// 显示价格表管理
+// Show price table management
 function showPriceManagement() {
     $('.admin-card').hide();
     $('.admin-content').hide();
     $('#price-management-content').show();
     loadPriceStats();
-    loadOccwPrices(1); // 从第一页开始加载，这会同时初始化过滤器
+    loadOccwPrices(1); // Load from first page, this will also initialize filters
 }
 
-// 显示SKU映射
+// Show SKU mappings
 function showSkuMappings() {
     $('.admin-card').hide();
     $('.admin-content').hide();
@@ -915,14 +925,14 @@ function showSkuMappings() {
     loadSkuMappings();
 }
 
-// 显示系统设置
+// Show system settings
 function showSystemSettings() {
     $('.admin-card').hide();
     $('.admin-content').hide();
     $('#system-settings-content').show();
 }
 
-// 显示导入过滤设置
+// Show import filter settings
 function showImportFilters() {
     $('.admin-card').hide();
     $('.admin-content').hide();
@@ -930,7 +940,7 @@ function showImportFilters() {
     loadCurrentFilters();
 }
 
-// 保存系统设置
+// Save system settings
 function saveSystemSettings() {
     const userLoginEnabled = $('#userLoginEnabled').is(':checked');
     
@@ -943,33 +953,33 @@ function saveSystemSettings() {
         }),
         success: function(response) {
             if (response.success) {
-                showAlert('{{ t("settings_saved_success") }}', 'success');
+                showAlert('[[ t("settings_saved_success") ]]', 'success');
                 updateSystemStatus(userLoginEnabled);
             } else {
                 showAlert(response.error, 'danger');
             }
         },
         error: function() {
-            showAlert('{{ t("save_settings_failed") }}', 'danger');
+            showAlert('[[ t("save_settings_failed") ]]', 'danger');
         }
     });
 }
 
-// 更新系统状态显示
+// Update system status display
 function updateSystemStatus(userLoginEnabled) {
     const statusElement = $('#userLoginStatus');
     const lastUpdatedElement = $('#lastUpdated');
     
     if (userLoginEnabled) {
-        statusElement.removeClass('bg-danger').addClass('bg-success').text('{{ t("enabled") }}');
+        statusElement.removeClass('bg-danger').addClass('bg-success').text('[[ t("enabled") ]]');
     } else {
-        statusElement.removeClass('bg-success').addClass('bg-danger').text('{{ t("disabled") }}');
+        statusElement.removeClass('bg-success').addClass('bg-danger').text('[[ t("disabled") ]]');
     }
     
     lastUpdatedElement.text(new Date().toLocaleString());
 }
 
-// 加载全部{{ _("quotation_order") }}
+// Load all [[ _("quotation_order") ]]
 function loadAllQuotations() {
     // console.log('loadAllQuotations called');
     try {
@@ -986,7 +996,7 @@ function loadAllQuotations() {
             },
             error: function(xhr, status, error) {
                 console.error('loadAllQuotations error:', error);
-                showAlert('{{ t("load_all_quotations_failed") }}', 'danger');
+                showAlert('[[ t("load_all_quotations_failed") ]]', 'danger');
             }
         });
     } catch (error) {
@@ -994,15 +1004,15 @@ function loadAllQuotations() {
     }
 }
 
-// 全局变量存储所有{{ _("quotation_order") }}数据
+// Global variable to store all [[ _("quotation_order") ]] data
 let allQuotationsData = [];
 let filteredQuotationsData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
-// 显示全部{{ _("quotation_order") }}列表
+// Show all [[ _("quotation_order") ]] list
 function displayAllQuotationsList(allQuotations) {
-    // 转换数据格式为扁平化数组
+    // Convert data format to flattened array
     allQuotationsData = [];
     Object.keys(allQuotations).forEach(function(username) {
         const userQuotations = allQuotations[username];
@@ -1016,14 +1026,14 @@ function displayAllQuotationsList(allQuotations) {
         }
     });
     
-    // 初始化过滤器和显示
+    // Initialize filters and display
     initializeFilters();
     filterQuotations();
 }
 
-// 初始化过滤器
+// Initialize filters
 function initializeFilters() {
-    // 填充用户过滤器
+    // Populate user filters
     const users = [...new Set(allQuotationsData.map(q => q.username))];
     const userSelect = $('#userFilterSelect');
     userSelect.find('option:not(:first)').remove();
@@ -1032,24 +1042,24 @@ function initializeFilters() {
     });
 }
 
-// 过滤{{ _("quotation_order") }}
+// Filter [[ _("quotation_order") ]]
 function filterQuotations() {
     const searchTerm = $('#quotationSearchInput').val().toLowerCase();
     const userFilter = $('#userFilterSelect').val();
     const dateFilter = $('#dateFilterSelect').val();
     
     filteredQuotationsData = allQuotationsData.filter(quotation => {
-        // 搜索过滤
+        // [[ _("search") ]] filter
         const matchesSearch = !searchTerm || 
             quotation.title.toLowerCase().includes(searchTerm) ||
             quotation.quotation_id.toLowerCase().includes(searchTerm) ||
             quotation.username.toLowerCase().includes(searchTerm) ||
             (quotation.data && quotation.data.sales_person && quotation.data.sales_person.toLowerCase().includes(searchTerm));
         
-        // 用户过滤
+        // User filter
         const matchesUser = !userFilter || quotation.username === userFilter;
         
-        // {{ _("date_filter") }}
+        // [[ _("date_filter") ]]
         let matchesDate = true;
         if (dateFilter && quotation.data && quotation.data.order_date) {
             const orderDate = new Date(quotation.data.order_date);
@@ -1077,7 +1087,7 @@ function filterQuotations() {
     displayQuotationsTable();
 }
 
-// 清除过滤器
+// Clear filters
 function clearFilters() {
     $('#quotationSearchInput').val('');
     $('#userFilterSelect').val('');
@@ -1085,7 +1095,7 @@ function clearFilters() {
     filterQuotations();
 }
 
-// 显示{{ _("quotation_order") }}表格
+// Show [[ _("quotation_order") ]] table
 function displayQuotationsTable() {
     const tbody = $('#allQuotationsTableBody');
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -1097,12 +1107,12 @@ function displayQuotationsTable() {
             <tr>
                 <td colspan="6" class="text-center py-5">
                     <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
-                    <h5 class="text-muted">{{ t('no_quotations') }}</h5>
-                    <p class="text-muted">{{ t('no_quotations_desc') }}</p>
+                    <h5 class="text-muted">[[ t('no_quotations') ]]</h5>
+                    <p class="text-muted">[[ t('no_quotations_desc') ]]</p>
                 </td>
             </tr>
         `);
-        $('#quotationCount').text('{{ t("total_quotations") }}: 0');
+        $('#quotationCount').text('[[ t("total_quotations") ]]: 0');
         $('#quotationPagination').empty();
         return;
     }
@@ -1121,13 +1131,13 @@ function displayQuotationsTable() {
                 <td>${salesPerson}</td>
                 <td style="text-align: right;">
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewQuotationDetail('${quotation.quotation_id}')">
-                        <i class="fas fa-eye me-1"></i>{{ t('view') }}
+                        <i class="fas fa-eye me-1"></i>[[ t('view') ]]
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-warning" onclick="editQuotation('${quotation.quotation_id}')">
-                        <i class="fas fa-edit me-1"></i>{{ t('edit') }}
+                        <i class="fas fa-edit me-1"></i>[[ t('edit') ]]
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteQuotation('${quotation.quotation_id}')">
-                        <i class="fas fa-trash me-1"></i>{{ t('delete') }}
+                        <i class="fas fa-trash me-1"></i>[[ t('delete') ]]
                     </button>
                 </td>
             </tr>
@@ -1136,25 +1146,25 @@ function displayQuotationsTable() {
     
     tbody.html(html);
     
-    // 更新计数和分页
-    $('#quotationCount').text(`{{ t("total_quotations") }}: ${filteredQuotationsData.length}`);
+    // Update count and pagination
+    $('#quotationCount').text(`[[ t("total_quotations") ]]: ${filteredQuotationsData.length}`);
     displayPagination();
 }
 
-// 查看{{ _("quotation_order") }}详情
+// View [[ _("quotation_order") ]] details
 function viewQuotationDetail(quotationId) {
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// 编辑{{ _("quotation_order") }}
+// Edit [[ _("quotation_order") ]]
 function editQuotation(quotationId) {
-    // 直接打开{{ _("quotation_order") }}详情页面
+    // Directly open [[ _("quotation_order") ]] details page
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// 删除{{ _("quotation_order") }}
+// Delete [[ _("quotation_order") ]]
 function deleteQuotation(quotationId) {
-    if (confirm('{{ t("confirm_delete_quotation") }}')) {
+    if (confirm('[[ t("confirm_delete_quotation") ]]')) {
         $.ajax({
             url: `/delete_quotation/${quotationId}`,
             type: 'POST',
@@ -1162,19 +1172,19 @@ function deleteQuotation(quotationId) {
             success: function(response) {
                 if (response.success) {
                     showAlert(response.message, 'success');
-                    loadAllQuotations(); // 重新加载{{ _("quotation_order") }}列表
+                    loadAllQuotations(); // Reload [[ _("quotation_order") ]] list
                 } else {
                     showAlert(response.error, 'danger');
                 }
             },
             error: function() {
-                showAlert('{{ t("delete_quotation_failed") }}', 'danger');
+                showAlert('[[ t("delete_quotation_failed") ]]', 'danger');
             }
         });
     }
 }
 
-// 显示分页
+// Show pagination
 function displayPagination() {
     const totalPages = Math.ceil(filteredQuotationsData.length / itemsPerPage);
     const pagination = $('#quotationPagination');
@@ -1186,7 +1196,7 @@ function displayPagination() {
     
     let html = '';
     
-    // 上一页
+    // Previous page
     html += `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
             <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">
@@ -1195,7 +1205,7 @@ function displayPagination() {
         </li>
     `;
     
-    // 页码
+    // Page number
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
     
@@ -1207,7 +1217,7 @@ function displayPagination() {
         `;
     }
     
-    // 下一页
+    // Next page
     html += `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
             <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">
@@ -1219,7 +1229,7 @@ function displayPagination() {
     pagination.html(html);
 }
 
-// 切换页面
+// Switch page
 function changePage(page) {
     const totalPages = Math.ceil(filteredQuotationsData.length / itemsPerPage);
     if (page >= 1 && page <= totalPages) {
@@ -1228,7 +1238,7 @@ function changePage(page) {
     }
 }
 
-// 加载销售人员列表
+// Load sales person list
 function loadSalesPersons() {
     $.ajax({
         url: '/get_sales_persons',
@@ -1241,12 +1251,12 @@ function loadSalesPersons() {
             }
         },
         error: function() {
-            showAlert('{{ t("load_sales_persons_failed") }}', 'danger');
+            showAlert('[[ t("load_sales_persons_failed") ]]', 'danger');
         }
     });
 }
 
-// 显示销售人员列表
+// Show sales person list
 function displaySalesPersonsList(salesPersons) {
     const container = $('#salesPersonsList');
     
@@ -1254,15 +1264,15 @@ function displaySalesPersonsList(salesPersons) {
         container.html(`
             <div class="text-center py-5">
                 <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">{{ t('no_sales_persons') }}</h5>
-                <p class="text-muted">{{ t('no_sales_persons_desc') }}</p>
+                <h5 class="text-muted">[[ t('no_sales_persons') ]]</h5>
+                <p class="text-muted">[[ t('no_sales_persons_desc') ]]</p>
             </div>
         `);
         return;
     }
     
     let html = '<div class="table-responsive"><table class="table table-striped">';
-    html += '<thead><tr><th>{{ t("name") }}</th><th>{{ t("email") }}</th><th>{{ t("operation") }}</th></tr></thead><tbody>';
+    html += '<thead><tr><th>[[ t("name") ]]</th><th>[[ t("email") ]]</th><th>[[ t("operation") ]]</th></tr></thead><tbody>';
     
     salesPersons.forEach(function(person) {
         html += `
@@ -1282,7 +1292,7 @@ function displaySalesPersonsList(salesPersons) {
     container.html(html);
 }
 
-// 添加销售人员
+// Add sales person
 $('#addSalesPersonForm').on('submit', function(e) {
     e.preventDefault();
     
@@ -1305,14 +1315,14 @@ $('#addSalesPersonForm').on('submit', function(e) {
             }
         },
         error: function() {
-            showAlert('{{ t("add_sales_person_failed") }}', 'danger');
+            showAlert('[[ t("add_sales_person_failed") ]]', 'danger');
         }
     });
 });
 
-// 删除销售人员
+// Delete sales person
 function deleteSalesPerson(name) {
-    if (confirm('{{ t("confirm_delete_sales_person") }}')) {
+    if (confirm('[[ t("confirm_delete_sales_person") ]]')) {
         $.ajax({
             url: '/delete_sales_person',
             type: 'POST',
@@ -1327,7 +1337,7 @@ function deleteSalesPerson(name) {
                 }
             },
             error: function() {
-                showAlert('{{ t("delete_sales_person_failed") }}', 'danger');
+                showAlert('[[ t("delete_sales_person_failed") ]]', 'danger');
             }
         });
     }
@@ -1337,7 +1347,7 @@ function deleteSalesPerson(name) {
 
 
 
-// 加载SKU映射
+// Load SKU mappings
 function loadSkuMappings() {
     $.ajax({
         url: '/get_sku_mappings',
@@ -1350,12 +1360,12 @@ function loadSkuMappings() {
             }
         },
         error: function() {
-            showAlert('{{ t("load_sku_mappings_failed") }}', 'danger');
+            showAlert('[[ t("load_sku_mappings_failed") ]]', 'danger');
         }
     });
 }
 
-// 显示SKU映射列表
+// Show SKU mappings list
 function displaySkuMappingsList(mappings) {
     const container = $('#skuMappingsList');
     
@@ -1363,15 +1373,15 @@ function displaySkuMappingsList(mappings) {
         container.html(`
             <div class="text-center py-5">
                 <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">{{ t('no_sku_mappings') }}</h5>
-                <p class="text-muted">{{ t('no_sku_mappings_desc') }}</p>
+                <h5 class="text-muted">[[ t('no_sku_mappings') ]]</h5>
+                <p class="text-muted">[[ t('no_sku_mappings_desc') ]]</p>
             </div>
         `);
         return;
     }
     
     let html = '<div class="table-responsive"><table class="table table-striped">';
-    html += '<thead><tr><th>{{ t("original_sku") }}</th><th>{{ t("mapped_sku") }}</th><th>{{ t("operation") }}</th></tr></thead><tbody>';
+    html += '<thead><tr><th>[[ t("original_sku") ]]</th><th>[[ t("mapped_sku") ]]</th><th>[[ t("operation") ]]</th></tr></thead><tbody>';
     
     Object.keys(mappings).forEach(function(originalSku) {
         const mappedSku = mappings[originalSku];
@@ -1392,7 +1402,7 @@ function displaySkuMappingsList(mappings) {
     container.html(html);
 }
 
-// 添加SKU映射
+// Add SKU mapping
 $('#addSkuMappingForm').on('submit', function(e) {
     e.preventDefault();
     
@@ -1415,14 +1425,14 @@ $('#addSkuMappingForm').on('submit', function(e) {
             }
         },
         error: function() {
-            showAlert('{{ t("add_sku_mapping_failed") }}', 'danger');
+            showAlert('[[ t("add_sku_mapping_failed") ]]', 'danger');
         }
     });
 });
 
-// 删除SKU映射
+// Delete SKU mapping
 function deleteSkuMapping(originalSku) {
-    if (confirm('{{ t("confirm_delete_sku_mapping") }}')) {
+    if (confirm('[[ t("confirm_delete_sku_mapping") ]]')) {
         $.ajax({
             url: '/delete_sku_mapping',
             type: 'POST',
@@ -1437,15 +1447,15 @@ function deleteSkuMapping(originalSku) {
                 }
             },
             error: function() {
-                showAlert('{{ t("delete_sku_mapping_failed") }}', 'danger');
+                showAlert('[[ t("delete_sku_mapping_failed") ]]', 'danger');
             }
         });
     }
 }
 
-// 清空所有SKU映射
+// Clear all SKU mappings
 function clearAllSkuMappings() {
-    if (confirm('{{ t("confirm_clear_all_sku_mappings") }}')) {
+    if (confirm('[[ t("confirm_clear_all_sku_mappings") ]]')) {
         $.ajax({
             url: '/clear_all_sku_mappings',
             type: 'POST',
@@ -1458,25 +1468,25 @@ function clearAllSkuMappings() {
                 }
             },
             error: function() {
-                showAlert('{{ t("clear_sku_mappings_failed") }}', 'danger');
+                showAlert('[[ t("clear_sku_mappings_failed") ]]', 'danger');
             }
         });
     }
 }
 
-// 导出SKU映射
+// Export SKU mappings
 function exportSkuMappings() {
     window.open('/export_sku_mappings', '_blank');
 }
 
-// 导出{{ _("quotation_order") }}
+// Export [[ _("quotation_order") ]]
 function exportQuotation(quotationId) {
     window.open(`/export_quotation/${quotationId}`, '_blank');
 }
 
-// 价格管理相关函数
+// Price management related functions
 $(document).ready(function() {
-    // 价格上传表单提交处理
+    // Price upload form submission handling
     $('#uploadOccwPricesForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -1484,7 +1494,7 @@ $(document).ready(function() {
         const fileInput = $('#occwPricesFile')[0];
         
         if (fileInput.files.length === 0) {
-            showAlert('{{ t("please_select_file") }}', 'warning');
+            showAlert('[[ t("please_select_file") ]]', 'warning');
             return;
         }
         
@@ -1507,12 +1517,12 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                showAlert('{{ t("upload_failed") }}', 'danger');
+                showAlert('[[ t("upload_failed") ]]', 'danger');
             }
         });
     });
     
-    // 管理员密码修改表单提交处理
+    // Admin password change form submission handling
     $('#adminPasswordForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -1520,23 +1530,23 @@ $(document).ready(function() {
         const newPassword = $('#newAdminPassword').val();
         const confirmPassword = $('#confirmAdminPassword').val();
         
-        // 验证输入
+        // Validate input
         if (!currentPassword || !newPassword || !confirmPassword) {
-            showAlert('{{ t("all_fields_required") }}', 'warning');
+            showAlert('[[ t("all_fields_required") ]]', 'warning');
             return;
         }
         
         if (newPassword !== confirmPassword) {
-            showAlert('{{ t("passwords_not_match") }}', 'danger');
+            showAlert('[[ t("passwords_not_match") ]]', 'danger');
             return;
         }
         
         if (newPassword.length < 6) {
-            showAlert('{{ t("password_too_short") }}', 'warning');
+            showAlert('[[ t("password_too_short") ]]', 'warning');
             return;
         }
         
-        // 提交密码修改请求
+        // Submit password change request
         $.ajax({
             url: '/change_admin_password',
             type: 'POST',
@@ -1547,8 +1557,8 @@ $(document).ready(function() {
             }),
             success: function(response) {
                 if (response.success) {
-                    showAlert('{{ t("admin_password_changed_success") }}', 'success');
-                    // 清空表单
+                    showAlert('[[ t("admin_password_changed_success") ]]', 'success');
+                    // Clear form
                     $('#currentAdminPassword').val('');
                     $('#newAdminPassword').val('');
                     $('#confirmAdminPassword').val('');
@@ -1557,13 +1567,13 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                showAlert('{{ t("change_admin_password_failed") }}', 'danger');
+                showAlert('[[ t("change_admin_password_failed") ]]', 'danger');
             }
         });
     });
 });
 
-// 加载价格统计
+// Load price statistics
 function loadPriceStats() {
     $.ajax({
         url: '/get_occw_stats',
@@ -1576,16 +1586,16 @@ function loadPriceStats() {
             }
         },
         error: function() {
-            showAlert('{{ t("load_stats_failed") }}', 'danger');
+            showAlert('[[ t("load_stats_failed") ]]', 'danger');
         }
     });
 }
 
-// 显示价格统计
+// Show price statistics
 function displayPriceStats(stats) {
-    // 检查stats是否存在
+    // Check if stats exists
     if (!stats) {
-        $('#priceStats').html('<p class="text-muted">{{ t("upload_file_to_see_stats") }}</p>');
+        $('#priceStats').html('<p class="text-muted">[[ t("upload_file_to_see_stats") ]]</p>');
         return;
     }
     
@@ -1594,25 +1604,25 @@ function displayPriceStats(stats) {
             <div class="col-md-3">
                 <div class="text-center">
                     <h4 class="text-primary">${stats.total_products || 0}</h4>
-                    <small class="text-muted">{{ t('total_products') }}</small>
+                    <small class="text-muted">[[ t('total_products') ]]</small>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="text-center">
                     <h4 class="text-success">${stats.total_categories || 0}</h4>
-                    <small class="text-muted">{{ t('total_categories') }}</small>
+                    <small class="text-muted">[[ t('total_categories') ]]</small>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="text-center">
                     <h4 class="text-info">$${stats.average_price || 0}</h4>
-                    <small class="text-muted">{{ t('average_price') }}</small>
+                    <small class="text-muted">[[ t('average_price') ]]</small>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="text-center">
                     <h4 class="text-warning">$${stats.total_value || 0}</h4>
-                    <small class="text-muted">{{ t('total_value') }}</small>
+                    <small class="text-muted">[[ t('total_value') ]]</small>
                 </div>
             </div>
         </div>
@@ -1620,12 +1630,12 @@ function displayPriceStats(stats) {
     $('#priceStats').html(statsHtml);
 }
 
-// 全局分页变量
+// Global pagination variables
 let totalPages = 1;
 let totalItems = 0;
 let perPage = 50;
 
-// 加载OCCW价格表
+// Load OCCW price table
 function loadOccwPrices(page = 1) {
     currentPage = page;
     perPage = parseInt($('#perPageSelect').val());
@@ -1642,7 +1652,7 @@ function loadOccwPrices(page = 1) {
                 displayOccwPrices(response.data || response.prices || []);
                 initializePriceFilters(response.data || response.prices || []);
                 
-                // 更新分页信息
+                // Update pagination information
                 totalPages = response.total_pages || 1;
                 totalItems = response.total || 0;
                 updatePaginationInfo();
@@ -1652,18 +1662,18 @@ function loadOccwPrices(page = 1) {
             }
         },
         error: function() {
-            showAlert('{{ t("load_prices_failed") }}', 'danger');
+            showAlert('[[ t("load_prices_failed") ]]', 'danger');
         }
     });
 }
 
-// 显示OCCW价格表
+// Show OCCW price table
 function displayOccwPrices(prices) {
     const tbody = $('#occwPricesTableBody');
     tbody.empty();
     
     if (prices.length === 0) {
-        tbody.html('<tr><td colspan="6" class="text-center text-muted">{{ t("no_prices_found") }}</td></tr>');
+        tbody.html('<tr><td colspan="6" class="text-center text-muted">[[ t("no_prices_found") ]]</td></tr>');
         return;
     }
     
@@ -1682,15 +1692,15 @@ function displayOccwPrices(prices) {
     });
 }
 
-// 更新分页信息显示
-function updatePaginationInfo() {
-    const start = (currentPage - 1) * perPage + 1;
-    const end = Math.min(currentPage * perPage, totalItems);
-    const info = `{{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', totalItems);
-    $('#priceTableInfo').text(info);
-}
+        // Update pagination information display
+        function updatePaginationInfo() {
+            const start = (currentPage - 1) * perPage + 1;
+            const end = Math.min(currentPage * perPage, totalItems);
+            const info = showingRecordsText.replace('{start}', start).replace('{end}', end).replace('{total}', totalItems);
+            $('#priceTableInfo').text(info);
+        }
 
-// 更新分页控件
+// Update pagination controls
 function updatePaginationControls() {
     const pagination = $('#priceTablePagination');
     pagination.empty();
@@ -1699,7 +1709,7 @@ function updatePaginationControls() {
         return;
     }
     
-    // 上一页按钮
+    // Previous page button
     const prevBtn = $(`<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
         <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${currentPage - 1})" ${currentPage === 1 ? 'tabindex="-1"' : ''}>
             <i class="fas fa-chevron-left"></i>
@@ -1707,7 +1717,7 @@ function updatePaginationControls() {
     </li>`);
     pagination.append(prevBtn);
     
-    // 页码按钮
+    // Page number button
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -1716,7 +1726,7 @@ function updatePaginationControls() {
         startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
     
-    // 第一页
+    // First page
     if (startPage > 1) {
         pagination.append(`<li class="page-item"><a class="page-link" href="#" onclick="loadOccwPricesWithFilters(1)">1</a></li>`);
         if (startPage > 2) {
@@ -1724,7 +1734,7 @@ function updatePaginationControls() {
         }
     }
     
-    // 中间页码
+    // Middle page numbers
     for (let i = startPage; i <= endPage; i++) {
         const pageBtn = $(`<li class="page-item ${i === currentPage ? 'active' : ''}">
             <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${i})">${i}</a>
@@ -1732,7 +1742,7 @@ function updatePaginationControls() {
         pagination.append(pageBtn);
     }
     
-    // 最后一页
+    // Last page
     if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
             pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
@@ -1740,7 +1750,7 @@ function updatePaginationControls() {
         pagination.append(`<li class="page-item"><a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${totalPages})">${totalPages}</a></li>`);
     }
     
-    // 下一页按钮
+    // Next page button
     const nextBtn = $(`<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
         <a class="page-link" href="#" onclick="loadOccwPricesWithFilters(${currentPage + 1})" ${currentPage === totalPages ? 'tabindex="-1"' : ''}>
             <i class="fas fa-chevron-right"></i>
@@ -1749,52 +1759,38 @@ function updatePaginationControls() {
     pagination.append(nextBtn);
 }
 
-// 改变每页显示数量
+// Change items per page
 function changePerPage() {
-    loadOccwPricesWithFilters(1); // 重置到第一页
+    loadOccwPricesWithFilters(1); // Reset to first page
 }
 
-// 初始化价格过滤器
+// Initialize price filters
 function initializePriceFilters(prices) {
-    // 如果prices为空，尝试从所有数据中获取过滤器选项
-    if (!prices || prices.length === 0) {
-        loadAllPriceDataForFilters();
-        return;
-    }
-    
-    const categories = [...new Set(prices.map(p => p.category).filter(c => c))];
-    const boxVariants = [...new Set(prices.map(p => p.box_variant).filter(v => v))];
-    const doorVariants = [...new Set(prices.map(p => p.door_variant).filter(v => v))];
-    
-    populateFilterOptions(categories, boxVariants, doorVariants);
+    // Always load complete filter options from all data to ensure all categories are available
+    loadAllPriceDataForFilters();
 }
 
-// 加载所有价格数据用于初始化过滤器
+// Load all price data for filter initialization
 function loadAllPriceDataForFilters() {
     $.ajax({
-        url: '/get_occw_price_table',
+        url: '/get_price_filter_options',
         type: 'GET',
-        data: {
-            page: 1,
-            per_page: 10000 // 获取所有数据
-        },
         success: function(response) {
             if (response.success && response.data) {
-                const allPrices = response.data;
-                const categories = [...new Set(allPrices.map(p => p.category).filter(c => c))];
-                const boxVariants = [...new Set(allPrices.map(p => p.box_variant).filter(v => v))];
-                const doorVariants = [...new Set(allPrices.map(p => p.door_variant).filter(v => v))];
+                const categories = response.data.categories || [];
+                const boxVariants = response.data.box_variants || [];
+                const doorVariants = response.data.door_variants || [];
                 
                 populateFilterOptions(categories, boxVariants, doorVariants);
             }
         },
         error: function() {
-            console.log('Failed to load all price data for filters');
+            console.log('Failed to load filter options');
         }
     });
 }
 
-// 填充过滤器选项
+// Populate filter options
 function populateFilterOptions(categories, boxVariants, doorVariants) {
     const categorySelect = $('#categoryFilterSelect');
     const boxVariantSelect = $('#boxVariantFilterSelect');
@@ -1817,14 +1813,14 @@ function populateFilterOptions(categories, boxVariants, doorVariants) {
     });
 }
 
-// 过滤价格
+// Filter prices
 function filterPrices() {
-    // 重置到第一页
+    // Reset to first page
     currentPage = 1;
     loadOccwPricesWithFilters();
 }
 
-// 带过滤条件的加载价格表
+// Load price table with filter conditions
 function loadOccwPricesWithFilters(page = 1) {
     currentPage = page;
     perPage = parseInt($('#perPageSelect').val());
@@ -1849,7 +1845,7 @@ function loadOccwPricesWithFilters(page = 1) {
             if (response.success) {
                 displayOccwPrices(response.data || response.prices || []);
                 
-                // 更新分页信息
+                // Update pagination information
                 totalPages = response.total_pages || 1;
                 totalItems = response.total || 0;
                 updatePaginationInfo();
@@ -1859,12 +1855,12 @@ function loadOccwPricesWithFilters(page = 1) {
             }
         },
         error: function() {
-            showAlert('{{ t("load_prices_failed") }}', 'danger');
+            showAlert('[[ t("load_prices_failed") ]]', 'danger');
         }
     });
 }
 
-// 清空价格过滤器
+// Clear price filters
 function clearPriceFilters() {
     $('#skuFilterInput').val('');
     $('#categoryFilterSelect').val('');
@@ -1873,10 +1869,10 @@ function clearPriceFilters() {
     filterPrices();
 }
 
-// showAlert 函数已在 base.html 中统一实现为 toast 系统
+// showAlert function has been unified in base.html as toast system
 
-// 导入过滤设置相关函数
-// 加载当前过滤设置
+// Import filter settings related functions
+// Load current filter settings
 function loadCurrentFilters() {
     $.ajax({
         url: '/get_import_filters',
@@ -1886,7 +1882,7 @@ function loadCurrentFilters() {
                 populateFilterForm(response.filters);
             } else {
                 console.log('Failed to load filters:', response.error);
-                // 如果加载失败，设置默认值
+                // If loading fails, set default values
                 setDefaultFilters();
             }
         },
@@ -1897,7 +1893,7 @@ function loadCurrentFilters() {
     });
 }
 
-// 填充过滤表单
+// Populate filter form
 function populateFilterForm(filters) {
     $('#minAmount').val(filters.import_filter_min_amount !== null && filters.import_filter_min_amount !== undefined ? filters.import_filter_min_amount : '');
     $('#startDate').val(filters.import_filter_start_date || '');
@@ -1905,22 +1901,22 @@ function populateFilterForm(filters) {
     $('#salesPersonFilter').val(filters.import_filter_sales_person || '');
     $('#customerFilter').val(filters.import_filter_customer || '');
     
-    // 设置订单状态复选框
+    // Set order status checkboxes
     const orderStatuses = filters.import_filter_order_status ? 
         filters.import_filter_order_status.split(',') : 
-        ['{{ _("sales_order") }}', '{{ _("quotation_order") }}', '已发送{{ _("quotation_order") }}'];
+        [salesOrderText, quotationOrderText, sentQuotationOrderText];
     
-    // 重置所有复选框
+    // Reset all checkboxes
     $('#orderStatusFilters input[type="checkbox"]').prop('checked', false);
     
-    // 设置选中的状态
+    // Set selected status
     orderStatuses.forEach(function(status) {
         const statusId = 'status_' + status.trim();
         $('#' + statusId).prop('checked', true);
     });
 }
 
-// 设置默认过滤设置
+// Set default filter settings
 function setDefaultFilters() {
     $('#minAmount').val('1000');
     $('#startDate').val('');
@@ -1928,24 +1924,24 @@ function setDefaultFilters() {
     $('#salesPersonFilter').val('');
     $('#customerFilter').val('');
     
-    // 默认选中常用状态
-    $('#status_{{ _("sales_order") }}').prop('checked', true);
-    $('#status_{{ _("quotation_order") }}').prop('checked', true);
-    $('#status_已发送{{ _("quotation_order") }}').prop('checked', true);
-    $('#status_已取消').prop('checked', false);
+    // Default select common status
+    $('#status_' + salesOrderText).prop('checked', true);
+    $('#status_' + quotationOrderText).prop('checked', true);
+    $('#status_' + sentQuotationOrderText).prop('checked', true);
+    $('#status_cancelled').prop('checked', false);
 }
 
-// 重置过滤设置
+// Reset filter settings
 function resetFilters() {
     setDefaultFilters();
 }
 
-// 导入过滤表单提交处理
+// Import filter form submission handling
 $(document).ready(function() {
     $('#importFiltersForm').on('submit', function(e) {
         e.preventDefault();
         
-        // 收集表单数据
+        // Collect form data
         const filterData = {
             import_filter_min_amount: $('#minAmount').val() === '' ? null : parseFloat($('#minAmount').val()),
             import_filter_start_date: $('#startDate').val() || null,
@@ -1955,15 +1951,15 @@ $(document).ready(function() {
             import_filter_order_status: getSelectedOrderStatuses()
         };
         
-        // 验证日期
+        // Validate date
         if (filterData.import_filter_start_date && filterData.import_filter_end_date) {
             if (filterData.import_filter_start_date > filterData.import_filter_end_date) {
-                showAlert('{{ _("start_date_after_end_date") }}', 'warning');
+                showAlert(startDateAfterEndDateText, 'warning');
                 return;
             }
         }
         
-        // 保存过滤设置
+        // Save filter settings
         $.ajax({
             url: '/save_import_filters',
             type: 'POST',
@@ -1971,19 +1967,19 @@ $(document).ready(function() {
             data: JSON.stringify(filterData),
             success: function(response) {
                 if (response.success) {
-                    showAlert('{{ _("filter_settings_save_success") }}', 'success');
+                    showAlert(filterSettingsSaveSuccessText, 'success');
                 } else {
                     showAlert(response.error, 'danger');
                 }
             },
             error: function() {
-                showAlert('{{ _("save_filter_settings_failed") }}', 'danger');
+                showAlert(saveFilterSettingsFailedText, 'danger');
             }
         });
     });
 });
 
-// 获取选中的订单状态
+// Get selected order status
 function getSelectedOrderStatuses() {
     const selected = [];
     $('#orderStatusFilters input[type="checkbox"]:checked').each(function() {
@@ -1992,4 +1988,4 @@ function getSelectedOrderStatuses() {
     return selected.join(',');
 }
 </script>
-{% endblock %} 
+[% endblock %] 

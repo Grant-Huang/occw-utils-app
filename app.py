@@ -26,6 +26,14 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+# 配置Jinja2定界符，避免与JavaScript模板语法冲突
+app.jinja_env.variable_start_string = '[['
+app.jinja_env.variable_end_string = ']]'
+app.jinja_env.block_start_string = '[%'
+app.jinja_env.block_end_string = '%]'
+app.jinja_env.comment_start_string = '[#'
+app.jinja_env.comment_end_string = '#]'
+
 # Babel配置
 app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
@@ -1905,8 +1913,19 @@ def export_quotation(format):
 
 @app.route('/help')
 def help():
-    """帮助页面"""
-    return render_template('help.html')
+    """帮助页面 - 根据语言选择返回相应的帮助文件"""
+    current_lang = get_current_language()
+    
+    # 根据当前语言选择相应的帮助模板
+    if current_lang == 'en':
+        template_name = 'help_en.html'
+    elif current_lang == 'fr':
+        template_name = 'help_fr.html'
+    else:
+        # 默认使用中文帮助文件
+        template_name = 'help.html'
+    
+    return render_template(template_name)
 
 @app.route('/test_frontend')
 def test_frontend():
@@ -3398,26 +3417,29 @@ def get_product_categories():
     """获取产品类别列表"""
     try:
         categories = set()
-        for item in occw_prices.keys():
-            # 从现有的OCCW价格表中提取类别信息
-            # 这里需要根据实际的数据结构来分析
-            pass
+        for sku, price_data in occw_prices.items():
+            if isinstance(price_data, dict) and 'category' in price_data:
+                category = price_data['category'].strip()
+                if category:  # 确保类别不为空
+                    categories.add(category)
         
-        # 暂时返回预定义的类别
-        default_categories = [
-            "Assm.组合件",
-            "Door", 
-            "BOX",
-            "ENDING PANEL",
-            "MOLDING", 
-            "TOE KICK",
-            "FILLER",
-            "HARDWARE"
-        ]
+        # 如果没有从数据中提取到类别，则返回默认类别作为后备
+        if not categories:
+            default_categories = [
+                "Assm.组合件",
+                "Door", 
+                "BOX",
+                "ENDING PANEL",
+                "MOLDING", 
+                "TOE KICK",
+                "FILLER",
+                "HARDWARE"
+            ]
+            categories = set(default_categories)
         
         return jsonify({
             'success': True,
-            'categories': default_categories
+            'categories': sorted(list(categories))
         })
     except Exception as e:
         return jsonify({'error': f'{_("get_categories_failed")}: {str(e)}'}), 500
@@ -3601,6 +3623,7 @@ def get_occw_price_table():
             if search_sku and search_sku.upper() not in product_data['sku']:
                 should_include = False
             
+
             # 门板变体过滤
             if door_variant and door_variant.upper() != product_data['door_variant']:
                 should_include = False
@@ -3628,7 +3651,7 @@ def get_occw_price_table():
                     'product_name': price_data.get('product_name', ''),
                     'door_variant': price_data.get('door_variant', ''),
                     'box_variant': price_data.get('box_variant', ''),
-                    'category': price_data.get('category', ''),
+                    'category': price_data.get('category', '').upper(),  # 保持与过滤逻辑一致
                     'price': price_data.get('unit_price', 0)
                 })
             else:
