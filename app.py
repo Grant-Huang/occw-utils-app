@@ -36,9 +36,6 @@ def configure_jinja2_delimiters():
     app.jinja_env.comment_start_string = '[#'
     app.jinja_env.comment_end_string = '#]'
 
-# 立即配置定界符
-configure_jinja2_delimiters()
-
 # Babel配置
 app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
@@ -81,19 +78,50 @@ def force_reconfigure_jinja2():
         'session': lambda: session
     })
 
-# 应用启动后的回调，确保Jinja2定界符配置
-@app.before_request
-def ensure_jinja2_delimiters():
-    """确保Jinja2定界符配置正确"""
-    if not hasattr(app, '_jinja2_delimiters_configured'):
-        configure_jinja2_delimiters()
-        app._jinja2_delimiters_configured = True
-
 # 在应用创建后立即配置Jinja2
 configure_jinja2_delimiters()
 
 # 强制重新配置Jinja2环境（在应用启动时）
 force_reconfigure_jinja2()
+
+# 使用Flask的before_first_request装饰器（如果可用）或before_request
+try:
+    # Flask 2.3+ 使用 before_serving
+    @app.before_serving
+    def ensure_jinja2_delimiters():
+        """确保Jinja2定界符配置正确"""
+        if not hasattr(app, '_jinja2_delimiters_configured'):
+            configure_jinja2_delimiters()
+            force_reconfigure_jinja2()
+            app._jinja2_delimiters_configured = True
+except AttributeError:
+    # Flask 2.2及以下版本使用 before_first_request
+    try:
+        @app.before_first_request
+        def ensure_jinja2_delimiters():
+            """确保Jinja2定界符配置正确"""
+            if not hasattr(app, '_jinja2_delimiters_configured'):
+                configure_jinja2_delimiters()
+                force_reconfigure_jinja2()
+                app._jinja2_delimiters_configured = True
+    except AttributeError:
+        # 如果都不支持，使用before_request
+        @app.before_request
+        def ensure_jinja2_delimiters():
+            """确保Jinja2定界符配置正确"""
+            if not hasattr(app, '_jinja2_delimiters_configured'):
+                configure_jinja2_delimiters()
+                force_reconfigure_jinja2()
+                app._jinja2_delimiters_configured = True
+
+# 应用启动后的回调，确保Jinja2定界符配置
+@app.before_request
+def ensure_jinja2_delimiters_before_request():
+    """确保Jinja2定界符配置正确（before_request版本）"""
+    if not hasattr(app, '_jinja2_delimiters_configured'):
+        configure_jinja2_delimiters()
+        force_reconfigure_jinja2()
+        app._jinja2_delimiters_configured = True
 
 # 使用Flask的teardown_appcontext来确保Jinja2环境被正确配置
 @app.teardown_appcontext
@@ -102,6 +130,35 @@ def teardown_jinja2(exception=None):
     if not hasattr(app, '_jinja2_delimiters_configured'):
         configure_jinja2_delimiters()
         app._jinja2_delimiters_configured = True
+
+# 添加一个全局的Jinja2配置检查函数
+def verify_jinja2_configuration():
+    """验证Jinja2配置是否正确"""
+    try:
+        # 检查定界符是否正确设置
+        if (app.jinja_env.variable_start_string != '[[' or 
+            app.jinja_env.variable_end_string != ']]' or
+            app.jinja_env.block_start_string != '[%' or
+            app.jinja_env.block_end_string != '%]'):
+            
+            print("Jinja2定界符配置不正确，正在重新配置...")
+            configure_jinja2_delimiters()
+            force_reconfigure_jinja2()
+            app._jinja2_delimiters_configured = True
+            print("Jinja2定界符重新配置完成")
+            return True
+        return True
+    except Exception as e:
+        print(f"Jinja2配置验证失败: {e}")
+        return False
+
+# 在应用启动时验证Jinja2配置
+@app.before_request
+def verify_jinja2_before_request():
+    """在每次请求前验证Jinja2配置"""
+    if not hasattr(app, '_jinja2_verified'):
+        verify_jinja2_configuration()
+        app._jinja2_verified = True
 
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
