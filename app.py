@@ -56,7 +56,6 @@ def force_reconfigure_jinja2():
     """强制重新配置Jinja2环境"""
     # 重新创建Jinja2环境
     from jinja2 import Environment, FileSystemLoader
-    from flask import _app_ctx_stack
     
     # 获取模板目录
     template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -75,13 +74,11 @@ def force_reconfigure_jinja2():
     # 替换应用的Jinja2环境
     app.jinja_env = jinja_env
     
-    # 设置全局函数
+    # 设置全局函数 - 使用延迟绑定避免函数未定义的问题
     app.jinja_env.globals.update({
         't': get_text,
-        'current_language': get_current_language,
         'version': VERSION,
-        'session': lambda: session,
-        'system_settings': lambda: load_system_settings()
+        'session': lambda: session
     })
 
 # 应用启动后的回调，确保Jinja2定界符配置
@@ -95,8 +92,13 @@ def ensure_jinja2_delimiters():
 # 在应用创建后立即配置Jinja2
 configure_jinja2_delimiters()
 
-# 强制重新配置Jinja2环境
-force_reconfigure_jinja2()
+# 使用Flask的teardown_appcontext来确保Jinja2环境被正确配置
+@app.teardown_appcontext
+def teardown_jinja2(exception=None):
+    """在应用上下文结束时确保Jinja2定界符配置"""
+    if not hasattr(app, '_jinja2_delimiters_configured'):
+        configure_jinja2_delimiters()
+        app._jinja2_delimiters_configured = True
 
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -5056,6 +5058,9 @@ def get_customer_type_options():
 if __name__ == '__main__':
     # 确保Jinja2定界符配置正确
     configure_jinja2_delimiters()
+    
+    # 强制重新配置Jinja2环境
+    force_reconfigure_jinja2()
     
     # 加载数据
     load_standard_prices()
