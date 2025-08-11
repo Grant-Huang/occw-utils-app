@@ -92,6 +92,9 @@ def ensure_jinja2_delimiters():
 # 在应用创建后立即配置Jinja2
 configure_jinja2_delimiters()
 
+# 强制重新配置Jinja2环境（在应用启动时）
+force_reconfigure_jinja2()
+
 # 使用Flask的teardown_appcontext来确保Jinja2环境被正确配置
 @app.teardown_appcontext
 def teardown_jinja2(exception=None):
