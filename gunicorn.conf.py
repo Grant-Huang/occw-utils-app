@@ -53,4 +53,23 @@ def when_ready(server):
 # 工作进程启动回调
 def on_reload(server):
     """重新加载时的回调"""
-    print("Gunicorn服务器正在重新加载") 
+    print("Gunicorn服务器正在重新加载")
+
+# 工作进程启动回调
+def post_worker_init(worker):
+    """工作进程启动后的回调"""
+    print(f"工作进程 {worker.pid} 已启动")
+    # 可以在这里添加Jinja2配置验证
+    try:
+        import app
+        if hasattr(app.app, 'jinja_env'):
+            print(f"Jinja2环境已配置 - 定界符: {app.app.jinja_env.variable_start_string}")
+        else:
+            print("警告: Jinja2环境未找到")
+    except Exception as e:
+        print(f"Jinja2配置检查失败: {e}")
+
+# 工作进程退出回调
+def worker_exit(server, worker):
+    """工作进程退出时的回调"""
+    print(f"工作进程 {worker.pid} 已退出") 
