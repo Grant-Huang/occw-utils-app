@@ -150,4 +150,35 @@ data/system_settings.json
 translations/*/LC_MESSAGES/*.mo
 
 # Babel generated files
-messages.pot 
+messages.pot
+
+# Environment and configuration files
+.env
+.env.*
+!.env.example
+config.py
+config.*.py
+settings.py
+settings.*.py
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+logs/
+*.log.*
+
+# Cache directories
+.cache/
+cache/
+
+# Temporary directories
+tmp/
+temp/
+
+# OS specific files
+Thumbs.db
+.DS_Store
+*.lnk 
