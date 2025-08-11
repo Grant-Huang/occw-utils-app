@@ -71,9 +71,11 @@ def force_reconfigure_jinja2():
     # 替换应用的Jinja2环境
     app.jinja_env = jinja_env
     
-    # 设置全局函数 - 使用延迟绑定避免函数未定义的问题
+    # 设置全局函数 - 包含所有必要的函数
     app.jinja_env.globals.update({
         't': get_text,
+        '_': _,  # Babel的gettext函数
+        '_l': _l,  # Babel的lazy_gettext函数
         'version': VERSION,
         'session': lambda: session
     })
