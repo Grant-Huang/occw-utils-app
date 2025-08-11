@@ -26,27 +26,9 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-# 立即配置Jinja2定界符，避免与JavaScript模板语法冲突
-app.jinja_env.variable_start_string = '[['
-app.jinja_env.variable_end_string = ']]'
-app.jinja_env.block_start_string = '[%'
-app.jinja_env.block_end_string = '%]'
-app.jinja_env.comment_start_string = '[#'
-app.jinja_env.comment_end_string = '#]'
-
 # 配置Jinja2定界符，避免与JavaScript模板语法冲突
-# 配置Jinja2定界符，避免与JavaScript模板语法冲突
-app.config['JINJA2_ENVIRONMENT_OPTIONS'] = {
-    'variable_start_string': '[[',
-    'variable_end_string': ']]',
-    'block_start_string': '[%',
-    'block_end_string': '%]',
-    'comment_start_string': '[#',
-    'comment_end_string': '#]'
-}
-
 def configure_jinja2_delimiters():
-    """配置Jinja2定界符（备用方法）"""
+    """配置Jinja2定界符"""
     app.jinja_env.variable_start_string = '[['
     app.jinja_env.variable_end_string = ']]'
     app.jinja_env.block_start_string = '[%'
@@ -69,6 +51,39 @@ app.config['LANGUAGES'] = {
 # 初始化Babel
 babel = Babel(app)
 
+# 强制重新配置Jinja2环境
+def force_reconfigure_jinja2():
+    """强制重新配置Jinja2环境"""
+    # 重新创建Jinja2环境
+    from jinja2 import Environment, FileSystemLoader
+    from flask import _app_ctx_stack
+    
+    # 获取模板目录
+    template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+    
+    # 创建新的Jinja2环境
+    jinja_env = Environment(
+        loader=FileSystemLoader(template_dir),
+        variable_start_string='[[',
+        variable_end_string=']]',
+        block_start_string='[%',
+        block_end_string='%]',
+        comment_start_string='[#',
+        comment_end_string='#]'
+    )
+    
+    # 替换应用的Jinja2环境
+    app.jinja_env = jinja_env
+    
+    # 设置全局函数
+    app.jinja_env.globals.update({
+        't': get_text,
+        'current_language': get_current_language,
+        'version': VERSION,
+        'session': lambda: session,
+        'system_settings': lambda: load_system_settings()
+    })
+
 # 应用启动后的回调，确保Jinja2定界符配置
 @app.before_request
 def ensure_jinja2_delimiters():
@@ -76,6 +91,12 @@ def ensure_jinja2_delimiters():
     if not hasattr(app, '_jinja2_delimiters_configured'):
         configure_jinja2_delimiters()
         app._jinja2_delimiters_configured = True
+
+# 在应用创建后立即配置Jinja2
+configure_jinja2_delimiters()
+
+# 强制重新配置Jinja2环境
+force_reconfigure_jinja2()
 
 # 确保上传目录存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -4315,7 +4336,7 @@ def analyze_customer_type_trends(df, time_period='monthly'):
                 'borderDash': [5, 5],
                 'tension': 0.1
             })
-            
+        
         result = {
             'labels': time_labels,
             'datasets': datasets
