@@ -91,6 +91,37 @@ upload/*
 # Backup files
 *.bak
 *.backup
+backup/
+help_removal_backup/
+final_translations_backup/
+translations_backup/
+
+# Translation backup files
+translations.py.backup*
+*.po.backup*
+
+# Fix and test scripts (temporary development files)
+fix_*.py
+test_*.py
+*_fix_*.py
+*_test_*.py
+final_fix_*.py
+update_missing_*.py
+validate_*.py
+rebuild_*.py
+manage_*.py
+replace_*.py
+
+# Translation validation and reports
+translation_validation_*.md
+I18N_*.md
+
+# Temporary and corrupted files
+e4
+tart.py
+tatus --porcelain
+-files
+*.corrupted
 
 # Local configuration
 config.local.py
@@ -113,4 +144,10 @@ data/system_settings.json
 # Note: The following files in data/ should be committed as they contain system settings:
 # - data/sku_rules.json (SKU generation rules)
 # - data/pdf_rules.json (PDF parsing rules)
-# - data/system_settings.json.template (system configuration template) 
+# - data/system_settings.json.template (system configuration template)
+
+# Compiled translation files
+translations/*/LC_MESSAGES/*.mo
+
+# Babel generated files
+messages.pot 
