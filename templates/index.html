@@ -121,7 +121,7 @@
 
                 </div>
 
-                <!-- My [[ _("quotation_order") ]] APP -->
+                <!-- My [[ t("quotation_order") ]] APP -->
                 <div id="my-quotations-app" class="app-content" style="display: none;">
                     <div class="card shadow-sm">
                         <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
@@ -133,7 +133,7 @@
                             </button>
                         </div>
                         <div class="card-body">
-                            <!-- [[ _("search_and_filter_area") ]] -->
+                            <!-- [[ t("search_and_filter_area") ]] -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" id="userQuotationSearchInput" placeholder="[[ t('search_quotations') ]]" onkeyup="filterUserQuotations()">
@@ -153,7 +153,7 @@
                                 </div>
                             </div>
                             
-                            <!-- [[ _("quotation_table") ]] -->
+                            <!-- [[ t("quotation_table") ]] -->
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="userQuotationsTable">
                                     <thead class="table-dark">
@@ -166,7 +166,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="userQuotationsTableBody">
-                                        <!-- [[ _("quotation_data_will_load_here") ]] -->
+                                        <!-- [[ t("quotation_data_will_load_here") ]] -->
                                     </tbody>
                                 </table>
                             </div>
@@ -186,7 +186,7 @@
                     </div>
                 </div>
 
-                <!-- All [[ _("quotation_order") ]] APP (Admin Only) -->
+                <!-- All [[ t("quotation_order") ]] APP (Admin Only) -->
                 <div id="all-quotations-app" class="app-content" style="display: none;">
                     <div class="card shadow-sm">
                         <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
@@ -199,7 +199,7 @@
                         </div>
                         <div class="card-body">
                             <div id="allQuotationsList">
-                                <!-- All [[ _("quotation_order") ]] list will be dynamically loaded here -->
+                                <!-- All [[ t("quotation_order") ]] list will be dynamically loaded here -->
                             </div>
                         </div>
                     </div>
@@ -463,7 +463,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody id="customerTableBody">
-                                                                    <!-- [[ _("customer_count") ]]据将在这里动态加载 -->
+                                                                    <!-- [[ t("customer_count") ]]据将在这里动态加载 -->
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -477,9 +477,9 @@
                                                                     <option value="50">50</option>
                                                                     <option value="100">100</option>
                                                                 </select>
-                                                                <span class="ms-3 text-muted" id="customerTableInfo">[[ _("showing_records").format(start="1", end="25", total="0") ]]</span>
+                                                                <span class="ms-3 text-muted" id="customerTableInfo">[[ t("showing_records").format(start="1", end="25", total="0") ]]</span>
                                                             </div>
-                                                            <nav aria-label="[[ _("customer_order_analysis_pagination") ]]">
+                                                            <nav aria-label="[[ t("customer_order_analysis_pagination") ]]">
                                                                 <ul class="pagination pagination-sm mb-0" id="customerTablePagination">
                                                                     <!-- Pagination buttons will be dynamically generated here -->
                                                                 </ul>
@@ -767,7 +767,7 @@
                     </div>
                 </div>
 
-                <!-- 手动创建[[ _("quotation_order") ]]APP -->
+                <!-- 手动创建[[ t("quotation_order") ]]APP -->
                 <div id="manual-create-app" class="app-content" style="display: none;">
                     <div class="card shadow-sm">
                         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
@@ -1172,7 +1172,7 @@ $(document).ready(function() {
     // Load sales person list
     loadSalesPersons();
     
-    // 检查用户登录Status并显示我的[[ _("quotation_order") ]]行
+    // 检查用户登录Status并显示我的[[ t("quotation_order") ]]行
     checkUserLoginStatus();
 });
 
@@ -1270,7 +1270,7 @@ $(document).ready(function() {
     // 自动语言检测和设置
     autoDetectLanguage();
     
-    // [[ _("quotation_order") ]]上传处理
+    // [[ t("quotation_order") ]]上传处理
     $('#quotationForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -1304,7 +1304,7 @@ $(document).ready(function() {
                     // 显示结果区域
                     $('#quotationResult').show();
                     
-                    // 显示成功消息并[[ _("tip") ]]可以查看PDF文本
+                    // 显示成功消息并[[ t("tip") ]]可以查看PDF文本
                                             showAlert('[[ t("quotation_parsed_success") ]]', 'success');
                 } else {
                     showAlert(response.error, 'danger');
@@ -1318,7 +1318,7 @@ $(document).ready(function() {
         });
     });
 
-    // 手动创建[[ _("quotation_order") ]]处理已整合到下方的专门函数中
+    // 手动创建[[ t("quotation_order") ]]处理已整合到下方的专门函数中
 
 });
 
@@ -1496,7 +1496,7 @@ function exportOCCWQuotation() {
     link.click();
     document.body.removeChild(link);
     
-    // 显示成功[[ _("tip") ]]
+    // 显示成功[[ t("tip") ]]
     showAlert('[[ t("export_success_message") ]]', 'success');
 }
 
@@ -1580,7 +1580,7 @@ function copyPdfText() {
     navigator.clipboard.writeText(text).then(function() {
         showAlert('PDF文本已复制到剪贴板', 'success');
     }).catch(function() {
-        showAlert('[[ _("copy_failed_manual") ]]', 'warning');
+        showAlert('[[ t("copy_failed_manual") ]]', 'warning');
     });
 }
 
@@ -1619,7 +1619,7 @@ function saveSkuMapping(originalSku, mappedSku, seqNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("save_sku_mapping_failed") ]]', 'danger');
+            showAlert('[[ t("save_sku_mapping_failed") ]]', 'danger');
         }
     });
 }
@@ -1699,7 +1699,7 @@ function createSKUDropdown(cell, originalSku, seqNum, userCode) {
                 // 有匹配的SKU，创建下拉框
                 const selectId = `sku-select-${seqNum}`;
                 let selectHtml = `<select class="form-select form-select-sm sku-select" id="${selectId}" data-original-sku="${originalSku}" data-seq="${seqNum}">`;
-                selectHtml += `<option value="${originalSku}">${originalSku} [[ _("original_sku") ]]</option>`;
+                selectHtml += `<option value="${originalSku}">${originalSku} [[ t("original_sku") ]]</option>`;
                 
                 response.skus.forEach(function(sku) {
                     if (sku !== originalSku) {
@@ -1744,7 +1744,7 @@ function createSKUInput(cell, originalSku, seqNum) {
         <div class="input-group input-group-sm">
             <input type="text" class="form-control" id="${inputId}" 
                    data-original-sku="${originalSku}" data-seq="${seqNum}"
-                   placeholder="[[ _("enter_occw_sku") ]]" value="${originalSku}">
+                   placeholder="[[ t("enter_occw_sku") ]]" value="${originalSku}">
             <button class="btn btn-outline-primary" type="button" onclick="confirmSKUInput('${seqNum}')">
                 <i class="fas fa-check"></i>
             </button>
@@ -1769,7 +1769,7 @@ function confirmSKUInput(seqNum) {
     const originalSku = input.data('original-sku');
     
     if (!newSku) {
-        showAlert('[[ _("enter_valid_sku") ]]', 'warning');
+        showAlert('[[ t("enter_valid_sku") ]]', 'warning');
         return;
     }
     
@@ -1874,7 +1874,7 @@ function updatePriceDisplay(seqNum, unitPrice) {
     }
 }
 
-// ===== 手动创建[[ _("quotation_order") ]]相关函数 =====
+// ===== 手动创建[[ t("quotation_order") ]]相关函数 =====
 
 let manualProductCounter = 1;
 let manualProducts = [];
@@ -1901,7 +1901,7 @@ function loadProductCategories(rowNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_category_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
         }
     });
 }
@@ -1973,7 +1973,7 @@ function loadProductsByCategory(category, rowNum) {
                 productSelect.disabled = false;
                 
                 // Populate cabinet body variant selection
-                boxVariantSelect.innerHTML = '<option value="">[[ _("select_box_variant") ]]</option>';
+                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
                 response.box_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -1982,7 +1982,7 @@ function loadProductsByCategory(category, rowNum) {
                 });
                 
                 // Populate door panel variant selection
-                doorVariantSelect.innerHTML = '<option value="">[[ _("select_door_variant") ]]</option>';
+                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
                 response.door_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -2007,7 +2007,7 @@ function loadProductsByCategory(category, rowNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_list_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_list_failed") ]]', 'warning');
         }
     });
 }
@@ -2022,7 +2022,7 @@ function onVariantChange(rowNum) {
     searchSkuAndPrice(rowNum);
 }
 
-// Manual版本的函数（用于加载已保存的[[ _("quotation_order") ]]）
+// Manual版本的函数（用于加载已保存的[[ t("quotation_order") ]]）
 function onCategoryChangeManual(rowNum) {
     // Handle type selection change
     const category = document.getElementById(`category-manual-${rowNum}`).value;
@@ -2032,8 +2032,8 @@ function onCategoryChangeManual(rowNum) {
     
     // Clear subsequent selections
     productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-    boxVariantSelect.innerHTML = '<option value="">[[ _("select_box_variant") ]]</option>';
-    doorVariantSelect.innerHTML = '<option value="">[[ _("select_door_variant") ]]</option>';
+    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
+    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
     
     // Reset SKU and price
     document.getElementById(`sku-manual-${rowNum}`).textContent = '[[ t("not_selected") ]]';
@@ -2084,7 +2084,7 @@ function loadProductsByCategoryManual(category, rowNum) {
                 productSelect.disabled = false;
                 
                 // Populate cabinet body variant selection
-                boxVariantSelect.innerHTML = '<option value="">[[ _("select_box_variant") ]]</option>';
+                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
                 response.box_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -2093,7 +2093,7 @@ function loadProductsByCategoryManual(category, rowNum) {
                 });
                 
                 // Populate door panel variant selection
-                doorVariantSelect.innerHTML = '<option value="">[[ _("select_door_variant") ]]</option>';
+                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
                 response.door_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -2118,13 +2118,13 @@ function loadProductsByCategoryManual(category, rowNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_list_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_list_failed") ]]', 'warning');
         }
     });
 }
 
 function searchSkuAndPriceManual(rowNum) {
-    // [[ _("search") ]]SKU和Price（Manual版本）
+    // [[ t("search") ]]SKU和Price（Manual版本）
     const category = document.getElementById(`category-manual-${rowNum}`).value;
     const product = document.getElementById(`product-manual-${rowNum}`).value;
     const boxVariant = document.getElementById(`box-variant-manual-${rowNum}`).value;
@@ -2153,7 +2153,7 @@ function searchSkuAndPriceManual(rowNum) {
                     skuElement.className = 'badge bg-success';
                     priceElement.textContent = `$${response.price.toFixed(2)}`;
                 } else {
-                    skuElement.textContent = '[[ _("not_found") ]]';
+                    skuElement.textContent = '[[ t("not_found") ]]';
                     skuElement.className = 'badge bg-danger';
                     priceElement.textContent = '$0.00';
                 }
@@ -2162,13 +2162,13 @@ function searchSkuAndPriceManual(rowNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("search_sku_failed") ]]', 'warning');
+            showAlert('[[ t("search_sku_failed") ]]', 'warning');
         }
     });
 }
 
 function searchSkuAndPrice(rowNum) {
-    // [[ _("search") ]]SKU和Price
+    // [[ t("search") ]]SKU和Price
     const category = document.getElementById(`category-${rowNum}`).value;
     const product = document.getElementById(`product-${rowNum}`).value;
     const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
@@ -2197,7 +2197,7 @@ function searchSkuAndPrice(rowNum) {
                     skuElement.className = 'badge bg-success';
                     priceElement.textContent = `$${response.price.toFixed(2)}`;
                 } else {
-                    skuElement.textContent = '[[ _("not_found") ]]';
+                    skuElement.textContent = '[[ t("not_found") ]]';
                     skuElement.className = 'badge bg-danger';
                     priceElement.textContent = '$0.00';
                 }
@@ -2206,7 +2206,7 @@ function searchSkuAndPrice(rowNum) {
             }
         },
         error: function() {
-            showAlert('[[ _("search_sku_failed") ]]', 'warning');
+            showAlert('[[ t("search_sku_failed") ]]', 'warning');
         }
     });
 }
@@ -2219,9 +2219,9 @@ function clearCurrentManualRow(rowNum) {
         document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">[[ t("select_type") ]]</option>';
         document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">[[ t("select_product") ]]</option>';
         document.getElementById(`product-${rowNum}`).disabled = true;
-        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">[[ _("select_box_variant") ]]</option>';
+        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
         document.getElementById(`box-variant-${rowNum}`).disabled = true;
-        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">[[ _("select_door_variant") ]]</option>';
+        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
         document.getElementById(`door-variant-${rowNum}`).disabled = true;
         document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
         document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
@@ -2310,10 +2310,10 @@ $(document).ready(function() {
     // Load sales person list
     loadSalesPersons();
     
-    // 手动创建[[ _("quotation_order") ]]页面加载时自动加载产品类别
+    // 手动创建[[ t("quotation_order") ]]页面加载时自动加载产品类别
     loadProductCategories(1);
     
-    // 手动创建[[ _("quotation_order") ]]的折扣计算
+    // 手动创建[[ t("quotation_order") ]]的折扣计算
     $('#discountInput').on('input', function() {
         const tbody = document.getElementById('manualProductsTableBody');
         const rows = tbody.getElementsByTagName('tr');
@@ -2333,7 +2333,7 @@ $(document).ready(function() {
         updateDiscountCalculator('manual', total);
     });
     
-    // PDF导入[[ _("quotation_order") ]]的折扣计算
+    // PDF导入[[ t("quotation_order") ]]的折扣计算
     $('#pdfDiscountInput').on('input', function() {
         // 获取OCCW总价
         const totalText = $('#totalOCCWPrice strong').text();
@@ -2433,7 +2433,7 @@ function showAllQuotationsApp() {
 }
 
 function loadUserQuotations() {
-            // console.log('开始加载用户[[ _("quotation_order") ]]...');
+            // console.log('开始加载用户[[ t("quotation_order") ]]...');
     $.ajax({
         url: '/get_user_quotations',
         type: 'GET',
@@ -2467,32 +2467,32 @@ function loadAllQuotations() {
     });
 }
 
-// 全局变量存储用户[[ _("quotation_order") ]] Count据
+// 全局变量存储用户[[ t("quotation_order") ]] Count据
 let userQuotationsData = [];
 let filteredUserQuotationsData = [];
 let userCurrentPage = 1;
 const userItemsPerPage = 20;
 
 function displayQuotationsList(quotations) {
-    // 存储用户[[ _("quotation_order") ]] Count据
+    // 存储用户[[ t("quotation_order") ]] Count据
     userQuotationsData = quotations;
     
     // Initialize显示
     filterUserQuotations();
 }
 
-// 过滤用户[[ _("quotation_order") ]]
+// 过滤用户[[ t("quotation_order") ]]
 function filterUserQuotations() {
     const searchTerm = $('#userQuotationSearchInput').val().toLowerCase();
     const dateFilter = $('#userDateFilterSelect').val();
     
     filteredUserQuotationsData = userQuotationsData.filter(quotation => {
-        // [[ _("search") ]] filter
+        // [[ t("search") ]] filter
         const matchesSearch = !searchTerm || 
             quotation.title.toLowerCase().includes(searchTerm) ||
             quotation.quotation_id.toLowerCase().includes(searchTerm);
         
-        // [[ _("date_filter") ]]
+        // [[ t("date_filter") ]]
         let matchesDate = true;
         if (dateFilter) {
             const createdDate = new Date(quotation.created_at);
@@ -2527,7 +2527,7 @@ function clearUserFilters() {
     filterUserQuotations();
 }
 
-// 显示用户[[ _("quotation_order") ]]表格
+// 显示用户[[ t("quotation_order") ]]表格
 function displayUserQuotationsTable() {
     // console.log('displayUserQuotationsTable 被调用');
     console.log('filteredUserQuotationsData:', filteredUserQuotationsData);
@@ -2707,7 +2707,7 @@ function loadQuotationDetail(quotationId) {
         type: 'GET',
         success: function(response) {
             if (response.success) {
-                // 跳转到手动创建页面并加载[[ _("quotation_order") ]] Count据
+                // 跳转到手动创建页面并加载[[ t("quotation_order") ]] Count据
                 showManualCreateApp();
                 setTimeout(function() {
                     loadQuotationData(response.quotation);
@@ -2723,7 +2723,7 @@ function loadQuotationDetail(quotationId) {
 }
 
 function addManualProductRow(product) {
-    // 添加手动产品行（用于加载已保存的[[ _("quotation_order") ]]）
+    // 添加手动产品行（用于加载已保存的[[ t("quotation_order") ]]）
     const tbody = document.getElementById('manualProductsTableBody');
     const rowId = `manual-row-${manualProductCounter}`;
     
@@ -2743,12 +2743,12 @@ function addManualProductRow(product) {
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="box-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ _("select_box_variant") ]]</option>
+                <option value="">[[ t("select_box_variant") ]]</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="door-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ _("select_door_variant") ]]</option>
+                <option value="">[[ t("select_door_variant") ]]</option>
             </select>
         </td>
         <td>
@@ -2777,7 +2777,7 @@ function addManualProductRow(product) {
 }
 
 function addManualProductRowWithCallback(product, callback) {
-    // 添加手动产品行（用于加载已保存的[[ _("quotation_order") ]]，带回调）
+    // 添加手动产品行（用于加载已保存的[[ t("quotation_order") ]]，带回调）
     const tbody = document.getElementById('manualProductsTableBody');
     const rowId = `manual-row-${manualProductCounter}`;
     
@@ -2797,12 +2797,12 @@ function addManualProductRowWithCallback(product, callback) {
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="box-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ _("select_box_variant") ]]</option>
+                <option value="">[[ t("select_box_variant") ]]</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="door-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ _("select_door_variant") ]]</option>
+                <option value="">[[ t("select_door_variant") ]]</option>
             </select>
         </td>
         <td>
@@ -2855,7 +2855,7 @@ function loadProductCategoriesAndSetValues(rowNum, product) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_category_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
         }
     });
 }
@@ -2890,7 +2890,7 @@ function loadProductCategoriesAndSetValuesWithCallback(rowNum, product, callback
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_category_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
             if (callback) callback();
         }
     });
@@ -2928,7 +2928,7 @@ function loadProductsAndSetValues(rowNum, product) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_failed") ]]', 'warning');
         }
     });
 }
@@ -2970,7 +2970,7 @@ function loadProductsAndSetValuesWithCallback(rowNum, product, callback) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_product_failed") ]]', 'warning');
+            showAlert('[[ t("load_product_failed") ]]', 'warning');
             if (callback) callback();
         }
     });
@@ -3025,7 +3025,7 @@ function loadVariantsAndSetValues(rowNum, product) {
             }
         },
         error: function() {
-            showAlert('[[ _("load_variant_failed") ]]', 'warning');
+            showAlert('[[ t("load_variant_failed") ]]', 'warning');
         }
     });
 }
@@ -3082,17 +3082,17 @@ function loadVariantsAndSetValuesWithCallback(rowNum, product, callback) {
             if (callback) callback();
         },
         error: function() {
-            showAlert('[[ _("load_variant_failed") ]]', 'warning');
+            showAlert('[[ t("load_variant_failed") ]]', 'warning');
             if (callback) callback();
         }
     });
 }
 
 function loadQuotationData(quotation) {
-    // 加载[[ _("quotation_order") ]] Count据到手动创建页面
+    // 加载[[ t("quotation_order") ]] Count据到手动创建页面
     const data = quotation.data;
     
-            // console.log('加载[[ _("quotation_order") ]] Count据:', quotation);
+            // console.log('加载[[ t("quotation_order") ]] Count据:', quotation);
     
     // 设置Export表单字段
     $('#manualExportDate').val(data.order_date || '[[ today_date ]]');
@@ -3223,7 +3223,7 @@ function updateManualProductSequence() {
 }
 
 function viewQuotationDetail(quotationId) {
-    // Directly open [[ _("quotation_order") ]] details page
+    // Directly open [[ t("quotation_order") ]] details page
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
@@ -3255,7 +3255,7 @@ function checkUserLoginStatus() {
     const username = '[[ session.get("username", "") ]]';
     window.isUserLoggedIn = username !== '';
     
-    // 只有当用户登录功能启用且用户已登录时才显示我的[[ _("quotation_order") ]]卡片
+    // 只有当用户登录功能启用且用户已登录时才显示我的[[ t("quotation_order") ]]卡片
     if (userLoginEnabled && window.isUserLoggedIn) {
         $('#myQuotationsCard').show();
     } else {
@@ -3267,7 +3267,7 @@ function saveToMyQuotations(type) {
     // 检查用户登录功能是否启用
     const userLoginEnabled = [% if system_settings.get('user_login_enabled', True) %]true[% else %]false[% endif %];
     if (!userLoginEnabled) {
-        showAlert('用户登录功能已禁用，无法保存[[ _("quotation_order") ]]', 'warning');
+        showAlert('用户登录功能已禁用，无法保存[[ t("quotation_order") ]]', 'warning');
         return;
     }
     
@@ -3277,7 +3277,7 @@ function saveToMyQuotations(type) {
         return;
     }
     
-    // 收集[[ _("quotation_order") ]] Count据
+    // 收集[[ t("quotation_order") ]] Count据
     let quotationData = {};
     
     if (type === 'pdf') {
@@ -3451,7 +3451,7 @@ function showSaveQuotationModal(quotationData) {
     // 添加新的模态框并显示
     $('body').append(modalHtml);
     
-    // 存储[[ _("quotation_order") ]] Count据供保存使用
+    // 存储[[ t("quotation_order") ]] Count据供保存使用
     window.currentQuotationData = quotationData;
     
     new bootstrap.Modal(document.getElementById('saveQuotationModal')).show();
@@ -3496,7 +3496,7 @@ function confirmSaveQuotation() {
 }
 
 function clearManualQuotation() {
-    // 清空手动[[ _("quotation_order") ]]
+    // 清空手动[[ t("quotation_order") ]]
     if (confirm('确定要清空所有产品吗？')) {
         document.getElementById('manualProductsTableBody').innerHTML = '';
         manualProductCounter = 1;
@@ -3521,7 +3521,7 @@ function updateExportButton() {
 }
 
 function exportManualQuotation() {
-    // Export手动创建的[[ _("quotation_order") ]]
+    // Export手动创建的[[ t("quotation_order") ]]
     const tbody = document.getElementById('manualProductsTableBody');
     const rows = tbody.getElementsByTagName('tr');
     
@@ -3631,7 +3631,7 @@ function exportManualQuotation() {
     form.submit();
     document.body.removeChild(form);
     
-    // 显示成功[[ _("tip") ]]
+    // 显示成功[[ t("tip") ]]
     showAlert('[[ t("export_success_message") ]]', 'success');
 }
 
@@ -3674,7 +3674,7 @@ function showSampleData() {
             }
         },
         error: function() {
-            showAlert('[[ _("get_data_failed") ]]', 'danger');
+            showAlert('[[ t("get_data_failed") ]]', 'danger');
         }
     });
 }
@@ -3694,7 +3694,7 @@ function showRawDataModal(data) {
                     <div class="modal-body">
                         <div class="row mb-3">
                             <div class="col-md-2">
-                                <input type="text" class="form-control" id="searchInput" placeholder="[[ _("search_placeholder") ]]" onkeyup="filterTable()">
+                                <input type="text" class="form-control" id="searchInput" placeholder="[[ t("search_placeholder") ]]" onkeyup="filterTable()">
                             </div>
                             <div class="col-md-2">
                                 <select class="form-select" id="salesPersonFilter" onchange="filterTable()">
@@ -3709,8 +3709,8 @@ function showRawDataModal(data) {
                             <div class="col-md-2">
                                 <select class="form-select" id="statusFilter" onchange="filterTable()">
                                     <option value="">All Status</option>
-                                    <option value="[[ _("sales_order") ]]">[[ _("sales_order") ]]</option>
-                                    <option value="[[ _("quotation_order") ]]">[[ _("quotation_order") ]]</option>
+                                    <option value="[[ t("sales_order") ]]">[[ t("sales_order") ]]</option>
+                                    <option value="[[ t("quotation_order") ]]">[[ t("quotation_order") ]]</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -3750,7 +3750,7 @@ function showRawDataModal(data) {
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Number</th>
-                                        <th>[[ _("order_date") ]]</th>
+                                        <th>[[ t("order_date") ]]</th>
                                         <th>Sales Person</th>
                                         <th>Customer</th>
                                         <th>Total</th>
@@ -3768,7 +3768,7 @@ function showRawDataModal(data) {
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <div>
-                                [[ _("showing_records").format(start="0", end="0", total="0") ]]
+                                [[ t("showing_records").format(start="0", end="0", total="0") ]]
                             </div>
                             <nav>
                                 <ul class="pagination pagination-sm" id="pagination">
@@ -3972,15 +3972,15 @@ function showAmountRangeStats() {
             const amount = parseFloat(row['Total']) || 0;
             const status = row['Order Status'];
             
-            if (status === '[[ _("quotation_order") ]]') {
+            if (status === '[[ t("quotation_order") ]]') {
                 quotationAmount += amount;
                 quotationCount += 1;
-            } else if (status === '订单' || status.includes('[[ _("sales_order") ]]')) {
+            } else if (status === '订单' || status.includes('[[ t("sales_order") ]]')) {
                 orderAmount += amount;
                 orderCount += 1;
-                quotationAmount += amount; // 根据转换逻辑，订单也贡献[[ _("quotation_order") ]] Amount
+                quotationAmount += amount; // 根据转换逻辑，订单也贡献[[ t("quotation_order") ]] Amount
                 quotationCount += 1;
-            } else if (status === '已发送[[ _("quotation_order") ]]') {
+            } else if (status === '已发送[[ t("quotation_order") ]]') {
                 quotationAmount += amount;
                 quotationCount += 1;
             }
@@ -4035,7 +4035,7 @@ function displayRawData(data) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${row['Number'] || ''}</td>
-            <td>${row['[[ _("order_date") ]]'] || ''}</td>
+            <td>${row['[[ t("order_date") ]]'] || ''}</td>
             <td>${row['Sales Person'] || ''}</td>
             <td>${row['Customer'] || ''}</td>
             <td>$${parseFloat(row['Total'] || 0).toFixed(2)}</td>
@@ -4212,7 +4212,7 @@ function openChartModal(chartId, title) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[ _("close") ]]</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[ t("close") ]]</button>
                         <button type="button" class="btn btn-primary" onclick="downloadChart()">
                             <i class="fas fa-download me-1"></i>下载图表
                         </button>
@@ -4316,7 +4316,7 @@ function downloadChart() {
     link.click();
     document.body.removeChild(link);
     
-    showAlert('[[ _("chart_download_success") ]]', 'success');
+    showAlert('[[ t("chart_download_success") ]]', 'success');
 }
 
 // 切换显示部分
@@ -4405,21 +4405,21 @@ function createComparisonCharts(salesPerson1, salesPerson2) {
     
     if (!monthlyData) {
         console.log('错误：没有月度数据');
-                    showAlert('[[ _("no_monthly_data_found") ]]', 'warning');
+                    showAlert('[[ t("no_monthly_data_found") ]]', 'warning');
         return;
     }
     
     if (!monthlyData[salesPerson1]) {
         console.log('错误：没有找到销售员1的数据:', salesPerson1);
         console.log('可用的销售员:', Object.keys(monthlyData));
-        showAlert(`[[ _("sales_person_monthly_data_not_found").format(sales_person=salesPerson1) ]]`, 'warning');
+        showAlert(`[[ t("sales_person_monthly_data_not_found").format(sales_person=salesPerson1) ]]`, 'warning');
         return;
     }
     
     if (!monthlyData[salesPerson2]) {
         console.log('错误：没有找到销售员2的数据:', salesPerson2);
         console.log('可用的销售员:', Object.keys(monthlyData));
-        showAlert(`[[ _("sales_person_monthly_data_not_found").format(sales_person=salesPerson2) ]]`, 'warning');
+        showAlert(`[[ t("sales_person_monthly_data_not_found").format(sales_person=salesPerson2) ]]`, 'warning');
         return;
     }
     
@@ -4785,7 +4785,7 @@ function displaySalesAnalysis(data) {
             if (data.trend_data && data.conversion_data) {
                 displayCharts(data);
             } else {
-                console.warn('[[ _("chart_data_incomplete_skip_display") ]]');
+                console.warn('[[ t("chart_data_incomplete_skip_display") ]]');
             }
             
             // 显示Customer类型相关图表
@@ -4820,7 +4820,7 @@ function displaySalesAnalysis(data) {
             }
         } catch (chartError) {
             console.error('图表显示失败，但不影响其他功能:', chartError);
-            // 不显示错误[[ _("tip") ]]，因为表格数据已经成功显示
+            // 不显示错误[[ t("tip") ]]，因为表格数据已经成功显示
         }
         
         // console.log('销售分析结果显示完成');
@@ -4990,7 +4990,7 @@ function updateCustomerTablePagination(totalItems) {
     // 更新信息显示
     const startItem = (customerTableCurrentPage - 1) * customerTablePageSize + 1;
     const endItem = Math.min(customerTableCurrentPage * customerTablePageSize, totalItems);
-    info.text(`[[ _("showing_records") ]]`.replace('{start}', startItem).replace('{end}', endItem).replace('{total}', totalItems));
+    info.text(`[[ t("showing_records") ]]`.replace('{start}', startItem).replace('{end}', endItem).replace('{total}', totalItems));
     
     // 生成分页按钮
     pagination.empty();
@@ -5324,7 +5324,7 @@ function displayCharts(data) {
         console.log('图表创建完成');
     } catch (error) {
         console.error('图表创建失败:', error);
-        // 不显示错误[[ _("tip") ]]，因为表格数据已经成功显示
+        // 不显示错误[[ t("tip") ]]，因为表格数据已经成功显示
         console.warn('图表创建失败，但不影响其他功能:', error.message);
     }
 }
@@ -5417,7 +5417,7 @@ function updateCustomerTypeTable(data) {
             </tr>
         `;
         
-        // console.log(`✅ 添加行: ${customerType} - Order Quantity: ${orderCount}, [[ _("quotation_order") ]] Count: ${quotationCount}`);
+        // console.log(`✅ 添加行: ${customerType} - Order Quantity: ${orderCount}, [[ t("quotation_order") ]] Count: ${quotationCount}`);
         tbody.append(row);
     });
     

@@ -33,5 +33,5 @@
   "import_filter_customer": null,
   "import_filter_start_date": null,
   "import_filter_end_date": null,
-  "import_filter_order_status": "销售订单,报价单,已发送报价单"
+  "import_filter_order_status": "销售订单,报价单,已发送报价订单"
 }

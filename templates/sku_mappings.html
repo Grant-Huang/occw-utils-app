@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="searchInput" 
-                                       placeholder="[[ _("search") ]]Original SKU or Mapped SKU..." onkeypress="handleSearchKeyPress(event)">
+                                       placeholder="[[ t("search") ]]Original SKU or Mapped SKU..." onkeypress="handleSearchKeyPress(event)">
                                 <button class="btn btn-outline-secondary" type="button" onclick="searchMappings()">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -117,9 +117,9 @@
                         <div id="mappingTableEmpty" class="text-center py-5" style="display: none;">
                             <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No SKU mapping data available</h5>
-                            <p class="text-muted">Mapping relationships will be automatically generated after uploading PDF [[ _("quotation_order") ]]</p>
+                            <p class="text-muted">Mapping relationships will be automatically generated after uploading PDF [[ t("quotation_order") ]]</p>
                             <a href="/" class="btn btn-primary">
-                                <i class="fas fa-upload me-1"></i>Go to upload [[ _("quotation_order") ]]
+                                <i class="fas fa-upload me-1"></i>Go to upload [[ t("quotation_order") ]]
                             </a>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                                 </label>
                                 <input type="text" class="form-control" id="editOriginalSku" 
                                        placeholder="输入Original SKU">
-                                <div class="form-text">SKU from PDF [[ _("quotation_order") ]]</div>
+                                <div class="form-text">SKU from PDF [[ t("quotation_order") ]]</div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -178,17 +178,17 @@
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">
-                                    <i class="fas fa-search me-1"></i>[[ _("sku_search_assistant") ]]
+                                    <i class="fas fa-search me-1"></i>[[ t("sku_search_assistant") ]]
                                 </label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="skuSearchInput" 
-                                           placeholder="[[ _("search_occw_sku") ]]...">
+                                           placeholder="[[ t("search_occw_sku") ]]...">
                                     <button class="btn btn-outline-primary" type="button" onclick="searchOCCWSku()">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
                                 <div id="skuSearchResults" class="mt-2" style="display: none;">
-                                    <!-- [[ _("search") ]]结果 -->
+                                    <!-- [[ t("search") ]]结果 -->
                                 </div>
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                         <div class="col-12">
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                <strong>[[ _("tip") ]]：</strong>您可以直接输入SKU，或使用下拉菜单选择，或使用[[ _("search") ]]助手快速查找匹配的SKU。
+                                <strong>[[ t("tip") ]]：</strong>您可以直接输入SKU，或使用下拉菜单选择，或使用[[ t("search") ]]助手快速查找匹配的SKU。
                             </div>
                         </div>
                     </div>
@@ -287,13 +287,13 @@ $(document).ready(function() {
         }
     });
     
-    // 绑定实时[[ _("search") ]]
+    // 绑定实时[[ t("search") ]]
     $('#searchInput').on('input', function() {
         debounceSearch();
     });
 });
 
-// 防抖[[ _("search") ]]
+// 防抖[[ t("search") ]]
 let searchTimeout;
 let mainSearchTimeout;
 
@@ -336,7 +336,7 @@ function loadMappingData(page = 1, search = '') {
                 
                 updateStats(allMappings);
             } else {
-                showAlert('[[ _("load_mapping_data_failed") ]]: ' + (response.error || '[[ _("unknown_error") ]]'), 'danger');
+                showAlert('[[ t("load_mapping_data_failed") ]]: ' + (response.error || '[[ t("unknown_error") ]]'), 'danger');
                 $('#mappingTableEmpty').show();
             }
         },
@@ -345,7 +345,7 @@ function loadMappingData(page = 1, search = '') {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('[[ _("load_mapping_data_failed") ]]', 'danger');
+                showAlert('[[ t("load_mapping_data_failed") ]]', 'danger');
                 $('#mappingTableEmpty').show();
             }
         }
@@ -504,7 +504,7 @@ function updateTableStats(start, end, total) {
     
     $('#statsInfo').html(`
         <i class="fas fa-info-circle me-1"></i>
-        [[ _("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', total)
+        [[ t("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', total)
     `);
 }
 
@@ -518,7 +518,7 @@ function updatePagination(total, perPage) {
     // Previous page
     pagination.append(`
         <li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">[[ _("previous_page") ]]</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">[[ t("previous_page") ]]</a>
         </li>
     `);
     
@@ -537,7 +537,7 @@ function updatePagination(total, perPage) {
     // Next page
     pagination.append(`
         <li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">[[ _("next_page") ]]</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">[[ t("next_page") ]]</a>
         </li>
     `);
 }
@@ -571,10 +571,10 @@ function applyFilters() {
     const statusFilter = $('#statusFilter').val();
     currentPage = 1;
     
-    // 应用[[ _("search") ]]和Status筛选
+    // 应用[[ t("search") ]]和Status筛选
     let filteredMappings = Object.entries(allMappings);
     
-    // 文本[[ _("search") ]]
+    // 文本[[ t("search") ]]
     if (search) {
         const searchLower = search.toLowerCase();
         filteredMappings = filteredMappings.filter(([originalSku, mappedSku]) => {
@@ -643,17 +643,17 @@ function saveMappingForm() {
         success: function(response) {
             if (response.success) {
                 $('#editMappingModal').modal('hide');
-                showAlert('[[ _("sku_mapping_save_success") ]]', 'success');
+                showAlert('[[ t("sku_mapping_save_success") ]]', 'success');
                 loadMappingData(currentPage, currentSearch);
             } else {
-                showAlert(response.error || '[[ _("save_failed") ]]', 'danger');
+                showAlert(response.error || '[[ t("save_failed") ]]', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('[[ _("save_sku_mapping_failed") ]]', 'danger');
+                showAlert('[[ t("save_sku_mapping_failed") ]]', 'danger');
             }
         }
     });
@@ -677,14 +677,14 @@ function confirmDeleteMapping() {
         success: function(response) {
             if (response.success) {
                 $('#confirmDeleteModal').modal('hide');
-                showAlert('[[ _("sku_mapping_delete_success") ]]', 'success');
+                showAlert('[[ t("sku_mapping_delete_success") ]]', 'success');
                 loadMappingData(currentPage, currentSearch);
             } else {
-                showAlert(response.error || '[[ _("delete_failed") ]]', 'danger');
+                showAlert(response.error || '[[ t("delete_failed") ]]', 'danger');
             }
         },
         error: function() {
-            showAlert('[[ _("delete_sku_mapping_failed") ]]', 'danger');
+            showAlert('[[ t("delete_sku_mapping_failed") ]]', 'danger');
         }
     });
 }
@@ -703,20 +703,20 @@ function clearAllMappings() {
                 showAlert(response.message, 'success');
                 loadMappingData(1, ''); // 重新加载数据
             } else {
-                showAlert(response.error || '[[ _("clear_failed") ]]', 'danger');
+                showAlert(response.error || '[[ t("clear_failed") ]]', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('[[ _("clear_sku_mapping_failed") ]]', 'danger');
+                showAlert('[[ t("clear_sku_mapping_failed") ]]', 'danger');
             }
         }
     });
 }
 
-// === SKU[[ _("search") ]]助手 ===
+// === SKU[[ t("search") ]]助手 ===
 function populateSkuDropdown() {
     const menu = $('#skuDropdownMenu');
     menu.empty();
@@ -735,7 +735,7 @@ function populateSkuDropdown() {
     
     if (occwSkuList.length > 50) {
         menu.append(`<li><hr class="dropdown-divider"></li>`);
-        menu.append(`<li><span class="dropdown-item-text text-muted">显示前50个，使用[[ _("search") ]]查找更多</span></li>`);
+        menu.append(`<li><span class="dropdown-item-text text-muted">显示前50个，使用[[ t("search") ]]查找更多</span></li>`);
     }
 }
 
@@ -748,7 +748,7 @@ function filterSkuDropdown(query) {
     ).slice(0, 20);
     
     if (filtered.length === 0) {
-        menu.append('<li><span class="dropdown-item-text text-muted">[[ _("no_matching_sku_found") ]]</span></li>');
+        menu.append('<li><span class="dropdown-item-text text-muted">[[ t("no_matching_sku_found") ]]</span></li>');
         return;
     }
     
@@ -781,7 +781,7 @@ function searchOCCWSku() {
     ).slice(0, 10);
     
     if (matches.length === 0) {
-        resultsDiv.html('<div class="alert alert-info">[[ _("no_matching_sku_found") ]]</div>').show();
+        resultsDiv.html('<div class="alert alert-info">[[ t("no_matching_sku_found") ]]</div>').show();
         return;
     }
     
@@ -833,16 +833,16 @@ function exportMappings() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                showAlert('[[ _("export_sku_mapping_success").format(count="${response.count}") ]]', 'success');
+                showAlert('[[ t("export_sku_mapping_success").format(count="${response.count}") ]]', 'success');
             } else {
-                showAlert(response.error || '[[ _("export_failed") ]]', 'danger');
+                showAlert(response.error || '[[ t("export_failed") ]]', 'danger');
             }
         },
         error: function(xhr) {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('[[ _("export_sku_mapping_failed") ]]', 'danger');
+                showAlert('[[ t("export_sku_mapping_failed") ]]', 'danger');
             }
         }
     });

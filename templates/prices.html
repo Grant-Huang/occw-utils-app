@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     
-                    <!-- [[ _("import_description") ]] -->
+                    <!-- [[ t("import_description") ]] -->
                     <div class="alert alert-info mb-4">
                         <h5 class="alert-heading">
                             <i class="fas fa-info-circle me-2"></i>[[ t('excel_format_requirements') ]]
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- [[ _("advanced_search_panel") ]] -->
+                            <!-- [[ t("advanced_search_panel") ]] -->
                             <div class="card mb-3">
                                 <div class="card-header bg-light">
                                     <h6 class="mb-0">
@@ -175,7 +175,7 @@
                                     </h6>
                                 </div>
                                 <div class="card-body">
-                                    <!-- [[ _("basic_search") ]] -->
+                                    <!-- [[ t("basic_search") ]] -->
                                     <div class="row mb-3">
                                         <div class="col-md-8">
                                             <div class="input-group">
@@ -183,9 +183,9 @@
                                                     <i class="fas fa-search"></i>
                                                 </span>
                                                 <input type="text" class="form-control" id="skuSearch" 
-                                                       placeholder="[[ _("search_by_sku") ]]..." onkeypress="handleSearchKeyPress(event)">
+                                                       placeholder="[[ t("search_by_sku") ]]..." onkeypress="handleSearchKeyPress(event)">
                                                 <button class="btn btn-primary" type="button" onclick="applyFilters()">
-                                                    [[ _("search") ]]
+                                                    [[ t("search") ]]
                                                 </button>
                                                 <button class="btn btn-outline-secondary" type="button" onclick="clearAllFilters()">
                                                     清空
@@ -306,7 +306,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[ _("close") ]]</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[ t("close") ]]</button>
             </div>
         </div>
     </div>
@@ -439,7 +439,7 @@ function handleUpload(e) {
             if (response) {
                 handleUploadError(response);
             } else {
-                showAlert('[[ _("upload_failed_retry") ]]', 'danger');
+                showAlert('[[ t("upload_failed_retry") ]]', 'danger');
             }
         },
         complete: function() {
@@ -451,7 +451,7 @@ function handleUpload(e) {
 function handleUploadError(response) {
     if (response.has_errors && response.error_details) {
         showErrorDetails(response.error_details, 'failed');
-        showAlert('[[ _("import_failed_with_errors").format(count="${response.error_details.length}") ]]', 'danger');
+        showAlert('[[ t("import_failed_with_errors").format(count="${response.error_details.length}") ]]', 'danger');
     } else {
         showAlert(response.error || '导入失败', 'danger');
     }
@@ -559,7 +559,7 @@ function loadPriceTable(page = 1, search = '') {
         requestData.category = currentFilters.category;
     }
     
-    // 兼容老的[[ _("search") ]]参数
+    // 兼容老的[[ t("search") ]]参数
     if (search) {
         requestData.search = search;
     }
@@ -583,7 +583,7 @@ function loadPriceTable(page = 1, search = '') {
             if (xhr.status === 401) {
                 window.location.href = '/admin_login';
             } else {
-                showAlert('[[ _("load_price_table_failed") ]]', 'danger');
+                showAlert('[[ t("load_price_table_failed") ]]', 'danger');
                 $('#priceTableEmpty').show();
             }
         }
@@ -618,7 +618,7 @@ function displayPriceTable(response) {
     const end = Math.min(startIndex + response.per_page, response.total);
     $('#tableStats').html(`
         <i class="fas fa-info-circle me-1"></i>
-        [[ _("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', response.total.toLocaleString())
+        [[ t("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', response.total.toLocaleString())
     `);
 }
 
@@ -634,7 +634,7 @@ function updatePagination(response) {
     // Previous page
     pagination.append(`
         <li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">[[ _("previous_page") ]]</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">[[ t("previous_page") ]]</a>
         </li>
     `);
     
@@ -653,7 +653,7 @@ function updatePagination(response) {
     // Next page
     pagination.append(`
         <li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">[[ _("next_page") ]]</a>
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">[[ t("next_page") ]]</a>
         </li>
     `);
 }

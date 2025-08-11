@@ -14,7 +14,7 @@
                             <i class="fas fa-table me-3 page-icon"></i>
                             Converted Sales Data
                         </h1>
-                        <p class="page-subtitle">View converted data including order amount, [[ _("quotation_order") ]] amount, conversion rate and other fields</p>
+                        <p class="page-subtitle">View converted data including order amount, [[ t("quotation_order") ]] amount, conversion rate and other fields</p>
                     </div>
                     <div>
                         <a href="/view_imported_data" class="btn btn-outline-secondary">
@@ -31,13 +31,13 @@
             </div>
 
             [% if error %]
-            <!-- [[ _("error_message") ]] -->
+            <!-- [[ t("error_message") ]] -->
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 [[ error ]]
             </div>
             [% elif data %]
-            <!-- [[ _("current_filter_settings_tip") ]] -->
+            <!-- [[ t("current_filter_settings_tip") ]] -->
             [% if system_settings.get('import_filter_min_amount') or system_settings.get('import_filter_sales_person') or system_settings.get('import_filter_customer') or system_settings.get('import_filter_start_date') or system_settings.get('import_filter_end_date') or system_settings.get('import_filter_order_status') %]
             <div class="alert alert-warning" role="alert">
                 <h6 class="alert-heading">
@@ -47,7 +47,7 @@
                     <div class="col-md-12">
                         <ul class="mb-2">
                             [% if system_settings.get('import_filter_min_amount') %]
-                            <li><strong>[[ _("min_amount_threshold") ]]:</strong> ≥ $[[ system_settings.get('import_filter_min_amount') ]]</li>
+                            <li><strong>[[ t("min_amount_threshold") ]]:</strong> ≥ $[[ system_settings.get('import_filter_min_amount') ]]</li>
                             [% endif %]
                             [% if system_settings.get('import_filter_sales_person') %]
                             <li><strong>Sales Person:</strong> [[ system_settings.get('import_filter_sales_person') ]]</li>
@@ -56,10 +56,10 @@
                             <li><strong>Customer:</strong> [[ system_settings.get('import_filter_customer') ]]</li>
                             [% endif %]
                             [% if system_settings.get('import_filter_start_date') %]
-                            <li><strong>[[ _("start_date") ]]:</strong> [[ system_settings.get('import_filter_start_date') ]]</li>
+                            <li><strong>[[ t("start_date") ]]:</strong> [[ system_settings.get('import_filter_start_date') ]]</li>
                             [% endif %]
                             [% if system_settings.get('import_filter_end_date') %]
-                            <li><strong>[[ _("end_date") ]]:</strong> [[ system_settings.get('import_filter_end_date') ]]</li>
+                            <li><strong>[[ t("end_date") ]]:</strong> [[ system_settings.get('import_filter_end_date') ]]</li>
                             [% endif %]
                             [% if system_settings.get('import_filter_order_status') %]
                             <li><strong>Order Status:</strong> [[ system_settings.get('import_filter_order_status') ]]</li>
@@ -97,8 +97,8 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-shopping-cart text-success me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">[[ _("sales_order") ]] Count</div>
-                                    <div class="h4 mb-0 text-success">[[ data | selectattr('Order Status', 'equalto', '[[ _("sales_order") ]]') | list | length ]]</div>
+                                    <div class="fw-bold">[[ t("sales_order") ]] Count</div>
+                                    <div class="h4 mb-0 text-success">[[ data | selectattr('Order Status', 'equalto', '[[ t("sales_order") ]]') | list | length ]]</div>
                                 </div>
                             </div>
                         </div>
@@ -106,8 +106,8 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-file-invoice text-warning me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">[[ _("quotation_order") ]] Count</div>
-                                    <div class="h4 mb-0 text-warning">[[ data | selectattr('Order Status', 'equalto', '[[ _("quotation_order") ]]') | list | length ]]</div>
+                                    <div class="fw-bold">[[ t("quotation_order") ]] Count</div>
+                                    <div class="h4 mb-0 text-warning">[[ data | selectattr('Order Status', 'equalto', '[[ t("quotation_order") ]]') | list | length ]]</div>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                                     <div class="fw-bold">Overall Conversion Rate</div>
                                     <div class="h4 mb-0 text-info">
                                         [% set total_order_amount = data | map(attribute='Order Amount') | select | list | sum %]
-                                        [% set total_quotation_amount = data | map(attribute='[[ _("quotation_order") ]] Amount') | select | list | sum %]
+                                        [% set total_quotation_amount = data | map(attribute='[[ t("quotation_order") ]] Amount') | select | list | sum %]
                                         [% if total_quotation_amount > 0 %]
                                             [[ "%.1f" | format((total_order_amount / total_quotation_amount) * 100) ]]%
                                         [% else %]
@@ -132,16 +132,16 @@
                 </div>
             </div>
 
-            <!-- [[ _("data_filter_and_search") ]] -->
+            <!-- [[ t("data_filter_and_search") ]] -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h6 class="mb-0">[[ _("data_filter") ]]</h6>
+                    <h6 class="mb-0">[[ t("data_filter") ]]</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="searchInput" class="form-label">[[ _("search") ]]</label>
-                            <input type="text" class="form-control" id="searchInput" placeholder="[[ _("search_number_customer_salesperson") ]]" onkeyup="filterData()">
+                            <label for="searchInput" class="form-label">[[ t("search") ]]</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="[[ t("search_number_customer_salesperson") ]]" onkeyup="filterData()">
                         </div>
                         <div class="col-md-2">
                             <label for="salesPersonFilter" class="form-label">Sales Person</label>
@@ -157,11 +157,11 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="startDate" class="form-label">[[ _("start_date") ]]</label>
+                            <label for="startDate" class="form-label">[[ t("start_date") ]]</label>
                             <input type="date" class="form-control" id="startDate" onchange="filterData()">
                         </div>
                         <div class="col-md-2">
-                            <label for="endDate" class="form-label">[[ _("end_date") ]]</label>
+                            <label for="endDate" class="form-label">[[ t("end_date") ]]</label>
                             <input type="date" class="form-control" id="endDate" onchange="filterData()">
                         </div>
                         <div class="col-md-1">
@@ -193,15 +193,15 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th style="cursor: pointer;" onclick="sortData('Number')">Number <i id="sort-Number" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('[[ _("order_date") ]]')">[[ _("order_date") ]] <i id="sort-[[ _("order_date") ]]" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ t("order_date") ]]')">[[ t("order_date") ]] <i id="sort-[[ t("order_date") ]]" class="fas fa-sort"></i></th>
                                     <th style="cursor: pointer;" onclick="sortData('Sales Person')">Sales Person <i id="sort-Sales Person" class="fas fa-sort"></i></th>
                                     <th style="cursor: pointer;" onclick="sortData('Customer')">Customer <i id="sort-Customer" class="fas fa-sort"></i></th>
                                     <th style="cursor: pointer;" onclick="sortData('Order Status')">Order Status <i id="sort-Order Status" class="fas fa-sort"></i></th>
 
                                     <th style="cursor: pointer;" onclick="sortData('Order Amount')">Order Amount <i id="sort-Order Amount" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('[[ _("quotation_order") ]] Amount')">[[ _("quotation_order") ]] Amount <i id="sort-[[ _("quotation_order") ]] Amount" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ t("quotation_order") ]] Amount')">[[ t("quotation_order") ]] Amount <i id="sort-[[ t("quotation_order") ]] Amount" class="fas fa-sort"></i></th>
                                     <th style="cursor: pointer;" onclick="sortData('Order Quantity')">Order Quantity <i id="sort-Order Quantity" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('[[ _("quotation_order") ]] Count')">[[ _("quotation_order") ]] Count <i id="sort-[[ _("quotation_order") ]] Count" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ t("quotation_order") ]] Count')">[[ t("quotation_order") ]] Count <i id="sort-[[ t("quotation_order") ]] Count" class="fas fa-sort"></i></th>
                                 </tr>
                             </thead>
                             <tbody id="dataTableBody">
@@ -227,7 +227,7 @@
                 </div>
             </div>
             [% else %]
-            <!-- No data [[ _("tip") ]] -->
+            <!-- No data [[ t("tip") ]] -->
             <div class="alert alert-info" role="alert">
                 <i class="fas fa-info-circle me-2"></i>
                 No data available, please import sales data first.
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         salesPersonFilter.appendChild(option);
     });
     
-    // Populate order [[ _("status_filter") ]] filter - dynamically get from converted data
+    // Populate order [[ t("status_filter") ]] filter - dynamically get from converted data
     const statusSet = new Set();
     allRecords.forEach(record => {
         if (record['Order Status']) {
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// [[ _("data_filter") ]]
+// [[ t("data_filter") ]]
 function filterData() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const salesPersonFilter = document.getElementById('salesPersonFilter').value;
@@ -294,7 +294,7 @@ function filterData() {
     const endDate = document.getElementById('endDate').value;
     
     filteredRecords = allRecords.filter(record => {
-        // [[ _("search") ]] filter
+        // [[ t("search") ]] filter
         const matchesSearch = !searchTerm || 
             (record['Number'] && record['Number'].toString().toLowerCase().includes(searchTerm)) ||
             (record['Customer'] && record['Customer'].toLowerCase().includes(searchTerm)) ||
@@ -303,13 +303,13 @@ function filterData() {
         // Sales Person filter
         const matchesSalesPerson = !salesPersonFilter || record['Sales Person'] === salesPersonFilter;
         
-        // [[ _("status_filter") ]]
+        // [[ t("status_filter") ]]
         const matchesStatus = !statusFilter || record['Order Status'] === statusFilter;
         
-        // [[ _("date_filter") ]]
+        // [[ t("date_filter") ]]
         let matchesDate = true;
         if (startDate || endDate) {
-            const orderDate = record['[[ _("order_date") ]]'];
+            const orderDate = record['[[ t("order_date") ]]'];
             if (orderDate && orderDate !== 'None' && orderDate !== null) {
                 const recordDate = new Date(orderDate);
                 if (!isNaN(recordDate.getTime())) {
@@ -367,10 +367,10 @@ function sortData(column) {
         let valueB = b[column];
         
         // Handle different data types
-                    if (['Order Amount', '[[ _("quotation_order") ]] Amount', 'Order Quantity', '[[ _("quotation_order") ]] Count', 'Gross Profit Margin (%)'].includes(column)) {
+                    if (['Order Amount', '[[ t("quotation_order") ]] Amount', 'Order Quantity', '[[ t("quotation_order") ]] Count', 'Gross Profit Margin (%)'].includes(column)) {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
-        } else if (column === '[[ _("order_date") ]]') {
+        } else if (column === '[[ t("order_date") ]]') {
             valueA = new Date(valueA || '1900-01-01');
             valueB = new Date(valueB || '1900-01-01');
         } else {
@@ -407,19 +407,19 @@ function displayData() {
         
         row.innerHTML = `
             <td>${record['Number'] || ''}</td>
-            <td>${record['[[ _("order_date") ]]'] || ''}</td>
+            <td>${record['[[ t("order_date") ]]'] || ''}</td>
             <td>${record['Sales Person'] || ''}</td>
             <td>${record['Customer'] || ''}</td>
             <td>
-                ${record['Order Status'] === '[[ _("sales_order") ]]' ? '<span class="badge bg-success">[[ _("sales_order") ]]</span>' : 
-                  record['Order Status'] === '[[ _("quotation_order") ]]' ? '<span class="badge bg-warning">[[ _("quotation_order") ]]</span>' : 
+                ${record['Order Status'] === '[[ t("sales_order") ]]' ? '<span class="badge bg-success">[[ t("sales_order") ]]</span>' : 
+                  record['Order Status'] === '[[ t("quotation_order") ]]' ? '<span class="badge bg-warning">[[ t("quotation_order") ]]</span>' : 
                   '<span class="badge bg-secondary">' + (record['Order Status'] || '') + '</span>'}
             </td>
 
             <td class="text-end">$${record['Order Amount'] ? parseFloat(record['Order Amount']).toFixed(2) : '0.00'}</td>
-            <td class="text-end">$${record['[[ _("quotation_order") ]] Amount'] ? parseFloat(record['[[ _("quotation_order") ]] Amount']).toFixed(2) : '0.00'}</td>
+            <td class="text-end">$${record['[[ t("quotation_order") ]] Amount'] ? parseFloat(record['[[ t("quotation_order") ]] Amount']).toFixed(2) : '0.00'}</td>
             <td class="text-center">${record['Order Quantity'] || 0}</td>
-            <td class="text-center">${record['[[ _("quotation_order") ]] Count'] || 0}</td>
+            <td class="text-center">${record['[[ t("quotation_order") ]] Count'] || 0}</td>
         `;
     }
     
@@ -446,7 +446,7 @@ function updatePagination() {
     // Update page information
     const start = (currentPage - 1) * pageSize + 1;
     const end = Math.min(currentPage * pageSize, filteredRecords.length);
-    pageInfo.textContent = `[[ _("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', filteredRecords.length);
+    pageInfo.textContent = `[[ t("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', filteredRecords.length);
     
     // Update pagination按钮
     pagination.innerHTML = '';
@@ -495,7 +495,7 @@ function changePageSize() {
 
 // Export to Excel
 function exportToExcel() {
-                const headers = ['Number', '[[ _("order_date") ]]', 'Sales Person', 'Customer', 'Order Status', 'Order Amount', '[[ _("quotation_order") ]] Amount', 'Order Quantity', '[[ _("quotation_order") ]] Count'];
+                const headers = ['Number', '[[ t("order_date") ]]', 'Sales Person', 'Customer', 'Order Status', 'Order Amount', '[[ t("quotation_order") ]] Amount', 'Order Quantity', '[[ t("quotation_order") ]] Count'];
     let csvContent = headers.join(',') + '\n';
     
     filteredRecords.forEach(record => {

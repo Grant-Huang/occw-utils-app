@@ -103,7 +103,7 @@
             transform: translateY(-2px);
         }
         
-        /* [[ _("toast_system") ]] Styles */
+        /* [[ t("toast_system") ]] Styles */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -437,7 +437,7 @@
             color: var(--white);
         }
 
-        /* [[ _("warning_box_styles") ]] */
+        /* [[ t("warning_box_styles") ]] */
         .alert {
             border-radius: 0.75rem;
             border: none;
@@ -602,7 +602,7 @@
             border-radius: 0.5rem;
         }
 
-        /* [[ _("tooltip_styles") ]] */
+        /* [[ t("tooltip_styles") ]] */
         .tooltip-inner {
             background-color: var(--primary-color);
             border-radius: 0.375rem;
@@ -788,7 +788,7 @@
             border-color: var(--border-color) var(--border-color) var(--white);
         }
 
-        /* [[ _("warning_tip_color_adjustment") ]] */
+        /* [[ t("warning_tip_color_adjustment") ]] */
         .alert-warning {
             background-color: #fff3cd;
             border-color: #ffeaa7;
@@ -928,7 +928,7 @@
         </div>
     </footer>
 
-    <!-- [[ _("toast_container") ]] -->
+    <!-- [[ t("toast_container") ]] -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Floating Info Bar Container -->
@@ -939,7 +939,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     
     <script>
-    // [[ _("toast_system") ]]
+    // [[ t("toast_system") ]]
     class ToastManager {
         constructor() {
             this.container = document.getElementById('toastContainer');
@@ -991,12 +991,12 @@
         
         getTitle(type) {
             const titles = {
-                'success': '[[ _("success") ]]',
-                'error': '[[ _("error") ]]',
-                'warning': '[[ _("warning") ]]',
-                'info': '[[ _("tip") ]]'
+                'success': '[[ t("success") ]]',
+                'error': '[[ t("error") ]]',
+                'warning': '[[ t("warning") ]]',
+                'info': '[[ t("tip") ]]'
             };
-            return titles[type] || '[[ _("tip") ]]';
+            return titles[type] || '[[ t("tip") ]]';
         }
         
         hide(toast) {

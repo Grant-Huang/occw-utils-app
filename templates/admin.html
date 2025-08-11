@@ -101,7 +101,7 @@
     
     <!-- Function Content Area -->
     <div id="adminContent">
-        <!-- [[ _("all_quotations") ]] -->
+        <!-- [[ t("all_quotations") ]] -->
         <div id="all-quotations-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -113,7 +113,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <!-- [[ _("search_and_filter_area") ]] -->
+                    <!-- [[ t("search_and_filter_area") ]] -->
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <input type="text" class="form-control" id="quotationSearchInput" placeholder="[[ t('search_quotations') ]]" onkeyup="filterQuotations()">
@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     
-                    <!-- [[ _("quotation_table") ]] -->
+                    <!-- [[ t("quotation_table") ]] -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="allQuotationsTable">
                             <thead class="table-dark">
@@ -152,7 +152,7 @@
                                 </tr>
                             </thead>
                             <tbody id="allQuotationsTableBody">
-                                <!-- [[ _("quotation_data_will_load_here") ]] -->
+                                <!-- [[ t("quotation_data_will_load_here") ]] -->
                             </tbody>
                         </table>
                     </div>
@@ -352,7 +352,7 @@
                 </div>
                 <div class="card-body">
                     
-                    <!-- [[ _("import_description") ]] -->
+                    <!-- [[ t("import_description") ]] -->
                     <div class="alert alert-info mb-4">
                         <h5 class="alert-heading">
                             <i class="fas fa-info-circle me-2"></i>[[ t('excel_format_requirements') ]]
@@ -542,7 +542,7 @@
             </div>
         </div>
         
-        <!-- [[ _("sales_order_import_filter_settings") ]] -->
+        <!-- [[ t("sales_order_import_filter_settings") ]] -->
         <div id="import-filters-content" class="admin-content" style="display: none;">
             <div class="card shadow-sm">
                 <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
@@ -597,7 +597,7 @@
                                     <i class="fas fa-users me-2"></i>[[ t('person_customer_filter') ]]
                                 </h6>
                                 <div class="mb-3">
-                                    <label for="salesPersonFilter" class="form-label">[[ _("sales_person_filter") ]]</label>
+                                    <label for="salesPersonFilter" class="form-label">[[ t("sales_person_filter") ]]</label>
                                     <input type="text" class="form-control" id="salesPersonFilter" 
                                            placeholder="e.g.: Zhang San, Li Si, Wang Wu">
                                     <small class="form-text text-muted">Multiple sales persons separated by commas, leave empty for no filter</small>
@@ -624,12 +624,12 @@
 <label class="form-check-label" for="status_[[ t('quotation_order') ]]">[[ t('quotation_order') ]]</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="[[ _("sent_quotation_order") ]]" id="status_[[ _("sent_quotation_order") ]]" checked>
-                                            <label class="form-check-label" for="status_[[ _("sent_quotation_order") ]]">[[ _("sent_quotation_order") ]]</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ t("sent_quotation_order") ]]" id="status_[[ t("sent_quotation_order") ]]" checked>
+                                            <label class="form-check-label" for="status_[[ t("sent_quotation_order") ]]">[[ t("sent_quotation_order") ]]</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="[[ _("cancelled") ]]" id="status_[[ _("cancelled") ]]">
-                                            <label class="form-check-label" for="status_[[ _("cancelled") ]]">[[ _("cancelled") ]]</label>
+                                            <input class="form-check-input" type="checkbox" value="[[ t("cancelled") ]]" id="status_[[ t("cancelled") ]]">
+                                            <label class="form-check-label" for="status_[[ t("cancelled") ]]">[[ t("cancelled") ]]</label>
                                         </div>
                                     </div>
                                     <small class="form-text text-muted">[[ t('status_filter_help') ]]</small>
@@ -640,13 +640,13 @@
                         <div class="row mt-4">
                             <div class="col-12">
                                 <button type="submit" class="btn btn-warning me-2">
-                                    <i class="fas fa-save me-1"></i>[[ _("save_filter_settings") ]]
+                                    <i class="fas fa-save me-1"></i>[[ t("save_filter_settings") ]]
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary me-2" onclick="resetFilters()">
-                                    <i class="fas fa-undo me-1"></i>[[ _("reset_settings") ]]
+                                    <i class="fas fa-undo me-1"></i>[[ t("reset_settings") ]]
                                 </button>
                                 <button type="button" class="btn btn-outline-info" onclick="loadCurrentFilters()">
-                                    <i class="fas fa-refresh me-1"></i>[[ _("load_current_settings") ]]
+                                    <i class="fas fa-refresh me-1"></i>[[ t("load_current_settings") ]]
                                 </button>
                             </div>
                         </div>
@@ -887,7 +887,7 @@ function showAdminDashboard() {
     $('.admin-content').hide();
 }
 
-// Show all [[ _("quotation_order") ]]
+// Show all [[ t("quotation_order") ]]
 function showAllQuotations() {
     // console.log('showAllQuotations called');
     try {
@@ -979,7 +979,7 @@ function updateSystemStatus(userLoginEnabled) {
     lastUpdatedElement.text(new Date().toLocaleString());
 }
 
-// Load all [[ _("quotation_order") ]]
+// Load all [[ t("quotation_order") ]]
 function loadAllQuotations() {
     // console.log('loadAllQuotations called');
     try {
@@ -1004,13 +1004,13 @@ function loadAllQuotations() {
     }
 }
 
-// Global variable to store all [[ _("quotation_order") ]] data
+// Global variable to store all [[ t("quotation_order") ]] data
 let allQuotationsData = [];
 let filteredQuotationsData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
-// Show all [[ _("quotation_order") ]] list
+// Show all [[ t("quotation_order") ]] list
 function displayAllQuotationsList(allQuotations) {
     // Convert data format to flattened array
     allQuotationsData = [];
@@ -1042,14 +1042,14 @@ function initializeFilters() {
     });
 }
 
-// Filter [[ _("quotation_order") ]]
+// Filter [[ t("quotation_order") ]]
 function filterQuotations() {
     const searchTerm = $('#quotationSearchInput').val().toLowerCase();
     const userFilter = $('#userFilterSelect').val();
     const dateFilter = $('#dateFilterSelect').val();
     
     filteredQuotationsData = allQuotationsData.filter(quotation => {
-        // [[ _("search") ]] filter
+        // [[ t("search") ]] filter
         const matchesSearch = !searchTerm || 
             quotation.title.toLowerCase().includes(searchTerm) ||
             quotation.quotation_id.toLowerCase().includes(searchTerm) ||
@@ -1059,7 +1059,7 @@ function filterQuotations() {
         // User filter
         const matchesUser = !userFilter || quotation.username === userFilter;
         
-        // [[ _("date_filter") ]]
+        // [[ t("date_filter") ]]
         let matchesDate = true;
         if (dateFilter && quotation.data && quotation.data.order_date) {
             const orderDate = new Date(quotation.data.order_date);
@@ -1095,7 +1095,7 @@ function clearFilters() {
     filterQuotations();
 }
 
-// Show [[ _("quotation_order") ]] table
+// Show [[ t("quotation_order") ]] table
 function displayQuotationsTable() {
     const tbody = $('#allQuotationsTableBody');
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -1151,18 +1151,18 @@ function displayQuotationsTable() {
     displayPagination();
 }
 
-// View [[ _("quotation_order") ]] details
+// View [[ t("quotation_order") ]] details
 function viewQuotationDetail(quotationId) {
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// Edit [[ _("quotation_order") ]]
+// Edit [[ t("quotation_order") ]]
 function editQuotation(quotationId) {
-    // Directly open [[ _("quotation_order") ]] details page
+    // Directly open [[ t("quotation_order") ]] details page
     window.open(`/view_quotation/${quotationId}`, '_blank');
 }
 
-// Delete [[ _("quotation_order") ]]
+// Delete [[ t("quotation_order") ]]
 function deleteQuotation(quotationId) {
     if (confirm('[[ t("confirm_delete_quotation") ]]')) {
         $.ajax({
@@ -1172,7 +1172,7 @@ function deleteQuotation(quotationId) {
             success: function(response) {
                 if (response.success) {
                     showAlert(response.message, 'success');
-                    loadAllQuotations(); // Reload [[ _("quotation_order") ]] list
+                    loadAllQuotations(); // Reload [[ t("quotation_order") ]] list
                 } else {
                     showAlert(response.error, 'danger');
                 }
@@ -1479,7 +1479,7 @@ function exportSkuMappings() {
     window.open('/export_sku_mappings', '_blank');
 }
 
-// Export [[ _("quotation_order") ]]
+// Export [[ t("quotation_order") ]]
 function exportQuotation(quotationId) {
     window.open(`/export_quotation/${quotationId}`, '_blank');
 }
