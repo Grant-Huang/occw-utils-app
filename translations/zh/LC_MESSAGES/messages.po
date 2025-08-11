@@ -1,14 +1,10 @@
-# ZH translations for OCCW报价系统.
-# Copyright (C) 2025 OCCW报价系统
-# This file is distributed under the same license as the OCCW报价系统 package.
-# OCCW报价系统 <info@oppeincabinet.ca>, 2025.
-#
+
 msgid ""
 msgstr ""
 "Project-Id-Version: OCCW报价系统 2.2.0\n"
 "Report-Msgid-Bugs-To: info@oppeincabinet.ca\n"
-"POT-Creation-Date: 2025-08-09 14:47-0700\n"
-"PO-Revision-Date: 2025-08-08 10:30+0800\n"
+"POT-Creation-Date: 2025-08-10 12:30-0700\n"
+"PO-Revision-Date: 2025-08-10 11:19+0000\n"
 "Last-Translator: OCCW报价系统 <info@oppeincabinet.ca>\n"
 "Language: zh\n"
 "Language-Team: ZH <info@oppeincabinet.ca>\n"
@@ -18,344 +14,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#~ msgid "system_name"
-#~ msgstr "OCCW报价与销售分析系统"
+#~ msgid "2020_price"
+#~ msgstr "2020价格"
 
-#~ msgid "company_name"
-#~ msgstr "加西欧派"
+#~ msgid "2020_total"
+#~ msgstr "2020总计"
 
-#~ msgid "company_full_name"
-#~ msgstr "Oppein Cabinet Canada West Ltd."
+#~ msgid "accessory"
+#~ msgstr "Accessory"
 
-#~ msgid "copyright"
-#~ msgstr "© 2025 OCCW报价系统 - Oppein Cabinet Canada West Ltd."
+#~ msgid "actions"
+#~ msgstr "操作"
 
-#~ msgid "nav_home"
-#~ msgstr "主页"
+#~ msgid "add"
+#~ msgstr "添加"
 
-#~ msgid "nav_prices"
-#~ msgstr "价格管理"
-
-#~ msgid "nav_config"
-#~ msgstr "配置"
-
-#~ msgid "nav_mappings"
-#~ msgstr "SKU映射"
-
-#~ msgid "nav_settings"
-#~ msgstr "设置"
-
-#~ msgid "nav_help"
-#~ msgstr "帮助"
-
-#~ msgid "nav_admin_login"
-#~ msgstr "管理员登录"
-
-#~ msgid "nav_admin_logout"
-#~ msgstr "退出"
-
-#~ msgid "nav_language"
-#~ msgstr "语言"
-
-#~ msgid "language"
-#~ msgstr "语言"
-
-#~ msgid "home_title"
-#~ msgstr "主页"
-
-#~ msgid "home_subtitle"
-#~ msgstr "OCCW 报价平台"
-
-#~ msgid "system_status_ready"
-#~ msgstr "系统就绪"
-
-#~ msgid "back_to_home"
-#~ msgstr "返回主页"
-
-#~ msgid "upload_pdf_title"
-#~ msgstr "上传2020软件报价单PDF"
-
-#~ msgid "upload_pdf_desc"
-#~ msgstr "请选择要转换的2020软件报价单PDF文件"
-
-#~ msgid "select_file"
-#~ msgstr "选择文件"
-
-#~ msgid "upload_button"
-#~ msgstr "上传价格表"
-
-#~ msgid "quotation_table_title"
-#~ msgstr "报价单表格"
-
-#~ msgid "export_excel"
-#~ msgstr "导出Excel"
-
-#~ msgid "export_csv"
-#~ msgstr "导出CSV"
-
-#~ msgid "export_pdf"
-#~ msgstr "导出PDF"
-
-#~ msgid "show_raw_text"
-#~ msgstr "显示PDF原始文本"
-
-#~ msgid "export_date"
-#~ msgstr "导出日期"
-
-#~ msgid "export_username"
-#~ msgstr "用户名"
-
-#~ msgid "enter_username"
-#~ msgstr "请输入用户名"
-
-#~ msgid "export_quote"
-#~ msgstr "导出报价单"
-
-#~ msgid "occw_excel"
-#~ msgstr "OCCW Excel"
-
-#~ msgid "pdf_text"
-#~ msgstr "PDF文本"
-
-#~ msgid "pdf_import_quote"
-#~ msgstr "PDF导入报价单"
-
-#~ msgid "pdf_import_desc"
-#~ msgstr "上传2020报价单PDF文件，自动解析并生成OCCW格式报价单"
-
-#~ msgid "manual_create_quote"
-#~ msgstr "手动创建报价单"
-
-#~ msgid "manual_create_desc"
-#~ msgstr "手动选择产品，创建自定义报价单"
-
-#~ msgid "select_type"
-#~ msgstr "选择类型..."
-
-#~ msgid "select_product"
-#~ msgstr "选择产品..."
-
-#~ msgid "select_box_variant"
-#~ msgstr "选择柜身变体..."
-
-#~ msgid "select_door_variant"
-#~ msgstr "选择门板变体..."
-
-#~ msgid "not_selected"
-#~ msgstr "未选择"
+#~ msgid "add_new_product"
+#~ msgstr "添加新产品"
 
 #~ msgid "add_product"
 #~ msgstr "添加产品"
 
-#~ msgid "parsing_total_matches_pdf"
-#~ msgstr "解析总价与PDF合计金额一致"
-
-#~ msgid "parsing_total_mismatch_pdf"
-#~ msgstr "解析总价({calc_total:.2f})与PDF合计金额({pdf_total:.2f})不一致，请检查解析逻辑或PDF内容！"
-
-#~ msgid "quotation_parsed_success"
-#~ msgstr "报价单解析成功！点击\"PDF文本\"按钮可查看原始PDF内容"
-
-#~ msgid "section_data_summary"
-#~ msgstr "第一部分：数据汇总"
-
-#~ msgid "section_chart_analysis"
-#~ msgstr "第二部分：统计图表"
-
-#~ msgid "section_sales_comparison"
-#~ msgstr "第三部分：销售人员对比"
-
-#~ msgid "chart_time_dimension"
-#~ msgstr "图表时间维度"
-
-#~ msgid "sales_person_filter"
-#~ msgstr "销售人员过滤"
-
-#~ msgid "all_sales_persons"
-#~ msgstr "全部销售人员"
-
-#~ msgid "update_charts"
-#~ msgstr "更新图表"
-
-#~ msgid "order_amount_conversion_analysis"
-#~ msgstr "订单金额转化率分析"
-
-#~ msgid "order_quantity_conversion_analysis"
-#~ msgstr "订单数量转化率分析"
-
-#~ msgid "sales_person_1"
-#~ msgstr "销售人员1"
-
-#~ msgid "sales_person_2"
-#~ msgstr "销售人员2"
-
-#~ msgid "please_select_sales_person"
-#~ msgstr "请选择销售人员"
-
-#~ msgid "update_comparison_charts"
-#~ msgstr "更新对比图表"
-
-#~ msgid "quantity_comparison"
-#~ msgstr "数量对比"
-
-#~ msgid "amount_comparison"
-#~ msgstr "金额对比"
-
-#~ msgid "quantity_comparison_chart"
-#~ msgstr "数量对比图"
-
-#~ msgid "amount_comparison_chart"
-#~ msgstr "金额对比图"
-
-#~ msgid "conversion_rate_comparison"
-#~ msgstr "转化率对比"
-
-#~ msgid "conversion_rate_comparison_chart"
-#~ msgstr "转化率对比图"
-
-#~ msgid "quote_result"
-#~ msgstr "报价单结果"
-
-#~ msgid "processing_pdf"
-#~ msgstr "正在处理PDF文件..."
-
-#~ msgid "no_file_selected"
-#~ msgstr "没有选择文件"
-
-#~ msgid "close"
-#~ msgstr "关闭"
-
-#~ msgid "copy_text"
-#~ msgstr "复制文本"
-
-#~ msgid "settings_title"
-#~ msgstr "系统设置"
-
-#~ msgid "settings_subtitle"
-#~ msgstr "管理系统配置和默认设置"
-
-#~ msgid "sales_person_settings"
-#~ msgstr "销售人员设置"
-
-#~ msgid "default_sales_person"
-#~ msgstr "默认销售人员"
-
-#~ msgid "enter_sales_person"
-#~ msgstr "请输入销售人员姓名"
-
-#~ msgid "default_sales_person_help"
-#~ msgstr "设置默认销售人员，用于导出报价单时自动填充"
-
-#~ msgid "save_settings"
-#~ msgstr "保存设置"
-
-#~ msgid "reset_settings"
-#~ msgstr "重置设置"
-
-#~ msgid "settings_saved_success"
-#~ msgstr "设置保存成功"
-
-#~ msgid "confirm_reset_settings"
-#~ msgstr "确定要重置所有设置吗？"
-
-#~ msgid "reset_failed"
-#~ msgstr "恢复失败"
-
-#~ msgid "discount_calculator"
-#~ msgstr "折扣计算器"
-
-#~ msgid "discount_price_estimate"
-#~ msgstr "折扣价格估算"
-
-#~ msgid "discount_rate"
-#~ msgstr "折扣率"
-
-#~ msgid "discount_unit"
-#~ msgstr "折"
-
-#~ msgid "original_price"
-#~ msgstr "原价"
-
-#~ msgid "discounted_price"
-#~ msgstr "折后价"
-
-#~ msgid "plus_tax"
-#~ msgstr "税前"
-
-#~ msgid "export_instruction"
-#~ msgstr "导出价格后，请将导出的Excel文件发送给OCCW销售人员"
-
-#~ msgid "date"
-#~ msgstr "日期"
-
-#~ msgid "sales_person"
-#~ msgstr "销售人员"
-
-#~ msgid "select_sales_person"
-#~ msgstr "选择销售人员"
-
-#~ msgid "sales_person_management"
-#~ msgstr "销售人员管理"
-
-#~ msgid "sales_person_name"
-#~ msgstr "销售人员姓名"
-
-#~ msgid "sales_person_email"
-#~ msgstr "销售人员邮箱"
+#~ msgid "add_rule"
+#~ msgstr "添加规则"
 
 #~ msgid "add_sales_person"
 #~ msgstr "添加销售人员"
 
-#~ msgid "enter_sales_person_name"
-#~ msgstr "请输入销售人员姓名"
+#~ msgid "add_sales_person_failed"
+#~ msgstr "添加销售人员失败"
 
-#~ msgid "enter_sales_person_email"
-#~ msgstr "请输入销售人员邮箱"
+#~ msgid "add_sku_mapping"
+#~ msgstr "添加SKU映射"
 
-#~ msgid "discount_estimate_note"
-#~ msgstr "此折扣仅用于客户自己估算折后价，不作为官方报价依据"
+#~ msgid "add_sku_mapping_failed"
+#~ msgstr "添加SKU映射失败"
 
-#~ msgid "export_success"
-#~ msgstr "导出成功"
-
-#~ msgid "export_success_message"
-#~ msgstr "报价单已成功导出！请将导出的Excel文件发送给OCCW销售人员。"
-
-#~ msgid "user_register_title"
-#~ msgstr "用户注册"
-
-#~ msgid "user_login_title"
-#~ msgstr "用户登录"
-
-#~ msgid "username"
-#~ msgstr "用户名"
-
-#~ msgid "email"
-#~ msgstr "邮箱"
-
-#~ msgid "password"
-#~ msgstr "密码"
-
-#~ msgid "confirm_password"
-#~ msgstr "确认密码"
-
-#~ msgid "register"
-#~ msgstr "注册"
-
-#~ msgid "login"
-#~ msgstr "登录"
-
-#~ msgid "logout"
-#~ msgstr "退出登录"
-
-#~ msgid "user_login"
-#~ msgstr "用户登录"
-
-#~ msgid "user_register"
-#~ msgstr "用户注册"
-
-#~ msgid "already_have_account"
-#~ msgstr "已有账户？点击登录"
+#~ msgid "adjust_sku_generation_rules"
+#~ msgstr "3. 在\\"
 
 #~ msgid "admin"
 #~ msgstr "管理员"
@@ -366,862 +62,20 @@ msgstr ""
 #~ msgid "admin_dashboard_subtitle"
 #~ msgstr "管理系统功能和数据"
 
-#~ msgid "admin_mode"
-#~ msgstr "管理员模式"
-
-#~ msgid "back_to_dashboard"
-#~ msgstr "返回仪表板"
-
-#~ msgid "all_quotations"
-#~ msgstr "所有报价单"
-
-#~ msgid "all_quotations_desc"
-#~ msgstr "查看和管理所有用户的报价单"
-
-#~ msgid "sales_person_settings_desc"
-#~ msgstr "管理销售人员信息"
-
-#~ msgid "price_management"
-#~ msgstr "价格管理"
-
-#~ msgid "price_management_desc"
-#~ msgstr "上传和管理OCCW价格表"
-
-#~ msgid "sku_mappings"
-#~ msgstr "2020-OCCW SKU映射"
-
-#~ msgid "sku_mappings_desc"
-#~ msgstr "管理SKU映射关系"
-
-#~ msgid "system_settings"
-#~ msgstr "系统设置"
-
-#~ msgid "system_settings_desc"
-#~ msgstr "管理系统配置和功能开关"
-
-#~ msgid "import_filter_settings"
-#~ msgstr "销售订单导入过滤设置"
-
-#~ msgid "import_filter_settings_desc"
-#~ msgstr "配置销售数据导入时的过滤条件"
-
-#~ msgid "feature_controls"
-#~ msgstr "功能控制"
-
-#~ msgid "enable_user_login"
-#~ msgstr "启用用户登录"
-
-#~ msgid "user_login_description"
-#~ msgstr "控制用户登录功能的开启和关闭"
-
-#~ msgid "admin_password_settings"
-#~ msgstr "管理员密码设置"
-
-#~ msgid "current_admin_password"
-#~ msgstr "当前管理员密码"
-
-#~ msgid "new_admin_password"
-#~ msgstr "新管理员密码"
-
-#~ msgid "confirm_new_password"
-#~ msgstr "确认新密码"
-
-#~ msgid "change_admin_password"
-#~ msgstr "修改管理员密码"
-
-#~ msgid "system_info"
-#~ msgstr "系统信息"
-
-#~ msgid "current_status"
-#~ msgstr "当前状态"
-
-#~ msgid "enabled"
-#~ msgstr "已启用"
-
-#~ msgid "disabled"
-#~ msgstr "已禁用"
-
-#~ msgid "import_data_filter"
-#~ msgstr "导入数据过滤"
-
-#~ msgid "import_data_filter_desc"
-#~ msgstr "配置数据导入时的过滤条件和阈值设置"
-
-#~ msgid "import_data_filter_settings"
-#~ msgstr "导入数据过滤设置"
-
-#~ msgid "amount_threshold_settings"
-#~ msgstr "金额阈值设置"
-
-#~ msgid "min_import_amount_threshold"
-#~ msgstr "最小导入金额阈值"
-
-#~ msgid "min_import_amount_desc"
-#~ msgstr "只导入总计金额大于等于此值的数据（美元）"
-
-#~ msgid "data_filter_conditions"
-#~ msgstr "数据过滤条件"
-
-#~ msgid "customer_filter"
-#~ msgstr "客户过滤"
-
-#~ msgid "filter_empty_desc"
-#~ msgstr "留空表示不过滤"
-
-#~ msgid "sales_person_filter_desc"
-#~ msgstr "只导入指定销售人员的数据（支持多个，用逗号分隔）"
-
-#~ msgid "customer_filter_desc"
-#~ msgstr "只导入指定客户的数据（支持多个，用逗号分隔）"
-
-#~ msgid "start_date"
-#~ msgstr "开始日期"
-
-#~ msgid "end_date"
-#~ msgstr "结束日期"
-
-#~ msgid "start_date_desc"
-#~ msgstr "只导入此日期之后的数据"
-
-#~ msgid "end_date_desc"
-#~ msgstr "只导入此日期之前的数据"
-
-#~ msgid "order_status_filter"
-#~ msgstr "订单状态过滤"
-
-#~ msgid "select_all_none"
-#~ msgstr "全选/全不选"
-
-#~ msgid "order_status_filter_desc"
-#~ msgstr "选择要导入的订单状态类型（多选）"
-
-#~ msgid "save_filter_settings"
-#~ msgstr "保存过滤设置"
-
-#~ msgid "loading_text"
-#~ msgstr "加载中..."
-
-#~ msgid "no_data_import_first"
-#~ msgstr "暂无数据，请先上传销售数据"
-
-#~ msgid "load_failed_retry"
-#~ msgstr "加载失败，请重试"
-
-#~ msgid "sales_analysis"
-#~ msgstr "销售分析"
-
-#~ msgid "sales_analysis_features"
-#~ msgstr "销售分析功能"
-
-#~ msgid "data_import"
-#~ msgstr "数据导入"
-
-#~ msgid "upload_sales_data_button"
-#~ msgstr "上传销售数据"
-
-#~ msgid "upload_odoo_sales_data"
-#~ msgstr "上传Odoo导出的销售数据"
-
-#~ msgid "view_imported_data"
-#~ msgstr "查看导入数据"
-
-#~ msgid "view_converted_data"
-#~ msgstr "查看转换数据"
-
-#~ msgid "data_import_filter"
-#~ msgstr "数据导入与过滤设置"
-
-#~ msgid "data_viewing"
-#~ msgstr "数据查看功能"
-
-#~ msgid "analysis_tables"
-#~ msgstr "分析表格"
-
-#~ msgid "chart_analysis"
-#~ msgstr "图表分析"
-
-#~ msgid "data_conversion_logic"
-#~ msgstr "数据转换逻辑"
-
-#~ msgid "current_password_required"
-#~ msgstr "请输入当前管理员密码"
-
-#~ msgid "new_password_requirements"
-#~ msgstr "新密码至少6位字符"
-
-#~ msgid "confirm_password_help"
-#~ msgstr "请再次输入新密码以确认"
-
-#~ msgid "add"
-#~ msgstr "添加"
-
-#~ msgid "name"
-#~ msgstr "名称"
-
-#~ msgid "operation"
-#~ msgstr "操作"
-
-#~ msgid "no_sales_persons"
-#~ msgstr "暂无销售人员"
-
-#~ msgid "no_sales_persons_desc"
-#~ msgstr "请添加销售人员信息"
-
-#~ msgid "upload_occw_prices"
-#~ msgstr "上传OCCW价格表"
-
-#~ msgid "upload"
-#~ msgstr "上传"
-
-#~ msgid "price_statistics"
-#~ msgstr "价格统计"
-
-#~ msgid "view_price_table"
-#~ msgstr "查看价格表"
-
-#~ msgid "add_sku_mapping"
-#~ msgstr "添加SKU映射"
-
-#~ msgid "original_sku"
-#~ msgstr "原始SKU"
-
-#~ msgid "mapped_sku"
-#~ msgstr "映射SKU"
-
-#~ msgid "clear_all_mappings"
-#~ msgstr "清空所有映射"
-
-#~ msgid "export_mappings"
-#~ msgstr "导出映射"
-
-#~ msgid "no_sku_mappings"
-#~ msgstr "暂无SKU映射"
-
-#~ msgid "no_sku_mappings_desc"
-#~ msgstr "请添加SKU映射关系"
-
-#~ msgid "view"
-#~ msgstr "查看"
-
-#~ msgid "export"
-#~ msgstr "导出"
-
-#~ msgid "total_prices"
-#~ msgstr "总价格数"
-
-#~ msgid "last_updated"
-#~ msgstr "最后更新"
-
-#~ msgid "name_and_email_required"
-#~ msgstr "姓名和邮箱不能为空"
-
-#~ msgid "sales_person_already_exists"
-#~ msgstr "销售人员已存在"
-
-#~ msgid "sales_person_added_success"
-#~ msgstr "销售人员添加成功"
-
-#~ msgid "name_required"
-#~ msgstr "姓名不能为空"
-
-#~ msgid "sales_person_deleted_success"
-#~ msgstr "销售人员删除成功"
-
-#~ msgid "confirm_delete_sales_person"
-#~ msgstr "确定要删除此销售人员吗？"
-
-#~ msgid "add_sales_person_failed"
-#~ msgstr "添加销售人员失败"
-
-#~ msgid "delete_sales_person_failed"
-#~ msgstr "删除销售人员失败"
-
-#~ msgid "load_sales_persons_failed"
-#~ msgstr "加载销售人员列表失败"
-
-#~ msgid "load_all_quotations_failed"
-#~ msgstr "加载所有报价单失败"
-
-#~ msgid "load_sku_mappings_failed"
-#~ msgstr "加载SKU映射失败"
-
-#~ msgid "add_sku_mapping_failed"
-#~ msgstr "添加SKU映射失败"
-
-#~ msgid "delete_sku_mapping_failed"
-#~ msgstr "删除SKU映射失败"
-
-#~ msgid "clear_sku_mappings_failed"
-#~ msgstr "清空SKU映射失败"
-
-#~ msgid "upload_prices_failed"
-#~ msgstr "上传价格表失败"
-
-#~ msgid "confirm_delete_sku_mapping"
-#~ msgstr "确定要删除此SKU映射吗？"
-
-#~ msgid "confirm_clear_all_sku_mappings"
-#~ msgstr "确定要清空所有SKU映射吗？"
-
-#~ msgid "search_quotations"
-#~ msgstr "搜索报价单..."
-
-#~ msgid "all_users"
-#~ msgstr "所有用户"
-
-#~ msgid "all_dates"
-#~ msgstr "所有日期"
-
-#~ msgid "today"
-#~ msgstr "今天"
-
-#~ msgid "this_week"
-#~ msgstr "本周"
-
-#~ msgid "this_month"
-#~ msgstr "本月"
-
-#~ msgid "clear_filters"
-#~ msgstr "清除过滤器"
-
-#~ msgid "total_quotations"
-#~ msgstr "总报价单数"
-
-#~ msgid "quotation_detail"
-#~ msgstr "报价单详情"
-
-#~ msgid "quotation_detail_subtitle"
-#~ msgstr "查看报价单的详细信息"
-
-#~ msgid "back"
-#~ msgstr "返回"
-
-#~ msgid "quotation_info"
-#~ msgstr "报价单信息"
-
-#~ msgid "title"
-#~ msgstr "标题"
-
-#~ msgid "type"
-#~ msgstr "类型"
-
-#~ msgid "pdf_import"
-#~ msgstr "PDF导入"
-
-#~ msgid "manual_create"
-#~ msgstr "手动创建"
-
-#~ msgid "actions"
-#~ msgstr "操作"
-
-#~ msgid "export_quotation"
-#~ msgstr "导出报价单"
-
-#~ msgid "edit_quotation"
-#~ msgstr "编辑报价单"
-
-#~ msgid "delete_quotation"
-#~ msgstr "删除报价单"
-
-#~ msgid "products"
-#~ msgstr "产品列表"
-
-#~ msgid "manufacturer_code"
-#~ msgstr "制造商代码"
-
-#~ msgid "2020_price"
-#~ msgstr "2020价格"
-
-#~ msgid "2020_total"
-#~ msgstr "2020总计"
-
-#~ msgid "occw_sku"
-#~ msgstr "OCCW SKU"
-
-#~ msgid "occw_price"
-#~ msgstr "OCCW价格"
-
-#~ msgid "occw_total"
-#~ msgstr "OCCW总计"
-
-#~ msgid "total"
-#~ msgstr "总计"
-
-#~ msgid "no_products"
-#~ msgstr "暂无产品"
-
-#~ msgid "no_products_desc"
-#~ msgstr "此报价单中没有产品信息"
-
-#~ msgid "export_info"
-#~ msgstr "导出信息"
-
-#~ msgid "confirm_export_quotation"
-#~ msgstr "确定要导出此报价单吗？"
-
-#~ msgid "confirm_edit_quotation"
-#~ msgstr "确定要编辑此报价单吗？"
-
-#~ msgid "confirm_delete_quotation"
-#~ msgstr "确定要删除这个报价单吗？"
-
-#~ msgid "create_new_account"
-#~ msgstr "创建新账户"
-
-#~ msgid "passwords_not_match"
-#~ msgstr "两次输入的密码不一致"
-
-#~ msgid "all_fields_required"
-#~ msgstr "请填写所有必填字段"
-
-#~ msgid "username_exists"
-#~ msgstr "用户名已存在"
-
-#~ msgid "registration_success"
-#~ msgstr "注册成功！正在跳转到登录页面..."
-
-#~ msgid "registration_failed"
-#~ msgstr "注册失败"
-
-#~ msgid "username_password_required"
-#~ msgstr "请输入用户名和密码"
-
-#~ msgid "invalid_credentials"
-#~ msgstr "用户名或密码错误"
-
-#~ msgid "login_success"
-#~ msgstr "登录成功"
-
-#~ msgid "login_failed"
-#~ msgstr "登录失败"
-
-#~ msgid "my_quotations"
-#~ msgstr "我的报价单"
-
-#~ msgid "quotation_title_required"
-#~ msgstr "请输入报价单描述"
-
-#~ msgid "quotation_saved_success"
-#~ msgstr "报价单保存成功"
-
-#~ msgid "quotation_updated_success"
-#~ msgstr "报价单更新成功"
-
-#~ msgid "quotation_deleted_success"
-#~ msgstr "报价单删除成功"
-
-#~ msgid "quotation_not_found"
-#~ msgstr "报价单不存在"
-
-#~ msgid "delete_failed"
-#~ msgstr "删除失败"
-
-#~ msgid "not_registered"
-#~ msgstr "未注册用户？"
-
-#~ msgid "register_here"
-#~ msgstr "点击这里注册"
-
-#~ msgid "my_quotations_desc"
-#~ msgstr "查看和管理您保存的报价单"
-
-#~ msgid "view_my_quotations"
-#~ msgstr "查看我的报价单"
-
-#~ msgid "save_to_my_quotations"
-#~ msgstr "保存到我的报价单"
-
-#~ msgid "no_quotations"
-#~ msgstr "暂无报价单"
-
-#~ msgid "no_quotations_desc"
-#~ msgstr "您还没有保存任何报价单"
-
-#~ msgid "quotation_id"
-#~ msgstr "报价单编号"
-
-#~ msgid "created_at"
-#~ msgstr "创建时间"
-
-#~ msgid "updated_at"
-#~ msgstr "更新时间"
-
-#~ msgid "edit"
-#~ msgstr "编辑"
-
-#~ msgid "delete"
-#~ msgstr "删除"
-
-#~ msgid "load_quotations_failed"
-#~ msgstr "加载报价单列表失败"
-
-#~ msgid "load_quotation_failed"
-#~ msgstr "加载报价单详情失败"
-
-#~ msgid "user"
-#~ msgstr "用户"
-
-#~ msgid "quotation_loaded_success"
-#~ msgstr "报价单加载成功"
-
-#~ msgid "delete_quotation_failed"
-#~ msgstr "删除报价单失败"
-
-#~ msgid "save_changes"
-#~ msgstr "保存更改"
-
-#~ msgid "save_changes_failed"
-#~ msgstr "保存更改失败"
-
-#~ msgid "confirm_remove_product"
-#~ msgstr "确定要删除此产品吗？"
-
-#~ msgid "login_required_to_save"
-#~ msgstr "请先登录才能保存报价单"
-
-#~ msgid "enter_sku"
-#~ msgstr "请输入SKU"
-
-#~ msgid "save_quotation"
-#~ msgstr "保存报价单"
-
-#~ msgid "quotation_title"
-#~ msgstr "描述信息"
-
-#~ msgid "enter_quotation_title"
-#~ msgstr "请输入报价单描述"
-
-#~ msgid "cancel"
-#~ msgstr "取消"
-
-#~ msgid "save"
-#~ msgstr "保存"
-
-#~ msgid "save_quotation_failed"
-#~ msgstr "保存报价单失败"
-
-#~ msgid "col_seq"
-#~ msgstr "序号"
-
-#~ msgid "col_code"
-#~ msgstr "Code"
-
-#~ msgid "col_sku"
-#~ msgstr "SKU"
-
-#~ msgid "col_qty"
-#~ msgstr "数量"
-
-#~ msgid "col_color"
-#~ msgstr "花色"
-
-#~ msgid "col_2020_price"
-#~ msgstr "2020单价"
-
-#~ msgid "col_2020_total"
-#~ msgstr "2020总价"
-
-#~ msgid "col_occw_sku"
-#~ msgstr "OCCW SKU"
-
-#~ msgid "col_occw_price"
-#~ msgstr "OCCW单价"
-
-#~ msgid "col_occw_total"
-#~ msgstr "OCCW总价"
-
-#~ msgid "total_2020"
-#~ msgstr "2020合计"
-
-#~ msgid "total_occw"
-#~ msgstr "OCCW合计"
-
-#~ msgid "loading"
-#~ msgstr "加载中..."
-
-#~ msgid "confirm"
-#~ msgstr "确认"
-
-#~ msgid "success"
-#~ msgstr "成功"
-
-#~ msgid "error"
-#~ msgstr "错误"
-
-#~ msgid "warning"
-#~ msgstr "警告"
-
-#~ msgid "info"
-#~ msgstr "信息"
-
-#~ msgid "admin_required"
-#~ msgstr "需要管理员权限"
-
-#~ msgid "password_error"
-#~ msgstr "密码错误"
-
-#~ msgid "sku_mappings_title"
-#~ msgstr "SKU映射管理"
-
-#~ msgid "mapping_list"
-#~ msgstr "映射关系列表"
-
-#~ msgid "no_mappings"
-#~ msgstr "暂无SKU映射关系"
-
-#~ msgid "conversion_rate"
-#~ msgstr "转化率"
-
-#~ msgid "order_conversion_rate"
-#~ msgstr "订单转化率"
-
-#~ msgid "customer_order_analysis"
-#~ msgstr "客户订单分析"
-
-#~ msgid "sales_person_performance"
-#~ msgstr "销售员业绩分析"
-
-#~ msgid "order_count"
-#~ msgstr "订单数量"
-
-#~ msgid "quotation_count"
-#~ msgstr "总报价数量"
-
-#~ msgid "count_conversion_rate"
-#~ msgstr "数量转化率"
-
-#~ msgid "amount_conversion_rate"
-#~ msgstr "金额转化率"
-
-#~ msgid "amount_range"
-#~ msgstr "金额区间"
-
-#~ msgid "update_analysis_table"
-#~ msgstr "更新分析表格"
-
-#~ msgid "interval_conversion_rate"
-#~ msgstr "区间转化率"
-
-#~ msgid "amount_range_conversion_analysis"
-#~ msgstr "各金额区间转化率分析"
-
-#~ msgid "items_per_page"
-#~ msgstr "每页显示"
-
-#~ msgid "showing_items"
-#~ msgstr "显示"
-
-#~ msgid "total_items"
-#~ msgstr "总计项目"
-
-#~ msgid "records"
-#~ msgstr "条"
-
-#~ msgid "hide"
-#~ msgstr "隐藏"
-
-#~ msgid "please_select_start_end_date"
-#~ msgstr "请选择开始和结束日期"
-
-#~ msgid "start_date_cannot_be_later"
-#~ msgstr "开始日期不能晚于结束日期"
-
-#~ msgid "all_time"
-#~ msgstr "全部时间"
-
-#~ msgid "custom_time_range"
-#~ msgstr "自定义时间区间"
-
-#~ msgid "all_amounts"
-#~ msgstr "全部金额"
-
-#~ msgid "total_orders"
-#~ msgstr "总订单数"
-
-#~ msgid "order_amount"
-#~ msgstr "订单金额"
-
-#~ msgid "quotation_amount"
-#~ msgstr "报价单金额"
-
-#~ msgid "total_amount"
-#~ msgstr "总金额"
-
-#~ msgid "profit_margin"
-#~ msgstr "毛利率"
-
-#~ msgid "customer_name"
-#~ msgstr "客户名称"
-
-#~ msgid "loading_mappings"
-#~ msgstr "正在加载映射数据..."
-
-#~ msgid "upload_success"
-#~ msgstr "文件上传成功"
-
-#~ msgid "upload_failed"
-#~ msgstr "文件上传失败"
-
-#~ msgid "please_select_file"
-#~ msgstr "请选择文件"
-
-#~ msgid "parse_success"
-#~ msgstr "解析成功"
-
-#~ msgid "parse_failed"
-#~ msgstr "解析失败"
-
-#~ msgid "partial_success"
-#~ msgstr "部分成功"
-
-#~ msgid "parse_error_details"
-#~ msgstr "解析错误详情"
-
-#~ msgid "partial_import_success"
-#~ msgstr "部分导入成功 - 错误详情"
-
-#~ msgid "import_error_details"
-#~ msgstr "导入错误详情"
-
-#~ msgid "error_count"
-#~ msgstr "错误总数"
-
-#~ msgid "continue_with_errors"
-#~ msgstr "发现错误但继续处理"
-
-#~ msgid "save_success"
-#~ msgstr "保存成功"
-
-#~ msgid "save_failed"
-#~ msgstr "保存失败"
-
-#~ msgid "help_title"
-#~ msgstr "帮助文档"
-
-#~ msgid "help_system_intro"
-#~ msgstr "系统介绍"
-
-#~ msgid "help_system_intro_desc"
-#~ msgstr ""
-#~ "OCCW报价系统是一个专业的PDF报价单处理工具，专为加西欧派(Oppein Cabinet Canada "
-#~ "West Ltd.)设计，用于将2020软件生成的报价单转换为标准化的OCCW格式。"
-
-#~ msgid "help_main_features"
-#~ msgstr "主要功能"
-
-#~ msgid "help_pdf_upload"
-#~ msgstr "PDF文件上传"
-
-#~ msgid "help_pdf_upload_desc"
-#~ msgstr "支持上传2020软件生成的PDF报价单文件"
-
-#~ msgid "help_auto_parse"
-#~ msgstr "智能解析"
-
-#~ msgid "help_auto_parse_desc"
-#~ msgstr "自动识别PDF中的产品信息、数量、价格等数据"
-
-#~ msgid "help_sku_generation"
-#~ msgstr "SKU生成"
-
-#~ msgid "help_sku_generation_desc"
-#~ msgstr "根据预设规则自动生成OCCW标准SKU编码"
-
-#~ msgid "help_price_management"
-#~ msgstr "价格管理"
-
-#~ msgid "help_price_management_desc"
-#~ msgstr "管理OCCW标准价格表，支持Excel格式导入"
-
-#~ msgid "help_multi_export"
-#~ msgstr "多格式导出"
-
-#~ msgid "help_multi_export_desc"
-#~ msgstr "支持导出为Excel、CSV、PDF等多种格式"
-
-#~ msgid "help_multilang"
-#~ msgstr "多语言支持"
-
-#~ msgid "help_multilang_desc"
-#~ msgstr "支持中文、英语、法语三种界面语言"
-
-#~ msgid "help_system_settings_desc"
-#~ msgstr "系统设置管理，包括用户登录开关、管理员密码修改等"
-
-#~ msgid "help_admin_password_desc"
-#~ msgstr "管理员密码修改功能，支持安全密码更新"
-
-#~ msgid "help_usage_guide"
-#~ msgstr "使用指南"
-
-#~ msgid "help_step1"
-#~ msgstr "第1步：上传PDF文件"
-
-#~ msgid "help_step1_desc"
-#~ msgstr "选择从2020软件导出的PDF报价单文件"
-
-#~ msgid "help_step2"
-#~ msgstr "第2步：检查解析结果"
-
-#~ msgid "help_step2_desc"
-#~ msgstr "系统自动识别产品信息和价格"
-
-#~ msgid "help_step3"
-#~ msgstr "第3步：调整SKU映射"
-
-#~ msgid "help_step3_desc"
-#~ msgstr "自动生成标准SKU并应用映射"
-
-#~ msgid "help_step4"
-#~ msgstr "第4步：导出结果"
-
-#~ msgid "help_step4_desc"
-#~ msgstr "选择格式导出最终报价单"
-
-#~ msgid "help_permissions"
-#~ msgstr "权限说明"
-
-#~ msgid "help_normal_users"
-#~ msgstr "普通用户权限"
-
-#~ msgid "help_normal_users_desc"
-#~ msgstr "可以上传解析PDF、查看结果、导出文件、查看帮助文档"
-
-#~ msgid "help_admin_users"
-#~ msgstr "管理员权限"
-
-#~ msgid "help_admin_users_desc"
-#~ msgstr "除普通用户权限外，还可以管理OCCW价格表、配置SKU规则、管理SKU映射关系"
-
-#~ msgid "help_technical_support"
-#~ msgstr "技术支持"
-
-#~ msgid "help_contact_info"
-#~ msgstr "联系信息"
-
-#~ msgid "help_email_support"
-#~ msgstr "邮件支持"
-
-#~ msgid "help_phone_support"
-#~ msgstr "电话支持"
-
-#~ msgid "help_company_info"
-#~ msgstr "公司信息"
-
-#~ msgid "help_company_name"
-#~ msgstr "加西欧派"
-
-#~ msgid "help_company_full"
-#~ msgstr "Oppein Cabinet Canada West Ltd."
-
-#~ msgid "help_version_info"
-#~ msgstr "版本信息"
-
-#~ msgid "help_current_version"
-#~ msgstr "当前版本"
+#~ msgid "admin_login_button"
+#~ msgstr "登录"
+
+#~ msgid "admin_login_desc"
+#~ msgstr "管理员权限用于访问价格管理、配置和SKU映射功能"
 
 #~ msgid "admin_login_title"
 #~ msgstr "管理员登录"
+
+#~ msgid "admin_mode"
+#~ msgstr "管理员模式"
+
+#~ msgid "admin_only_features"
+#~ msgstr "管理员专用功能"
 
 #~ msgid "admin_password"
 #~ msgstr "管理员密码"
@@ -1229,380 +83,269 @@ msgstr ""
 #~ msgid "admin_password_placeholder"
 #~ msgstr "请输入管理员密码"
 
-#~ msgid "admin_login_button"
-#~ msgstr "登录"
+#~ msgid "admin_password_settings"
+#~ msgstr "管理员密码设置"
 
-#~ msgid "return_home"
-#~ msgstr "返回主页"
-
-#~ msgid "admin_login_desc"
-#~ msgstr "管理员权限用于访问价格管理、配置和SKU映射功能"
-
-#~ msgid "normal_user_can_use"
-#~ msgstr "普通用户可使用"
-
-#~ msgid "admin_only_features"
-#~ msgstr "管理员专用功能"
-
-#~ msgid "upload_parse_pdf"
-#~ msgstr "上传和解析PDF报价单"
-
-#~ msgid "view_export_results"
-#~ msgstr "查看和导出报价单结果"
-
-#~ msgid "view_help_docs"
-#~ msgstr "查看帮助文档"
-
-#~ msgid "occw_price_management"
-#~ msgstr "OCCW价格表管理"
-
-#~ msgid "sku_rule_config"
-#~ msgstr "SKU生成规则配置"
-
-#~ msgid "sku_mapping_management"
-#~ msgstr "SKU映射管理"
-
-#~ msgid "system_config_modify"
-#~ msgstr "系统配置修改"
-
-#~ msgid "sku_mapping_title"
-#~ msgstr "SKU映射管理"
-
-#~ msgid "loading_data"
-#~ msgstr "正在加载映射数据..."
-
-#~ msgid "no_mappings_found"
-#~ msgstr "暂无SKU映射关系"
-
-#~ msgid "no_mappings_desc"
-#~ msgstr "当您在主页处理报价单时，系统会自动保存SKU映射关系。"
-
-#~ msgid "go_upload_quote"
-#~ msgstr "去上传报价单"
-
-#~ msgid "sequence_number"
-#~ msgstr "序号"
-
-#~ msgid "price"
-#~ msgstr "价格"
-
-#~ msgid "getting_price"
-#~ msgstr "获取价格中..."
-
-#~ msgid "price_error"
-#~ msgstr "获取失败"
-
-#~ msgid "just_now"
-#~ msgstr "刚刚"
-
-#~ msgid "edit_mapping"
-#~ msgstr "编辑映射"
-
-#~ msgid "delete_mapping"
-#~ msgstr "删除映射"
-
-#~ msgid "edit_sku_mapping"
-#~ msgstr "编辑SKU映射"
-
-#~ msgid "select_occw_sku"
-#~ msgstr "选择OCCW SKU..."
-
-#~ msgid "or_enter_manually"
-#~ msgstr "或手动输入"
-
-#~ msgid "confirm_delete"
-#~ msgstr "确认删除"
-
-#~ msgid "delete_mapping_confirm"
-#~ msgstr "确定要删除以下SKU映射关系吗？"
-
-#~ msgid "operation_irreversible"
-#~ msgstr "此操作不可撤销。"
-
-#~ msgid "update_success"
-#~ msgstr "SKU映射更新成功"
-
-#~ msgid "delete_success"
-#~ msgstr "SKU映射删除成功"
-
-#~ msgid "clear_all_success"
-#~ msgstr "已清空所有映射关系"
-
-#~ msgid "export_table"
-#~ msgstr "导出表格"
-
-#~ msgid "data_export"
-#~ msgstr "数据导出"
-
-#~ msgid "file_format"
-#~ msgstr "文件格式"
-
-#~ msgid "download"
-#~ msgstr "下载"
-
-#~ msgid "processing"
-#~ msgstr "处理中..."
-
-#~ msgid "completed"
-#~ msgstr "已完成"
-
-#~ msgid "failed"
-#~ msgstr "失败"
-
-#~ msgid "price_management_title"
-#~ msgstr "价格管理"
-
-#~ msgid "occw_price_table_management"
-#~ msgstr "OCCW价格表管理"
-
-#~ msgid "select_occw_price_file"
-#~ msgstr "选择OCCW价格表文件"
-
-#~ msgid "excel_format_only"
-#~ msgstr "仅支持Excel(.xlsx)格式，第一行为表头，第一列为SKU，第二列为销售价格"
-
-#~ msgid "upload_occw_price_table"
-#~ msgstr "上传OCCW价格表"
-
-#~ msgid "file_requirements"
-#~ msgstr "文件要求"
-
-#~ msgid "excel_xlsx_format"
-#~ msgstr "Excel (.xlsx) 格式"
-
-#~ msgid "first_row_header"
-#~ msgstr "第一行为表头"
-
-#~ msgid "first_col_sku"
-#~ msgstr "第一列：SKU编码"
-
-#~ msgid "second_col_price"
-#~ msgstr "第二列：销售价格"
-
-#~ msgid "max_file_size"
-#~ msgstr "文件大小不超过10MB"
-
-#~ msgid "current_price_count"
-#~ msgstr "当前价格数量"
-
-#~ msgid "prices_loaded"
-#~ msgstr "个价格已加载"
-
-#~ msgid "query_filter"
-#~ msgstr "查询过滤"
+#~ msgid "admin_required"
+#~ msgstr "需要管理员权限"
 
 #~ msgid "advanced_filter"
 #~ msgstr "高级过滤"
 
-#~ msgid "search_by_sku"
-#~ msgstr "按SKU搜索..."
+#~ msgid "advanced_search_panel"
+#~ msgstr "高级搜索面板"
 
-#~ msgid "door_variant"
-#~ msgstr "门板变体"
+#~ msgid "all_amounts"
+#~ msgstr "全部金额"
 
-#~ msgid "box_variant"
-#~ msgstr "柜身变体"
+#~ msgid "all_box_variants"
+#~ msgstr "所有柜身变体"
 
-#~ msgid "product_category"
-#~ msgstr "产品分类"
+#~ msgid "all_categories"
+#~ msgstr "所有类别"
+
+#~ msgid "all_company_types"
+#~ msgstr "所有公司类型"
+
+#~ msgid "all_customer_types"
+#~ msgstr "所有客户类型"
+
+#~ msgid "all_customers"
+#~ msgstr "所有客户"
+
+#~ msgid "all_dates"
+#~ msgstr "所有日期"
+
+#~ msgid "all_door_variants"
+#~ msgstr "所有门板变体"
+
+#~ msgid "all_fields_required"
+#~ msgstr "请填写所有必填字段"
 
 #~ msgid "all_options"
 #~ msgstr "全部"
 
+#~ msgid "all_quotations"
+#~ msgstr "所有报价单"
+
+#~ msgid "all_quotations_desc"
+#~ msgstr "查看和管理所有用户的报价单"
+
+#~ msgid "all_sales_persons"
+#~ msgstr "全部销售人员"
+
+#~ msgid "all_time"
+#~ msgstr "全部时间"
+
+#~ msgid "all_users"
+#~ msgstr "所有用户"
+
+#~ msgid "already_have_account"
+#~ msgstr "已有账户？点击登录"
+
+#~ msgid "amount_comparison"
+#~ msgstr "金额对比"
+
+#~ msgid "amount_comparison_chart"
+#~ msgstr "金额对比图"
+
+#~ msgid "amount_conversion_rate"
+#~ msgstr "金额转化率"
+
+#~ msgid "amount_filter"
+#~ msgstr "金额过滤"
+
+#~ msgid "amount_range"
+#~ msgstr "金额区间"
+
+#~ msgid "amount_range_conversion_analysis"
+#~ msgstr "各金额区间转化率分析"
+
+#~ msgid "amount_threshold_settings"
+#~ msgstr "金额阈值设置"
+
+#~ msgid "analysis_tables"
+#~ msgstr "分析表格"
+
+#~ msgid "append_mode"
+#~ msgstr "追加模式"
+
+#~ msgid "append_mode_desc"
+#~ msgstr "保留现有数据，新增或更新SKU"
+
 #~ msgid "apply_filter"
 #~ msgstr "应用过滤"
 
-#~ msgid "clear_all_filters"
-#~ msgstr "清空所有过滤"
+#~ msgid "apply_filters"
+#~ msgstr "应用过滤"
 
-#~ msgid "search"
-#~ msgstr "搜索"
+#~ msgid "auto_add_total_row"
+#~ msgstr "自动添加总计行和合计信息"
+
+#~ msgid "auto_add_totals"
+#~ msgstr "自动添加总计行和合计信息"
+
+#~ msgid "auto_check_duplicate_sku"
+#~ msgstr "自动检查重复SKU和无效价格"
+
+#~ msgid "auto_handle_page_separators"
+#~ msgstr "自动处理页面分隔和格式变化"
+
+#~ msgid "auto_handle_pages"
+#~ msgstr "自动处理页面分隔和格式变化"
+
+#~ msgid "auto_recognize_door_style"
+#~ msgstr "自动识别门板样式和颜色信息"
+
+#~ msgid "auto_save_mapping_relationship"
+#~ msgstr "用户选择后自动保存映射关系，下次处理时自动应用"
+
+#~ msgid "back"
+#~ msgstr "返回"
+
+#~ msgid "back_to_dashboard"
+#~ msgstr "返回仪表板"
+
+#~ msgid "back_to_home"
+#~ msgstr "返回主页"
+
+#~ msgid "basic_search"
+#~ msgstr "基础搜索"
+
+#~ msgid "batch_import"
+#~ msgstr "批量导入"
+
+#~ msgid "batch_management"
+#~ msgstr "批量管理"
+
+#~ msgid "box_variant"
+#~ msgstr "柜身变体"
+
+#~ msgid "box_variant_col"
+#~ msgstr "柜身变体"
+
+#~ msgid "box_variant_pattern"
+#~ msgstr "柜身变体模式"
+
+#~ msgid "browse_files"
+#~ msgstr "浏览文件"
+
+#~ msgid "cabinet"
+#~ msgstr "Cabinet"
+
+#~ msgid "cancel"
+#~ msgstr "取消"
+
+#~ msgid "cancelled"
+#~ msgstr "已取消"
+
+#~ msgid "canvas_element_not_found"
+#~ msgstr "找不到图表canvas元素"
+
+#~ msgid "category"
+#~ msgstr "类别"
+
+#~ msgid "category_col"
+#~ msgstr "类别"
+
+#~ msgid "change_admin_password"
+#~ msgstr "修改管理员密码"
+
+#~ msgid "chart_analysis"
+#~ msgstr "图表分析"
+
+#~ msgid "chart_data_incomplete"
+#~ msgstr "图表数据不完整，跳过图表显示"
+
+#~ msgid "chart_data_incomplete_skip_display"
+#~ msgstr "图表数据不完整，跳过图表显示"
+
+#~ msgid "chart_download_success"
+#~ msgstr "图表下载成功"
+
+#~ msgid "chart_time_dimension"
+#~ msgstr "图表时间维度"
+
+#~ msgid "check_errors"
+#~ msgstr "检查是否有错误"
+
+#~ msgid "check_occw_price_table"
+#~ msgstr "1. 检查OCCW价格表是否已正确导入"
+
+#~ msgid "check_pdf_corruption"
+#~ msgstr "2. 检查PDF文件是否损坏"
+
+#~ msgid "check_pdf_format"
+#~ msgstr "1. 检查PDF中的数量和价格格式是否标准"
+
+#~ msgid "check_sku_format"
+#~ msgstr "4. 检查SKU格式是否符合OCCW标准"
 
 #~ msgid "clear"
 #~ msgstr "清空"
 
-#~ msgid "upload_pdf_quote"
-#~ msgstr "上传2020软件报价单PDF"
+#~ msgid "clear_all_filters"
+#~ msgstr "清空所有过滤"
+
+#~ msgid "clear_all_mappings"
+#~ msgstr "清空所有映射"
+
+#~ msgid "clear_all_success"
+#~ msgstr "已清空所有映射关系"
+
+#~ msgid "clear_failed"
+#~ msgstr "清空失败"
+
+#~ msgid "clear_filters"
+#~ msgstr "清除过滤器"
 
 #~ msgid "clear_list"
 #~ msgstr "清空列表"
 
-#~ msgid "product_type"
-#~ msgstr "产品类型"
+#~ msgid "clear_mapping_failed"
+#~ msgstr "清空映射关系失败"
 
-#~ msgid "product_name"
-#~ msgstr "产品名称"
+#~ msgid "clear_sku_mapping_failed"
+#~ msgstr "清空SKU映射失败"
 
-#~ msgid "unit_price"
-#~ msgstr "单价"
+#~ msgid "close"
+#~ msgstr "关闭"
 
-#~ msgid "quantity"
+#~ msgid "col_2020_price"
+#~ msgstr "2020单价"
+
+#~ msgid "col_2020_total"
+#~ msgstr "2020总价"
+
+#~ msgid "col_code"
+#~ msgstr "Code"
+
+#~ msgid "col_color"
+#~ msgstr "花色"
+
+#~ msgid "col_occw_price"
+#~ msgstr "OCCW单价"
+
+#~ msgid "col_occw_sku"
+#~ msgstr "OCCW SKU"
+
+#~ msgid "col_occw_total"
+#~ msgstr "OCCW总价"
+
+#~ msgid "col_qty"
 #~ msgstr "数量"
 
-#~ msgid "total_price"
-#~ msgstr "合计价格"
+#~ msgid "col_seq"
+#~ msgstr "序号"
 
-#~ msgid "order_date"
-#~ msgstr "订单日期"
+#~ msgid "col_sku"
+#~ msgstr "SKU"
 
-#~ msgid "not_found"
-#~ msgstr "未找到"
+#~ msgid "color_user_code"
+#~ msgstr "花色 + \\"
 
-#~ msgid "sku_rules_config"
-#~ msgstr "SKU规则配置"
-
-#~ msgid "sku_rules_management"
-#~ msgstr "SKU规则配置管理"
-
-#~ msgid "sku_rules_desc"
-#~ msgstr "管理PDF解析、OCCW导入和手动创建的SKU生成规则"
-
-#~ msgid "save_config"
-#~ msgstr "保存配置"
-
-#~ msgid "reset_default"
-#~ msgstr "恢复默认"
-
-#~ msgid "download_config"
-#~ msgstr "下载配置"
-
-#~ msgid "pdf_parsing_rules"
-#~ msgstr "PDF解析规则"
-
-#~ msgid "pdf_parsing_rules_desc"
-#~ msgstr "PDF解析时的SKU生成规则"
-
-#~ msgid "occw_import_rules"
-#~ msgstr "OCCW导入规则"
-
-#~ msgid "occw_import_rules_desc"
-#~ msgstr "OCCW价格表导入时的SKU生成规则"
-
-#~ msgid "manual_create_rules"
-#~ msgstr "手动创建规则"
-
-#~ msgid "manual_create_rules_desc"
-#~ msgstr "手动创建报价单时的SKU生成规则"
-
-#~ msgid "json_editor"
-#~ msgstr "JSON编辑器"
-
-#~ msgid "json_editor_desc"
-#~ msgstr "直接编辑JSON配置文件"
-
-#~ msgid "rule_id"
-#~ msgstr "规则ID"
-
-#~ msgid "rule_name"
-#~ msgstr "规则名称"
-
-#~ msgid "rule_condition"
-#~ msgstr "条件"
-
-#~ msgid "rule_pattern"
-#~ msgstr "模式"
-
-#~ msgid "rule_format"
-#~ msgstr "格式"
-
-#~ msgid "rule_enabled"
-#~ msgstr "启用"
-
-#~ msgid "rule_disabled"
-#~ msgstr "禁用"
-
-#~ msgid "add_rule"
-#~ msgstr "添加规则"
-
-#~ msgid "delete_rule"
-#~ msgstr "删除规则"
-
-#~ msgid "rule_validation"
-#~ msgstr "规则验证"
-
-#~ msgid "validation_success"
-#~ msgstr "验证成功"
-
-#~ msgid "validation_error"
-#~ msgstr "验证错误"
-
-#~ msgid "config_saved"
-#~ msgstr "配置已保存"
-
-#~ msgid "config_reset"
-#~ msgstr "配置已重置为默认值"
-
-#~ msgid "config_downloaded"
-#~ msgstr "配置文件已下载"
-
-#~ msgid "help_documentation"
-#~ msgstr "帮助文档"
-
-#~ msgid "help_system_introduction"
-#~ msgstr "系统介绍"
-
-#~ msgid "help_main_functionality"
-#~ msgstr "主要功能"
-
-#~ msgid "help_usage_instructions"
-#~ msgstr "使用说明"
-
-#~ msgid "help_permission_description"
-#~ msgstr "权限说明"
-
-#~ msgid "help_company_information"
-#~ msgstr "公司信息"
-
-#~ msgid "help_version_information"
-#~ msgstr "版本信息"
-
-#~ msgid "help_contact_information"
-#~ msgstr "联系信息"
-
-#~ msgid "help_normal_user_permissions"
-#~ msgstr "普通用户权限"
-
-#~ msgid "help_admin_user_permissions"
-#~ msgstr "管理员权限"
-
-#~ msgid "help_step_by_step_guide"
-#~ msgstr "分步使用指南"
-
-#~ msgid "help_step_1"
-#~ msgstr "第1步：上传PDF文件"
-
-#~ msgid "help_step_2"
-#~ msgstr "第2步：检查解析结果"
-
-#~ msgid "help_step_3"
-#~ msgstr "第3步：调整SKU映射"
-
-#~ msgid "help_step_4"
-#~ msgstr "第4步：导出结果"
-
-#~ msgid "help_step_1_desc"
-#~ msgstr "在主页点击\"选择文件\"按钮，选择2020软件生成的报价单PDF文件，然后点击\"上传并解析\"。"
-
-#~ msgid "help_step_2_desc"
-#~ msgstr "系统会自动解析PDF内容并显示产品表格，请检查解析结果是否正确。"
-
-#~ msgid "help_step_3_desc"
-#~ msgstr "如需要，可以在SKU映射管理页面调整产品的SKU对应关系。"
-
-#~ msgid "help_step_4_desc"
-#~ msgstr "确认无误后，可以将结果导出为Excel、CSV或PDF格式。"
-
-#~ msgid "help_normal_user_desc"
-#~ msgstr "可以上传解析PDF、查看结果、导出文件、查看帮助文档"
-
-#~ msgid "help_admin_user_desc"
-#~ msgstr "除普通用户权限外，还可以管理OCCW价格表、配置SKU规则、管理SKU映射关系"
-
-#~ msgid "excel_format_requirements"
-#~ msgstr "Excel文件格式要求"
-
-#~ msgid "required_columns"
-#~ msgstr "必需的5个列（按顺序）"
+#~ msgid "column_description"
+#~ msgstr "说明"
 
 #~ msgid "column_name"
 #~ msgstr "列名"
@@ -1610,1482 +353,540 @@ msgstr ""
 #~ msgid "column_type"
 #~ msgstr "类型"
 
-#~ msgid "column_description"
-#~ msgstr "说明"
-
-#~ msgid "internal_reference"
-#~ msgstr "内部参考号"
-
-#~ msgid "sales_price"
-#~ msgstr "销售价"
-
-#~ msgid "variant_value"
-#~ msgstr "变体值"
-
-#~ msgid "product_name_col"
-#~ msgstr "产品名称"
-
-#~ msgid "product_category_col"
-#~ msgstr "产品类别"
-
-#~ msgid "sku_identifier"
-#~ msgstr "系统SKU标识，不能为空"
-
-#~ msgid "product_price"
-#~ msgstr "产品价格，必须为正数"
-
-#~ msgid "variant_format"
-#~ msgstr "格式：门板: XXX 或 柜身: XXX 或空值（2-3个字符）"
-
-#~ msgid "product_name_desc"
-#~ msgstr "产品名称，不能为空"
-
-#~ msgid "product_category_desc"
-#~ msgstr "产品分类：RTA Assm.组合件、Door、BOX、Ending Panel、Molding、Toe Kick、Filler等"
-
-#~ msgid "supported_categories"
-#~ msgstr "支持的产品类别"
-
-#~ msgid "other_hardware"
-#~ msgstr "其他（归为HARDWARE）"
-
-#~ msgid "price_table_import"
-#~ msgstr "价格表导入"
-
-#~ msgid "select_excel_file"
-#~ msgstr "选择Excel文件"
-
-#~ msgid "support_xlsx_xls"
-#~ msgstr "支持.xlsx和.xls格式"
-
-#~ msgid "import_mode"
-#~ msgstr "导入模式"
-
-#~ msgid "create_mode"
-#~ msgstr "创建模式"
-
-#~ msgid "append_mode"
-#~ msgstr "追加模式"
-
-#~ msgid "create_mode_desc"
-#~ msgstr "清空现有数据，全新导入"
-
-#~ msgid "append_mode_desc"
-#~ msgstr "保留现有数据，新增或更新SKU"
-
-#~ msgid "current_price_table"
-#~ msgstr "当前价格表"
-
-#~ msgid "price_table_content"
-#~ msgstr "价格表内容"
-
-#~ msgid "no_data"
-#~ msgstr "暂无数据"
-
-#~ msgid "loading_price_table"
-#~ msgstr "正在加载价格表..."
-
-#~ msgid "load_price_table_failed"
-#~ msgstr "加载价格表失败"
-
-#~ msgid "check_errors"
-#~ msgstr "检查是否有错误"
-
-#~ msgid "apply_filters"
-#~ msgstr "应用过滤"
-
-#~ msgid "initialize_page"
-#~ msgstr "初始化页面"
-
-#~ msgid "set_modal_title"
-#~ msgstr "设置模态框标题和样式"
-
-#~ msgid "variant_extraction_rules"
-#~ msgstr "变体提取规则"
-
-#~ msgid "edit_common_variants"
-#~ msgstr "编辑常用变体"
-
-#~ msgid "door_variant_col"
-#~ msgstr "门板变体"
-
-#~ msgid "box_variant_col"
-#~ msgstr "柜身变体"
-
-#~ msgid "configuration_file"
-#~ msgstr "配置文件"
-
-#~ msgid "configuration_editor"
-#~ msgstr "配置编辑器"
-
-#~ msgid "render_category_rules"
-#~ msgstr "渲染类别规则"
-
-#~ msgid "used_for"
-#~ msgstr "用于从"
-
-#~ msgid "dynamic_load_rules"
-#~ msgstr "动态加载规则"
-
-#~ msgid "formatting"
-#~ msgstr "格式化"
-
-#~ msgid "product_information"
-#~ msgstr "产品信息"
-
-#~ msgid "quantity_data"
-#~ msgstr "数量数据"
-
-#~ msgid "price_information"
-#~ msgstr "价格信息"
-
-#~ msgid "door_color"
-#~ msgstr "门板颜色"
-
-#~ msgid "total_price_calculation"
-#~ msgstr "总价核算"
-
-#~ msgid "support_chinese_filename"
-#~ msgstr "支持中文文件名"
-
-#~ msgid "continuous_parsing"
-#~ msgstr "文档的连续解析"
-
-#~ msgid "manual_correction"
-#~ msgstr "必要时手动修正数据"
-
-#~ msgid "parsing_issues"
-#~ msgstr "解析问题"
-
-#~ msgid "product_category_help"
-#~ msgstr "产品分类"
-
-#~ msgid "total_price_help"
-#~ msgstr "总价"
-
-#~ msgid "sequence_number_help"
-#~ msgstr "序号"
-
-#~ msgid "product_name_help"
-#~ msgstr "产品名称"
-
-#~ msgid "permission_description"
-#~ msgstr "权限说明"
-
-#~ msgid "filter_data"
-#~ msgstr "过滤数据"
-
-#~ msgid "display_at_top"
-#~ msgstr "在容器顶部显示"
-
-#~ msgid "mapping_relationships"
-#~ msgstr "条映射关系"
-
-#~ msgid "initialize_page_mapping"
-#~ msgstr "初始化页面"
-
-#~ msgid "debounce_search"
-#~ msgstr "防抖搜索"
-
-#~ msgid "recreate_mapping"
-#~ msgstr "但您可以重新创建映射关系"
-
-#~ msgid "tip"
-#~ msgstr "提示"
-
-#~ msgid "export_failed"
-#~ msgstr "导出失败"
-
-#~ msgid "operation_col"
-#~ msgstr "操作"
-
-#~ msgid "reload_page_apply_language"
-#~ msgstr "重新加载页面以应用新语言"
-
-#~ msgid "language_switch_function"
-#~ msgstr "语言切换功能"
-
-#~ msgid "language_switch_dropdown"
-#~ msgstr "语言切换下拉菜单"
-
-#~ msgid "rules_configuration"
-#~ msgstr "规则配置"
-
-#~ msgid "text_type"
-#~ msgstr "文本"
-
-#~ msgid "number_type"
-#~ msgstr "数字"
-
-#~ msgid "name_col"
-#~ msgstr "名称"
-
-#~ msgid "category_col"
-#~ msgstr "类别"
-
-#~ msgid "price_col"
-#~ msgstr "价格"
-
-#~ msgid "no_price_data"
-#~ msgstr "暂无价格数据"
-
-#~ msgid "price_records"
-#~ msgstr "条价格记录"
-
-#~ msgid "load_stats_failed"
-#~ msgstr "加载统计信息失败"
-
-#~ msgid "previous_page"
-#~ msgstr "上一页"
-
-#~ msgid "next_page"
-#~ msgstr "下一页"
-
-#~ msgid "save_variants"
-#~ msgstr "保存变体"
-
-#~ msgid "matching_pattern"
-#~ msgstr "匹配模式"
-
-#~ msgid "rule_status"
-#~ msgstr "状态"
-
-#~ msgid "condition_description"
-#~ msgstr "条件说明"
-
-#~ msgid "preprocessing"
-#~ msgstr "预处理"
-
-#~ msgid "door_variant_pattern"
-#~ msgstr "门板变体模式"
-
-#~ msgid "box_variant_pattern"
-#~ msgstr "柜身变体模式"
-
-#~ msgid "special_handling"
-#~ msgstr "特殊处理"
-
-#~ msgid "trigger_condition"
-#~ msgstr "触发条件"
-
-#~ msgid "fallback_format"
-#~ msgstr "备用格式"
-
-#~ msgid "smart_distinguish_codes"
-#~ msgstr "智能区分以数字开头和字母开头的产品代码"
-
-#~ msgid "auto_handle_pages"
-#~ msgstr "自动处理页面分隔和格式变化"
-
-#~ msgid "judgment_condition"
-#~ msgstr "判断条件"
-
-#~ msgid "example"
-#~ msgstr "示例"
-
-#~ msgid "other_category"
-#~ msgstr "其他"
-
-#~ msgid "not_match_conditions"
-#~ msgstr "不符合上述条件"
-
-#~ msgid "batch_import"
-#~ msgstr "批量导入"
-
-#~ msgid "manual_add"
-#~ msgstr "手动添加"
-
-#~ msgid "real_time_update"
-#~ msgstr "实时更新"
-
-#~ msgid "data_validation"
-#~ msgstr "数据验证"
-
-#~ msgid "dropdown_selection"
-#~ msgstr "下拉选择"
-
-#~ msgid "manual_input"
-#~ msgstr "手动输入"
-
-#~ msgid "mapping_save"
-#~ msgstr "映射保存"
-
-#~ msgid "view_all_mappings"
-#~ msgstr "查看所有映射"
-
-#~ msgid "batch_management"
-#~ msgstr "批量管理"
-
-#~ msgid "auto_add_totals"
-#~ msgstr "自动添加总计行和合计信息"
-
-#~ msgid "keep_number_format"
-#~ msgstr "保持数字格式和货币符号"
-
 #~ msgid "common_problem_solving"
 #~ msgstr "常见问题解决"
-
-#~ msgid "performance_optimization"
-#~ msgstr "性能优化建议"
-
-#~ msgid "parse_content"
-#~ msgstr "解析内容"
-
-#~ msgid "product_code_desc_seq"
-#~ msgstr "产品代码、描述、序号"
-
-#~ msgid "smart_extract_qty_user"
-#~ msgstr "从合并列中智能提取数量和用户编码"
-
-#~ msgid "unit_price_total_price"
-#~ msgstr "单价、总价（支持带逗号的金额格式）"
-
-#~ msgid "auto_recognize_door_style"
-#~ msgstr "自动识别门板样式和颜色信息"
-
-#~ msgid "total_price_verification"
-#~ msgstr "总价核算"
-
-#~ msgid "compare_with_pdf_total"
-#~ msgstr "与PDF中的总价进行对比验证"
-
-#~ msgid "special_processing"
-#~ msgstr "特殊处理"
-
-#~ msgid "smart_distinguish_product_codes"
-#~ msgstr "智能区分以数字开头和字母开头的产品代码"
-
-#~ msgid "auto_handle_page_separators"
-#~ msgstr "自动处理页面分隔和格式变化"
-
-#~ msgid "support_multi_page_pdf"
-#~ msgstr "支持多页PDF文档的连续解析"
-
-#~ msgid "sku_generation_rules"
-#~ msgstr "SKU生成规则"
-
-#~ msgid "sku_generation_rule"
-#~ msgstr "SKU生成规则"
-
-#~ msgid "cabinet"
-#~ msgstr "Cabinet"
-
-#~ msgid "description_contains_cabinet"
-#~ msgstr "描述包含\"Cabinet\""
-
-#~ msgid "occw_code_ply_color"
-#~ msgstr "OCCW编码 + \"-PLY-\" + 花色"
-
-#~ msgid "hardware"
-#~ msgstr "Hardware"
-
-#~ msgid "description_contains_hardware"
-#~ msgstr "描述包含\"Hardware\""
-
-#~ msgid "hw_user_code"
-#~ msgstr "\"HW-\" + 用户编码"
-
-#~ msgid "accessory"
-#~ msgstr "Accessory"
-
-#~ msgid "description_contains_accessory"
-#~ msgstr "描述包含\"Accessory\""
-
-#~ msgid "color_user_code"
-#~ msgstr "花色 + \"-\" + 用户编码"
-
-#~ msgid "other"
-#~ msgstr "其他"
-
-#~ msgid "not_meet_above_conditions"
-#~ msgstr "不符合上述条件"
-
-#~ msgid "note"
-#~ msgstr "注意"
-
-#~ msgid "sku_rules_customizable"
-#~ msgstr "SKU生成规则可以在\"配置\"页面进行自定义修改"
-
-#~ msgid "occw_price_table"
-#~ msgstr "OCCW价格表"
-
-#~ msgid "category"
-#~ msgstr "类别"
-
-#~ msgid "all_categories"
-#~ msgstr "所有类别"
-
-#~ msgid "support_excel_batch_import"
-#~ msgstr "支持Excel文件批量导入价格数据"
-
-#~ msgid "manually_add_single_sku"
-#~ msgstr "可以手动添加单个SKU的价格信息"
-
-#~ msgid "modify_price_immediately_effective"
-#~ msgstr "修改价格后立即生效，无需重启系统"
-
-#~ msgid "export_price_table_excel_csv"
-#~ msgstr "支持将价格表导出为Excel或CSV格式"
-
-#~ msgid "auto_check_duplicate_sku"
-#~ msgstr "自动检查重复SKU和无效价格"
-
-#~ msgid "excel_import_format_requirements"
-#~ msgstr "Excel导入格式要求"
-
-#~ msgid "data_type"
-#~ msgstr "数据类型"
-
-#~ msgid "description"
-#~ msgstr "说明"
-
-#~ msgid "internal_reference_number"
-#~ msgstr "内部参考号"
-
-#~ msgid "text"
-#~ msgstr "文本"
-
-#~ msgid "system_sku_identifier"
-#~ msgstr "系统SKU标识，不能为空"
-
-#~ msgid "selling_price"
-#~ msgstr "销售价"
-
-#~ msgid "number"
-#~ msgstr "数字"
-
-#~ msgid "product_price_must_be_positive"
-#~ msgstr "产品价格，必须为正数"
-
-#~ msgid "door_or_box_variant_format"
-#~ msgstr "门板或柜身变体，可为空。格式：门板: XXX 或 柜身: XXX"
-
-#~ msgid "product_name_cannot_be_empty"
-#~ msgstr "产品名称，不能为空"
-
-#~ msgid "product_category_name"
-#~ msgstr "产品类别/名称"
-
-#~ msgid "product_classification_support"
-#~ msgstr "产品分类，支持：RTA Assm.组合件、Door、BOX、Ending Panel、Molding、Toe Kick、Filler等"
-
-#~ msgid "mapping_mechanism"
-#~ msgstr "映射机制"
-
-#~ msgid "when_system_generated_sku_not_found"
-#~ msgstr "当系统生成的SKU在OCCW价格表中找不到精确匹配时，会提供以下选项："
-
-#~ msgid "display_related_sku_list"
-#~ msgstr "显示包含用户编码的相关SKU列表"
-
-#~ msgid "provide_text_input_when_no_related_sku"
-#~ msgstr "当没有相关SKU时，提供文本输入框"
-
-#~ msgid "auto_save_mapping_relationship"
-#~ msgstr "用户选择后自动保存映射关系，下次处理时自动应用"
-
-#~ msgid "mapping_management_features"
-#~ msgstr "映射管理功能"
-
-#~ msgid "view_all_saved_mappings"
-#~ msgstr "在\"SKU映射\"页面查看所有保存的映射关系"
-
-#~ msgid "modify_existing_mapping_relationship"
-#~ msgstr "可以修改已有的映射关系"
-
-#~ msgid "delete_unnecessary_mapping_relationship"
-#~ msgstr "删除不再需要的映射关系"
-
-#~ msgid "support_batch_delete_and_modify"
-#~ msgstr "支持批量删除和修改操作"
-
-#~ msgid "mapping_relationship_display_note"
-#~ msgstr "映射关系保存后，在表格中会显示映射后的SKU而不是原始生成的SKU"
-
-#~ msgid "export_features"
-#~ msgstr "导出功能"
-
-#~ msgid "supported_export_formats"
-#~ msgstr "支持的导出格式"
-
-#~ msgid "format_2020_export"
-#~ msgstr "2020格式导出"
-
-#~ msgid "excel_xlsx"
-#~ msgstr "Excel (.xlsx)"
-
-#~ msgid "contains_all_column_information"
-#~ msgstr "包含所有列信息"
-
-#~ msgid "csv_format"
-#~ msgstr "CSV (.csv)"
-
-#~ msgid "plain_text_format"
-#~ msgstr "纯文本格式，便于其他系统导入"
-
-#~ msgid "pdf_format"
-#~ msgstr "PDF (.pdf)"
-
-#~ msgid "professional_print_format"
-#~ msgstr "专业的打印格式"
-
-#~ msgid "contains_sequence_code_quantity"
-#~ msgstr "包含：序号、Code、数量、花色、2020单价、2020总价、OCCW SKU、OCCW单价、OCCW总价"
-
-#~ msgid "occw_format_export"
-#~ msgstr "OCCW格式导出"
-
-#~ msgid "special_occw_quote_format"
-#~ msgstr "专门的OCCW报价单格式"
-
-#~ msgid "contains_sequence_occw_sku"
-#~ msgstr "包含：序号、OCCW SKU、数量、OCCW单价、OCCW总价"
-
-#~ msgid "export_features_title"
-#~ msgstr "导出特性"
-
-#~ msgid "auto_add_total_row"
-#~ msgstr "自动添加总计行和合计信息"
-
-#~ msgid "maintain_number_format"
-#~ msgstr "保持数字格式和货币符号"
-
-#~ msgid "file_size_optimization"
-#~ msgstr "文件大小优化，导出速度快"
 
 #~ msgid "common_problem_solving_title"
 #~ msgstr "常见问题解决"
 
-#~ msgid "pdf_parsing_issues"
-#~ msgstr "PDF解析问题"
+#~ msgid "company_full_name"
+#~ msgstr "Oppein Cabinet Canada West Ltd."
 
-#~ msgid "pdf_upload_parse_error_question"
-#~ msgstr "Q: PDF上传后无法解析或解析错误？"
+#~ msgid "company_name"
+#~ msgstr "加西欧派"
 
-#~ msgid "solution"
-#~ msgstr "解决方案"
+#~ msgid "compare_with_pdf_total"
+#~ msgstr "与PDF中的总价进行对比验证"
 
-#~ msgid "confirm_pdf_from_2020"
-#~ msgstr "1. 确认PDF是由2020软件生成的标准报价单"
+#~ msgid "completed"
+#~ msgstr "已完成"
 
-#~ msgid "check_pdf_corruption"
-#~ msgstr "2. 检查PDF文件是否损坏"
+#~ msgid "condition_description"
+#~ msgstr "条件说明"
 
-#~ msgid "use_show_raw_text"
-#~ msgstr "3. 使用\"显示原始PDF文本\"按钮查看解析内容"
+#~ msgid "config_downloaded"
+#~ msgstr "配置文件已下载"
 
-#~ msgid "confirm_complete_product_list"
-#~ msgstr "4. 确认PDF中包含完整的产品列表和价格信息"
-
-#~ msgid "product_quantity_price_error_question"
-#~ msgstr "Q: 产品数量或价格解析错误？"
-
-#~ msgid "check_pdf_format"
-#~ msgstr "1. 检查PDF中的数量和价格格式是否标准"
-
-#~ msgid "confirm_merged_column_format"
-#~ msgstr "2. 确认合并列的格式符合预期（数量+用户编码）"
-
-#~ msgid "view_total_price_comparison"
-#~ msgstr "3. 查看系统显示的总价对比信息"
-
-#~ msgid "manually_correct_data"
-#~ msgstr "4. 必要时手动修正数据"
-
-#~ msgid "sku_and_price_issues"
-#~ msgstr "SKU和价格问题"
-
-#~ msgid "occw_price_zero_question"
-#~ msgstr "Q: OCCW价格显示为$0.00？"
-
-#~ msgid "check_occw_price_table"
-#~ msgstr "1. 检查OCCW价格表是否已正确导入"
-
-#~ msgid "confirm_sku_mapping"
-#~ msgstr "2. 确认SKU映射是否正确"
-
-#~ msgid "manually_add_missing_sku"
-#~ msgstr "3. 在\"价格管理\"页面手动添加缺失的SKU价格"
-
-#~ msgid "check_sku_format"
-#~ msgstr "4. 检查SKU格式是否符合OCCW标准"
-
-#~ msgid "sku_no_match_question"
-#~ msgstr "Q: SKU无法找到匹配项？"
-
-#~ msgid "use_similar_sku_dropdown"
-#~ msgstr "1. 使用下拉列表中的相似SKU"
-
-#~ msgid "manually_input_correct_sku"
-#~ msgstr "2. 手动输入正确的OCCW SKU"
-
-#~ msgid "adjust_sku_generation_rules"
-#~ msgstr "3. 在\"配置\"页面调整SKU生成规则"
-
-#~ msgid "contact_admin_update_price"
-#~ msgstr "4. 联系管理员更新价格表"
-
-#~ msgid "performance_optimization_title"
-#~ msgstr "性能优化建议"
-
-#~ msgid "regularly_clean_sku_mappings"
-#~ msgstr "定期清理不需要的SKU映射关系"
-
-#~ msgid "keep_occw_price_table_updated"
-#~ msgstr "保持OCCW价格表更新，减少手动映射需求"
-
-#~ msgid "use_standard_pdf_format"
-#~ msgstr "使用标准格式的PDF文件，提高解析准确度"
-
-#~ msgid "large_file_processing_patience"
-#~ msgstr "大文件处理时请耐心等待，避免重复操作"
-
-#~ msgid "price_management_status"
-#~ msgstr "价格管理"
-
-#~ msgid "mapping_status"
-#~ msgstr "映射状态"
-
-#~ msgid "config_title"
-#~ msgstr "系统配置"
-
-#~ msgid "config_subtitle"
-#~ msgstr "SKU生成规则与系统设置"
-
-#~ msgid "config_status"
-#~ msgstr "配置管理"
-
-#~ msgid "sku_mapping_desc"
-#~ msgstr "管理SKU映射关系，优化价格匹配"
-
-#~ msgid "help_pdf_import"
-#~ msgstr "导入2020报价单"
-
-#~ msgid "help_manual_create"
-#~ msgstr "手动创建报价单"
-
-#~ msgid "help_troubleshooting"
-#~ msgstr "常见问题与解决"
-
-#~ msgid "help_system_overview"
-#~ msgstr "系统概述"
-
-#~ msgid "help_manual_create_desc"
-#~ msgstr "手动创建报价单功能"
-
-#~ msgid "help_sku_mapping_desc"
-#~ msgstr "SKU映射管理（管理员）"
-
-#~ msgid "help_price_query_desc"
-#~ msgstr "实时价格查询"
-
-#~ msgid "help_operation_steps"
-#~ msgstr "操作步骤"
-
-#~ msgid "help_step1_title"
-#~ msgstr "上传PDF文件"
-
-#~ msgid "help_step2_title"
-#~ msgstr "智能解析"
-
-#~ msgid "help_step3_title"
-#~ msgstr "SKU生成"
-
-#~ msgid "help_step4_title"
-#~ msgstr "导出报价单"
-
-#~ msgid "help_supported_formats"
-#~ msgstr "支持的文件格式"
-
-#~ msgid "help_pdf_format"
-#~ msgstr "PDF格式"
-
-#~ msgid "help_pdf_format_desc"
-#~ msgstr "从2020软件导出的标准PDF报价单"
-
-#~ msgid "help_file_size"
-#~ msgstr "文件大小"
-
-#~ msgid "help_file_size_desc"
-#~ msgstr "最大支持16MB"
-
-#~ msgid "help_language_support"
-#~ msgstr "语言支持"
-
-#~ msgid "help_language_support_desc"
-#~ msgstr "支持中文、英文、法文等多语言PDF"
-
-#~ msgid "help_parsing_features"
-#~ msgstr "解析功能说明"
-
-#~ msgid "help_content_parsing"
-#~ msgstr "内容解析"
-
-#~ msgid "help_auto_recognize_products"
-#~ msgstr "自动识别产品描述和规格"
-
-#~ msgid "help_extract_quantity_price"
-#~ msgstr "提取数量和单价信息"
-
-#~ msgid "help_recognize_door_color"
-#~ msgstr "识别门板颜色和变体"
-
-#~ msgid "help_handle_multiline"
-#~ msgstr "处理多行产品信息"
-
-#~ msgid "help_special_processing"
-#~ msgstr "特殊处理"
-
-#~ msgid "help_smart_merge_lines"
-#~ msgstr "智能合并跨行产品信息"
-
-#~ msgid "help_auto_handle_variants"
-#~ msgstr "自动处理产品变体组合"
-
-#~ msgid "help_support_components"
-#~ msgstr "支持组合件和硬件识别"
-
-#~ msgid "help_handle_special_chars"
-#~ msgstr "处理特殊字符和格式"
-
-#~ msgid "help_function_description"
-#~ msgstr "功能说明"
-
-#~ msgid "help_add_product"
-#~ msgstr "添加产品"
-
-#~ msgid "help_click_add_product"
-#~ msgstr "点击\"添加产品\"按钮"
-
-#~ msgid "help_select_product_type"
-#~ msgstr "选择产品类型（组合件、门板、柜身等）"
-
-#~ msgid "help_fill_product_info"
-#~ msgstr "填写产品名称和规格"
-
-#~ msgid "help_select_variants"
-#~ msgstr "选择门板变体和柜身变体"
-
-#~ msgid "help_input_price_quantity"
-#~ msgstr "输入单价和数量"
-
-#~ msgid "help_edit_management"
-#~ msgstr "编辑管理"
-
-#~ msgid "help_edit_product_info"
-#~ msgstr "可以随时编辑产品信息"
-
-#~ msgid "help_delete_single_product"
-#~ msgstr "支持删除单个产品"
-
-#~ msgid "help_clear_quotation"
-#~ msgstr "可以清空整个报价单"
-
-#~ msgid "help_real_time_total"
-#~ msgstr "实时计算总价"
-
-#~ msgid "help_supported_product_types"
-#~ msgstr "支持的产品类型"
-
-#~ msgid "help_product_type_assm"
-#~ msgstr "RTA Assm.组合件"
-
-#~ msgid "help_product_type_door"
-#~ msgstr "Door门板"
-
-#~ msgid "help_product_type_box"
-#~ msgstr "BOX柜身"
-
-#~ msgid "help_product_type_ending"
-#~ msgstr "Ending Panel端板"
-
-#~ msgid "help_product_type_molding"
-#~ msgstr "Molding装饰条"
-
-#~ msgid "help_product_type_toe_kick"
-#~ msgstr "Toe Kick踢脚线"
-
-#~ msgid "help_product_type_filler"
-#~ msgstr "Filler填充板"
-
-#~ msgid "help_product_type_hardware"
-#~ msgstr "Hardware五金件"
-
-#~ msgid "help_pdf_parsing_issues"
-#~ msgstr "PDF解析问题"
-
-#~ msgid "help_pdf_upload_parse_error_question"
-#~ msgstr "PDF上传后无法解析"
-
-#~ msgid "help_possible_causes"
-#~ msgstr "可能原因"
-
-#~ msgid "help_pdf_not_standard_format"
-#~ msgstr "PDF文件不是从2020软件导出的标准格式"
-
-#~ msgid "help_file_corrupted_encrypted"
-#~ msgstr "文件损坏或加密"
-
-#~ msgid "help_file_size_exceeded"
-#~ msgstr "文件大小超过16MB限制"
-
-#~ msgid "help_solutions"
-#~ msgstr "解决方案"
-
-#~ msgid "help_use_2020_standard_export"
-#~ msgstr "确保使用2020软件的标准PDF导出功能"
-
-#~ msgid "help_check_file_integrity"
-#~ msgstr "检查文件是否完整且未加密"
-
-#~ msgid "help_try_re_export_pdf"
-#~ msgstr "尝试重新导出PDF文件"
-
-#~ msgid "help_product_info_recognition_error"
-#~ msgstr "产品信息识别错误"
-
-#~ msgid "help_pdf_format_irregular"
-#~ msgstr "PDF格式不规范"
-
-#~ msgid "help_product_desc_special_chars"
-#~ msgstr "产品描述包含特殊字符"
-
-#~ msgid "help_multiline_format_abnormal"
-#~ msgstr "多行产品信息格式异常"
-
-#~ msgid "help_use_standard_pdf_format"
-#~ msgstr "使用标准格式的PDF文件"
-
-#~ msgid "help_check_product_desc_standard"
-#~ msgstr "检查产品描述是否规范"
-
-#~ msgid "help_manual_create_correction"
-#~ msgstr "可以手动创建报价单进行修正"
-
-#~ msgid "help_sku_and_price_issues"
-#~ msgstr "SKU和价格问题"
-
-#~ msgid "help_sku_no_match_question"
-#~ msgstr "SKU显示为0或无法匹配"
-
-#~ msgid "help_sku_not_in_price_table"
-#~ msgstr "价格表中没有对应的SKU"
-
-#~ msgid "help_sku_mapping_not_configured"
-#~ msgstr "SKU映射关系未配置"
-
-#~ msgid "help_product_type_not_supported"
-#~ msgstr "产品类型不在支持范围内"
-
-#~ msgid "help_contact_admin_check_price_table"
-#~ msgstr "联系管理员检查价格表"
-
-#~ msgid "help_confirm_sku_mapping_configured"
-#~ msgstr "确认SKU映射关系已配置"
-
-#~ msgid "help_check_product_type_supported"
-#~ msgstr "检查产品类型是否支持"
-
-#~ msgid "help_price_display_abnormal"
-#~ msgstr "价格显示异常"
-
-#~ msgid "help_price_table_incomplete"
-#~ msgstr "价格表数据不完整"
-
-#~ msgid "help_sku_format_mismatch"
-#~ msgstr "SKU格式不匹配"
-
-#~ msgid "help_variant_info_missing"
-#~ msgstr "变体信息缺失"
-
-#~ msgid "help_contact_admin_update_price_table"
-#~ msgstr "联系管理员更新价格表"
-
-#~ msgid "help_check_sku_format_correct"
-#~ msgstr "检查SKU格式是否正确"
-
-#~ msgid "help_confirm_variant_info_complete"
-#~ msgstr "确认变体信息完整"
-
-#~ msgid "help_export_issues"
-#~ msgstr "导出问题"
-
-#~ msgid "help_export_format_issues"
-#~ msgstr "导出文件格式问题"
-
-#~ msgid "help_format_2020"
-#~ msgstr "2020格式"
-
-#~ msgid "help_format_2020_desc"
-#~ msgstr "兼容2020软件的Excel格式"
-
-#~ msgid "help_format_occw"
-#~ msgstr "OCCW格式"
-
-#~ msgid "help_format_occw_desc"
-#~ msgstr "标准OCCW系统格式"
-
-#~ msgid "help_format_pdf"
-#~ msgstr "PDF格式"
-
-#~ msgid "help_format_pdf_desc"
-#~ msgstr "可打印的PDF报价单"
-
-#~ msgid "help_export_failed"
-#~ msgstr "导出失败"
-
-#~ msgid "help_browser_download_settings"
-#~ msgstr "浏览器下载设置问题"
-
-#~ msgid "help_file_generation_error"
-#~ msgstr "文件生成过程中出错"
-
-#~ msgid "help_network_connection_issue"
-#~ msgstr "网络连接问题"
-
-#~ msgid "help_check_browser_download_settings"
-#~ msgstr "检查浏览器下载设置"
-
-#~ msgid "help_refresh_page_retry"
-#~ msgstr "刷新页面重新尝试"
-
-#~ msgid "help_check_network_connection"
-#~ msgstr "检查网络连接"
-
-#~ msgid "help_email_response_time"
-#~ msgstr "工作日24小时内回复"
-
-#~ msgid "help_phone_service_time"
-#~ msgstr "工作日 9:00-18:00"
-
-#~ msgid "help_system_name"
-#~ msgstr "系统名称"
-
-#~ msgid "help_update_date"
-#~ msgstr "更新日期"
-
-#~ msgid "help_usage_suggestions"
-#~ msgstr "使用建议"
-
-#~ msgid "help_regular_backup_data"
-#~ msgstr "定期备份重要的报价单数据"
-
-#~ msgid "help_check_troubleshooting_first"
-#~ msgstr "如遇问题，请先查看常见问题解决方案"
-
-#~ msgid "browse_files"
-#~ msgstr "浏览文件"
-
-#~ msgid "drag_drop_files"
-#~ msgstr "拖拽文件到此处或点击浏览"
-
-#~ msgid "file_selected"
-#~ msgstr "已选择文件"
-
-#~ msgid "file_size_limit"
-#~ msgstr "文件大小限制"
-
-#~ msgid "file_type_not_supported"
-#~ msgstr "不支持的文件类型"
-
-#~ msgid "file_upload_success"
-#~ msgstr "文件上传成功"
-
-#~ msgid "file_upload_failed"
-#~ msgstr "文件上传失败"
-
-#~ msgid "file_processing"
-#~ msgstr "文件处理中..."
-
-#~ msgid "upload_pdf_file"
-#~ msgstr "请上传PDF文件"
-
-#~ msgid "upload_excel_csv"
-#~ msgstr "请上传Excel或CSV文件"
-
-#~ msgid "file_processing_failed"
-#~ msgstr "文件处理失败"
-
-#~ msgid "missing_required_params"
-#~ msgstr "缺少必要参数"
-
-#~ msgid "save_mapping_failed"
-#~ msgstr "保存映射关系失败"
-
-#~ msgid "missing_sku_param"
-#~ msgstr "缺少SKU参数"
-
-#~ msgid "get_price_failed"
-#~ msgstr "获取价格失败"
-
-#~ msgid "get_stats_failed"
-#~ msgstr "获取统计信息失败"
-
-#~ msgid "get_mapping_failed"
-#~ msgstr "获取映射关系失败"
-
-#~ msgid "missing_original_sku"
-#~ msgstr "缺少原始SKU参数"
-
-#~ msgid "mapping_not_exists"
-#~ msgstr "映射关系不存在"
-
-#~ msgid "delete_mapping_failed"
-#~ msgstr "删除映射关系失败"
-
-#~ msgid "clear_mapping_failed"
-#~ msgstr "清空映射关系失败"
-
-#~ msgid "export_mapping_failed"
-#~ msgstr "导出映射关系失败"
-
-#~ msgid "unsupported_export_format"
-#~ msgstr "不支持的导出格式"
+#~ msgid "config_reset"
+#~ msgstr "配置已重置为默认值"
 
 #~ msgid "config_save_success"
 #~ msgstr "配置保存成功"
 
-#~ msgid "sku_rules_save_success"
-#~ msgstr "SKU规则保存成功"
+#~ msgid "config_saved"
+#~ msgstr "配置已保存"
 
-#~ msgid "reset_default_success"
-#~ msgstr "已恢复默认配置"
+#~ msgid "config_status"
+#~ msgstr "配置管理"
 
-#~ msgid "default_config_not_exists"
-#~ msgstr "默认配置文件不存在"
+#~ msgid "config_subtitle"
+#~ msgstr "SKU生成规则与系统设置"
 
-#~ msgid "no_filename_specified"
-#~ msgstr "没有指定文件名"
+#~ msgid "config_title"
+#~ msgstr "系统配置"
 
-#~ msgid "file_not_exists"
-#~ msgstr "文件不存在"
+#~ msgid "configuration_editor"
+#~ msgstr "配置编辑器"
 
-#~ msgid "read_pdf_failed"
-#~ msgstr "读取PDF失败"
+#~ msgid "configuration_file"
+#~ msgstr "配置文件"
 
-#~ msgid "get_categories_failed"
-#~ msgstr "获取产品类别失败"
+#~ msgid "confirm"
+#~ msgstr "确认"
 
-#~ msgid "missing_category_param"
-#~ msgstr "缺少category参数"
+#~ msgid "confirm_clear_all_sku_mappings"
+#~ msgstr "确定要清空所有SKU映射吗？"
 
-#~ msgid "get_products_failed"
-#~ msgstr "获取产品列表失败"
+#~ msgid "confirm_complete_product_list"
+#~ msgstr "4. 确认PDF中包含完整的产品列表和价格信息"
 
-#~ msgid "search_sku_failed"
-#~ msgstr "搜索SKU失败"
+#~ msgid "confirm_delete"
+#~ msgstr "确认删除"
 
-#~ msgid "search_sku"
-#~ msgstr "搜索SKU"
+#~ msgid "confirm_delete_quotation"
+#~ msgstr "确定要删除这个报价单吗？"
 
-#~ msgid "all_box_variants"
-#~ msgstr "所有柜身变体"
+#~ msgid "confirm_delete_sales_person"
+#~ msgstr "确定要删除此销售人员吗？"
 
-#~ msgid "all_door_variants"
-#~ msgstr "所有门板变体"
+#~ msgid "confirm_delete_sku_mapping"
+#~ msgstr "确定要删除此SKU映射吗？"
 
-#~ msgid "get_price_table_failed"
-#~ msgstr "获取价格表失败"
+#~ msgid "confirm_edit_quotation"
+#~ msgstr "确定要编辑此报价单吗？"
 
-#~ msgid "get_filter_options_failed"
-#~ msgstr "获取过滤选项失败"
+#~ msgid "confirm_export_quotation"
+#~ msgstr "确定要导出此报价单吗？"
 
-#~ msgid "get_sku_list_failed"
-#~ msgstr "获取SKU列表失败"
+#~ msgid "confirm_merged_column_format"
+#~ msgstr "2. 确认合并列的格式符合预期（数量+用户编码）"
 
-#~ msgid "search_number_customer_salesperson"
-#~ msgstr "搜索编号、客户或销售人员"
+#~ msgid "confirm_new_password"
+#~ msgstr "确认新密码"
 
-#~ msgid "time_period"
-#~ msgstr "时间区间"
+#~ msgid "confirm_password"
+#~ msgstr "确认密码"
 
-#~ msgid "load_product_list_failed"
-#~ msgstr "加载产品列表失败"
+#~ msgid "confirm_password_help"
+#~ msgstr "请再次输入新密码以确认"
 
-#~ msgid "search_placeholder"
-#~ msgstr "搜索..."
+#~ msgid "confirm_pdf_from_2020"
+#~ msgstr "1. 确认PDF是由2020软件生成的标准报价单"
 
-#~ msgid "data_pagination"
-#~ msgstr "数据分页"
+#~ msgid "confirm_remove_product"
+#~ msgstr "确定要删除此产品吗？"
 
-#~ msgid "no_matching_sku_found"
-#~ msgstr "未找到匹配的SKU"
+#~ msgid "confirm_reset_settings"
+#~ msgstr "确定要重置所有设置吗？"
 
-#~ msgid "enter_occw_sku"
-#~ msgstr "输入OCCW SKU"
+#~ msgid "confirm_sku_mapping"
+#~ msgstr "2. 确认SKU映射是否正确"
 
-#~ msgid "showing_records"
-#~ msgstr "显示 {start}-{end} 条，共 {total} 条"
+#~ msgid "contact_admin_update_price"
+#~ msgstr "4. 联系管理员更新价格表"
 
-#~ msgid "enter_valid_sku"
-#~ msgstr "请输入有效的SKU"
+#~ msgid "contains_all_column_information"
+#~ msgstr "包含所有列信息"
 
-#~ msgid "customer_order_analysis_pagination"
-#~ msgstr "客户订单分析分页"
+#~ msgid "contains_sequence_code_quantity"
+#~ msgstr "包含：序号、Code、数量、花色、2020单价、2020总价、OCCW SKU、OCCW单价、OCCW总价"
 
-#~ msgid "quotation_order"
-#~ msgstr "报价单"
+#~ msgid "contains_sequence_occw_sku"
+#~ msgstr "包含：序号、OCCW SKU、数量、OCCW单价、OCCW总价"
 
-#~ msgid "customer_count"
-#~ msgstr "客户数"
+#~ msgid "continue_with_errors"
+#~ msgstr "发现错误但继续处理"
 
-#~ msgid "load_product_failed"
-#~ msgstr "加载产品失败"
+#~ msgid "continuous_parsing"
+#~ msgstr "文档的连续解析"
 
-#~ msgid "toast_system"
-#~ msgstr "Toast 提示系统"
+#~ msgid "conversion_rate"
+#~ msgstr "转化率"
 
-#~ msgid "load_variant_failed"
-#~ msgstr "加载变体失败"
+#~ msgid "conversion_rate_comparison"
+#~ msgstr "转化率对比"
 
-#~ msgid "toast_container"
-#~ msgstr "Toast 提示容器"
-
-#~ msgid "import_description"
-#~ msgstr "导入说明"
-
-#~ msgid "date_filter"
-#~ msgstr "日期过滤"
-
-#~ msgid "current_filter_settings_tip"
-#~ msgstr "当前过滤设定提示"
-
-#~ msgid "tooltip_styles"
-#~ msgstr "工具提示样式"
-
-#~ msgid "status_filter_help"
-#~ msgstr "选择要导入的订单状态类型"
-
-#~ msgid "import_failed_with_errors"
-#~ msgstr "导入失败：发现 {count} 个错误，请查看详情"
-
-#~ msgid "quotation_data_will_load_here"
-#~ msgstr "报价单数据将在这里动态加载"
-
-#~ msgid "get_data_failed"
-#~ msgstr "获取数据失败"
-
-#~ msgid "sales_order"
-#~ msgstr "销售订单"
-
-#~ msgid "amount_filter"
-#~ msgstr "金额过滤"
-
-#~ msgid "sku_mapping_delete_success"
-#~ msgstr "SKU映射删除成功"
-
-#~ msgid "upload_failed_retry"
-#~ msgstr "上传失败，请重试"
-
-#~ msgid "end_date_help"
-#~ msgstr "只导入此日期之前的数据"
-
-#~ msgid "start_date_after_end_date"
-#~ msgstr "开始日期不能晚于结束日期"
-
-#~ msgid "min_amount_threshold"
-#~ msgstr "最小金额阈值"
-
-#~ msgid "save_filter_settings_failed"
-#~ msgstr "保存过滤设置失败"
-
-#~ msgid "warning_tip_color_adjustment"
-#~ msgstr "警告和提示颜色调整"
-
-#~ msgid "filter_settings_save_success"
-#~ msgstr "过滤设置保存成功"
-
-#~ msgid "clear_sku_mapping_failed"
-#~ msgstr "清空SKU映射失败"
-
-#~ msgid "load_product_category_failed"
-#~ msgstr "加载产品类别失败"
-
-#~ msgid "min_amount_help"
-#~ msgstr "只导入总计金额大于等于此值的数据"
-
-#~ msgid "clear_failed"
-#~ msgstr "清空失败"
-
-#~ msgid "export_sku_mapping_success"
-#~ msgstr "成功导出 {count} 个SKU映射关系"
-
-#~ msgid "error_message"
-#~ msgstr "错误消息"
-
-#~ msgid "load_mapping_data_failed"
-#~ msgstr "加载映射数据失败"
-
-#~ msgid "save_sku_mapping_failed"
-#~ msgstr "保存SKU映射失败"
-
-#~ msgid "sku_mapping_save_success"
-#~ msgstr "SKU映射保存成功"
-
-#~ msgid "chart_download_success"
-#~ msgstr "图表下载成功"
-
-#~ msgid "date_range"
-#~ msgstr "日期范围"
+#~ msgid "conversion_rate_comparison_chart"
+#~ msgstr "转化率对比图"
 
 #~ msgid "copy_failed_manual"
 #~ msgstr "复制失败，请手动选择文本复制"
 
-#~ msgid "warning_box_styles"
-#~ msgstr "警告框样式"
+#~ msgid "copy_text"
+#~ msgstr "复制文本"
 
-#~ msgid "export_sku_mapping_failed"
-#~ msgstr "导出SKU映射失败"
+#~ msgid "copyright"
+#~ msgstr "© 2025 OCCW报价系统 - Oppein Cabinet Canada West Ltd."
+
+#~ msgid "count_conversion_rate"
+#~ msgstr "数量转化率"
+
+#~ msgid "create_mode"
+#~ msgstr "创建模式"
+
+#~ msgid "create_mode_desc"
+#~ msgstr "清空现有数据，全新导入"
+
+#~ msgid "create_new_account"
+#~ msgstr "创建新账户"
+
+#~ msgid "created_at"
+#~ msgstr "创建时间"
+
+#~ msgid "csv_format"
+#~ msgstr "CSV (.csv)"
+
+#~ msgid "current_admin_password"
+#~ msgstr "当前管理员密码"
+
+#~ msgid "current_filter_settings_tip"
+#~ msgstr "当前过滤设定提示"
+
+#~ msgid "current_password_required"
+#~ msgstr "请输入当前管理员密码"
+
+#~ msgid "current_price_count"
+#~ msgstr "当前价格数量"
+
+#~ msgid "current_price_table"
+#~ msgstr "当前价格表"
+
+#~ msgid "current_status"
+#~ msgstr "当前状态"
+
+#~ msgid "custom_time_range"
+#~ msgstr "自定义时间区间"
+
+#~ msgid "customer"
+#~ msgstr "客户"
+
+#~ msgid "customer_company_type"
+#~ msgstr "客户公司类型"
+
+#~ msgid "customer_count"
+#~ msgstr "客户数"
+
+#~ msgid "customer_example"
+#~ msgstr "例如：客户A,客户B"
+
+#~ msgid "customer_filter"
+#~ msgstr "客户过滤"
+
+#~ msgid "customer_filter_desc"
+#~ msgstr "只导入指定客户的数据（支持多个，用逗号分隔）"
 
 #~ msgid "customer_filter_help"
 #~ msgstr "多个客户用逗号分隔，留空表示不过滤"
 
-#~ msgid "filter_settings_help"
-#~ msgstr "这些设置将在销售订单数据导入时自动应用，过滤掉不符合条件的数据。所有过滤条件为可选，留空表示不限制该条件。"
+#~ msgid "customer_name"
+#~ msgstr "客户名称"
 
-#~ msgid "sales_order_import_filter_settings"
-#~ msgstr "销售订单导入过滤设置"
+#~ msgid "customer_order_analysis"
+#~ msgstr "客户订单分析"
 
-#~ msgid "start_date_help"
-#~ msgstr "只导入此日期之后的数据"
+#~ msgid "customer_order_analysis_pagination"
+#~ msgstr "客户订单分析分页"
 
-#~ msgid "person_customer_filter"
-#~ msgstr "人员和客户过滤"
+#~ msgid "customer_type"
+#~ msgstr "客户类型"
 
-#~ msgid "filter_settings_description"
-#~ msgstr "过滤设置说明"
+#~ msgid "customer_type_amount_distribution"
+#~ msgstr "客户类型金额分布"
 
-#~ msgid "no_monthly_data_found"
-#~ msgstr "没有找到月度数据"
+#~ msgid "customer_type_amount_trend"
+#~ msgstr "客户类型金额趋势"
 
-#~ msgid "chart_data_incomplete_skip_display"
-#~ msgstr "图表数据不完整，跳过图表显示"
+#~ msgid "customer_type_analysis"
+#~ msgstr "客户类型分析"
 
-#~ msgid "sales_analysis_desc"
-#~ msgstr "上传销售数据，生成业绩分析报表和图表，支持多维度统计和转化率分析"
+#~ msgid "customer_type_count_distribution"
+#~ msgstr "客户类型数量分布"
 
-#~ msgid "help_import_filter_settings"
-#~ msgstr "导入过滤设置（管理员功能）"
+#~ msgid "customer_type_count_trend"
+#~ msgstr "客户类型数量趋势"
 
-#~ msgid "help_import_filter_desc"
-#~ msgstr "管理员可以在\"导入数据过滤\"页面配置过滤条件："
+#~ msgid "customer_type_data_loading"
+#~ msgstr "客户类型数据将在这里动态加载"
 
-#~ msgid "help_min_amount_threshold"
-#~ msgstr "最小导入金额阈值"
+#~ msgid "customer_type_distribution_charts"
+#~ msgstr "客户类型分布图表"
 
-#~ msgid "help_min_amount_desc"
-#~ msgstr "只导入总计金额大于等于设定值的数据"
+#~ msgid "customer_type_table_body_not_found"
+#~ msgstr "找不到客户类型表格体元素"
 
-#~ msgid "help_sales_person_filter"
-#~ msgstr "销售人员过滤"
+#~ msgid "customer_type_trend_charts"
+#~ msgstr "客户类型趋势图表"
 
-#~ msgid "help_sales_person_desc"
-#~ msgstr "多个销售人员用逗号分隔，留空表示不过滤"
+#~ msgid "data_conversion_logic"
+#~ msgstr "数据转换逻辑"
 
-#~ msgid "help_customer_filter"
-#~ msgstr "客户过滤"
+#~ msgid "data_export"
+#~ msgstr "数据导出"
 
-#~ msgid "help_customer_desc"
-#~ msgstr "多个客户用逗号分隔，留空表示不过滤"
+#~ msgid "data_filter_and_search"
+#~ msgstr "数据过滤和搜索"
 
-#~ msgid "help_date_range"
-#~ msgstr "日期范围"
+#~ msgid "data_filter_conditions"
+#~ msgstr "数据过滤条件"
 
-#~ msgid "help_date_range_desc"
-#~ msgstr "设置开始和结束日期，只导入指定时间范围的数据"
+#~ msgid "data_import"
+#~ msgstr "数据导入"
 
-#~ msgid "help_order_status_filter"
-#~ msgstr "订单状态过滤"
+#~ msgid "data_pagination"
+#~ msgstr "数据分页"
 
-#~ msgid "help_order_status_desc"
-#~ msgstr "动态多选，系统自动提取数据中的所有订单状态"
+#~ msgid "data_type"
+#~ msgstr "数据类型"
 
-#~ msgid "help_data_import_steps"
-#~ msgstr "数据导入步骤"
+#~ msgid "data_validation"
+#~ msgstr "数据验证"
 
-#~ msgid "help_prepare_excel"
-#~ msgstr "准备标准格式的 Excel 文件（销售订单.xlsx）"
-
-#~ msgid "help_select_file"
-#~ msgstr "在主页面点击\"选择销售订单文件\""
-
-#~ msgid "help_upload_file"
-#~ msgstr "上传文件，系统会自动应用预设的过滤条件"
-
-#~ msgid "help_check_filter_result"
-#~ msgstr "查看\"导入数据过滤后剩余的行数\"确认过滤结果"
-
-#~ msgid "help_update_analysis"
-#~ msgstr "点击\"更新分析表格\"开始分析"
-
-#~ msgid "help_data_viewing_features"
+#~ msgid "data_viewing"
 #~ msgstr "数据查看功能"
 
-#~ msgid "help_view_imported_data"
-#~ msgstr "查看导入数据"
+#~ msgid "date"
+#~ msgstr "日期"
 
-#~ msgid "help_view_imported_desc"
-#~ msgstr "点击\"查看导入数据\"按钮可以："
+#~ msgid "date_filter"
+#~ msgstr "日期过滤"
 
-#~ msgid "help_view_original_data"
-#~ msgstr "查看原始导入的销售数据"
+#~ msgid "date_range"
+#~ msgstr "日期范围"
 
-#~ msgid "help_column_sort"
-#~ msgstr "支持列排序（点击列标题）"
+#~ msgid "debounce_search"
+#~ msgstr "防抖搜索"
 
-#~ msgid "help_search_filter"
-#~ msgstr "支持搜索和过滤"
+#~ msgid "default_config_not_exists"
+#~ msgstr "默认配置文件不存在"
 
-#~ msgid "help_pagination"
-#~ msgstr "支持分页显示"
+#~ msgid "default_sales_person"
+#~ msgstr "默认销售人员"
 
-#~ msgid "help_export_excel"
-#~ msgstr "支持导出为Excel文件"
+#~ msgid "default_sales_person_help"
+#~ msgstr "设置默认销售人员，用于导出报价单时自动填充"
 
-#~ msgid "help_view_converted_data"
-#~ msgstr "查看转换数据"
+#~ msgid "delete"
+#~ msgstr "删除"
 
-#~ msgid "help_view_converted_desc"
-#~ msgstr "点击\"查看转换数据\"按钮可以："
+#~ msgid "delete_failed"
+#~ msgstr "删除失败"
 
-#~ msgid "help_standardized_data"
-#~ msgstr "查看系统转换后的标准化数据"
+#~ msgid "delete_mapping"
+#~ msgstr "删除映射"
 
-#~ msgid "help_new_fields"
-#~ msgstr "包含新增字段：订单金额、报价单金额、订单数量、报价单数量"
+#~ msgid "delete_mapping_confirm"
+#~ msgstr "确定要删除以下SKU映射关系吗？"
 
-#~ msgid "help_analysis_tables"
-#~ msgstr "分析表格"
+#~ msgid "delete_mapping_failed"
+#~ msgstr "删除映射关系失败"
 
-#~ msgid "help_sales_performance_table"
-#~ msgstr "销售员业绩分析表"
+#~ msgid "delete_quotation"
+#~ msgstr "删除报价单"
 
-#~ msgid "help_sales_performance_desc"
-#~ msgstr "显示每个销售员的业绩统计："
+#~ msgid "delete_quotation_failed"
+#~ msgstr "删除报价单失败"
 
-#~ msgid "help_order_quantity"
-#~ msgstr "订单数量"
+#~ msgid "delete_rule"
+#~ msgstr "删除规则"
 
-#~ msgid "help_order_quantity_desc"
-#~ msgstr "成功转化的订单数"
+#~ msgid "delete_sales_person_failed"
+#~ msgstr "删除销售人员失败"
 
-#~ msgid "help_total_quotation_quantity"
-#~ msgstr "总报价数量"
+#~ msgid "delete_sku_mapping_failed"
+#~ msgstr "删除SKU映射失败"
 
-#~ msgid "help_order_amount"
-#~ msgstr "订单金额"
+#~ msgid "delete_success"
+#~ msgstr "SKU映射删除成功"
 
-#~ msgid "help_total_quotation_amount"
-#~ msgstr "总报价金额"
+#~ msgid "delete_unnecessary_mapping_relationship"
+#~ msgstr "删除不再需要的映射关系"
 
-#~ msgid "help_quantity_conversion_rate"
-#~ msgstr "数量转化率"
+#~ msgid "description"
+#~ msgstr "说明"
 
-#~ msgid "help_quantity_conversion_desc"
-#~ msgstr "订单数量/总报价数量"
+#~ msgid "description_contains_accessory"
+#~ msgstr "描述包含\\"
 
-#~ msgid "help_amount_conversion_rate"
-#~ msgstr "金额转化率"
+#~ msgid "description_contains_cabinet"
+#~ msgstr "描述包含\\"
 
-#~ msgid "help_amount_conversion_desc"
-#~ msgstr "订单金额/总报价金额"
+#~ msgid "description_contains_hardware"
+#~ msgstr "描述包含\\"
 
-#~ msgid "help_customer_order_table"
-#~ msgstr "客户订单分析表"
+#~ msgid "disabled"
+#~ msgstr "已禁用"
 
-#~ msgid "help_customer_order_desc"
-#~ msgstr "显示每个客户的订单统计和转化率，默认显示10条记录。"
+#~ msgid "discount_calculator"
+#~ msgstr "折扣计算器"
 
-#~ msgid "help_chart_analysis"
-#~ msgstr "图表分析"
+#~ msgid "discount_estimate_note"
+#~ msgstr "此折扣仅用于客户自己估算折后价，不作为官方报价依据"
 
-#~ msgid "help_order_amount_conversion_chart"
-#~ msgstr "订单金额转化率分析"
+#~ msgid "discount_price_estimate"
+#~ msgstr "折扣价格估算"
 
-#~ msgid "help_dual_y_axis_line"
-#~ msgstr "双Y轴折线图："
+#~ msgid "discount_rate"
+#~ msgstr "折扣率"
 
-#~ msgid "help_primary_y_axis"
-#~ msgstr "主Y轴（实线）"
+#~ msgid "discount_unit"
+#~ msgstr "折"
 
-#~ msgid "help_primary_y_axis_desc"
-#~ msgstr "订单金额、总报价金额"
+#~ msgid "discounted_price"
+#~ msgstr "折后价"
 
-#~ msgid "help_secondary_y_axis"
-#~ msgstr "副Y轴（虚线）"
+#~ msgid "display_analysis_result_error"
+#~ msgstr "Erreur lors de l\\"
 
-#~ msgid "help_secondary_y_axis_desc"
-#~ msgstr "金额转化率"
+#~ msgid "display_at_top"
+#~ msgstr "在容器顶部显示"
 
-#~ msgid "help_sales_person_filter_chart"
-#~ msgstr "支持按销售人员过滤"
+#~ msgid "display_customer_analysis_error"
+#~ msgstr "Erreur lors de l\\"
 
-#~ msgid "help_order_quantity_conversion_chart"
-#~ msgstr "订单数量转化率分析"
+#~ msgid "display_customer_table_error"
+#~ msgstr "Erreur lors de l\\"
 
-#~ msgid "help_quantity_y_axis_desc"
-#~ msgstr "订单数、总报价数量"
+#~ msgid "display_related_sku_list"
+#~ msgstr "显示包含用户编码的相关SKU列表"
 
-#~ msgid "help_quantity_conversion_y_axis"
-#~ msgstr "数量转化率"
+#~ msgid "display_sales_analysis_result_error"
+#~ msgstr "Erreur lors de l\\"
 
-#~ msgid "help_sales_comparison_charts"
-#~ msgstr "销售人员对比图表"
+#~ msgid "display_sales_person_analysis_error"
+#~ msgstr "Erreur lors de l\\"
 
-#~ msgid "help_sales_comparison_desc"
-#~ msgstr "包含三个对比图表："
+#~ msgid "door_color"
+#~ msgstr "门板颜色"
 
-#~ msgid "help_quantity_comparison"
-#~ msgstr "数量对比"
+#~ msgid "door_or_box_variant_format"
+#~ msgstr "门板或柜身变体，可为空。格式：门板: XXX 或 柜身: XXX"
 
-#~ msgid "help_quantity_comparison_desc"
-#~ msgstr "对比不同销售人员的订单数量和报价数量"
+#~ msgid "door_variant"
+#~ msgstr "门板变体"
 
-#~ msgid "help_amount_comparison"
-#~ msgstr "金额对比"
+#~ msgid "door_variant_col"
+#~ msgstr "门板变体"
 
-#~ msgid "help_amount_comparison_desc"
-#~ msgstr "对比不同销售人员的订单金额和报价金额"
+#~ msgid "door_variant_pattern"
+#~ msgstr "门板变体模式"
 
-#~ msgid "help_conversion_rate_comparison"
-#~ msgstr "转化率对比"
+#~ msgid "download"
+#~ msgstr "下载"
 
-#~ msgid "help_conversion_rate_comparison_desc"
-#~ msgstr "对比数量转化率和金额转化率"
+#~ msgid "download_config"
+#~ msgstr "下载配置"
 
-#~ msgid "help_maximize_chart"
-#~ msgstr "支持图表最大化显示"
+#~ msgid "drag_drop_files"
+#~ msgstr "拖拽文件到此处或点击浏览"
 
-#~ msgid "help_summary_row"
-#~ msgstr "销售员业绩表格增加汇总行，显示全员统计"
+#~ msgid "dropdown_selection"
+#~ msgstr "下拉选择"
 
-#~ msgid "help_multilingual_support"
-#~ msgstr "多语言支持"
+#~ msgid "dynamic_load_rules"
+#~ msgstr "动态加载规则"
 
-#~ msgid "help_multilingual_desc"
-#~ msgstr "系统完整支持三种语言："
+#~ msgid "edit"
+#~ msgstr "编辑"
 
-#~ msgid "help_chinese_support"
-#~ msgstr "中文"
+#~ msgid "edit_common_variants"
+#~ msgstr "编辑常用变体"
 
-#~ msgid "help_chinese_desc"
-#~ msgstr "简体中文界面，适合国内用户"
+#~ msgid "edit_mapping"
+#~ msgstr "编辑映射"
 
-#~ msgid "help_english_support"
-#~ msgstr "英文"
+#~ msgid "edit_quotation"
+#~ msgstr "编辑报价单"
 
-#~ msgid "help_english_desc"
-#~ msgstr "标准英语界面，面向国际用户"
+#~ msgid "edit_sku_mapping"
+#~ msgstr "编辑SKU映射"
 
-#~ msgid "help_french_support"
-#~ msgstr "法文"
+#~ msgid "email"
+#~ msgstr "邮箱"
 
-#~ msgid "help_french_desc"
-#~ msgstr "法语界面支持，适合加拿大法语区"
+#~ msgid "enable_user_login"
+#~ msgstr "启用用户登录"
 
-#~ msgid "help_real_time_switch"
-#~ msgstr "实时语言切换，无需重新登录"
+#~ msgid "enabled"
+#~ msgstr "已启用"
 
-#~ msgid "help_complete_translation"
-#~ msgstr "所有界面元素完整翻译"
+#~ msgid "end_date"
+#~ msgstr "结束日期"
+
+#~ msgid "end_date_desc"
+#~ msgstr "只导入此日期之前的数据"
+
+#~ msgid "end_date_help"
+#~ msgstr "只导入此日期之前的数据"
+
+#~ msgid "enter_occw_sku"
+#~ msgstr "输入OCCW SKU"
+
+#~ msgid "enter_quotation_title"
+#~ msgstr "请输入报价单描述"
+
+#~ msgid "enter_sales_person_email"
+#~ msgstr "请输入销售人员邮箱"
+
+#~ msgid "enter_sales_person_name"
+#~ msgstr "请输入销售人员姓名"
+
+#~ msgid "enter_sku"
+#~ msgstr "请输入SKU"
+
+#~ msgid "enter_username"
+#~ msgstr "请输入用户名"
+
+#~ msgid "enter_valid_sku"
+#~ msgstr "请输入有效的SKU"
+
+#~ msgid "entries"
+#~ msgstr "条目"
+
+#~ msgid "error"
+#~ msgstr "错误"
+
+#~ msgid "error_count"
+#~ msgstr "错误总数"
+
+#~ msgid "error_message"
+#~ msgstr "错误消息"
+
+#~ msgid "example"
+#~ msgstr "示例"
+
+#~ msgid "excel_file_requirements"
+#~ msgstr "Excel文件要求"
+
+#~ msgid "excel_format_only"
+#~ msgstr "仅支持Excel(.xlsx)格式，第一行为表头，第一列为SKU，第二列为销售价格"
+
+#~ msgid "excel_format_requirements"
+#~ msgstr "Excel文件格式要求"
+
+#~ msgid "excel_import_format_requirements"
+#~ msgstr "Excel导入格式要求"
+
+#~ msgid "excel_xlsx"
+#~ msgstr "Excel (.xlsx)"
+
+#~ msgid "excel_xlsx_format"
+#~ msgstr "Excel (.xlsx) 格式"
+
+#~ msgid "export"
+#~ msgstr "导出"
+
+#~ msgid "export_csv"
+#~ msgstr "导出CSV"
+
+#~ msgid "export_date"
+#~ msgstr "导出日期"
+
+#~ msgid "export_excel"
+#~ msgstr "导出Excel"
+
+#~ msgid "export_failed"
+#~ msgstr "导出失败"
+
+#~ msgid "export_features"
+#~ msgstr "导出功能"
+
+#~ msgid "export_features_title"
+#~ msgstr "导出特性"
+
+#~ msgid "export_info"
+#~ msgstr "导出信息"
+
+#~ msgid "export_instruction"
+#~ msgstr "导出价格后，请将导出的Excel文件发送给OCCW销售人员"
+
+#~ msgid "export_mapping_failed"
+#~ msgstr "导出映射关系失败"
+
+#~ msgid "export_mappings"
+#~ msgstr "导出映射"
+
+#~ msgid "export_pdf"
+#~ msgstr "导出PDF"
+
+#~ msgid "export_price_table_excel_csv"
+#~ msgstr "支持将价格表导出为Excel或CSV格式"
+
+#~ msgid "export_quotation"
+#~ msgstr "导出报价单"
+
+#~ msgid "export_quote"
+#~ msgstr "导出报价单"
+
+#~ msgid "export_sku_mapping_failed"
+#~ msgstr "导出SKU映射失败"
 

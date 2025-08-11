@@ -1,38 +1,38 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}{{ t('admin_login_title') }} - {{ t('system_name') }}{% endblock %}
+[% block title %][[ t('admin_login_title') ]] - [[ t('system_name') ]][% endblock %]
 
-{% block content %}
+[% block content %]
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
         <div class="card">
             <div class="card-header text-center">
                 <h4 class="mb-0">
-                    <i class="fas fa-lock me-2 text-primary"></i>{{ t('admin_login_title') }}
+                    <i class="fas fa-lock me-2 text-primary"></i>[[ t('admin_login_title') ]]
                 </h4>
             </div>
             <div class="card-body">
-                {% if error %}
+                [% if error %]
                 <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+                    <i class="fas fa-exclamation-triangle me-2"></i>[[ error ]]
                 </div>
-                {% endif %}
+                [% endif %]
                 
                 <form method="POST">
                     <div class="mb-3">
                         <label for="password" class="form-label">
-                            <i class="fas fa-key me-1"></i>{{ t('admin_password') }}
+                            <i class="fas fa-key me-1"></i>[[ t('admin_password') ]]
                         </label>
                         <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="{{ t('admin_password_placeholder') }}" required autofocus>
+                               placeholder="[[ t('admin_password_placeholder') ]]" required autofocus>
                     </div>
                     
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt me-1"></i>{{ t('admin_login_button') }}
+                            <i class="fas fa-sign-in-alt me-1"></i>[[ t('admin_login_button') ]]
                         </button>
                         <a href="/" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>{{ t('return_home') }}
+                            <i class="fas fa-arrow-left me-1"></i>[[ t('return_home') ]]
                         </a>
                     </div>
                 </form>
@@ -40,32 +40,32 @@
             <div class="card-footer text-muted text-center">
                 <small>
                     <i class="fas fa-info-circle me-1"></i>
-                    {{ t('admin_login_desc') }}
+                    [[ t('admin_login_desc') ]]
                 </small>
             </div>
         </div>
         
-        <!-- {{ _("permission_description") }} -->
+        <!-- [[ _("permission_description") ]] -->
         <div class="card mt-4">
             <div class="card-header">
                 <h6 class="mb-0">
-                    <i class="fas fa-shield-alt me-2"></i>{{ t('help_permissions') }}
+                    <i class="fas fa-shield-alt me-2"></i>[[ t('help_permissions') ]]
                 </h6>
             </div>
             <div class="card-body">
-                <h6 class="text-success">{{ t('normal_user_can_use') }}：</h6>
+                <h6 class="text-success">[[ t('normal_user_can_use') ]]：</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-check text-success me-2"></i>{{ t('upload_parse_pdf') }}</li>
-                    <li><i class="fas fa-check text-success me-2"></i>{{ t('view_export_results') }}</li>
-                    <li><i class="fas fa-check text-success me-2"></i>{{ t('view_help_docs') }}</li>
+                    <li><i class="fas fa-check text-success me-2"></i>[[ t('upload_parse_pdf') ]]</li>
+                    <li><i class="fas fa-check text-success me-2"></i>[[ t('view_export_results') ]]</li>
+                    <li><i class="fas fa-check text-success me-2"></i>[[ t('view_help_docs') ]]</li>
                 </ul>
                 
-                <h6 class="text-warning mt-3">{{ t('admin_only_features') }}：</h6>
+                <h6 class="text-warning mt-3">[[ t('admin_only_features') ]]：</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('occw_price_management') }}</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('sku_rule_config') }}</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('sku_mapping_management') }}</li>
-                    <li><i class="fas fa-lock text-warning me-2"></i>{{ t('system_config_modify') }}</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>[[ t('occw_price_management') ]]</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>[[ t('sku_rule_config') ]]</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>[[ t('sku_mapping_management') ]]</li>
+                    <li><i class="fas fa-lock text-warning me-2"></i>[[ t('system_config_modify') ]]</li>
                 </ul>
             </div>
         </div>
@@ -99,4 +99,4 @@
     transform: translateY(-1px);
 }
 </style>
-{% endblock %} 
+[% endblock %] 

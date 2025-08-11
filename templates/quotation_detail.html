@@ -1,22 +1,22 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}{{ t('quotation_detail') }}{% endblock %}
+[% block title %][[ t('quotation_detail') ]][% endblock %]
 
-{% block content %}
-<!-- 页面标题 -->
+[% block content %]
+<!-- Page Title -->
 <div class="page-header">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h1 class="page-title">
                     <i class="fas fa-file-invoice-dollar me-3 page-icon"></i>
-                    {{ t('quotation_detail') }}
+                    [[ t('quotation_detail') ]]
                 </h1>
-                <p class="page-subtitle">{{ t('quotation_detail_subtitle') }}</p>
+                <p class="page-subtitle">[[ t('quotation_detail_subtitle') ]]</p>
             </div>
                          <div class="col-md-4 text-end">
                  <a href="/" class="btn btn-outline-secondary">
-                     <i class="fas fa-arrow-left me-1"></i>{{ t('back') }}
+                     <i class="fas fa-arrow-left me-1"></i>[[ t('back') ]]
                  </a>
              </div>
         </div>
@@ -24,18 +24,18 @@
 </div>
 
 <div class="container-fluid">
-    {% if error %}
+    [% if error %]
     <div class="alert alert-danger" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+        <i class="fas fa-exclamation-triangle me-2"></i>[[ error ]]
     </div>
-    {% elif quotation %}
-         <!-- 报价单信息 -->
+    [% elif quotation %]
+         <!-- Quotation Information -->
      <div class="row mb-4">
          <div class="col-md-12">
              <div class="card">
                  <div class="card-header">
                      <h5 class="card-title mb-0">
-                         <i class="fas fa-info-circle me-2"></i>{{ t('quotation_info') }}
+                         <i class="fas fa-info-circle me-2"></i>[[ t('quotation_info') ]]
                      </h5>
                  </div>
                  <div class="card-body">
@@ -43,37 +43,37 @@
                          <div class="col-md-6">
                              <table class="table table-borderless">
                                  <tr>
-                                     <td><strong>{{ t('quotation_id') }}:</strong></td>
-                                     <td><code>{{ quotation.quotation_id }}</code></td>
+                                     <td><strong>[[ t('quotation_id') ]]:</strong></td>
+                                     <td><code>[[ quotation.quotation_id ]]</code></td>
                                  </tr>
                                  <tr>
-                                     <td><strong>{{ t('title') }}:</strong></td>
-                                     <td>{{ quotation.title }}</td>
+                                     <td><strong>[[ t('title') ]]:</strong></td>
+                                     <td>[[ quotation.title ]]</td>
                                  </tr>
                                  <tr>
-                                     <td><strong>{{ t('order_date') }}:</strong></td>
-                                     <td>{{ quotation.data.order_date }}</td>
+                                     <td><strong>[[ t('order_date') ]]:</strong></td>
+                                     <td>[[ quotation.data.order_date ]]</td>
                                  </tr>
                              </table>
                          </div>
                          <div class="col-md-6">
                              <table class="table table-borderless">
                                  <tr>
-                                     <td><strong>{{ t('user') }}:</strong></td>
-                                     <td>{{ quotation.data.user }}</td>
+                                     <td><strong>[[ t('user') ]]:</strong></td>
+                                     <td>[[ quotation.data.user ]]</td>
                                  </tr>
                                  <tr>
-                                     <td><strong>{{ t('sales_person') }}:</strong></td>
-                                     <td>{{ quotation.data.sales_person }}</td>
+                                     <td><strong>[[ t('sales_person') ]]:</strong></td>
+                                     <td>[[ quotation.data.sales_person ]]</td>
                                  </tr>
                                  <tr>
-                                     <td><strong>{{ t('type') }}:</strong></td>
+                                     <td><strong>[[ t('type') ]]:</strong></td>
                                      <td>
-                                         {% if quotation.data.type == 'pdf' %}
-                                         {{ t('pdf_import') }}
-                                         {% else %}
-                                         {{ t('manual_create') }}
-                                         {% endif %}
+                                         [% if quotation.data.type == 'pdf' %]
+                                         [[ t('pdf_import') ]]
+                                         [% else %]
+                                         [[ t('manual_create') ]]
+                                         [% endif %]
                                      </td>
                                  </tr>
                              </table>
@@ -84,99 +84,99 @@
          </div>
           </div>
  
-     <!-- 添加新产品区域 -->
+     <!-- Add New Product Area -->
      <div id="addProductSection" class="card mt-3">
          <div class="card-header bg-primary text-white">
              <h6 class="card-title mb-0">
-                 <i class="fas fa-plus me-2"></i>{{ t('add_new_product') }}
+                 <i class="fas fa-plus me-2"></i>[[ t('add_new_product') ]]
              </h6>
          </div>
          <div class="card-body">
-                          <!-- 添加产品按钮 -->
+                          <!-- Add Product Button -->
               <div class="mb-3">
-                  <!-- 按钮已移除 -->
+                  <!-- Button has been removed -->
               </div>
              
              <div class="table-responsive">
                  <table class="table table-bordered table-hover" id="addProductTable">
                                           <thead>
                           <tr>
-                              <th style="width: 15%;">{{ t('product_type') }}</th>
-                              <th style="width: 15%;">{{ t('product_name') }}</th>
-                              <th style="width: 12.5%;">{{ t('box_variant') }}</th>
-                              <th style="width: 12.5%;">{{ t('door_variant') }}</th>
-                              <th style="width: 15%;">{{ t('add_product') }}</th>
-                              <th style="width: 10%;">{{ t('unit_price') }}</th>
-                              <th style="width: 10%;">{{ t('quantity') }}</th>
-                              <th style="width: 10%;">{{ t('operation') }}</th>
+                              <th style="width: 15%;">[[ t('product_type') ]]</th>
+                              <th style="width: 15%;">[[ t('product_name') ]]</th>
+                              <th style="width: 12.5%;">[[ t('box_variant') ]]</th>
+                              <th style="width: 12.5%;">[[ t('door_variant') ]]</th>
+                              <th style="width: 15%;">[[ t('add_product') ]]</th>
+                              <th style="width: 10%;">[[ t('unit_price') ]]</th>
+                              <th style="width: 10%;">[[ t('quantity') ]]</th>
+                              <th style="width: 10%;">[[ t('operation') ]]</th>
                           </tr>
                       </thead>
                      <tbody id="addProductTableBody">
-                         <!-- 动态添加的产品行将在这里显示 -->
+                         <!-- Dynamically added product rows will be displayed here -->
                      </tbody>
                  </table>
              </div>
              <div class="mt-3 text-end">
                  <button type="button" class="btn btn-success" onclick="addCurrentProduct()">
-                     <i class="fas fa-plus me-1"></i>{{ t('add_product') }}
+                     <i class="fas fa-plus me-1"></i>[[ t('add_product') ]]
                  </button>
              </div>
          </div>
      </div>
  
-          <!-- 产品列表 -->
+          <!-- Product List -->
       <div class="card mt-3">
           <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">
-                  <i class="fas fa-list me-2"></i>{{ t('products') }}
+                  <i class="fas fa-list me-2"></i>[[ t('products') ]]
               </h5>
               <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="exportQuotation('{{ quotation.quotation_id }}')">
-                      <i class="fas fa-download me-1"></i>{{ t('export_quotation') }}
+                  <button type="button" class="btn btn-primary btn-sm" onclick="exportQuotation('[[ quotation.quotation_id ]]')">
+                      <i class="fas fa-download me-1"></i>[[ t('export_quotation') ]]
                   </button>
                   <button type="button" class="btn btn-success btn-sm" onclick="saveChanges()">
-                      <i class="fas fa-save me-1"></i>{{ t('save_changes') }}
+                      <i class="fas fa-save me-1"></i>[[ t('save_changes') ]]
                   </button>
               </div>
           </div>
          <div class="card-body">
-             {% if quotation.data.products %}
+             [% if quotation.data.products %]
              <div class="table-responsive">
                                   <table class="table table-striped table-hover" id="productsTable">
                       <thead class="table-dark">
                           <tr>
-                              <th style="width: 6%;">{{ t('sequence_number') }}</th>
-                              <th style="width: 36%;">{{ t('sku') }}</th>
-                              <th style="width: 10%;">{{ t('quantity') }}</th>
-                              <th style="width: 15%;">{{ t('unit_price') }}</th>
-                              <th style="width: 15%;">{{ t('total') }}</th>
-                              <th style="width: 9%;">{{ t('operation') }}</th>
+                              <th style="width: 6%;">[[ t('sequence_number') ]]</th>
+                              <th style="width: 36%;">[[ t('sku') ]]</th>
+                              <th style="width: 10%;">[[ t('quantity') ]]</th>
+                              <th style="width: 15%;">[[ t('unit_price') ]]</th>
+                              <th style="width: 15%;">[[ t('total') ]]</th>
+                              <th style="width: 9%;">[[ t('operation') ]]</th>
                           </tr>
                       </thead>
                      <tbody id="productsTableBody">
-                                                  {% for product in quotation.data.products %}
-                          <tr data-product-index="{{ loop.index0 }}">
-                              <td>{{ loop.index }}</td>
-                              <td><code>{{ product.sku }}</code></td>
+                                                  [% for product in quotation.data.products %]
+                          <tr data-product-index="[[ loop.index0 ]]">
+                              <td>[[ loop.index ]]</td>
+                              <td><code>[[ product.sku ]]</code></td>
                               <td>
-                                  <input type="number" class="form-control form-control-sm" value="{{ product.qty }}" min="1" onchange="updateProductTotal(this)">
+                                  <input type="number" class="form-control form-control-sm" value="[[ product.qty ]]" min="1" onchange="updateProductTotal(this)">
                               </td>
-                              <td>${{ "%.2f"|format(product.price|float) }}</td>
-                              <td class="product-total">${{ "%.2f"|format(product.line_total|float) }}</td>
+                              <td>$[[ "%.2f"|format(product.price|float) ]]</td>
+                              <td class="product-total">$[[ "%.2f"|format(product.line_total|float) ]]</td>
                               <td>
-                                  <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct({{ loop.index0 }})">
+                                  <button type="button" class="btn btn-sm btn-danger" onclick="removeProduct([[ loop.index0 ]])">
                                       <i class="fas fa-trash"></i>
                                   </button>
                               </td>
                           </tr>
-                          {% endfor %}
+                          [% endfor %]
                      </tbody>
                                           <tfoot class="table-info">
                           <tr>
-                              <td colspan="4" class="text-end"><strong>{{ t('total') }}：</strong></td>
+                              <td colspan="4" class="text-end"><strong>[[ t('total') ]]：</strong></td>
                               <td>
                                   <strong id="grandTotal">
-                                      ${{ "%.2f"|format(quotation.data.total_amount|float) }}
+                                      $[[ "%.2f"|format(quotation.data.total_amount|float) ]]
                                   </strong>
                               </td>
                               <td></td>
@@ -184,55 +184,55 @@
                       </tfoot>
                  </table>
              </div>
-             {% else %}
+             [% else %]
              <div class="text-center py-5">
                  <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                 <h5 class="text-muted">{{ t('no_products') }}</h5>
-                 <p class="text-muted">{{ t('no_products_desc') }}</p>
+                 <h5 class="text-muted">[[ t('no_products') ]]</h5>
+                 <p class="text-muted">[[ t('no_products_desc') ]]</p>
              </div>
-             {% endif %}
+             [% endif %]
          </div>
      </div>
 
-    <!-- 导出信息 -->
-    {% if quotation.data.export_date or quotation.data.export_username or quotation.data.export_sales_person %}
+    <!-- Export Information -->
+    [% if quotation.data.export_date or quotation.data.export_username or quotation.data.export_sales_person %]
     <div class="card mt-4">
         <div class="card-header">
             <h5 class="card-title mb-0">
-                <i class="fas fa-file-export me-2"></i>{{ t('export_info') }}
+                <i class="fas fa-file-export me-2"></i>[[ t('export_info') ]]
             </h5>
         </div>
         <div class="card-body">
             <div class="row">
-                {% if quotation.data.export_date %}
+                [% if quotation.data.export_date %]
                 <div class="col-md-4">
-                    <strong>{{ t('export_date') }}:</strong> {{ quotation.data.export_date }}
+                    <strong>[[ t('export_date') ]]:</strong> [[ quotation.data.export_date ]]
                 </div>
-                {% endif %}
-                {% if quotation.data.export_username %}
+                [% endif %]
+                [% if quotation.data.export_username %]
                 <div class="col-md-4">
-                    <strong>{{ t('export_username') }}:</strong> {{ quotation.data.export_username }}
+                    <strong>[[ t('export_username') ]]:</strong> [[ quotation.data.export_username ]]
                 </div>
-                {% endif %}
-                {% if quotation.data.export_sales_person %}
+                [% endif %]
+                [% if quotation.data.export_sales_person %]
                 <div class="col-md-4">
-                    <strong>{{ t('sales_person') }}:</strong> {{ quotation.data.export_sales_person }}
+                    <strong>[[ t('sales_person') ]]:</strong> [[ quotation.data.export_sales_person ]]
                 </div>
-                {% endif %}
+                [% endif %]
             </div>
         </div>
     </div>
-    {% endif %}
-    {% endif %}
+    [% endif %]
+    [% endif %]
 </div>
 
-<!-- Toast提示容器 -->
+<!-- Toast Notification Container -->
 <div id="toastContainer" class="toast-container"></div>
-{% endblock %}
+[% endblock %]
 
-{% block extra_css %}
+[% block extra_css %]
 <style>
-/* Toast提示系统样式 */
+/* Toast Notification System Styles */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -300,25 +300,25 @@
     animation: slideOut 0.3s ease forwards;
 }
 </style>
-{% endblock %}
+[% endblock %]
 
-{% block extra_js %}
+[% block extra_js %]
 <script>
-// Toast提示系统
+// Toast notification system
 function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast-message ${type}`;
     toast.textContent = message;
     
-    // 点击关闭
+    // Click to close
     toast.addEventListener('click', function() {
         removeToast(toast);
     });
     
     container.appendChild(toast);
     
-    // 15秒后自动关闭
+    // Auto close after 15 seconds
     setTimeout(() => {
         removeToast(toast);
     }, 15000);
@@ -336,20 +336,20 @@ function removeToast(toast) {
 }
 
 function exportQuotation(quotationId) {
-    if (confirm('{{ t("confirm_export_quotation") }}')) {
+    if (confirm('[[ t("confirm_export_quotation") ]]')) {
         window.open(`/export_quotation/${quotationId}`, '_blank');
     }
 }
 
  function editQuotation(quotationId) {
-     // 此函数已不再需要，保留以避免错误
+     // This function is no longer needed, kept to avoid errors
  }
 
-// 添加新产品
+// Add new product
 let editProductCounter = 1;
 
  function addNewProduct() {
-     // 添加产品行到添加产品表格
+     // Add product row to add product table
      const tbody = document.getElementById('addProductTableBody');
      const rowId = `add-row-${editProductCounter}`;
      
@@ -358,26 +358,26 @@ let editProductCounter = 1;
      row.innerHTML = `
          <td>
              <select class="form-select form-select-sm" onchange="onCategoryChange(${editProductCounter})" id="category-${editProductCounter}">
-                 <option value="">{{ t('select_type') }}</option>
+                 <option value="">[[ t('select_type') ]]</option>
              </select>
          </td>
          <td>
              <select class="form-select form-select-sm" onchange="onProductChange(${editProductCounter})" id="product-${editProductCounter}" disabled>
-                 <option value="">{{ t('select_product') }}</option>
+                 <option value="">[[ t('select_product') ]]</option>
              </select>
          </td>
          <td>
              <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="box-variant-${editProductCounter}" disabled>
-                 <option value="">{{ t('select_box_variant') }}</option>
+                 <option value="">[[ t('select_box_variant') ]]</option>
              </select>
          </td>
          <td>
              <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="door-variant-${editProductCounter}" disabled>
-                 <option value="">{{ t('select_door_variant') }}</option>
+                 <option value="">[[ t('select_door_variant') ]]</option>
              </select>
          </td>
          <td>
-             <span id="sku-${editProductCounter}" class="badge bg-secondary">{{ t('not_selected') }}</span>
+             <span id="sku-${editProductCounter}" class="badge bg-secondary">[[ t('not_selected') ]]</span>
          </td>
          <td>
              <span id="price-${editProductCounter}">$0.00</span>
@@ -394,14 +394,14 @@ let editProductCounter = 1;
      
      tbody.appendChild(row);
      
-     // 加载产品类别
+     // Load product categories
      loadProductCategories(editProductCounter);
      
      editProductCounter++;
  }
 
 function loadProductCategories(rowNum) {
-    // 加载产品类别
+    // Load product categories
     $.ajax({
         url: '/get_product_categories',
         type: 'GET',
@@ -417,35 +417,35 @@ function loadProductCategories(rowNum) {
             }
         },
         error: function() {
-            showToast('加载产品类别失败', 'warning');
+            showToast('Failed to load product categories', 'warning');
         }
     });
 }
 
 function onCategoryChange(rowNum) {
-    // 类型选择改变时的处理
+    // Handle type selection change
     const category = document.getElementById(`category-${rowNum}`).value;
     const productSelect = document.getElementById(`product-${rowNum}`);
     const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
     const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
     
-    // 清空后续选择
-    productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
-    boxVariantSelect.innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
-    doorVariantSelect.innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
+    // Clear subsequent selections
+    productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
+    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
+    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
     
-    // 重置SKU和价格
-    document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
+    // Reset SKU and price
+    document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
     document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
     document.getElementById(`price-${rowNum}`).textContent = '$0.00';
     
-    // 禁用后续选择
+    // Disable subsequent selections
     productSelect.disabled = true;
     boxVariantSelect.disabled = true;
     doorVariantSelect.disabled = true;
     
     if (category) {
-        // 加载产品
+        // Load products
         loadProducts(rowNum, category);
     }
 }
@@ -461,8 +461,8 @@ function loadProducts(rowNum, category) {
                 const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
                 const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
                 
-                // 填充产品选择
-                productSelect.innerHTML = '<option value="">{{ t("select_product") }}</option>';
+                // Populate product selection
+                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
@@ -471,8 +471,8 @@ function loadProducts(rowNum, category) {
                 });
                 productSelect.disabled = false;
                 
-                // 填充柜身变体选择
-                boxVariantSelect.innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
+                // Populate cabinet body variant selection
+                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
                 response.box_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -480,8 +480,8 @@ function loadProducts(rowNum, category) {
                     boxVariantSelect.appendChild(option);
                 });
                 
-                // 填充门板变体选择
-                doorVariantSelect.innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
+                // Populate door panel variant selection
+                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
                 response.door_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -489,7 +489,7 @@ function loadProducts(rowNum, category) {
                     doorVariantSelect.appendChild(option);
                 });
                 
-                // 根据类别启用/禁用变体选择
+                // Enable/disable variant selection based on category
                 if (category === 'BOX') {
                     boxVariantSelect.disabled = false;
                     doorVariantSelect.disabled = false;
@@ -506,23 +506,23 @@ function loadProducts(rowNum, category) {
             }
         },
         error: function() {
-            showToast('加载产品失败', 'warning');
+            showToast('Failed to load products', 'warning');
         }
     });
 }
 
 function onProductChange(rowNum) {
-    // 产品选择改变时的处理
+    // Handle product selection change
     const category = document.getElementById(`category-${rowNum}`).value;
     const product = document.getElementById(`product-${rowNum}`).value;
     
-    // 重置SKU和价格
-    document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
+    // Reset SKU and price
+    document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
     document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
     document.getElementById(`price-${rowNum}`).textContent = '$0.00';
     
     if (product) {
-        // 搜索SKU和价格
+        // 搜索SKU和Price
         searchSkuAndPrice(rowNum);
     }
 }
@@ -530,7 +530,7 @@ function onProductChange(rowNum) {
 
 
 function searchSkuAndPrice(rowNum) {
-    // 搜索SKU和价格
+    // 搜索SKU和Price
     const category = document.getElementById(`category-${rowNum}`).value;
     const product = document.getElementById(`product-${rowNum}`).value;
     const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
@@ -559,14 +559,14 @@ function searchSkuAndPrice(rowNum) {
                     skuElement.className = 'badge bg-success';
                     priceElement.textContent = `$${response.price.toFixed(2)}`;
                 } else {
-                    skuElement.textContent = '{{ t("not_found") }}';
+                    skuElement.textContent = '[[ t("not_found") ]]';
                     skuElement.className = 'badge bg-danger';
                     priceElement.textContent = '$0.00';
                 }
             }
         },
         error: function() {
-            showToast('{{ t("search_sku_failed") }}', 'warning');
+            showToast('[[ t("search_sku_failed") ]]', 'warning');
         }
     });
 }
@@ -600,7 +600,7 @@ function addToProductList(rowNum) {
     const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = parseInt(document.getElementById(`qty-${rowNum}`).value) || 1;
     
-    if (sku === '{{ t("not_selected") }}' || sku === '{{ t("not_found") }}' || price === '$0.00') {
+    if (sku === '[[ t("not_selected") ]]' || sku === '[[ t("not_found") ]]' || price === '$0.00') {
         showToast('请先选择完整的产品信息', 'warning');
         return;
     }
@@ -630,7 +630,7 @@ function addToProductList(rowNum) {
     // 清空当前行并重新加载产品类别
     clearCurrentEditRow(rowNum);
     
-    // 更新总计
+    // 更新Total
     updateGrandTotal();
     
     showToast('产品添加成功', 'success');
@@ -641,14 +641,14 @@ function clearCurrentEditRow(rowNum) {
     const row = document.getElementById(`add-row-${rowNum}`);
     if (row) {
         // 清空所有选择框和输入框
-        document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">{{ t("select_type") }}</option>';
-        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">{{ t("select_product") }}</option>';
+        document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">[[ t("select_type") ]]</option>';
+        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">[[ t("select_product") ]]</option>';
         document.getElementById(`product-${rowNum}`).disabled = true;
-        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">{{ t("select_box_variant") }}</option>';
+        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
         document.getElementById(`box-variant-${rowNum}`).disabled = true;
-        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">{{ t("select_door_variant") }}</option>';
+        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
         document.getElementById(`door-variant-${rowNum}`).disabled = true;
-        document.getElementById(`sku-${rowNum}`).textContent = '{{ t("not_selected") }}';
+        document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
         document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
         document.getElementById(`price-${rowNum}`).textContent = '$0.00';
         document.getElementById(`qty-${rowNum}`).value = '1';
@@ -666,7 +666,7 @@ function removeEditProduct(rowNum) {
 }
 
 function updateEditTotal() {
-    // 这里可以添加更新编辑区域总计的逻辑
+    // 这里可以添加更新编辑区域Total的逻辑
 }
 
  function clearEditProductList() {
@@ -687,7 +687,7 @@ function updateEditTotal() {
 
  // 取消编辑
  function cancelEdit() {
-     // 此函数已不再需要，保留以避免错误
+     // This function is no longer needed, kept to avoid errors
  }
 
 // 更新产品小计
@@ -701,7 +701,7 @@ function updateProductTotal(input) {
     updateGrandTotal();
 }
 
-// 更新总计
+// 更新Total
 function updateGrandTotal() {
     let grandTotal = 0;
     $('.product-total').each(function() {
@@ -714,7 +714,7 @@ function updateGrandTotal() {
 
 // 删除产品
 function removeProduct(productIndex) {
-    if (confirm('{{ t("confirm_remove_product") }}')) {
+    if (confirm('[[ t("confirm_remove_product") ]]')) {
         $(`tr[data-product-index="${productIndex}"]`).remove();
         updateSequenceNumbers();
         updateGrandTotal();
@@ -745,18 +745,18 @@ function saveChanges() {
     });
     
     const quotationData = {
-        title: '{{ quotation.title }}',
+        title: '[[ quotation.title ]]',
         data: {
-            type: '{{ quotation.data.type }}',
-            order_date: '{{ quotation.data.order_date }}',
-            user: '{{ quotation.data.user }}',
-            sales_person: '{{ quotation.data.sales_person }}',
+            type: '[[ quotation.data.type ]]',
+            order_date: '[[ quotation.data.order_date ]]',
+            user: '[[ quotation.data.user ]]',
+            sales_person: '[[ quotation.data.sales_person ]]',
             products: products
         }
     };
     
     $.ajax({
-        url: `/update_quotation/{{ quotation.quotation_id }}`,
+        url: `/update_quotation/[[ quotation.quotation_id ]]`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(quotationData),
@@ -771,13 +771,13 @@ function saveChanges() {
             }
         },
         error: function() {
-            showToast('{{ t("save_changes_failed") }}', 'error');
+            showToast('[[ t("save_changes_failed") ]]', 'error');
         }
     });
 }
 
 function deleteQuotation(quotationId) {
-    if (confirm('{{ t("confirm_delete_quotation") }}')) {
+    if (confirm('[[ t("confirm_delete_quotation") ]]')) {
         $.ajax({
             url: `/delete_quotation/${quotationId}`,
             type: 'POST',
@@ -792,10 +792,10 @@ function deleteQuotation(quotationId) {
                 }
             },
             error: function() {
-                showToast('{{ t("delete_quotation_failed") }}', 'error');
+                showToast('[[ t("delete_quotation_failed") ]]', 'error');
             }
         });
     }
  }
  </script>
- {% endblock %} 
+ [% endblock %] 

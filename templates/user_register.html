@@ -1,41 +1,41 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}{{ t('user_register_title') }}{% endblock %}
+[% block title %][[ t('user_register_title') ]][% endblock %]
 
-{% block content %}
+[% block content %]
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-user-plus me-2"></i>{{ t('user_register_title') }}
+                        <i class="fas fa-user-plus me-2"></i>[[ t('user_register_title') ]]
                     </h5>
                 </div>
                 <div class="card-body">
                     <form id="registerForm">
                         <div class="mb-3">
-                            <label for="username" class="form-label">{{ t('username') }}</label>
+                            <label for="username" class="form-label">[[ t('username') ]]</label>
                             <input type="text" class="form-control" id="username" name="username" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">{{ t('email') }}</label>
+                            <label for="email" class="form-label">[[ t('email') ]]</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">{{ t('password') }}</label>
+                            <label for="password" class="form-label">[[ t('password') ]]</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">{{ t('confirm_password') }}</label>
+                            <label for="confirmPassword" class="form-label">[[ t('confirm_password') ]]</label>
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-user-plus me-1"></i>{{ t('register') }}
+                                <i class="fas fa-user-plus me-1"></i>[[ t('register') ]]
                             </button>
-                            <a href="{{ url_for('user_login') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-sign-in-alt me-1"></i>{{ t('already_have_account') }}
+                            <a href="[[ url_for('user_login') ]]" class="btn btn-outline-secondary">
+                                <i class="fas fa-sign-in-alt me-1"></i>[[ t('already_have_account') ]]
                             </a>
                         </div>
                     </form>
@@ -44,9 +44,9 @@
         </div>
     </div>
 </div>
-{% endblock %}
+[% endblock %]
 
-{% block extra_js %}
+[% block extra_js %]
 <script>
 $(document).ready(function() {
     $('#registerForm').on('submit', function(e) {
@@ -56,7 +56,7 @@ $(document).ready(function() {
         const confirmPassword = $('#confirmPassword').val();
         
         if (password !== confirmPassword) {
-            showAlert('{{ t("passwords_not_match") }}', 'danger');
+            showAlert('[[ t("passwords_not_match") ]]', 'danger');
             return;
         }
         
@@ -83,12 +83,12 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 const response = xhr.responseJSON;
-                showAlert(response ? response.error : '{{ t("registration_failed") }}', 'danger');
+                showAlert(response ? response.error : '[[ t("registration_failed") ]]', 'danger');
             }
         });
     });
 });
 
-// showAlert 函数已在 base.html 中统一实现为 toast 系统
+// showAlert function has been unified in base.html as toast system
 </script>
-{% endblock %} 
+[% endblock %] 

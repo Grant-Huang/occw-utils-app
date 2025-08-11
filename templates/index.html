@@ -2380,7 +2380,7 @@ function loadSalesPersons() {
 
 // 根据用户登录Status设置默认Export值
 function setDefaultExportValues(salesPersons) {
-    const userLoginEnabled = [% if system_settings.get('user_login_enabled', True) %]true[% else %]false[% endif %];
+    const userLoginEnabled = [[ system_settings.get('user_login_enabled', True) | tojson ]];
     const currentUsername = '[[ session.get("username", "") ]]';
     
     // 设置用户名

@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}{{ t('help_title') }} - {{ t('system_name') }}{% endblock %}
+[% block title %]帮助文档 - OCCW工具系统[% endblock %]
 
-{% block content %}
+[% block content %]
 <!-- 页面标题 -->
 <div class="page-header">
     <div class="container-fluid">
@@ -10,9 +10,9 @@
             <div class="col-md-8">
                 <h1 class="page-title">
                     <i class="fas fa-question-circle me-3 page-icon"></i>
-                    {{ t('help_title') }}
+                    帮助文档
                 </h1>
-                <p class="page-subtitle">{{ t('system_name') }} {{ t('help_usage_guide') }}</p>
+                <p class="page-subtitle">OCCW工具系统 使用指南</p>
             </div>
         </div>
     </div>
@@ -30,32 +30,32 @@
                     <div class="row">
                         <div class="col-md-2">
                             <a href="#overview" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-info-circle me-1"></i>{{ t('help_system_intro') }}
+                                <i class="fas fa-info-circle me-1"></i>系统介绍
                             </a>
                         </div>
                         <div class="col-md-2">
                             <a href="#pdf-import" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-file-pdf me-1"></i>{{ t('help_pdf_import') }}
+                                <i class="fas fa-file-pdf me-1"></i>导入2020报价单
                             </a>
                         </div>
                         <div class="col-md-2">
                             <a href="#manual-create" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-edit me-1"></i>{{ t('help_manual_create') }}
+                                <i class="fas fa-edit me-1"></i>手动创建报价单
                             </a>
                         </div>
                         <div class="col-md-2">
                             <a href="#sales-analysis" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-chart-line me-1"></i>{{ t('sales_analysis') }}
+                                <i class="fas fa-chart-line me-1"></i>销售分析
                             </a>
                         </div>
                         <div class="col-md-2">
                             <a href="#troubleshooting" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-tools me-1"></i>{{ t('help_troubleshooting') }}
+                                <i class="fas fa-tools me-1"></i>常见问题与解决
                             </a>
                         </div>
                         <div class="col-md-3">
                             <a href="#support" class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="fas fa-headset me-1"></i>{{ t('help_technical_support') }}
+                                <i class="fas fa-headset me-1"></i>技术支持
                             </a>
                         </div>
                     </div>
@@ -69,36 +69,36 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>{{ t('help_system_intro') }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>系统介绍</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-primary">{{ t('help_system_overview') }}</h6>
-                    <p>{{ t('help_system_intro_desc') }}</p>
+                    <h6 class="text-primary">系统概述</h6>
+                    <p>OCCW报价系统是一个专业的PDF报价单处理工具，专为加西欧派(Oppein Cabinet Canada West Ltd.)设计，用于将2020软件生成的报价单转换为标准化的OCCW格式。</p>
                     
                     <div class="alert alert-info">
-                        <h6 class="alert-heading"><i class="fas fa-shield-alt me-2"></i>{{ t('help_permissions') }}</h6>
-                        <p class="mb-2"><strong>{{ t('help_normal_users') }}：</strong>{{ t('help_normal_users_desc') }}</p>
-                        <p class="mb-0"><strong>{{ t('help_admin_users') }}：</strong>{{ t('help_admin_users_desc') }}</p>
+                        <h6 class="alert-heading"><i class="fas fa-shield-alt me-2"></i>权限说明</h6>
+                        <p class="mb-2"><strong>普通用户权限：</strong>可以上传解析PDF、查看结果、导出文件、查看帮助文档</p>
+                        <p class="mb-0"><strong>管理员权限：</strong>除普通用户权限外，还可以管理OCCW价格表、配置SKU规则、管理SKU映射关系</p>
                     </div>
                     
-                    <h6 class="text-primary mt-4">{{ t('help_main_functionality') }}</h6>
+                    <h6 class="text-primary mt-4">主要功能</h6>
                     <div class="row">
                         <div class="col-md-6">
                             <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_pdf_upload_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_sku_generation_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_price_management_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_multi_export_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_multilang_desc') }}</li>
+                                <li><i class="fas fa-check text-success me-2"></i>支持上传2020软件生成的PDF报价单文件</li>
+                                <li><i class="fas fa-check text-success me-2"></i>根据预设规则自动生成OCCW标准SKU编码</li>
+                                <li><i class="fas fa-check text-success me-2"></i>管理OCCW标准价格表，支持Excel格式导入</li>
+                                <li><i class="fas fa-check text-success me-2"></i>支持导出为Excel、CSV、PDF等多种格式</li>
+                                <li><i class="fas fa-check text-success me-2"></i>支持中文、英语、法语三种界面语言</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_manual_create_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_sku_mapping_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_price_query_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_system_settings_desc') }}</li>
-                                <li><i class="fas fa-check text-success me-2"></i>{{ t('help_admin_password_desc') }}</li>
+                                <li><i class="fas fa-check text-success me-2"></i>手动创建报价单功能</li>
+                                <li><i class="fas fa-check text-success me-2"></i>SKU映射管理（管理员）</li>
+                                <li><i class="fas fa-check text-success me-2"></i>实时价格查询</li>
+                                <li><i class="fas fa-check text-success me-2"></i>系统设置管理，包括用户登录开关、管理员密码修改等</li>
+                                <li><i class="fas fa-check text-success me-2"></i>管理员密码修改功能，支持安全密码更新</li>
                             </ul>
                         </div>
                     </div>
@@ -112,18 +112,18 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i>{{ t('help_pdf_import') }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i>导入2020报价单</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-primary">{{ t('help_operation_steps') }}</h6>
+                    <h6 class="text-primary">操作步骤</h6>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="text-center mb-3">
                                 <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                     <span class="h4 mb-0">1</span>
                                 </div>
-                                <h6 class="text-primary mt-2">{{ t('help_step1_title') }}</h6>
-                                <p class="small text-muted">{{ t('help_step1_desc') }}</p>
+                                <h6 class="text-primary mt-2">上传PDF文件</h6>
+                                <p class="small text-muted">选择从2020软件导出的PDF报价单文件</p>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -131,8 +131,8 @@
                                 <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                     <span class="h4 mb-0">2</span>
                                 </div>
-                                <h6 class="text-info mt-2">{{ t('help_step2_title') }}</h6>
-                                <p class="small text-muted">{{ t('help_step2_desc') }}</p>
+                                <h6 class="text-info mt-2">智能解析</h6>
+                                <p class="small text-muted">系统自动识别产品信息和价格</p>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -140,8 +140,8 @@
                                 <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                     <span class="h4 mb-0">3</span>
                                 </div>
-                                <h6 class="text-warning mt-2">{{ t('help_step3_title') }}</h6>
-                                <p class="small text-muted">{{ t('help_step3_desc') }}</p>
+                                <h6 class="text-warning mt-2">SKU生成</h6>
+                                <p class="small text-muted">自动生成标准SKU并应用映射</p>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -149,39 +149,39 @@
                                 <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                     <span class="h4 mb-0">4</span>
                                 </div>
-                                <h6 class="text-success mt-2">{{ t('help_step4_title') }}</h6>
-                                <p class="small text-muted">{{ t('help_step4_desc') }}</p>
+                                <h6 class="text-success mt-2">导出报价单</h6>
+                                <p class="small text-muted">选择格式导出最终报价单</p>
                             </div>
                         </div>
                     </div>
 
-                    <h6 class="text-primary mt-4">{{ t('help_supported_formats') }}</h6>
+                    <h6 class="text-primary mt-4">支持的文件格式</h6>
                     <div class="alert alert-light">
                         <ul class="mb-0">
-                            <li><strong>{{ t('help_pdf_format') }}：</strong>{{ t('help_pdf_format_desc') }}</li>
-                            <li><strong>{{ t('help_file_size') }}：</strong>{{ t('help_file_size_desc') }}</li>
-                            <li><strong>{{ t('help_language_support') }}：</strong>{{ t('help_language_support_desc') }}</li>
+                            <li><strong>PDF格式：</strong>从2020软件导出的标准PDF报价单</li>
+                            <li><strong>文件大小：</strong>最大支持16MB</li>
+                            <li><strong>语言支持：</strong>支持中文、英文、法文等多语言PDF</li>
                         </ul>
                     </div>
 
-                    <h6 class="text-primary mt-4">{{ t('help_parsing_features') }}</h6>
+                    <h6 class="text-primary mt-4">解析功能说明</h6>
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-primary"><i class="fas fa-cog me-1"></i>{{ t('help_content_parsing') }}</h6>
+                            <h6 class="text-primary"><i class="fas fa-cog me-1"></i>内容解析</h6>
                             <ul class="small">
-                                <li>{{ t('help_auto_recognize_products') }}</li>
-                                <li>{{ t('help_extract_quantity_price') }}</li>
-                                <li>{{ t('help_recognize_door_color') }}</li>
-                                <li>{{ t('help_handle_multiline') }}</li>
+                                <li>自动识别产品描述和规格</li>
+                                <li>提取数量和单价信息</li>
+                                <li>识别门板颜色和变体</li>
+                                <li>处理多行产品信息</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6 class="text-primary"><i class="fas fa-tags me-1"></i>{{ t('help_special_processing') }}</h6>
+                            <h6 class="text-primary"><i class="fas fa-tags me-1"></i>特殊处理</h6>
                             <ul class="small">
-                                <li>{{ t('help_smart_merge_lines') }}</li>
-                                <li>{{ t('help_auto_handle_variants') }}</li>
-                                <li>{{ t('help_support_components') }}</li>
-                                <li>{{ t('help_handle_special_chars') }}</li>
+                                <li>智能合并跨行产品信息</li>
+                                <li>自动处理产品变体组合</li>
+                                <li>支持组合件和硬件识别</li>
+                                <li>处理特殊字符和格式</li>
                             </ul>
                         </div>
                     </div>
@@ -195,54 +195,30 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>{{ t('help_manual_create') }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>手动创建报价单</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-primary">{{ t('help_function_description') }}</h6>
-                    <p>{{ t('help_manual_create_desc') }}</p>
+                    <h6 class="text-primary">功能说明</h6>
+                    <p>手动创建报价单功能允许用户直接输入产品信息，无需依赖PDF文件。适用于以下场景：</p>
                     
-                    <h6 class="text-primary mt-4">{{ t('help_operation_steps') }}</h6>
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-primary"><i class="fas fa-plus me-1"></i>{{ t('help_add_product') }}</h6>
+                            <h6 class="text-primary"><i class="fas fa-plus me-1"></i>适用场景</h6>
                             <ul class="small">
-                                <li>{{ t('help_click_add_product') }}</li>
-                                <li>{{ t('help_select_product_type') }}</li>
-                                <li>{{ t('help_fill_product_info') }}</li>
-                                <li>{{ t('help_select_variants') }}</li>
-                                <li>{{ t('help_input_price_quantity') }}</li>
+                                <li>快速创建简单报价单</li>
+                                <li>修改现有报价单内容</li>
+                                <li>添加新的产品项目</li>
+                                <li>测试系统功能</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6 class="text-primary"><i class="fas fa-edit me-1"></i>{{ t('help_edit_management') }}</h6>
+                            <h6 class="text-primary"><i class="fas fa-edit me-1"></i>操作方式</h6>
                             <ul class="small">
-                                <li>{{ t('help_edit_product_info') }}</li>
-                                <li>{{ t('help_delete_single_product') }}</li>
-                                <li>{{ t('help_clear_quotation') }}</li>
-                                <li>{{ t('help_real_time_total') }}</li>
+                                <li>逐行输入产品信息</li>
+                                <li>支持复制粘贴操作</li>
+                                <li>实时验证数据格式</li>
+                                <li>自动计算总价</li>
                             </ul>
-                        </div>
-                    </div>
-
-                    <h6 class="text-primary mt-4">{{ t('help_supported_product_types') }}</h6>
-                    <div class="alert alert-light">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="small">
-                                    <li>{{ t('help_product_type_assm') }}</li>
-                                    <li>{{ t('help_product_type_door') }}</li>
-                                    <li>{{ t('help_product_type_box') }}</li>
-                                    <li>{{ t('help_product_type_ending') }}</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="small">
-                                    <li>{{ t('help_product_type_molding') }}</li>
-                                    <li>{{ t('help_product_type_toe_kick') }}</li>
-                                    <li>{{ t('help_product_type_filler') }}</li>
-                                    <li>{{ t('help_product_type_hardware') }}</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -250,258 +226,35 @@
         </div>
     </div>
 
-    <!-- 销售分析功能 -->
+    <!-- 销售分析 -->
     <div class="row mb-4" id="sales-analysis">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>{{ t('sales_analysis_features') }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>销售分析</h5>
                 </div>
                 <div class="card-body">
-                    <div class="accordion" id="salesAnalysisAccordion">
-                        <!-- 数据导入与过滤 -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="dataImport">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataImport">
-                                    <i class="fas fa-upload me-2"></i>{{ t('data_import_filter') }}
-                                </button>
-                            </h2>
-                            <div id="collapseDataImport" class="accordion-collapse collapse show" data-bs-parent="#salesAnalysisAccordion">
-                                <div class="accordion-body">
-                                    <h6><i class="fas fa-cog me-2"></i>{{ t("help_import_filter_settings") }}</h6>
-                                    <p>{{ t("help_import_filter_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_min_amount_threshold") }}</strong>：{{ t("help_min_amount_desc") }}</li>
-                                        <li><strong>{{ t("help_sales_person_filter") }}</strong>：{{ t("help_sales_person_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_filter") }}</strong>：{{ t("help_customer_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_company_type_filter") }}</strong>：{{ t("help_customer_company_type_filter_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_type_filter") }}</strong>：{{ t("help_customer_type_filter_desc") }}</li>
-                                        <li><strong>{{ t("help_date_range") }}</strong>：{{ t("help_date_range_desc") }}</li>
-                                        <li><strong>{{ t("help_order_status_filter") }}</strong>：{{ t("help_order_status_desc") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-file-excel me-2"></i>{{ t("help_data_import_steps") }}</h6>
-                                    <ol>
-                                        <li>{{ t("help_prepare_excel") }}</li>
-                                        <li>{{ t("help_select_file") }}</li>
-                                        <li>{{ t("help_upload_file") }}</li>
-                                        <li>{{ t("help_check_filter_result") }}</li>
-                                        <li>{{ t("help_update_analysis") }}</li>
-                                    </ol>
-                                </div>
-                            </div>
+                    <h6 class="text-primary">分析功能</h6>
+                    <p>销售分析模块提供全面的数据统计和可视化分析功能，帮助了解业务表现和趋势。</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-chart-bar me-1"></i>数据统计</h6>
+                            <ul class="small">
+                                <li>订单数量与报价数量对比</li>
+                                <li>订单金额与报价金额对比</li>
+                                <li>转化率分析</li>
+                                <li>客户类型分布</li>
+                            </ul>
                         </div>
-
-                        <!-- {{ t("help_data_viewing_features") }} -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="dataViewing">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataViewing">
-                                    <i class="fas fa-table me-2"></i>{{ t("help_data_viewing_features") }}
-                                </button>
-                            </h2>
-                            <div id="collapseDataViewing" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
-                                <div class="accordion-body">
-                                    <h6><i class="fas fa-eye me-2"></i>{{ t("help_view_imported_data") }}</h6>
-                                    <p>{{ t("help_view_imported_desc") }}</p>
-                                    <ul>
-                                        <li>{{ t("help_view_original_data") }}</li>
-                                        <li>{{ t("help_column_sort") }}</li>
-                                        <li>{{ t("help_search_filter") }}</li>
-                                        <li>{{ t("help_pagination") }}</li>
-                                        <li>{{ t("help_export_excel") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-exchange-alt me-2"></i>{{ t("help_view_converted_data") }}</h6>
-                                    <p>点击"{{ t("help_view_converted_data") }}"按钮可以：</p>
-                                    <ul>
-                                        <li>{{ t("help_standardized_data") }}</li>
-                                        <li>{{ t("help_new_fields") }}</li>
-                                        <li>{{ t("help_view_imported_desc") }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- {{ t("help_analysis_tables") }} -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="analysisTables">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalysisTables">
-                                    <i class="fas fa-table me-2"></i>{{ t("help_analysis_tables") }}
-                                </button>
-                            </h2>
-                            <div id="collapseAnalysisTables" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
-                                <div class="accordion-body">
-                                    <h6><i class="fas fa-user-tie me-2"></i>{{ t("help_sales_performance_table") }}</h6>
-                                    <p>{{ t("help_sales_performance_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_order_quantity") }}</strong>：{{ t("help_order_quantity_desc") }}</li>
-                                        <li><strong>{{ t("help_total_quotation_quantity") }}</strong>：{{ t("help_total_quotation_quantity") }}</li>
-                                        <li><strong>{{ t("help_order_amount") }}</strong>：{{ t("help_order_amount") }}</li>
-                                        <li><strong>{{ t("help_total_quotation_amount") }}</strong>：{{ t("help_total_quotation_amount") }}</li>
-                                        <li><strong>{{ t("help_quantity_conversion_y_axis") }}</strong>：{{ t("help_order_quantity") }}/{{ t("help_total_quotation_quantity") }}</li>
-                                        <li><strong>{{ t("help_amount_conversion_rate") }}</strong>：{{ t("help_order_amount") }}/{{ t("help_total_quotation_amount") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-users me-2"></i>{{ t("help_customer_order_table") }}</h6>
-                                    <p>{{ t("help_customer_order_desc") }}</p>
-                                    
-                                    <h6><i class="fas fa-user-tag me-2"></i>{{ t("help_customer_type_analysis_table") }}</h6>
-                                    <p>{{ t("help_customer_type_analysis_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_customer_type") }}</strong>：{{ t("help_customer_type_desc") }}</li>
-                                        <li><strong>{{ t("help_order_count") }}</strong>：{{ t("help_order_count_desc") }}</li>
-                                        <li><strong>{{ t("help_quotation_count") }}</strong>：{{ t("help_quotation_count_desc") }}</li>
-                                        <li><strong>{{ t("help_order_amount") }}</strong>：{{ t("help_order_amount_desc") }}</li>
-                                        <li><strong>{{ t("help_quotation_amount") }}</strong>：{{ t("help_quotation_amount_desc") }}</li>
-                                        <li><strong>{{ t("help_count_conversion_rate") }}</strong>：{{ t("help_count_conversion_rate_desc") }}</li>
-                                        <li><strong>{{ t("help_amount_conversion_rate") }}</strong>：{{ t("help_amount_conversion_rate_desc") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-filter me-2"></i>{{ t("help_customer_type_filters") }}</h6>
-                                    <p>{{ t("help_customer_type_filters_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_customer_company_type_filter") }}</strong>：{{ t("help_customer_company_type_filter_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_type_filter") }}</strong>：{{ t("help_customer_type_filter_desc") }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- {{ t("help_chart_analysis") }} -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="chartAnalysis">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChartAnalysis">
-                                    <i class="fas fa-chart-bar me-2"></i>{{ t("help_chart_analysis") }}
-                                </button>
-                            </h2>
-                            <div id="collapseChartAnalysis" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
-                                <div class="accordion-body">
-                                    <h6><i class="fas fa-dollar-sign me-2"></i>{{ t("help_order_amount_conversion_chart") }}</h6>
-                                    <p>{{ t("help_dual_y_axis_line") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_primary_y_axis") }}</strong>：{{ t("help_order_amount") }}、{{ t("help_total_quotation_amount") }}</li>
-                                        <li><strong>{{ t("help_secondary_y_axis") }}</strong>：{{ t("help_amount_conversion_rate") }}</li>
-                                        <li>{{ t("help_sales_person_filter_chart") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-sort-numeric-up me-2"></i>{{ t("help_order_quantity_conversion_chart") }}</h6>
-                                    <p>{{ t("help_dual_y_axis_line") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_primary_y_axis") }}</strong>：订单数、{{ t("help_total_quotation_quantity") }}</li>
-                                        <li><strong>{{ t("help_secondary_y_axis") }}</strong>：{{ t("help_quantity_conversion_y_axis") }}</li>
-                                        <li>{{ t("help_sales_person_filter_chart") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-balance-scale me-2"></i>{{ t("help_sales_comparison_charts") }}</h6>
-                                    <p>{{ t("help_sales_comparison_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_quantity_comparison") }}</strong>：对比不同销售人员的{{ t("help_order_quantity") }}和报价数量</li>
-                                        <li><strong>{{ t("help_amount_comparison") }}</strong>：对比不同销售人员的{{ t("help_order_amount") }}和报价金额</li>
-                                        <li><strong>{{ t("help_conversion_rate_comparison") }}</strong>：对比{{ t("help_quantity_conversion_y_axis") }}和{{ t("help_amount_conversion_rate") }}</li>
-                                        <li>{{ t("help_maximize_chart") }}</li>
-                                        <li>{{ t("help_summary_row") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-chart-line me-2"></i>{{ t("help_customer_type_trend_charts") }}</h6>
-                                    <p>{{ t("help_customer_type_trend_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_customer_type_amount_trend") }}</strong>：{{ t("help_customer_type_amount_trend_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_type_count_trend") }}</strong>：{{ t("help_customer_type_count_trend_desc") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-chart-pie me-2"></i>{{ t("help_customer_type_distribution_charts") }}</h6>
-                                    <p>{{ t("help_customer_type_distribution_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_customer_type_amount_pie") }}</strong>：{{ t("help_customer_type_amount_pie_desc") }}</li>
-                                        <li><strong>{{ t("help_customer_type_count_pie") }}</strong>：{{ t("help_customer_type_count_pie_desc") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-chart-line me-2"></i>{{ t("help_retail_wholesale_analysis_charts") }}</h6>
-                                    <p>{{ t("help_retail_wholesale_analysis_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_retail_wholesale_amount_chart") }}</strong>：{{ t("help_retail_wholesale_amount_chart_desc") }}</li>
-                                        <li><strong>{{ t("help_retail_wholesale_count_chart") }}</strong>：{{ t("help_retail_wholesale_count_chart_desc") }}</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-globe me-2"></i>{{ t("help_multilingual_support") }}</h6>
-                                    <p>{{ t("help_multilingual_desc") }}</p>
-                                    <ul>
-                                        <li><strong>{{ t("help_chinese_support") }}</strong>：简体{{ t("help_chinese_support") }}界面，适合国内用户</li>
-                                        <li><strong>{{ t("help_english_support") }}</strong>：{{ t("help_english_desc") }}</li>
-                                        <li><strong>{{ t("help_french_support") }}</strong>：{{ t("help_french_desc") }}</li>
-                                        <li>{{ t("help_real_time_switch") }}</li>
-                                        <li>{{ t("help_complete_translation") }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 数据转换逻辑 -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="dataLogic">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataLogic">
-                                    <i class="fas fa-cogs me-2"></i>数据转换逻辑
-                                </button>
-                            </h2>
-                            <div id="collapseDataLogic" class="accordion-collapse collapse" data-bs-parent="#salesAnalysisAccordion">
-                                <div class="accordion-body">
-                                    <h6><i class="fas fa-exchange-alt me-2"></i>转换规则</h6>
-                                    <p>系统根据订单状态自动转换数据：</p>
-                                    
-                                    <div class="alert alert-info">
-                                        <strong>销售订单</strong>：
-                                        <ul>
-                                            <li>{{ t("help_order_amount") }} = 总计金额</li>
-                                            <li>报价单金额 = 总计金额</li>
-                                            <li>{{ t("help_order_quantity") }} = 1</li>
-                                            <li>报价单数量 = 1</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="alert alert-warning">
-                                        <strong>报价单</strong>：
-                                        <ul>
-                                            <li>{{ t("help_order_amount") }} = 0</li>
-                                            <li>报价单金额 = 总计金额</li>
-                                            <li>{{ t("help_order_quantity") }} = 0</li>
-                                            <li>报价单数量 = 1</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="alert alert-secondary">
-                                        <strong>已发送报价单</strong>：
-                                        <ul>
-                                            <li>{{ t("help_order_amount") }} = 0</li>
-                                            <li>报价单金额 = 总计金额</li>
-                                            <li>{{ t("help_order_quantity") }} = 0</li>
-                                            <li>报价单数量 = 1</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="alert alert-danger">
-                                        <strong>已取消</strong>：
-                                        <ul>
-                                            <li>自动过滤掉此类数据，不参与统计</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <h6><i class="fas fa-calculator me-2"></i>转化率计算</h6>
-                                    <ul>
-                                        <li><strong>{{ t("help_quantity_conversion_y_axis") }}</strong> = {{ t("help_order_quantity") }} ÷ 报价单数量 × 100%</li>
-                                        <li><strong>{{ t("help_amount_conversion_rate") }}</strong> = {{ t("help_order_amount") }} ÷ 报价单金额 × 100%</li>
-                                    </ul>
-                                    
-                                    <h6><i class="fas fa-filter me-2"></i>金额区间过滤</h6>
-                                    <p>系统支持按报价单金额进行区间过滤分析：</p>
-                                    <ul>
-                                        <li><strong>≤1000</strong>：报价单金额小于等于1000的数据</li>
-                                        <li><strong>1000-5000</strong>：报价单金额在1000-5000之间的数据</li>
-                                        <li><strong>5000-10000</strong>：报价单金额在5000-10000之间的数据</li>
-                                        <li><strong>≥10000</strong>：报价单金额大于等于10000的数据</li>
-                                        <li><strong>全部金额</strong>：不限制金额范围</li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-chart-pie me-1"></i>图表展示</h6>
+                            <ul class="small">
+                                <li>趋势图表分析</li>
+                                <li>占比饼图展示</li>
+                                <li>对比柱状图</li>
+                                <li>支持图表最大化</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -514,119 +267,64 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>{{ t('help_troubleshooting') }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>常见问题与解决</h5>
                 </div>
                 <div class="card-body">
-                    <div class="accordion" id="troubleshootingAccordion">
-                        <!-- PDF解析问题 -->
+                    <h6 class="text-primary">常见问题</h6>
+                    
+                    <div class="accordion" id="faqAccordion">
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="pdfIssues">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePdfIssues">
-                                    <i class="fas fa-file-pdf me-2"></i>{{ t('help_pdf_parsing_issues') }}
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    PDF文件上传失败怎么办？
                                 </button>
                             </h2>
-                            <div id="collapsePdfIssues" class="accordion-collapse collapse show" data-bs-parent="#troubleshootingAccordion">
+                            <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <h6 class="text-danger">{{ t('help_pdf_upload_parse_error_question') }}</h6>
-                                    <p><strong>{{ t('help_possible_causes') }}：</strong></p>
+                                    <p>请检查以下几点：</p>
                                     <ul>
-                                        <li>{{ t('help_pdf_not_standard_format') }}</li>
-                                        <li>{{ t('help_file_corrupted_encrypted') }}</li>
-                                        <li>{{ t('help_file_size_exceeded') }}</li>
-                                    </ul>
-                                    <p><strong>{{ t('help_solutions') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_use_2020_standard_export') }}</li>
-                                        <li>{{ t('help_check_file_integrity') }}</li>
-                                        <li>{{ t('help_try_re_export_pdf') }}</li>
-                                    </ul>
-                                    
-                                    <h6 class="text-warning mt-3">{{ t('help_product_info_recognition_error') }}</h6>
-                                    <p><strong>{{ t('help_possible_causes') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_pdf_format_irregular') }}</li>
-                                        <li>{{ t('help_product_desc_special_chars') }}</li>
-                                        <li>{{ t('help_multiline_format_abnormal') }}</li>
-                                    </ul>
-                                    <p><strong>{{ t('help_solutions') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_use_standard_pdf_format') }}</li>
-                                        <li>{{ t('help_check_product_desc_standard') }}</li>
-                                        <li>{{ t('help_manual_create_correction') }}</li>
+                                        <li>文件格式是否为PDF</li>
+                                        <li>文件大小是否超过16MB</li>
+                                        <li>文件是否损坏或加密</li>
+                                        <li>网络连接是否正常</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- SKU和价格问题 -->
+                        
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="skuPriceIssues">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkuPriceIssues">
-                                    <i class="fas fa-tags me-2"></i>{{ t('help_sku_and_price_issues') }}
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    解析结果不准确怎么办？
                                 </button>
                             </h2>
-                            <div id="collapseSkuPriceIssues" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <h6 class="text-warning">{{ t('help_sku_no_match_question') }}</h6>
-                                    <p><strong>{{ t('help_possible_causes') }}：</strong></p>
+                                    <p>可以尝试以下方法：</p>
                                     <ul>
-                                        <li>{{ t('help_sku_not_in_price_table') }}</li>
-                                        <li>{{ t('help_sku_mapping_not_configured') }}</li>
-                                        <li>{{ t('help_product_type_not_supported') }}</li>
-                                    </ul>
-                                    <p><strong>{{ t('help_solutions') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_contact_admin_check_price_table') }}</li>
-                                        <li>{{ t('help_confirm_sku_mapping_configured') }}</li>
-                                        <li>{{ t('help_check_product_type_supported') }}</li>
-                                    </ul>
-                                    
-                                    <h6 class="text-info mt-3">{{ t('help_price_display_abnormal') }}</h6>
-                                    <p><strong>{{ t('help_possible_causes') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_price_table_incomplete') }}</li>
-                                        <li>{{ t('help_sku_format_mismatch') }}</li>
-                                        <li>{{ t('help_variant_info_missing') }}</li>
-                                    </ul>
-                                    <p><strong>{{ t('help_solutions') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_contact_admin_update_price_table') }}</li>
-                                        <li>{{ t('help_check_sku_format_correct') }}</li>
-                                        <li>{{ t('help_confirm_variant_info_complete') }}</li>
+                                        <li>检查PDF文件格式是否标准</li>
+                                        <li>调整SKU映射规则</li>
+                                        <li>手动编辑解析结果</li>
+                                        <li>联系技术支持</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- 导出问题 -->
+                        
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="exportIssues">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExportIssues">
-                                    <i class="fas fa-download me-2"></i>{{ t('help_export_issues') }}
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                    如何修改系统设置？
                                 </button>
                             </h2>
-                            <div id="collapseExportIssues" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <h6 class="text-info">{{ t('help_export_format_issues') }}</h6>
-                                    <p><strong>{{ t('help_supported_formats') }}：</strong></p>
+                                    <p>系统设置需要管理员权限：</p>
                                     <ul>
-                                        <li><strong>{{ t('help_format_2020') }}：</strong>{{ t('help_format_2020_desc') }}</li>
-                                        <li><strong>{{ t('help_format_occw') }}：</strong>{{ t('help_format_occw_desc') }}</li>
-                                        <li><strong>{{ t('help_format_pdf') }}：</strong>{{ t('help_format_pdf_desc') }}</li>
-                                    </ul>
-                                    
-                                    <h6 class="text-warning mt-3">{{ t('help_export_failed') }}</h6>
-                                    <p><strong>{{ t('help_possible_causes') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_browser_download_settings') }}</li>
-                                        <li>{{ t('help_file_generation_error') }}</li>
-                                        <li>{{ t('help_network_connection_issue') }}</li>
-                                    </ul>
-                                    <p><strong>{{ t('help_solutions') }}：</strong></p>
-                                    <ul>
-                                        <li>{{ t('help_check_browser_download_settings') }}</li>
-                                        <li>{{ t('help_refresh_page_retry') }}</li>
-                                        <li>{{ t('help_check_network_connection') }}</li>
+                                        <li>使用管理员账号登录</li>
+                                        <li>进入系统设置页面</li>
+                                        <li>修改相关配置参数</li>
+                                        <li>保存设置并重启服务</li>
                                     </ul>
                                 </div>
                             </div>
@@ -641,50 +339,36 @@
     <div class="row mb-4" id="support">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i>{{ t('help_technical_support') }}</h5>
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-headset me-2"></i>技术支持</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-primary">{{ t('help_contact_info') }}</h6>
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-envelope me-2"></i>{{ t('help_email_support') }}</h6>
-                            <p>info@oppeincabinet.ca</p>
-                            <small class="text-muted">{{ t('help_email_response_time') }}</small>
+                            <h6 class="text-primary">联系信息</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-envelope me-2 text-primary"></i>邮件支持：support@occw.com</li>
+                                <li><i class="fas fa-phone me-2 text-primary"></i>电话支持：+1-604-555-0123</li>
+                                <li><i class="fas fa-clock me-2 text-primary"></i>工作时间：周一至周五 9:00-18:00</li>
+                            </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-phone me-2"></i>{{ t('help_phone_support') }}</h6>
-                            <p>+1 (778) 532-6233</p>
-                            <small class="text-muted">{{ t('help_phone_service_time') }}</small>
+                            <h6 class="text-primary">公司信息</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-building me-2 text-primary"></i>公司名称：加西欧派</li>
+                                <li><i class="fas fa-globe me-2 text-primary"></i>英文名称：Oppein Cabinet Canada West Ltd.</li>
+                                <li><i class="fas fa-map-marker-alt me-2 text-primary"></i>地址：加拿大不列颠哥伦比亚省</li>
+                            </ul>
                         </div>
                     </div>
-
-                    <h6 class="text-primary mt-4">{{ t('help_version_info') }}</h6>
-                    <div class="alert alert-info">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="mb-1"><strong>{{ t('help_current_version') }}：</strong>v{{ version }}</p>
-                                <p class="mb-1"><strong>{{ t('help_system_name') }}：</strong>{{ t('system_name') }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="mb-1"><strong>{{ t('help_update_date') }}：</strong>{{ t('last_update') }}</p>
-                                <p class="mb-0"><strong>{{ t('help_technical_support') }}：</strong>{{ t('company_full_name') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h6 class="text-primary mt-4">{{ t('help_usage_suggestions') }}</h6>
-                    <div class="alert alert-warning">
-                        <ul class="mb-0">
-                            <li>{{ t('help_use_standard_pdf_format') }}</li>
-                            <li>{{ t('help_large_file_processing_patience') }}</li>
-                            <li>{{ t('help_regular_backup_data') }}</li>
-                            <li>{{ t('help_check_troubleshooting_first') }}</li>
-                        </ul>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h6 class="alert-heading"><i class="fas fa-info-circle me-2"></i>版本信息</h6>
+                        <p class="mb-0"><strong>当前版本：</strong>v2.1.0 | <strong>更新日期：</strong>2024年8月</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %} 
+[% endblock %] 

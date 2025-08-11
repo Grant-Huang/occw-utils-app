@@ -1,85 +1,85 @@
-{% extends "base.html" %}
+[% extends "base.html" %]
 
-{% block title %}转换后的销售数据{% endblock %}
+[% block title %]Converted Sales Data[% endblock %]
 
-{% block content %}
+[% block content %]
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12">
-            <!-- 页面标题 -->
+            <!-- Page Title -->
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h1 class="page-title">
                             <i class="fas fa-table me-3 page-icon"></i>
-                            转换后的销售数据
+                            Converted Sales Data
                         </h1>
-                        <p class="page-subtitle">查看包含订单金额、{{ _("quotation_order") }}金额、转化率等字段的转换后数据</p>
+                        <p class="page-subtitle">View converted data including order amount, [[ _("quotation_order") ]] amount, conversion rate and other fields</p>
                     </div>
                     <div>
                         <a href="/view_imported_data" class="btn btn-outline-secondary">
-                            <i class="fas fa-eye me-1"></i>查看原始数据
+                            <i class="fas fa-eye me-1"></i>View Original Data
                         </a>
                         <button type="button" class="btn btn-outline-secondary ms-2" onclick="window.close()">
-                            <i class="fas fa-times me-1"></i>关闭
+                            <i class="fas fa-times me-1"></i>Close
                         </button>
                         <a href="/" class="btn btn-primary ms-2">
-                            <i class="fas fa-home me-1"></i>返回主页
+                            <i class="fas fa-home me-1"></i>Return to Home
                         </a>
                     </div>
                 </div>
             </div>
 
-            {% if error %}
-            <!-- {{ _("error_message") }} -->
+            [% if error %]
+            <!-- [[ _("error_message") ]] -->
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                {{ error }}
+                [[ error ]]
             </div>
-            {% elif data %}
-            <!-- {{ _("current_filter_settings_tip") }} -->
-            {% if system_settings.get('import_filter_min_amount') or system_settings.get('import_filter_sales_person') or system_settings.get('import_filter_customer') or system_settings.get('import_filter_start_date') or system_settings.get('import_filter_end_date') or system_settings.get('import_filter_order_status') %}
+            [% elif data %]
+            <!-- [[ _("current_filter_settings_tip") ]] -->
+            [% if system_settings.get('import_filter_min_amount') or system_settings.get('import_filter_sales_person') or system_settings.get('import_filter_customer') or system_settings.get('import_filter_start_date') or system_settings.get('import_filter_end_date') or system_settings.get('import_filter_order_status') %]
             <div class="alert alert-warning" role="alert">
                 <h6 class="alert-heading">
-                    <i class="fas fa-filter me-2"></i>当前应用的导入过滤条件
+                    <i class="fas fa-filter me-2"></i>Currently applied import filter conditions
                 </h6>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="mb-2">
-                            {% if system_settings.get('import_filter_min_amount') %}
-                            <li><strong>{{ _("min_amount_threshold") }}:</strong> ≥ ${{ system_settings.get('import_filter_min_amount') }}</li>
-                            {% endif %}
-                            {% if system_settings.get('import_filter_sales_person') %}
-                            <li><strong>销售人员:</strong> {{ system_settings.get('import_filter_sales_person') }}</li>
-                            {% endif %}
-                            {% if system_settings.get('import_filter_customer') %}
-                            <li><strong>客户:</strong> {{ system_settings.get('import_filter_customer') }}</li>
-                            {% endif %}
-                            {% if system_settings.get('import_filter_start_date') %}
-                            <li><strong>{{ _("start_date") }}:</strong> {{ system_settings.get('import_filter_start_date') }}</li>
-                            {% endif %}
-                            {% if system_settings.get('import_filter_end_date') %}
-                            <li><strong>{{ _("end_date") }}:</strong> {{ system_settings.get('import_filter_end_date') }}</li>
-                            {% endif %}
-                            {% if system_settings.get('import_filter_order_status') %}
-                            <li><strong>订单状态:</strong> {{ system_settings.get('import_filter_order_status') }}</li>
-                            {% endif %}
+                            [% if system_settings.get('import_filter_min_amount') %]
+                            <li><strong>[[ _("min_amount_threshold") ]]:</strong> ≥ $[[ system_settings.get('import_filter_min_amount') ]]</li>
+                            [% endif %]
+                            [% if system_settings.get('import_filter_sales_person') %]
+                            <li><strong>Sales Person:</strong> [[ system_settings.get('import_filter_sales_person') ]]</li>
+                            [% endif %]
+                            [% if system_settings.get('import_filter_customer') %]
+                            <li><strong>Customer:</strong> [[ system_settings.get('import_filter_customer') ]]</li>
+                            [% endif %]
+                            [% if system_settings.get('import_filter_start_date') %]
+                            <li><strong>[[ _("start_date") ]]:</strong> [[ system_settings.get('import_filter_start_date') ]]</li>
+                            [% endif %]
+                            [% if system_settings.get('import_filter_end_date') %]
+                            <li><strong>[[ _("end_date") ]]:</strong> [[ system_settings.get('import_filter_end_date') ]]</li>
+                            [% endif %]
+                            [% if system_settings.get('import_filter_order_status') %]
+                            <li><strong>Order Status:</strong> [[ system_settings.get('import_filter_order_status') ]]</li>
+                            [% endif %]
                         </ul>
                         <p class="mb-0">
                             <i class="fas fa-info-circle me-1"></i>
-                            显示的数据已根据上述过滤条件筛选。要修改过滤设定，请前往
-                            <a href="/admin" class="alert-link">管理员仪表板 → 订单导入过滤设置</a>
+                            The displayed data has been filtered according to the above filter conditions. To modify filter settings, please go to
+                            <a href="/admin" class="alert-link">Admin Dashboard → Order Import Filter Settings</a>
                         </p>
                     </div>
                 </div>
             </div>
-            {% endif %}
+            [% endif %]
             
-            <!-- 数据统计信息 -->
+            <!-- Data Statistics Information -->
             <div class="card mb-4">
                 <div class="card-header bg-success text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-info-circle me-2"></i>数据概览
+                        <i class="fas fa-info-circle me-2"></i>Data Overview
                     </h5>
                 </div>
                 <div class="card-body">
@@ -88,8 +88,8 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-list-ol text-primary me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">总记录数</div>
-                                    <div class="h4 mb-0 text-primary">{{ total_records }}</div>
+                                    <div class="fw-bold">Total Records</div>
+                                    <div class="h4 mb-0 text-primary">[[ total_records ]]</div>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +97,8 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-shopping-cart text-success me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">{{ _("sales_order") }}数</div>
-                                    <div class="h4 mb-0 text-success">{{ data | selectattr('订单状态', 'equalto', '{{ _("sales_order") }}') | list | length }}</div>
+                                    <div class="fw-bold">[[ _("sales_order") ]] Count</div>
+                                    <div class="h4 mb-0 text-success">[[ data | selectattr('Order Status', 'equalto', '[[ _("sales_order") ]]') | list | length ]]</div>
                                 </div>
                             </div>
                         </div>
@@ -106,8 +106,8 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-file-invoice text-warning me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">{{ _("quotation_order") }}数</div>
-                                    <div class="h4 mb-0 text-warning">{{ data | selectattr('订单状态', 'equalto', '{{ _("quotation_order") }}') | list | length }}</div>
+                                    <div class="fw-bold">[[ _("quotation_order") ]] Count</div>
+                                    <div class="h4 mb-0 text-warning">[[ data | selectattr('Order Status', 'equalto', '[[ _("quotation_order") ]]') | list | length ]]</div>
                                 </div>
                             </div>
                         </div>
@@ -115,15 +115,15 @@
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-percentage text-info me-2" style="font-size: 1.5rem;"></i>
                                 <div>
-                                    <div class="fw-bold">整体转化率</div>
+                                    <div class="fw-bold">Overall Conversion Rate</div>
                                     <div class="h4 mb-0 text-info">
-                                        {% set total_order_amount = data | map(attribute='订单金额') | select | list | sum %}
-                                        {% set total_quotation_amount = data | map(attribute='{{ _("quotation_order") }}金额') | select | list | sum %}
-                                        {% if total_quotation_amount > 0 %}
-                                            {{ "%.1f" | format((total_order_amount / total_quotation_amount) * 100) }}%
-                                        {% else %}
+                                        [% set total_order_amount = data | map(attribute='Order Amount') | select | list | sum %]
+                                        [% set total_quotation_amount = data | map(attribute='[[ _("quotation_order") ]] Amount') | select | list | sum %]
+                                        [% if total_quotation_amount > 0 %]
+                                            [[ "%.1f" | format((total_order_amount / total_quotation_amount) * 100) ]]%
+                                        [% else %]
                                             0.0%
-                                        {% endif %}
+                                        [% endif %]
                                     </div>
                                 </div>
                             </div>
@@ -132,36 +132,36 @@
                 </div>
             </div>
 
-            <!-- 数据过滤和搜索 -->
+            <!-- [[ _("data_filter_and_search") ]] -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h6 class="mb-0">数据过滤</h6>
+                    <h6 class="mb-0">[[ _("data_filter") ]]</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="searchInput" class="form-label">{{ _("search") }}</label>
-                            <input type="text" class="form-control" id="searchInput" placeholder="{{ _("search_number_customer_salesperson") }}" onkeyup="filterData()">
+                            <label for="searchInput" class="form-label">[[ _("search") ]]</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="[[ _("search_number_customer_salesperson") ]]" onkeyup="filterData()">
                         </div>
                         <div class="col-md-2">
-                            <label for="salesPersonFilter" class="form-label">销售人员</label>
+                            <label for="salesPersonFilter" class="form-label">Sales Person</label>
                             <select class="form-control" id="salesPersonFilter" onchange="filterData()">
-                                <option value="">全部</option>
+                                <option value="">All</option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="statusFilter" class="form-label">订单状态</label>
+                            <label for="statusFilter" class="form-label">Order Status</label>
                             <select class="form-control" id="statusFilter" onchange="filterData()">
-                                <option value="">全部</option>
-                                <!-- 状态选项将通过JavaScript从转换后数据动态生成 -->
+                                <option value="">All</option>
+                                <!-- Status options will be dynamically generated from converted data via JavaScript -->
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="startDate" class="form-label">{{ _("start_date") }}</label>
+                            <label for="startDate" class="form-label">[[ _("start_date") ]]</label>
                             <input type="date" class="form-control" id="startDate" onchange="filterData()">
                         </div>
                         <div class="col-md-2">
-                            <label for="endDate" class="form-label">{{ _("end_date") }}</label>
+                            <label for="endDate" class="form-label">[[ _("end_date") ]]</label>
                             <input type="date" class="form-control" id="endDate" onchange="filterData()">
                         </div>
                         <div class="col-md-1">
@@ -174,16 +174,16 @@
                 </div>
             </div>
 
-            <!-- 数据表格 -->
+            <!-- Data Table -->
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
-                        <i class="fas fa-table me-2"></i>转换后数据列表
+                        <i class="fas fa-table me-2"></i>Converted Data List
                         <span id="recordCount" class="badge bg-secondary ms-2">0</span>
                     </h5>
                     <div>
                         <button type="button" class="btn btn-outline-success btn-sm" onclick="exportToExcel()">
-                            <i class="fas fa-file-excel me-1"></i>导出Excel
+                            <i class="fas fa-file-excel me-1"></i>ExportExcel
                         </button>
                     </div>
                 </div>
@@ -192,28 +192,28 @@
                         <table class="table table-striped table-hover" id="dataTable">
                             <thead class="table-dark">
                                 <tr>
-                                    <th style="cursor: pointer;" onclick="sortData('编号')">编号 <i id="sort-编号" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('{{ _("order_date") }}')">{{ _("order_date") }} <i id="sort-{{ _("order_date") }}" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('销售人员')">销售人员 <i id="sort-销售人员" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('客户')">客户 <i id="sort-客户" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('订单状态')">订单状态 <i id="sort-订单状态" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Number')">Number <i id="sort-Number" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ _("order_date") ]]')">[[ _("order_date") ]] <i id="sort-[[ _("order_date") ]]" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Sales Person')">Sales Person <i id="sort-Sales Person" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Customer')">Customer <i id="sort-Customer" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Order Status')">Order Status <i id="sort-Order Status" class="fas fa-sort"></i></th>
 
-                                    <th style="cursor: pointer;" onclick="sortData('订单金额')">订单金额 <i id="sort-订单金额" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('{{ _("quotation_order") }}金额')">{{ _("quotation_order") }}金额 <i id="sort-{{ _("quotation_order") }}金额" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('订单数量')">订单数量 <i id="sort-订单数量" class="fas fa-sort"></i></th>
-                                    <th style="cursor: pointer;" onclick="sortData('{{ _("quotation_order") }}数量')">{{ _("quotation_order") }}数量 <i id="sort-{{ _("quotation_order") }}数量" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Order Amount')">Order Amount <i id="sort-Order Amount" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ _("quotation_order") ]] Amount')">[[ _("quotation_order") ]] Amount <i id="sort-[[ _("quotation_order") ]] Amount" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('Order Quantity')">Order Quantity <i id="sort-Order Quantity" class="fas fa-sort"></i></th>
+                                    <th style="cursor: pointer;" onclick="sortData('[[ _("quotation_order") ]] Count')">[[ _("quotation_order") ]] Count <i id="sort-[[ _("quotation_order") ]] Count" class="fas fa-sort"></i></th>
                                 </tr>
                             </thead>
                             <tbody id="dataTableBody">
-                                <!-- 数据将通过JavaScript填充 -->
+                                <!-- Data will be populated via JavaScript -->
                             </tbody>
                         </table>
                     </div>
                     
-                    <!-- 分页控件 -->
+                    <!-- Pagination Controls -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div class="d-flex align-items-center">
-                            <span class="me-2">每页显示:</span>
+                            <span class="me-2">Items per page:</span>
                             <select class="form-select form-select-sm" id="pageSize" style="width: auto;" onchange="changePageSize()">
                                 <option value="25" selected>25</option>
                                 <option value="50">50</option>
@@ -226,32 +226,32 @@
                     </div>
                 </div>
             </div>
-            {% else %}
-            <!-- 无数据{{ _("tip") }} -->
+            [% else %]
+            <!-- No data [[ _("tip") ]] -->
             <div class="alert alert-info" role="alert">
                 <i class="fas fa-info-circle me-2"></i>
-                暂无数据，请先导入销售数据。
+                No data available, please import sales data first.
             </div>
-            {% endif %}
+            [% endif %]
         </div>
     </div>
 </div>
-{% endblock %}
+[% endblock %]
 
-{% block extra_js %}
+[% block extra_js %]
 <script>
-let allRecords = {{ data | tojson if data else '[]' }};
+let allRecords = [[ data | tojson if data else '[]' ]];
 let filteredRecords = [...allRecords];
 let currentPage = 1;
 let pageSize = 25;
 
-// 初始化
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    // 填充销售人员过滤器
+    // Populate Sales Person filter
     const salesPersonSet = new Set();
     allRecords.forEach(record => {
-        if (record['销售人员']) {
-            salesPersonSet.add(record['销售人员']);
+        if (record['Sales Person']) {
+            salesPersonSet.add(record['Sales Person']);
         }
     });
     
@@ -263,11 +263,11 @@ document.addEventListener('DOMContentLoaded', function() {
         salesPersonFilter.appendChild(option);
     });
     
-    // 填充订单{{ _("status_filter") }}器 - 从转换后数据动态获取
+    // Populate order [[ _("status_filter") ]] filter - dynamically get from converted data
     const statusSet = new Set();
     allRecords.forEach(record => {
-        if (record['订单状态']) {
-            statusSet.add(record['订单状态']);
+        if (record['Order Status']) {
+            statusSet.add(record['Order Status']);
         }
     });
     
@@ -279,13 +279,13 @@ document.addEventListener('DOMContentLoaded', function() {
         statusFilter.appendChild(option);
     });
     
-    // 只有在有数据且表格存在时才显示数据
+    // Only show data when data exists and table exists
     if (allRecords.length > 0 && document.getElementById('dataTableBody')) {
         displayData();
     }
 });
 
-// 数据过滤
+// [[ _("data_filter") ]]
 function filterData() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const salesPersonFilter = document.getElementById('salesPersonFilter').value;
@@ -294,22 +294,22 @@ function filterData() {
     const endDate = document.getElementById('endDate').value;
     
     filteredRecords = allRecords.filter(record => {
-        // 搜索过滤
+        // [[ _("search") ]] filter
         const matchesSearch = !searchTerm || 
-            (record['编号'] && record['编号'].toString().toLowerCase().includes(searchTerm)) ||
-            (record['客户'] && record['客户'].toLowerCase().includes(searchTerm)) ||
-            (record['销售人员'] && record['销售人员'].toLowerCase().includes(searchTerm));
+            (record['Number'] && record['Number'].toString().toLowerCase().includes(searchTerm)) ||
+            (record['Customer'] && record['Customer'].toLowerCase().includes(searchTerm)) ||
+            (record['Sales Person'] && record['Sales Person'].toLowerCase().includes(searchTerm));
         
-        // 销售人员过滤
-        const matchesSalesPerson = !salesPersonFilter || record['销售人员'] === salesPersonFilter;
+        // Sales Person filter
+        const matchesSalesPerson = !salesPersonFilter || record['Sales Person'] === salesPersonFilter;
         
-        // {{ _("status_filter") }}
-        const matchesStatus = !statusFilter || record['订单状态'] === statusFilter;
+        // [[ _("status_filter") ]]
+        const matchesStatus = !statusFilter || record['Order Status'] === statusFilter;
         
-        // {{ _("date_filter") }}
+        // [[ _("date_filter") ]]
         let matchesDate = true;
         if (startDate || endDate) {
-            const orderDate = record['{{ _("order_date") }}'];
+            const orderDate = record['[[ _("order_date") ]]'];
             if (orderDate && orderDate !== 'None' && orderDate !== null) {
                 const recordDate = new Date(orderDate);
                 if (!isNaN(recordDate.getTime())) {
@@ -330,7 +330,7 @@ function filterData() {
     displayData();
 }
 
-// 清除过滤器
+// Clear filters
 function clearFilters() {
     document.getElementById('searchInput').value = '';
     document.getElementById('salesPersonFilter').value = '';
@@ -340,7 +340,7 @@ function clearFilters() {
     filterData();
 }
 
-// 排序功能
+// Sorting functionality
 let currentSortColumn = '';
 let currentSortDirection = 'asc';
 
@@ -352,7 +352,7 @@ function sortData(column) {
         currentSortDirection = 'asc';
     }
     
-    // 更新排序图标
+    // Update sort icons
     document.querySelectorAll('[id^="sort-"]').forEach(icon => {
         icon.className = 'fas fa-sort';
     });
@@ -361,16 +361,16 @@ function sortData(column) {
         sortIcon.className = currentSortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
     }
     
-    // 排序数据
+    // Sort data
     filteredRecords.sort((a, b) => {
         let valueA = a[column];
         let valueB = b[column];
         
-        // 处理不同数据类型
-                    if (['订单金额', '{{ _("quotation_order") }}金额', '订单数量', '{{ _("quotation_order") }}数量', '毛利率（%）'].includes(column)) {
+        // Handle different data types
+                    if (['Order Amount', '[[ _("quotation_order") ]] Amount', 'Order Quantity', '[[ _("quotation_order") ]] Count', 'Gross Profit Margin (%)'].includes(column)) {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
-        } else if (column === '{{ _("order_date") }}') {
+        } else if (column === '[[ _("order_date") ]]') {
             valueA = new Date(valueA || '1900-01-01');
             valueB = new Date(valueB || '1900-01-01');
         } else {
@@ -389,7 +389,7 @@ function sortData(column) {
     displayData();
 }
 
-// 显示数据
+// Show data
 function displayData() {
     const tbody = document.getElementById('dataTableBody');
     if (!tbody) {
@@ -406,20 +406,20 @@ function displayData() {
         const row = tbody.insertRow();
         
         row.innerHTML = `
-            <td>${record['编号'] || ''}</td>
-            <td>${record['{{ _("order_date") }}'] || ''}</td>
-            <td>${record['销售人员'] || ''}</td>
-            <td>${record['客户'] || ''}</td>
+            <td>${record['Number'] || ''}</td>
+            <td>${record['[[ _("order_date") ]]'] || ''}</td>
+            <td>${record['Sales Person'] || ''}</td>
+            <td>${record['Customer'] || ''}</td>
             <td>
-                ${record['订单状态'] === '{{ _("sales_order") }}' ? '<span class="badge bg-success">{{ _("sales_order") }}</span>' : 
-                  record['订单状态'] === '{{ _("quotation_order") }}' ? '<span class="badge bg-warning">{{ _("quotation_order") }}</span>' : 
-                  '<span class="badge bg-secondary">' + (record['订单状态'] || '') + '</span>'}
+                ${record['Order Status'] === '[[ _("sales_order") ]]' ? '<span class="badge bg-success">[[ _("sales_order") ]]</span>' : 
+                  record['Order Status'] === '[[ _("quotation_order") ]]' ? '<span class="badge bg-warning">[[ _("quotation_order") ]]</span>' : 
+                  '<span class="badge bg-secondary">' + (record['Order Status'] || '') + '</span>'}
             </td>
 
-            <td class="text-end">$${record['订单金额'] ? parseFloat(record['订单金额']).toFixed(2) : '0.00'}</td>
-            <td class="text-end">$${record['{{ _("quotation_order") }}金额'] ? parseFloat(record['{{ _("quotation_order") }}金额']).toFixed(2) : '0.00'}</td>
-            <td class="text-center">${record['订单数量'] || 0}</td>
-            <td class="text-center">${record['{{ _("quotation_order") }}数量'] || 0}</td>
+            <td class="text-end">$${record['Order Amount'] ? parseFloat(record['Order Amount']).toFixed(2) : '0.00'}</td>
+            <td class="text-end">$${record['[[ _("quotation_order") ]] Amount'] ? parseFloat(record['[[ _("quotation_order") ]] Amount']).toFixed(2) : '0.00'}</td>
+            <td class="text-center">${record['Order Quantity'] || 0}</td>
+            <td class="text-center">${record['[[ _("quotation_order") ]] Count'] || 0}</td>
         `;
     }
     
@@ -427,7 +427,7 @@ function displayData() {
     updateRecordCount();
 }
 
-// 更新记录计数
+// Update record count
 function updateRecordCount() {
     const recordCount = document.getElementById('recordCount');
     if (recordCount) {
@@ -435,7 +435,7 @@ function updateRecordCount() {
     }
 }
 
-// 更新分页
+// Update pagination
 function updatePagination() {
     const totalPages = Math.ceil(filteredRecords.length / pageSize);
     const pageInfo = document.getElementById('pageInfo');
@@ -443,24 +443,24 @@ function updatePagination() {
     
     if (!pageInfo || !pagination) return;
     
-    // 更新页面信息
+    // Update page information
     const start = (currentPage - 1) * pageSize + 1;
     const end = Math.min(currentPage * pageSize, filteredRecords.length);
-    pageInfo.textContent = `{{ _("showing_records") }}`.replace('{start}', start).replace('{end}', end).replace('{total}', filteredRecords.length);
+    pageInfo.textContent = `[[ _("showing_records") ]]`.replace('{start}', start).replace('{end}', end).replace('{total}', filteredRecords.length);
     
-    // 更新分页按钮
+    // Update pagination按钮
     pagination.innerHTML = '';
     
     if (totalPages <= 1) return;
     
-    // 上一页按钮
+    // Previous page button
     const prevBtn = document.createElement('button');
     prevBtn.className = `btn btn-sm ${currentPage === 1 ? 'btn-outline-secondary disabled' : 'btn-outline-primary'}`;
     prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
     prevBtn.onclick = () => currentPage > 1 && changePage(currentPage - 1);
     pagination.appendChild(prevBtn);
     
-    // 页码按钮
+    // Page number button
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
     
@@ -472,7 +472,7 @@ function updatePagination() {
         pagination.appendChild(pageBtn);
     }
     
-    // 下一页按钮
+    // Next page button
     const nextBtn = document.createElement('button');
     nextBtn.className = `btn btn-sm ${currentPage === totalPages ? 'btn-outline-secondary disabled' : 'btn-outline-primary'}`;
     nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
@@ -480,22 +480,22 @@ function updatePagination() {
     pagination.appendChild(nextBtn);
 }
 
-// 切换页面
+// Switch page
 function changePage(page) {
     currentPage = page;
     displayData();
 }
 
-// 改变每页显示数量
+// Change items per page
 function changePageSize() {
     pageSize = parseInt(document.getElementById('pageSize').value);
     currentPage = 1;
     displayData();
 }
 
-// 导出到Excel
+// Export to Excel
 function exportToExcel() {
-                const headers = ['编号', '{{ _("order_date") }}', '销售人员', '客户', '订单状态', '订单金额', '{{ _("quotation_order") }}金额', '订单数量', '{{ _("quotation_order") }}数量'];
+                const headers = ['Number', '[[ _("order_date") ]]', 'Sales Person', 'Customer', 'Order Status', 'Order Amount', '[[ _("quotation_order") ]] Amount', 'Order Quantity', '[[ _("quotation_order") ]] Count'];
     let csvContent = headers.join(',') + '\n';
     
     filteredRecords.forEach(record => {
@@ -509,16 +509,16 @@ function exportToExcel() {
         csvContent += row + '\n';
     });
     
-    // 创建并下载文件
+    // Create and download file
     const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = '转换后销售数据_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.download = 'Converted Sales Data_' + new Date().toISOString().split('T')[0] + '.csv';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
 }
 </script>
-{% endblock %}
+[% endblock %]
