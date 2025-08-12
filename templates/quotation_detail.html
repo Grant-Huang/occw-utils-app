@@ -105,14 +105,44 @@
                               <th style="width: 15%;">[[ t('product_name') ]]</th>
                               <th style="width: 12.5%;">[[ t('box_variant') ]]</th>
                               <th style="width: 12.5%;">[[ t('door_variant') ]]</th>
-                              <th style="width: 15%;">[[ t('add_product') ]]</th>
+                              <th style="width: 25%;">[[ t('add_product') ]]</th>
                               <th style="width: 10%;">[[ t('unit_price') ]]</th>
                               <th style="width: 10%;">[[ t('quantity') ]]</th>
-                              <th style="width: 10%;">[[ t('operation') ]]</th>
                           </tr>
                       </thead>
                      <tbody id="addProductTableBody">
-                         <!-- Dynamically added product rows will be displayed here -->
+                        <!-- 默认的第一行，始终可见 -->
+                        <tr id="add-row-0">
+                            <td>
+                                <select class="form-select form-select-sm" onchange="onCategoryChange(0)" id="category-0">
+                                    <option value="">[[ t("select_type") ]]</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm" onchange="onProductChange(0)" id="product-0" disabled>
+                                    <option value="">[[ t("select_product") ]]</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm" onchange="onVariantChange(0)" id="box-variant-0" disabled>
+                                    <option value="">[[ t("select_box_variant") ]]</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm" onchange="onVariantChange(0)" id="door-variant-0" disabled>
+                                    <option value="">[[ t("select_door_variant") ]]</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span id="sku-0" class="badge bg-secondary">[[ t("not_selected") ]]</span>
+                            </td>
+                            <td>
+                                <span id="price-0">$0.00</span>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" value="1" min="1" id="qty-0">
+                            </td>
+                        </tr>
                      </tbody>
                  </table>
              </div>
@@ -303,6 +333,7 @@
 [% endblock %]
 
 [% block extra_js %]
+<script src="/static/js/shared_product_functions.js"></script>
 <script>
 // Toast notification system
 function showToast(message, type = 'info') {
@@ -349,237 +380,49 @@ function exportQuotation(quotationId) {
 let editProductCounter = 1;
 
  function addNewProduct() {
-     // Add product row to add product table
-     const tbody = document.getElementById('addProductTableBody');
-     const rowId = `add-row-${editProductCounter}`;
-     
-     const row = document.createElement('tr');
-     row.id = rowId;
-     row.innerHTML = `
-         <td>
-             <select class="form-select form-select-sm" onchange="onCategoryChange(${editProductCounter})" id="category-${editProductCounter}">
-                 <option value="">[[ t('select_type') ]]</option>
-             </select>
-         </td>
-         <td>
-             <select class="form-select form-select-sm" onchange="onProductChange(${editProductCounter})" id="product-${editProductCounter}" disabled>
-                 <option value="">[[ t('select_product') ]]</option>
-             </select>
-         </td>
-         <td>
-             <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="box-variant-${editProductCounter}" disabled>
-                 <option value="">[[ t('select_box_variant') ]]</option>
-             </select>
-         </td>
-         <td>
-             <select class="form-select form-select-sm" onchange="onVariantChange(${editProductCounter})" id="door-variant-${editProductCounter}" disabled>
-                 <option value="">[[ t('select_door_variant') ]]</option>
-             </select>
-         </td>
-         <td>
-             <span id="sku-${editProductCounter}" class="badge bg-secondary">[[ t('not_selected') ]]</span>
-         </td>
-         <td>
-             <span id="price-${editProductCounter}">$0.00</span>
-         </td>
-         <td>
-             <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateEditTotal()" id="qty-${editProductCounter}">
-         </td>
-         <td>
-             <button type="button" class="btn btn-sm btn-danger" onclick="removeEditProduct(${editProductCounter})">
-                 <i class="fas fa-trash"></i>
-             </button>
-         </td>
-     `;
-     
-     tbody.appendChild(row);
-     
-     // Load product categories
-     loadProductCategories(editProductCounter);
-     
+     // 使用共享的新增产品函数
+     addNewProductShared('addProductSection', 'addProductTableBody', editProductCounter);
      editProductCounter++;
  }
 
 function loadProductCategories(rowNum) {
-    // Load product categories
-    $.ajax({
-        url: '/get_product_categories',
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const select = document.getElementById(`category-${rowNum}`);
-                response.categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    select.appendChild(option);
-                });
-            }
-        },
-        error: function() {
-            showToast('Failed to load product categories', 'warning');
-        }
-    });
+    // 使用共享函数
+    loadProductCategoriesShared(rowNum);
 }
 
 function onCategoryChange(rowNum) {
-    // Handle type selection change
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const productSelect = document.getElementById(`product-${rowNum}`);
-    const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-    const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-    
-    // Clear subsequent selections
-    productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-    
-    // Reset SKU and price
-    document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
-    document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
-    document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-    
-    // Disable subsequent selections
-    productSelect.disabled = true;
-    boxVariantSelect.disabled = true;
-    doorVariantSelect.disabled = true;
-    
-    if (category) {
-        // Load products
-        loadProducts(rowNum, category);
-    }
+    // 使用共享函数
+    onCategoryChangeShared(rowNum);
 }
 
 function loadProducts(rowNum, category) {
-    $.ajax({
-        url: '/get_products_by_category',
-        type: 'GET',
-        data: { category: category },
-        success: function(response) {
-            if (response.success) {
-                const productSelect = document.getElementById(`product-${rowNum}`);
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // Populate product selection
-                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-                response.products.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product;
-                    option.textContent = product;
-                    productSelect.appendChild(option);
-                });
-                productSelect.disabled = false;
-                
-                // Populate cabinet body variant selection
-                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-                response.box_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    boxVariantSelect.appendChild(option);
-                });
-                
-                // Populate door panel variant selection
-                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    doorVariantSelect.appendChild(option);
-                });
-                
-                // Enable/disable variant selection based on category
-                if (category === 'BOX') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Assm.组合件') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'HARDWARE') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = true;
-                }
-            }
-        },
-        error: function() {
-            showToast('Failed to load products', 'warning');
-        }
+    // 使用通用函数加载产品列表
+    loadProductsByCategoryUniversal(category, rowNum, {
+        elementPrefix: '',
+        setValues: false
     });
 }
 
 function onProductChange(rowNum) {
-    // Handle product selection change
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const product = document.getElementById(`product-${rowNum}`).value;
-    
-    // Reset SKU and price
-    document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
-    document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
-    document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-    
-    if (product) {
-        // 搜索SKU和Price
-        searchSkuAndPrice(rowNum);
-    }
+    // 使用共享函数
+    onProductChangeShared(rowNum);
 }
-
 
 
 function searchSkuAndPrice(rowNum) {
-    // 搜索SKU和Price
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const product = document.getElementById(`product-${rowNum}`).value;
-    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
-    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
-    
-    if (!category || !product) {
-        return;
-    }
-    
-    $.ajax({
-        url: '/search_sku_price',
-        type: 'GET',
-        data: {
-            category: category,
-            product: product,
-            box_variant: boxVariant,
-            door_variant: doorVariant
-        },
-        success: function(response) {
-            if (response.success) {
-                const skuElement = document.getElementById(`sku-${rowNum}`);
-                const priceElement = document.getElementById(`price-${rowNum}`);
-                
-                if (response.found) {
-                    skuElement.textContent = response.sku;
-                    skuElement.className = 'badge bg-success';
-                    priceElement.textContent = `$${response.price.toFixed(2)}`;
-                } else {
-                    skuElement.textContent = '[[ t("not_found") ]]';
-                    skuElement.className = 'badge bg-danger';
-                    priceElement.textContent = '$0.00';
-                }
-            }
-        },
-        error: function() {
-            showToast('[[ t("search_sku_failed") ]]', 'warning');
-        }
-    });
+    // 使用共享函数
+    searchSkuAndPriceShared(rowNum);
 }
 
 function onVariantChange(rowNum) {
-    // 变体选择改变时的处理
-    searchSkuAndPrice(rowNum);
+    // 使用共享函数
+    onVariantChangeShared(rowNum);
 }
 
 
 
 function addCurrentProduct() {
-    // 获取当前添加产品表格中的产品信息
+    // 获取当前添加产品表格中的所有产品行
     const tbody = document.getElementById('addProductTableBody');
     const rows = tbody.getElementsByTagName('tr');
     
@@ -588,11 +431,29 @@ function addCurrentProduct() {
         return;
     }
     
-    // 获取第一行的产品信息（假设只有一行）
-    const row = rows[0];
-    const rowNum = row.id.replace('add-row-', '');
+    // 遍历所有行，添加有效的产品
+    let addedCount = 0;
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const rowNum = row.id.replace('add-row-', '');
+        
+        const sku = document.getElementById(`sku-${rowNum}`).textContent;
+        const price = document.getElementById(`price-${rowNum}`).textContent;
+        
+        // 检查产品信息是否完整
+        if (sku !== '[[ t("not_selected") ]]' && sku !== '[[ t("not_found") ]]' && price !== '$0.00') {
+            addToProductList(rowNum);
+            addedCount++;
+        }
+    }
     
-    addToProductList(rowNum);
+    if (addedCount === 0) {
+        showToast('请先选择完整的产品信息', 'warning');
+    } else {
+        showToast(`成功添加 ${addedCount} 个产品`, 'success');
+        // 清空所有行的选择，但保留第一行
+        clearAllRows();
+    }
 }
 
 function addToProductList(rowNum) {
@@ -680,15 +541,56 @@ function updateEditTotal() {
      }
  }
  
- // 页面加载时自动添加第一行
+ // 页面加载完成后初始化
  $(document).ready(function() {
-     addNewProduct();
+     console.log('页面加载完成，开始初始化...');
+     
+     // 初始化第一行的产品类别
+     loadProductCategories(0);
+     
+     // 重置计数器，因为已经有第一行了
+     editProductCounter = 1;
+     
+     console.log('初始化完成');
  });
 
- // 取消编辑
- function cancelEdit() {
-     // This function is no longer needed, kept to avoid errors
- }
+// 清空所有行的选择，但保留第一行
+function clearAllRows() {
+    const tbody = document.getElementById('addProductTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    // 保留第一行，删除其他行
+    while (rows.length > 1) {
+        tbody.removeChild(rows[1]);
+    }
+    
+    // 重置第一行
+    const firstRow = rows[0];
+    if (firstRow) {
+        document.getElementById('category-0').value = '';
+        document.getElementById('product-0').innerHTML = '<option value="">[[ t("select_product") ]]</option>';
+        document.getElementById('product-0').disabled = true;
+        document.getElementById('box-variant-0').innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
+        document.getElementById('box-variant-0').disabled = true;
+        document.getElementById('door-variant-0').innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
+        document.getElementById('door-variant-0').disabled = true;
+        document.getElementById('sku-0').textContent = '[[ t("not_selected") ]]';
+        document.getElementById('sku-0').className = 'badge bg-secondary';
+        document.getElementById('price-0').textContent = '$0.00';
+        document.getElementById('qty-0').value = '1';
+    }
+    
+    // 重新加载产品类别
+    loadProductCategories(0);
+    
+    // 重置计数器
+    editProductCounter = 1;
+}
+
+// 取消编辑
+function cancelEdit() {
+    // This function is no longer needed, kept to avoid errors
+}
 
 // 更新产品小计
 function updateProductTotal(input) {

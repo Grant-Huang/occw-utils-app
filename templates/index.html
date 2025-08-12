@@ -1164,6 +1164,7 @@
 [% endblock %]
 
 [% block extra_js %]
+<script src="/static/js/shared_product_functions.js"></script>
 <script>
 let currentProducts = [];
 
@@ -1907,109 +1908,16 @@ function loadProductCategories(rowNum) {
 }
 
 function onCategoryChange(rowNum) {
-    // Handle type selection change
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const productSelect = document.getElementById(`product-${rowNum}`);
-    const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-    const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-    
-    // Clear subsequent selections
-    productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-    
-    // Reset SKU and price
-    document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
-    document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
-    document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-    
-    if (category) {
-        productSelect.disabled = false;
-        
-        // 根据类型启用/禁用变体选择
-        if (category === 'BOX') {
-            boxVariantSelect.disabled = false;
-            doorVariantSelect.disabled = false;
-        } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
-            boxVariantSelect.disabled = true;
-            doorVariantSelect.disabled = false;
-        } else if (category === 'Assm.组合件') {
-            boxVariantSelect.disabled = false;
-            doorVariantSelect.disabled = false;
-        } else if (category === 'HARDWARE') {
-            boxVariantSelect.disabled = true;
-            doorVariantSelect.disabled = true;
-        }
-        
-        // Load products列表
-        loadProductsByCategory(category, rowNum);
-    } else {
-        productSelect.disabled = true;
-        boxVariantSelect.disabled = true;
-        doorVariantSelect.disabled = true;
-    }
+    // 使用通用函数处理类别改变（启用变体选择逻辑）
+    onCategoryChangeUniversal(rowNum, {
+        elementPrefix: '',
+        enableVariantLogic: true
+    });
 }
 
-function loadProductsByCategory(category, rowNum) {
-    // 根据类别加载产品列表
-    $.ajax({
-        url: '/get_products_by_category',
-        type: 'GET',
-        data: { category: category },
-        success: function(response) {
-            if (response.success) {
-                const productSelect = document.getElementById(`product-${rowNum}`);
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // Populate product selection
-                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-                response.products.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product;
-                    option.textContent = product;
-                    productSelect.appendChild(option);
-                });
-                productSelect.disabled = false;
-                
-                // Populate cabinet body variant selection
-                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-                response.box_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    boxVariantSelect.appendChild(option);
-                });
-                
-                // Populate door panel variant selection
-                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    doorVariantSelect.appendChild(option);
-                });
-                
-                // Enable/disable variant selection based on category
-                if (category === 'BOX') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Assm.组合件') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'HARDWARE') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = true;
-                }
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_list_failed") ]]', 'warning');
-        }
-    });
+function onProductChange(rowNum) {
+    // Handle product selection change
+    searchSkuAndPrice(rowNum);
 }
 
 function onProductChange(rowNum) {
@@ -2024,31 +1932,11 @@ function onVariantChange(rowNum) {
 
 // Manual版本的函数（用于加载已保存的[[ t("quotation_order") ]]）
 function onCategoryChangeManual(rowNum) {
-    // Handle type selection change
-    const category = document.getElementById(`category-manual-${rowNum}`).value;
-    const productSelect = document.getElementById(`product-manual-${rowNum}`);
-    const boxVariantSelect = document.getElementById(`box-variant-manual-${rowNum}`);
-    const doorVariantSelect = document.getElementById(`door-variant-manual-${rowNum}`);
-    
-    // Clear subsequent selections
-    productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-    
-    // Reset SKU and price
-    document.getElementById(`sku-manual-${rowNum}`).textContent = '[[ t("not_selected") ]]';
-    document.getElementById(`sku-manual-${rowNum}`).className = 'badge bg-secondary';
-    document.getElementById(`price-manual-${rowNum}`).textContent = '$0.00';
-    
-    // Disable subsequent selections
-    productSelect.disabled = true;
-    boxVariantSelect.disabled = true;
-    doorVariantSelect.disabled = true;
-    
-    if (category) {
-        // Load products列表
-        loadProductsByCategoryManual(category, rowNum);
-    }
+    // 使用通用函数处理类别改变（禁用变体选择逻辑）
+    onCategoryChangeUniversal(rowNum, {
+        elementPrefix: 'manual',
+        enableVariantLogic: false
+    });
 }
 
 function onProductChangeManual(rowNum) {
@@ -2062,153 +1950,17 @@ function onVariantChangeManual(rowNum) {
 }
 
 function loadProductsByCategoryManual(category, rowNum) {
-    // 根据类别加载产品列表（Manual版本）
-    $.ajax({
-        url: '/get_products_by_category',
-        type: 'GET',
-        data: { category: category },
-        success: function(response) {
-            if (response.success) {
-                const productSelect = document.getElementById(`product-manual-${rowNum}`);
-                const boxVariantSelect = document.getElementById(`box-variant-manual-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-manual-${rowNum}`);
-                
-                // Populate product selection
-                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-                response.products.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product;
-                    option.textContent = product;
-                    productSelect.appendChild(option);
-                });
-                productSelect.disabled = false;
-                
-                // Populate cabinet body variant selection
-                boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-                response.box_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    boxVariantSelect.appendChild(option);
-                });
-                
-                // Populate door panel variant selection
-                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    doorVariantSelect.appendChild(option);
-                });
-                
-                // Enable/disable variant selection based on category
-                if (category === 'BOX') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'Assm.组合件') {
-                    boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
-                } else if (category === 'HARDWARE') {
-                    boxVariantSelect.disabled = true;
-                    doorVariantSelect.disabled = true;
-                }
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_list_failed") ]]', 'warning');
-        }
-    });
+    loadProductsByCategoryUniversal(category, rowNum, {elementPrefix: 'manual', setValues: false})
 }
 
 function searchSkuAndPriceManual(rowNum) {
-    // [[ t("search") ]]SKU和Price（Manual版本）
-    const category = document.getElementById(`category-manual-${rowNum}`).value;
-    const product = document.getElementById(`product-manual-${rowNum}`).value;
-    const boxVariant = document.getElementById(`box-variant-manual-${rowNum}`).value;
-    const doorVariant = document.getElementById(`door-variant-manual-${rowNum}`).value;
-    
-    if (!category || !product) {
-        return;
-    }
-    
-    $.ajax({
-        url: '/search_sku_price',
-        type: 'GET',
-        data: {
-            category: category,
-            product: product,
-            box_variant: boxVariant,
-            door_variant: doorVariant
-        },
-        success: function(response) {
-            if (response.success) {
-                const skuElement = document.getElementById(`sku-manual-${rowNum}`);
-                const priceElement = document.getElementById(`price-manual-${rowNum}`);
-                
-                if (response.found) {
-                    skuElement.textContent = response.sku;
-                    skuElement.className = 'badge bg-success';
-                    priceElement.textContent = `$${response.price.toFixed(2)}`;
-                } else {
-                    skuElement.textContent = '[[ t("not_found") ]]';
-                    skuElement.className = 'badge bg-danger';
-                    priceElement.textContent = '$0.00';
-                }
-                
-                updateManualTotal();
-            }
-        },
-        error: function() {
-            showAlert('[[ t("search_sku_failed") ]]', 'warning');
-        }
-    });
+    // 使用共享函数搜索SKU和价格（Manual版本）
+    searchSkuAndPriceUniversal(rowNum, 'manual');
 }
 
 function searchSkuAndPrice(rowNum) {
-    // [[ t("search") ]]SKU和Price
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const product = document.getElementById(`product-${rowNum}`).value;
-    const boxVariant = document.getElementById(`box-variant-${rowNum}`).value;
-    const doorVariant = document.getElementById(`door-variant-${rowNum}`).value;
-    
-    if (!category || !product) {
-        return;
-    }
-    
-    $.ajax({
-        url: '/search_sku_price',
-        type: 'GET',
-        data: {
-            category: category,
-            product: product,
-            box_variant: boxVariant,
-            door_variant: doorVariant
-        },
-        success: function(response) {
-            if (response.success) {
-                const skuElement = document.getElementById(`sku-${rowNum}`);
-                const priceElement = document.getElementById(`price-${rowNum}`);
-                
-                if (response.found) {
-                    skuElement.textContent = response.sku;
-                    skuElement.className = 'badge bg-success';
-                    priceElement.textContent = `$${response.price.toFixed(2)}`;
-                } else {
-                    skuElement.textContent = '[[ t("not_found") ]]';
-                    skuElement.className = 'badge bg-danger';
-                    priceElement.textContent = '$0.00';
-                }
-                
-                updateManualTotal();
-            }
-        },
-        error: function() {
-            showAlert('[[ t("search_sku_failed") ]]', 'warning');
-        }
-    });
+    // 使用共享函数搜索SKU和价格
+    searchSkuAndPriceUniversal(rowNum, '');
 }
 
 function clearCurrentManualRow(rowNum) {
@@ -2898,82 +2650,12 @@ function loadProductCategoriesAndSetValuesWithCallback(rowNum, product, callback
 
 function loadProductsAndSetValues(rowNum, product) {
     // Load products并设置已保存的值
-    $.ajax({
-        url: `/get_products_by_category?category=${encodeURIComponent(product.category)}`,
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const productSelect = document.getElementById(`product-${rowNum}`);
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // 启用产品选择
-                productSelect.disabled = false;
-                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-                
-                response.products.forEach(prod => {
-                    const option = document.createElement('option');
-                    option.value = prod;
-                    option.textContent = prod;
-                    if (prod === product.product) {
-                        option.selected = true;
-                    }
-                    productSelect.appendChild(option);
-                });
-                
-                // 设置变体值
-                if (product.product) {
-                    loadVariantsAndSetValues(rowNum, product);
-                }
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_failed") ]]', 'warning');
-        }
-    });
+    loadProductsByCategoryUniversal(category, rowNum, {setValues: true, savedValues: product})
 }
 
 function loadProductsAndSetValuesWithCallback(rowNum, product, callback) {
     // Load products并设置已保存的值（带回调）
-    $.ajax({
-        url: `/get_products_by_category?category=${encodeURIComponent(product.category)}`,
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const productSelect = document.getElementById(`product-${rowNum}`);
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // 启用产品选择
-                productSelect.disabled = false;
-                productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-                
-                response.products.forEach(prod => {
-                    const option = document.createElement('option');
-                    option.value = prod;
-                    option.textContent = prod;
-                    if (prod === product.product) {
-                        option.selected = true;
-                    }
-                    productSelect.appendChild(option);
-                });
-                
-                // 设置变体值
-                if (product.product) {
-                    loadVariantsAndSetValuesWithCallback(rowNum, product, callback);
-                } else {
-                    // 如果没有产品，直接调用回调
-                    if (callback) callback();
-                }
-            } else {
-                if (callback) callback();
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_failed") ]]', 'warning');
-            if (callback) callback();
-        }
-    });
+    oadProductsByCategoryUniversal(category, rowNum, {setValues: true, savedValues: product, callback: callback})
 }
 
 function loadVariantsAndSetValues(rowNum, product) {
@@ -6170,5 +5852,16 @@ function initializeTableCustomerTypeOptions() {
     }
 }
 
+// 使用公共JS文件中的searchSkuAndPriceUniversal函数
+
+// 普通版本
+function searchSkuAndPrice(rowNum) {
+    searchSkuAndPriceUniversal(rowNum, '');
+}
+
+// Manual版本
+function searchSkuAndPriceManual(rowNum) {
+    searchSkuAndPriceUniversal(rowNum, 'manual');
+}
 </script>
 [% endblock %] 

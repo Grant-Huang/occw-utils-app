@@ -12,10 +12,10 @@ polib==1.2.0
 PyPDF2==3.0.1
 
 # 数据处理
-pandas==2.1.4
-openpyxl==3.1.2
-xlsxwriter==3.1.9
-numpy==1.24.3
+pandas>=2.2.3
+openpyxl>=3.1.5
+xlsxwriter>=3.2.5
+numpy>=2.2.4
 
 # 报告生成
 reportlab==4.0.7
@@ -24,16 +24,16 @@ reportlab==4.0.7
 gunicorn==21.2.0
 
 # 类型提示支持
-typing-extensions==4.8.0
+typing-extensions>=4.12.2
 
 # 安全相关
 cryptography==45.0.5
 
 # 日期时间处理
-python-dateutil==2.8.2
+python-dateutil>=2.8.2
 
 # 文件处理
-Pillow==10.0.1
+Pillow>=10.0.1
 
 # 开发工具（可选）
 # requests==2.31.0  # 仅用于测试 
