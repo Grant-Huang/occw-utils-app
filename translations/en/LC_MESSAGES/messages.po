@@ -890,3 +890,105 @@ msgstr ""
 #~ msgid "export_sku_mapping_failed"
 #~ msgstr "Failed to export SKU mapping"
 
+# New translation keys
+msgid "load_product_category_failed"
+msgstr "Failed to load product categories"
+
+msgid "load_product_list_failed"
+msgstr "Failed to load product list"
+
+msgid "search_sku_failed"
+msgstr "Failed to search SKU"
+
+msgid "no_data_to_export"
+msgstr "No data to export"
+
+msgid "please_enter_date"
+msgstr "Please enter date"
+
+msgid "username_cannot_be_empty"
+msgstr "Username cannot be empty"
+
+msgid "please_upload_pdf_first"
+msgstr "Please upload PDF file first"
+
+msgid "getting_pdf_text"
+msgstr "Getting PDF text..."
+
+msgid "pdf_text_copied"
+msgstr "PDF text copied to clipboard"
+
+msgid "sku_mapping_saved"
+msgstr "SKU mapping saved"
+
+msgid "please_select_complete_product_info"
+msgstr "Please select complete product information first"
+
+msgid "product_added_to_list"
+msgstr "Product added to list"
+
+msgid "product_deleted"
+msgstr "Product deleted"
+
+msgid "user_login_disabled_cannot_save"
+msgstr "User login feature is disabled, cannot save"
+
+msgid "no_data_to_save"
+msgstr "No data to save"
+
+msgid "no_products_to_save"
+msgstr "No products to save"
+
+msgid "no_products_to_export"
+msgstr "No products to export"
+
+msgid "please_upload_data_first"
+msgstr "Please upload data first"
+
+msgid "no_charts_to_download"
+msgstr "No charts to download"
+
+msgid "please_select_two_sales_persons"
+msgstr "Please select two Sales Persons for comparison"
+
+msgid "please_select_different_sales_persons"
+msgstr "Please select different Sales Persons for comparison"
+
+msgid "please_enter_original_sku"
+msgstr "Please enter Original SKU"
+
+msgid "please_enter_or_select_mapped_sku"
+msgstr "Please enter or select Mapped SKU"
+
+msgid "no_data_to_export_sku"
+msgstr "No data to export"
+
+msgid "please_add_product_row_first"
+msgstr "Please add product row first"
+
+msgid "product_added_success"
+msgstr "Product added successfully"
+
+msgid "product_list_cleared"
+msgstr "Product list cleared"
+
+msgid "please_select_excel_file"
+msgstr "Please select Excel file"
+
+msgid "export_feature_developing"
+msgstr "Export feature is under development..."
+
+# Dynamic content prompt messages
+msgid "row_sku_cannot_be_empty"
+msgstr "Row {row_num} SKU cannot be empty"
+
+msgid "row_price_cannot_be_zero"
+msgstr "Row {row_num} Price cannot be 0"
+
+msgid "row_quantity_cannot_be_zero"
+msgstr "Row {row_num} quantity cannot be 0"
+
+# Confirm clearing all products
+msgid "confirm_clear_all_products"
+msgstr "Are you sure you want to clear all products?"
+

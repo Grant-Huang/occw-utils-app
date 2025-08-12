@@ -1039,6 +1039,158 @@
         showAlert(message, type);
     }
     
+    // Helper function to format translation messages with dynamic content
+    function formatTranslation(key, params = {}) {
+        let message = '[[ t("' + key + '") ]]';
+        for (const [param, value] of Object.entries(params)) {
+            message = message.replace(`{${param}}`, value);
+        }
+        return message;
+    }
+    
+    // Unified confirmation dialog system (replaces confirm())
+    function showConfirm(message, onConfirm, onCancel = null, confirmText = '确定', cancelText = '取消') {
+        // Create modal backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'confirm-backdrop';
+        backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+        
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.style.cssText = `
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: confirmModalShow 0.3s ease-out;
+        `;
+        
+        // Add CSS animation
+        if (!document.querySelector('#confirmModalStyles')) {
+            const style = document.createElement('style');
+            style.id = 'confirmModalStyles';
+            style.textContent = `
+                @keyframes confirmModalShow {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.8) translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                    }
+                }
+                .confirm-backdrop {
+                    animation: confirmBackdropShow 0.3s ease-out;
+                }
+                @keyframes confirmBackdropShow {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        modal.innerHTML = `
+            <div style="margin-bottom: 20px;">
+                <h5 style="margin: 0 0 10px 0; color: #333;">确认操作</h5>
+                <p style="margin: 0; color: #666; line-height: 1.5;">${message}</p>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary confirm-cancel" style="min-width: 80px;">${cancelText}</button>
+                <button class="btn btn-primary confirm-ok" style="min-width: 80px;">${confirmText}</button>
+            </div>
+        `;
+        
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+        
+        // Add event listeners
+        const confirmBtn = modal.querySelector('.confirm-ok');
+        const cancelBtn = modal.querySelector('.confirm-cancel');
+        
+        const closeModal = () => {
+            backdrop.style.animation = 'confirmBackdropHide 0.3s ease-out';
+            modal.style.animation = 'confirmModalHide 0.3s ease-out';
+            
+            if (!document.querySelector('#confirmModalHideStyles')) {
+                const style = document.createElement('style');
+                style.id = 'confirmModalHideStyles';
+                style.textContent = `
+                    @keyframes confirmBackdropHide {
+                        to { opacity: 0; }
+                    }
+                    @keyframes confirmModalHide {
+                        to {
+                            opacity: 0;
+                            transform: scale(0.8) translateY(-20px);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            setTimeout(() => {
+                if (backdrop.parentElement) {
+                    backdrop.parentElement.removeChild(backdrop);
+                }
+            }, 300);
+        };
+        
+        confirmBtn.addEventListener('click', () => {
+            closeModal();
+            if (onConfirm && typeof onConfirm === 'function') {
+                onConfirm();
+            }
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            closeModal();
+            if (onCancel && typeof onCancel === 'function') {
+                onCancel();
+            }
+        });
+        
+        // Close on backdrop click
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                closeModal();
+                if (onCancel && typeof onCancel === 'function') {
+                    onCancel();
+                }
+            }
+        });
+        
+        // Close on Escape key
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                if (onCancel && typeof onCancel === 'function') {
+                    onCancel();
+                }
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // Focus on confirm button
+        setTimeout(() => confirmBtn.focus(), 100);
+    }
+    
     // Language switching function
     function setLanguage(lang) {
         fetch(`/set_language/${lang}`)

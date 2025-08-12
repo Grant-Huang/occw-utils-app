@@ -1197,6 +1197,454 @@
       },
       "created_at": "2025-08-05T22:27:25.691914",
       "updated_at": "2025-08-10T11:54:38.617391"
+    },
+    {
+      "quotation_id": "Q00010",
+      "title": "Grant的第2个报价单",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-08-12",
+        "user": "grant",
+        "sales_person": "info@oppeincabinet.ca",
+        "products": [
+          {
+            "sku": "PLY-W3036-BOX",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "PLY-W3015-BOX",
+            "qty": 1,
+            "price": 281.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "PLY-W1236-BOX",
+            "qty": 1,
+            "price": 294.0
+          },
+          {
+            "sku": "PLY-W2415-BOX",
+            "qty": 1,
+            "price": 231.0
+          },
+          {
+            "sku": "PLY-WER2436-BOX",
+            "qty": 1,
+            "price": 757.0
+          },
+          {
+            "sku": "PLY-W1812-BOX",
+            "qty": 1,
+            "price": 159.0
+          },
+          {
+            "sku": "PLY-W1242-BOX",
+            "qty": 1,
+            "price": 349.0
+          },
+          {
+            "sku": "PLY-W3036-BOX",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "PLY-W3042-BOX",
+            "qty": 1,
+            "price": 714.0
+          },
+          {
+            "sku": "PLY-W3036-BOX",
+            "qty": 1,
+            "price": 602.0
+          },
+          {
+            "sku": "PLY-W2442-BOX",
+            "qty": 1,
+            "price": 597.0
+          },
+          {
+            "sku": "PLY-W1236-BOX",
+            "qty": 1,
+            "price": 294.0
+          },
+          {
+            "sku": "PLY-W2415-BOX",
+            "qty": 1,
+            "price": 231.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 361.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 452.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 95.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 95.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 452.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 699.0
+          },
+          {
+            "sku": "PLY-W301524-BOX",
+            "qty": 1,
+            "price": 380.0
+          },
+          {
+            "sku": "PLY-WER2436-BOX",
+            "qty": 1,
+            "price": 757.0
+          },
+          {
+            "sku": "PLY-3DB30-BOX",
+            "qty": 1,
+            "price": 758.0
+          },
+          {
+            "sku": "PLY-SB36-BOX",
+            "qty": 1,
+            "price": 468.0
+          },
+          {
+            "sku": "PLY-BLS36-BOX",
+            "qty": 1,
+            "price": 949.0
+          },
+          {
+            "sku": "PLY-3DB30-BOX",
+            "qty": 1,
+            "price": 999.0
+          },
+          {
+            "sku": "PLY-3DB30-BOX",
+            "qty": 1,
+            "price": 999.0
+          },
+          {
+            "sku": "PLY-SB30-BOX",
+            "qty": 1,
+            "price": 534.0
+          },
+          {
+            "sku": "PLY-B36FH-BOX",
+            "qty": 1,
+            "price": 507.0
+          },
+          {
+            "sku": "PLY-B30-BOX",
+            "qty": 1,
+            "price": 549.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "PLY-BSR12-BOX",
+            "qty": 1,
+            "price": 554.0
+          },
+          {
+            "sku": "PLY-BSR12-BOX",
+            "qty": 1,
+            "price": 728.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "PLY-3DB24-BOX",
+            "qty": 1,
+            "price": 678.0
+          },
+          {
+            "sku": "PLY-BSR12-BOX",
+            "qty": 1,
+            "price": 728.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "PLY-PC3090-BOX",
+            "qty": 1,
+            "price": 1759.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "PLY-PC1890-BOX",
+            "qty": 1,
+            "price": 1205.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 390.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 5,
+            "price": 94.0
+          }
+        ]
+      },
+      "created_at": "2025-08-12T13:52:30.160655",
+      "updated_at": "2025-08-12T13:52:30.160655"
+    },
+    {
+      "quotation_id": "Q00011",
+      "title": "Grant的第3个报价单",
+      "data": {
+        "type": "pdf",
+        "order_date": "2025-08-12",
+        "user": "grant",
+        "sales_person": "info@oppeincabinet.ca",
+        "products": [
+          {
+            "sku": "PLY-W2430-BOX",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "PLY-W2430-BOX",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "PLY-W2430-BOX",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "PLY-W2430-BOX",
+            "qty": 1,
+            "price": 403.0
+          },
+          {
+            "sku": "PLY-W1230-BOX",
+            "qty": 1,
+            "price": 237.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 640.0
+          },
+          {
+            "sku": "PLY-W3636-BOX",
+            "qty": 1,
+            "price": 640.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "PLY-W3021-BOX",
+            "qty": 1,
+            "price": 321.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 82.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 292.0
+          },
+          {
+            "sku": "PLY-W2418-BOX",
+            "qty": 1,
+            "price": 239.0
+          },
+          {
+            "sku": "PLY-W1836-BOX",
+            "qty": 1,
+            "price": 362.0
+          },
+          {
+            "sku": "PLY-W361824-BOX",
+            "qty": 1,
+            "price": 455.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 148.0
+          },
+          {
+            "sku": "PLY-B18-BOX",
+            "qty": 1,
+            "price": 503.0
+          },
+          {
+            "sku": "PLY-SB42-BOX",
+            "qty": 1,
+            "price": 625.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "PLY-BBC45-BOX",
+            "qty": 1,
+            "price": 659.0
+          },
+          {
+            "sku": "PLY-B24-BOX",
+            "qty": 1,
+            "price": 601.0
+          },
+          {
+            "sku": "PLY-2DB30-BOX",
+            "qty": 1,
+            "price": 794.0
+          },
+          {
+            "sku": "PLY-BSR06-BOX",
+            "qty": 1,
+            "price": 583.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 30.0
+          },
+          {
+            "sku": "PLY-BSR06-BOX",
+            "qty": 1,
+            "price": 583.0
+          },
+          {
+            "sku": "PLY-3DB36-BOX",
+            "qty": 1,
+            "price": 1085.0
+          },
+          {
+            "sku": "PLY-BTC18-BOX",
+            "qty": 1,
+            "price": 850.0
+          },
+          {
+            "sku": "PLY-3DB18-BOX",
+            "qty": 1,
+            "price": 749.0
+          },
+          {
+            "sku": "PLY-3DB30-BOX",
+            "qty": 1,
+            "price": 957.0
+          },
+          {
+            "sku": "PLY-3DB30-BOX",
+            "qty": 1,
+            "price": 957.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 348.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 158.0
+          },
+          {
+            "sku": "PLY-PC1896-BOX",
+            "qty": 1,
+            "price": 1134.0
+          },
+          {
+            "sku": "PLY-PC1896-BOX",
+            "qty": 1,
+            "price": 1134.0
+          },
+          {
+            "sku": "PLY-PC3096-BOX",
+            "qty": 1,
+            "price": 1621.0
+          },
+          {
+            "sku": "WSS-BEP24",
+            "qty": 1,
+            "price": 348.0
+          }
+        ]
+      },
+      "created_at": "2025-08-12T13:53:00.087741",
+      "updated_at": "2025-08-12T13:53:00.087741"
     }
   ]
 }

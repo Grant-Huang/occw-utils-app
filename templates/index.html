@@ -3,6 +3,34 @@
 [% block title %][[ t('home_title') ]][% endblock %]
 
 [% block content %]
+<!-- 全局翻译对象 -->
+<script>
+    // 全局翻译对象，供 JavaScript 使用
+    window.translations = {
+        not_selected: '[[ t("not_selected") ]]',
+        not_found: '[[ t("not_found") ]]',
+        select_type: '[[ t("select_type") ]]',
+        select_product: '[[ t("select_product") ]]',
+        select_box_variant: '[[ t("select_box_variant") ]]',
+        select_door_variant: '[[ t("select_door_variant") ]]',
+        load_product_category_failed: '[[ t("load_product_category_failed") ]]',
+        load_product_list_failed: '[[ t("load_product_list_failed") ]]',
+        search_sku_failed: '[[ t("search_sku_failed") ]]',
+        upload_failed_retry: '[[ t("upload_failed_retry") ]]',
+        get_pdf_text_failed: '[[ t("get_pdf_text_failed") ]]',
+        row_sku_cannot_be_empty: '[[ t("row_sku_cannot_be_empty") ]]',
+        row_price_cannot_be_zero: '[[ t("row_price_cannot_be_zero") ]]',
+        row_quantity_cannot_be_zero: '[[ t("row_quantity_cannot_be_zero") ]]',
+        plus_tax: '[[ t("plus_tax") ]]',
+        export_success_message: '[[ t("export_success_message") ]]',
+        product_name: '[[ t("product_name") ]]',
+        tip: '[[ t("tip") ]]'
+    };
+</script>
+
+<!-- 隐藏的输入字段，供 JavaScript 使用 -->
+<input type="hidden" id="user-login-enabled" value="[[ 'true' if system_settings.get('user_login_enabled', True) else 'false' ]]">
+<input type="hidden" id="user-logged-in" value="[[ 'true' if session.get('username') else 'false' ]]">
 <!-- Page Title -->
 <div class="page-header">
     <div class="container-fluid">
@@ -566,8 +594,8 @@
                                             <div class="col-md-6 mb-4">
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                                                                <h6 class="mb-0">[[ t('order_amount_conversion_analysis') ]]</h6>
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('salesTrendChart', '[[ t('order_amount_conversion_analysis') ]]')">
+                                                        <h6 class="mb-0">[[ t('order_amount_conversion_analysis') ]]</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('salesTrendChart', t('order_amount_conversion_analysis'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -580,7 +608,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('order_quantity_conversion_analysis') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', '[[ t('order_quantity_conversion_analysis') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('conversionRateChart', t('order_quantity_conversion_analysis'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -597,7 +625,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('customer_type_amount_trend') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountTrendChart', '[[ t('customer_type_amount_trend') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountTrendChart', t('customer_type_amount_trend'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -610,7 +638,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('customer_type_count_trend') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountTrendChart', '[[ t('customer_type_count_trend') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountTrendChart', t('customer_type_count_trend'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -627,7 +655,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('customer_type_amount_distribution') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountPieChart', '[[ t('customer_type_amount_distribution') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeAmountPieChart', t('customer_type_amount_distribution'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -640,7 +668,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('customer_type_count_distribution') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountPieChart', '[[ t('customer_type_count_distribution') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('customerTypeCountPieChart', t('customer_type_count_distribution'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -657,7 +685,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('retail_vs_wholesale_amount') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleAmountChart', '[[ t('retail_vs_wholesale_amount') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleAmountChart', t('retail_vs_wholesale_amount'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -670,7 +698,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('retail_vs_wholesale_count') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleCountChart', '[[ t('retail_vs_wholesale_count') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="openChartModal('retailWholesaleCountChart', t('retail_vs_wholesale_count'))">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -724,7 +752,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('quantity_comparison') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonCountChart', '[[ t('quantity_comparison_chart') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonCountChart', [[ t('quantity_comparison_chart') ]])">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -737,7 +765,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('amount_comparison') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonAmountChart', '[[ t('amount_comparison_chart') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonAmountChart', [[ t('amount_comparison_chart') ]])">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -750,7 +778,7 @@
                                                 <div class="card">
                                                     <div class="card-header d-flex justify-content-between align-items-center">
                                                         <h6 class="mb-0">[[ t('conversion_rate_comparison') ]]</h6>
-                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonConversionChart', '[[ t('conversion_rate_comparison_chart') ]]')">
+                                                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="openChartModal('comparisonConversionChart', [[ t('conversion_rate_comparison_chart') ]])">
                                                             <i class="fas fa-expand"></i>
                                                         </button>
                                                     </div>
@@ -1314,7 +1342,7 @@ $(document).ready(function() {
             error: function(xhr) {
                 $('#uploadProgress').hide();
                 const response = xhr.responseJSON;
-                showAlert(response ? response.error : '上传失败，请重试', 'danger');
+                showAlert(response ? response.error : window.translations.upload_failed_retry, 'danger');
             }
         });
     });
@@ -1380,7 +1408,7 @@ function displayQuotation(products, totalPrice, compareMessage, compareResult) {
 
 function exportQuotation(format) {
     if (currentProducts.length === 0) {
-        showAlert('没有可Export的数据', 'warning');
+        showAlert('[[ t("no_data_to_export") ]]', 'warning');
         return;
     }
     
@@ -1393,7 +1421,7 @@ function exportQuotation(format) {
 
 function exportOCCWQuotation() {
     if (currentProducts.length === 0) {
-        showAlert('没有可Export的数据', 'warning');
+        showAlert('[[ t("no_data_to_export") ]]', 'warning');
         return;
     }
     
@@ -1404,13 +1432,13 @@ function exportOCCWQuotation() {
     
     // 验证必填信息
     if (!exportDate) {
-        showAlert('请输入日期', 'warning');
+        showAlert('[[ t("please_enter_date") ]]', 'warning');
         return;
     }
     
     // 验证必填信息
     if (!exportUsername) {
-        showAlert('用户名不能为空', 'warning');
+        showAlert('[[ t("username_cannot_be_empty") ]]', 'warning');
         return;
     }
     
@@ -1437,13 +1465,13 @@ function exportOCCWQuotation() {
         }
         
         if (!occwSku) {
-            showAlert(`第${product.seq_num}行的SKU不能为空`, 'warning');
+            showAlert(window.translations.row_sku_cannot_be_empty.replace('{row_num}', product.seq_num), 'warning');
             return;
         }
         
         const unitPrice = parseFloat(priceCell.text().replace('$', '')) || 0;
         if (unitPrice <= 0) {
-            showAlert(`第${product.seq_num}行的Price不能为0`, 'warning');
+            showAlert(window.translations.row_price_cannot_be_zero.replace('{row_num}', product.seq_num), 'warning');
             return;
         }
     }
@@ -1497,8 +1525,8 @@ function exportOCCWQuotation() {
     link.click();
     document.body.removeChild(link);
     
-    // 显示成功[[ t("tip") ]]
-    showAlert('[[ t("export_success_message") ]]', 'success');
+    // 显示成功提示
+    showAlert(window.translations.export_success_message, 'success');
 }
 
 // showAlert function has been unified in base.html as toast system
@@ -1513,14 +1541,14 @@ function showPdfText() {
     // 如果没有保存的文本，则从服务器获取
     const fileInput = $('#quotationFile')[0];
     if (!fileInput.files[0]) {
-        showAlert('请先上传PDF文件', 'warning');
+        showAlert('[[ t("please_upload_pdf_first") ]]', 'warning');
         return;
     }
     
     const filename = fileInput.files[0].name;
     
     // 显示加载Status
-    showAlert('正在获取PDF文本...', 'info');
+            showAlert('[[ t("getting_pdf_text") ]]', 'info');
     
     $.ajax({
         url: '/get_pdf_text',
@@ -1535,7 +1563,7 @@ function showPdfText() {
         },
         error: function(xhr) {
             const response = xhr.responseJSON;
-            showAlert(response ? response.error : '获取PDF文本失败', 'danger');
+            showAlert(response ? response.error : window.translations.get_pdf_text_failed, 'danger');
         }
     });
 }
@@ -1579,7 +1607,7 @@ function copyPdfText() {
     const text = textElement.textContent;
     
     navigator.clipboard.writeText(text).then(function() {
-        showAlert('PDF文本已复制到剪贴板', 'success');
+        showAlert('[[ t("pdf_text_copied") ]]', 'success');
     }).catch(function() {
         showAlert('[[ t("copy_failed_manual") ]]', 'warning');
     });
@@ -1614,7 +1642,7 @@ function saveSkuMapping(originalSku, mappedSku, seqNum) {
                 cell.html(`<code class="text-primary">${mappedSku}</code> <small class="text-muted">(已映射)</small>`);
                 
                 updateOCCWTotal();
-                showAlert('SKU映射已保存', 'success');
+                showAlert('[[ t("sku_mapping_saved") ]]', 'success');
             } else {
                 showAlert(response.error, 'danger');
             }
@@ -1969,13 +1997,13 @@ function clearCurrentManualRow(rowNum) {
     if (row) {
         // 清空所有选择框和输入框
         document.getElementById(`category-${rowNum}`).innerHTML = '<option value="">[[ t("select_type") ]]</option>';
-        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">[[ t("select_product") ]]</option>';
+        document.getElementById(`product-${rowNum}`).innerHTML = '<option value="">' + window.translations.select_product + '</option>';
         document.getElementById(`product-${rowNum}`).disabled = true;
-        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
+        document.getElementById(`box-variant-${rowNum}`).innerHTML = '<option value="">' + window.translations.select_box_variant + '</option>';
         document.getElementById(`box-variant-${rowNum}`).disabled = true;
-        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
+        document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">' + window.translations.select_door_variant + '</option>';
         document.getElementById(`door-variant-${rowNum}`).disabled = true;
-        document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
+        document.getElementById(`sku-${rowNum}`).innerHTML = '<span>' + window.translations.not_selected + '</span>';
         document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
         document.getElementById(`price-${rowNum}`).textContent = '$0.00';
         document.getElementById(`qty-${rowNum}`).value = '1';
@@ -2013,7 +2041,7 @@ function updateManualTotal() {
         }
     }
     
-    document.getElementById('manualTotalPrice').innerHTML = `$${total.toFixed(2)} <small class="text-muted">([[ t('plus_tax') ]])</small>`;
+            document.getElementById('manualTotalPrice').innerHTML = `$${total.toFixed(2)} <small class="text-muted">(${window.translations.plus_tax})</small>`;
     
     // 更新折扣计算器
     updateDiscountCalculator('manual', total);
@@ -2474,302 +2502,6 @@ function loadQuotationDetail(quotationId) {
     });
 }
 
-function addManualProductRow(product) {
-    // 添加手动产品行（用于加载已保存的[[ t("quotation_order") ]]）
-    const tbody = document.getElementById('manualProductsTableBody');
-    const rowId = `manual-row-${manualProductCounter}`;
-    
-    const row = document.createElement('tr');
-    row.id = rowId;
-    row.innerHTML = `
-        <td>${manualProductCounter}</td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onCategoryChangeManual(${manualProductCounter})" id="category-manual-${manualProductCounter}">
-                <option value="">[[ t("select_type") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onProductChangeManual(${manualProductCounter})" id="product-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_product") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="box-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_box_variant") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="door-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_door_variant") ]]</option>
-            </select>
-        </td>
-        <td>
-            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">[[ t("not_selected") ]]</span>
-        </td>
-        <td>
-            <span id="price-manual-${manualProductCounter}">$0.00</span>
-        </td>
-        <td>
-            <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateManualTotal()" id="qty-manual-${manualProductCounter}">
-        </td>
-        <td>
-            <button class="btn btn-sm btn-danger" onclick="removeManualProduct(${manualProductCounter})">
-                <i class="fas fa-trash"></i>
-            </button>
-        </td>
-    `;
-    
-    tbody.appendChild(row);
-    
-    // Load product categories并设置值
-    loadProductCategoriesAndSetValues(manualProductCounter, product);
-    
-    manualProductCounter++;
-    updateExportButton();
-}
-
-function addManualProductRowWithCallback(product, callback) {
-    // 添加手动产品行（用于加载已保存的[[ t("quotation_order") ]]，带回调）
-    const tbody = document.getElementById('manualProductsTableBody');
-    const rowId = `manual-row-${manualProductCounter}`;
-    
-    const row = document.createElement('tr');
-    row.id = rowId;
-    row.innerHTML = `
-        <td>${manualProductCounter}</td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onCategoryChangeManual(${manualProductCounter})" id="category-manual-${manualProductCounter}">
-                <option value="">[[ t("select_type") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onProductChangeManual(${manualProductCounter})" id="product-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_product") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="box-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_box_variant") ]]</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select form-select-sm" onchange="onVariantChangeManual(${manualProductCounter})" id="door-variant-manual-${manualProductCounter}" disabled>
-                <option value="">[[ t("select_door_variant") ]]</option>
-            </select>
-        </td>
-        <td>
-            <span id="sku-manual-${manualProductCounter}" class="badge bg-secondary">[[ t("not_selected") ]]</span>
-        </td>
-        <td>
-            <span id="price-manual-${manualProductCounter}">$0.00</span>
-        </td>
-        <td>
-            <input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateManualTotal()" id="qty-manual-${manualProductCounter}">
-        </td>
-        <td>
-            <button class="btn btn-sm btn-danger" onclick="removeManualProduct(${manualProductCounter})">
-                <i class="fas fa-trash"></i>
-            </button>
-        </td>
-    `;
-    
-    tbody.appendChild(row);
-    
-    // Load product categories并设置值，带回调
-    loadProductCategoriesAndSetValuesWithCallback(manualProductCounter, product, callback);
-    
-    manualProductCounter++;
-    updateExportButton();
-}
-
-function loadProductCategoriesAndSetValues(rowNum, product) {
-    // Load product categories并设置已保存的值
-    $.ajax({
-        url: '/get_product_categories',
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const select = document.getElementById(`category-${rowNum}`);
-                response.categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    if (category === product.category) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-                
-                // 设置产品值
-                if (product.category) {
-                    loadProductsAndSetValues(rowNum, product);
-                }
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
-        }
-    });
-}
-
-function loadProductCategoriesAndSetValuesWithCallback(rowNum, product, callback) {
-    // Load product categories并设置已保存的值（带回调）
-    $.ajax({
-        url: '/get_product_categories',
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const select = document.getElementById(`category-${rowNum}`);
-                response.categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    if (category === product.category) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-                
-                // 设置产品值
-                if (product.category) {
-                    loadProductsAndSetValuesWithCallback(rowNum, product, callback);
-                } else {
-                    // 如果没有类别，直接调用回调
-                    if (callback) callback();
-                }
-            } else {
-                if (callback) callback();
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
-            if (callback) callback();
-        }
-    });
-}
-
-function loadProductsAndSetValues(rowNum, product) {
-    // Load products并设置已保存的值
-    loadProductsByCategoryUniversal(category, rowNum, {setValues: true, savedValues: product})
-}
-
-function loadProductsAndSetValuesWithCallback(rowNum, product, callback) {
-    // Load products并设置已保存的值（带回调）
-    oadProductsByCategoryUniversal(category, rowNum, {setValues: true, savedValues: product, callback: callback})
-}
-
-function loadVariantsAndSetValues(rowNum, product) {
-    // 加载变体并设置已保存的值
-    $.ajax({
-        url: `/search_sku_price?category=${encodeURIComponent(product.category)}&product=${encodeURIComponent(product.product)}&box_variant=${encodeURIComponent(product.box_variant)}&door_variant=${encodeURIComponent(product.door_variant)}`,
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // 设置变体值
-                if (product.category === 'BOX') {
-                    boxVariantSelect.disabled = false;
-                    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-                    response.box_variants.forEach(variant => {
-                        const option = document.createElement('option');
-                        option.value = variant;
-                        option.textContent = variant;
-                        if (variant === product.box_variant) {
-                            option.selected = true;
-                        }
-                        boxVariantSelect.appendChild(option);
-                    });
-                }
-                
-                doorVariantSelect.disabled = false;
-                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    if (variant === product.door_variant) {
-                        option.selected = true;
-                    }
-                    doorVariantSelect.appendChild(option);
-                });
-                
-                // 设置SKU和Price
-                if (response.sku) {
-                    document.getElementById(`sku-${rowNum}`).textContent = response.sku;
-                    document.getElementById(`sku-${rowNum}`).className = 'badge bg-success';
-                    document.getElementById(`price-${rowNum}`).textContent = response.price;
-                }
-                
-                // 设置数量
-                document.getElementById(`qty-${rowNum}`).value = product.qty || 1;
-            }
-        },
-        error: function() {
-            showAlert('[[ t("load_variant_failed") ]]', 'warning');
-        }
-    });
-}
-
-function loadVariantsAndSetValuesWithCallback(rowNum, product, callback) {
-    // 加载变体并设置已保存的值（带回调）
-    $.ajax({
-        url: `/search_sku_price?category=${encodeURIComponent(product.category)}&product=${encodeURIComponent(product.product)}&box_variant=${encodeURIComponent(product.box_variant)}&door_variant=${encodeURIComponent(product.door_variant)}`,
-        type: 'GET',
-        success: function(response) {
-            if (response.success) {
-                const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-                const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-                
-                // 设置变体值
-                if (product.category === 'BOX') {
-                    boxVariantSelect.disabled = false;
-                    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-                    response.box_variants.forEach(variant => {
-                        const option = document.createElement('option');
-                        option.value = variant;
-                        option.textContent = variant;
-                        if (variant === product.box_variant) {
-                            option.selected = true;
-                        }
-                        boxVariantSelect.appendChild(option);
-                    });
-                }
-                
-                doorVariantSelect.disabled = false;
-                doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
-                response.door_variants.forEach(variant => {
-                    const option = document.createElement('option');
-                    option.value = variant;
-                    option.textContent = variant;
-                    if (variant === product.door_variant) {
-                        option.selected = true;
-                    }
-                    doorVariantSelect.appendChild(option);
-                });
-                
-                // 设置SKU和Price
-                if (response.sku) {
-                    document.getElementById(`sku-${rowNum}`).textContent = response.sku;
-                    document.getElementById(`sku-${rowNum}`).className = 'badge bg-success';
-                    document.getElementById(`price-${rowNum}`).textContent = response.price;
-                }
-                
-                // 设置数量
-                document.getElementById(`qty-${rowNum}`).value = product.qty || 1;
-            }
-            
-            // 无论成功还是失败，都调用回调
-            if (callback) callback();
-        },
-        error: function() {
-            showAlert('[[ t("load_variant_failed") ]]', 'warning');
-            if (callback) callback();
-        }
-    });
-}
-
 function loadQuotationData(quotation) {
     // 加载[[ t("quotation_order") ]] Count据到手动创建页面
     const data = quotation.data;
@@ -2840,8 +2572,8 @@ function addToProductList(rowNum) {
     const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = document.getElementById(`qty-${rowNum}`).value;
     
-    if (sku === '[[ t("not_selected") ]]' || price === '$0.00') {
-        showAlert('请先选择完整的产品信息', 'warning');
+    if (sku === window.translations.not_selected || sku.includes('not_selected') || price === '$0.00') {
+        showAlert(window.translations.please_select_complete_product_info, 'warning');
         return;
     }
     
@@ -2873,12 +2605,12 @@ function addToProductList(rowNum) {
     // 清空当前行并重新加载产品类别
     clearCurrentManualRow(rowNum);
     
-    showAlert('产品已添加到列表', 'success');
+    showAlert(window.translations.product_added_to_list, 'success');
 }
 
 // 从产品列表中删除产品
 function removeManualProductFromList(rowId) {
-    if (confirm('确定要删除这个产品吗？')) {
+    showConfirm(window.translations.confirm_remove_product, () => {
         const row = document.getElementById(rowId);
         if (row) {
             row.remove();
@@ -2886,9 +2618,9 @@ function removeManualProductFromList(rowId) {
             updateManualProductSequence();
             // 更新总价
             updateManualTotal();
-            showAlert('产品已删除', 'success');
+            showAlert(window.translations.product_deleted, 'success');
         }
-    }
+    });
 }
 
 // 更新产品列表的序号
@@ -2910,7 +2642,7 @@ function viewQuotationDetail(quotationId) {
 }
 
 function deleteQuotation(quotationId) {
-    if (confirm('[[ t("confirm_delete_quotation") ]]')) {
+    showConfirm('[[ t("confirm_delete_quotation") ]]', () => {
         $.ajax({
             url: `/delete_quotation/${quotationId}`,
             type: 'POST',
@@ -2926,18 +2658,16 @@ function deleteQuotation(quotationId) {
                 showAlert('[[ t("delete_quotation_failed") ]]', 'danger');
             }
         });
-    }
+    });
 }
 
 function checkUserLoginStatus() {
     // 检查用户登录功能是否启用
-    const userLoginEnabled = [% if system_settings.get('user_login_enabled', True) %]true[% else %]false[% endif %];
-    
-    // 检查用户是否登录
-    const username = '[[ session.get("username", "") ]]';
-    window.isUserLoggedIn = username !== '';
-    
-    // 只有当用户登录功能启用且用户已登录时才显示我的[[ t("quotation_order") ]]卡片
+    const userLoginEnabled = document.getElementById('user-login-enabled').value === 'true';
+
+// 检查用户是否登录（从隐藏字段读取）
+const isLogged = document.getElementById('user-logged-in').value === 'true';
+window.isUserLoggedIn = isLogged;    // 只有当用户登录功能启用且用户已登录时才显示我的[[ t("quotation_order") ]]卡片
     if (userLoginEnabled && window.isUserLoggedIn) {
         $('#myQuotationsCard').show();
     } else {
@@ -2947,9 +2677,9 @@ function checkUserLoginStatus() {
 
 function saveToMyQuotations(type) {
     // 检查用户登录功能是否启用
-    const userLoginEnabled = [% if system_settings.get('user_login_enabled', True) %]true[% else %]false[% endif %];
+    const userLoginEnabled = document.getElementById('user-login-enabled').value === 'true';
     if (!userLoginEnabled) {
-        showAlert('用户登录功能已禁用，无法保存[[ t("quotation_order") ]]', 'warning');
+        showAlert('[[ t("user_login_disabled_cannot_save") ]]', 'warning');
         return;
     }
     
@@ -2965,7 +2695,7 @@ function saveToMyQuotations(type) {
     if (type === 'pdf') {
         // 验证PDF导入数据
         if (currentProducts.length === 0) {
-            showAlert('没有可保存的数据', 'warning');
+            showAlert('[[ t("no_data_to_save") ]]', 'warning');
             return;
         }
         
@@ -2974,12 +2704,12 @@ function saveToMyQuotations(type) {
         const exportSalesPerson = $('#exportSalesPerson').val();
         
         if (!exportDate) {
-            showAlert('请输入日期', 'warning');
+            showAlert('[[ t("please_enter_date") ]]', 'warning');
             return;
         }
         
         if (!exportUsername) {
-            showAlert('用户名不能为空', 'warning');
+            showAlert('[[ t("username_cannot_be_empty") ]]', 'warning');
             return;
         }
         
@@ -3031,7 +2761,7 @@ function saveToMyQuotations(type) {
         const rows = tbody.getElementsByTagName('tr');
         
         if (rows.length === 0) {
-            showAlert('没有产品可保存', 'warning');
+            showAlert('[[ t("no_products_to_save") ]]', 'warning');
             return;
         }
         
@@ -3040,12 +2770,12 @@ function saveToMyQuotations(type) {
         const exportSalesPerson = $('#manualExportSalesPerson').val();
         
         if (!exportDate) {
-            showAlert('请输入日期', 'warning');
+            showAlert('[[ t("please_enter_date") ]]', 'warning');
             return;
         }
         
         if (!exportUsername) {
-            showAlert('用户名不能为空', 'warning');
+            showAlert('[[ t("username_cannot_be_empty") ]]', 'warning');
             return;
         }
         
@@ -3061,19 +2791,19 @@ function saveToMyQuotations(type) {
             const price = row.cells[3].textContent.trim();
             
             if (!sku) {
-                showAlert(`第${row.cells[0].textContent.trim()}行的SKU不能为空`, 'warning');
+                showAlert(window.translations.row_sku_cannot_be_empty.replace('{row_num}', row.cells[0].textContent.trim()), 'warning');
                 return;
             }
             
             const priceValue = parseFloat(price.replace('$', '')) || 0;
             if (priceValue <= 0) {
-                showAlert(`第${row.cells[0].textContent.trim()}行的Price不能为0`, 'warning');
+                showAlert(window.translations.row_price_cannot_be_zero.replace('{row_num}', row.cells[0].textContent.trim()), 'warning');
                 return;
             }
             
             const qtyValue = parseInt(qty) || 0;
             if (qtyValue <= 0) {
-                showAlert(`第${row.cells[0].textContent.trim()}行的数量不能为0`, 'warning');
+                showAlert(window.translations.row_quantity_cannot_be_zero.replace('{row_num}', row.cells[0].textContent.trim()), 'warning');
                 return;
             }
         }
@@ -3179,12 +2909,12 @@ function confirmSaveQuotation() {
 
 function clearManualQuotation() {
     // 清空手动[[ t("quotation_order") ]]
-    if (confirm('确定要清空所有产品吗？')) {
+    showConfirm('确定要清空所有产品吗？', () => {
         document.getElementById('manualProductsTableBody').innerHTML = '';
         manualProductCounter = 1;
         updateManualTotal();
         updateExportButton();
-    }
+    });
 }
 
 function updateExportButton() {
@@ -3208,7 +2938,7 @@ function exportManualQuotation() {
     const rows = tbody.getElementsByTagName('tr');
     
     if (rows.length === 0) {
-        showAlert('没有产品可Export', 'warning');
+        showAlert('[[ t("no_products_to_export") ]]', 'warning');
         return;
     }
     
@@ -3219,13 +2949,13 @@ function exportManualQuotation() {
     
     // 验证必填信息
     if (!exportDate) {
-        showAlert('请输入日期', 'warning');
+        showAlert('[[ t("please_enter_date") ]]', 'warning');
         return;
     }
     
     // 验证必填信息
     if (!exportUsername) {
-        showAlert('用户名不能为空', 'warning');
+        showAlert('[[ t("username_cannot_be_empty") ]]', 'warning');
         return;
     }
     
@@ -3240,7 +2970,7 @@ function exportManualQuotation() {
         const price = row.cells[2].textContent;
         const qty = row.cells[3].querySelector('input').value;
         
-        if (!sku || sku === '[[ t("not_selected") ]]') {
+        if (!sku || sku === window.translations.not_selected) {
             showAlert(`第${row.cells[0].textContent}行的SKU不能为空`, 'warning');
             return;
         }
@@ -3253,7 +2983,7 @@ function exportManualQuotation() {
         
         const qtyValue = parseInt(qty) || 0;
         if (qtyValue <= 0) {
-            showAlert(`第${row.cells[0].textContent}行的数量不能为0`, 'warning');
+            showAlert(window.translations.row_quantity_cannot_be_zero.replace('{row_num}', row.cells[0].textContent), 'warning');
             return;
         }
     }
@@ -3313,15 +3043,15 @@ function exportManualQuotation() {
     form.submit();
     document.body.removeChild(form);
     
-    // 显示成功[[ t("tip") ]]
-    showAlert('[[ t("export_success_message") ]]', 'success');
+    // 显示成功提示
+    showAlert(window.translations.export_success_message, 'success');
 }
 
 function createExcelFromManualData(products) {
     // 从手动数据创建Excel文件
     // 这里可以使用SheetJS或其他库来创建Excel文件
     // 暂时使用简单的CSV格式
-            let csvContent = "序号,类型,[[ t('product_name') ]],柜身变体,门板变体,SKU,单价,数量,小计\n";
+            let csvContent = "[[ t('sequence_number') ]],[[ t('product_type') ]]," + window.translations.product_name + ",[[ t('box_variant_col') ]],[[ t('door_variant_col') ]],SKU,[[ t('unit_price') ]],[[ t('quantity') ]],[[ t('total') ]]\n";
     
     products.forEach(product => {
         const price = parseFloat(product.price.replace('$', '')) || 0;
@@ -3603,7 +3333,7 @@ function clearAllFilters() {
 // 🆕 显示各金额区间转化率统计
 function showAmountRangeStats() {
     if (!window.rawData || window.rawData.length === 0) {
-        showAlert('请先上传数据', 'warning');
+        showAlert('[[ t("please_upload_data_first") ]]', 'warning');
         return;
     }
     
@@ -3986,7 +3716,7 @@ function copyChartToModal(originalChartId) {
 // 下载图表
 function downloadChart() {
     if (!window.modalChart) {
-        showAlert('没有可下载的图表', 'warning');
+        showAlert('[[ t("no_charts_to_download") ]]', 'warning');
         return;
     }
     
@@ -4062,12 +3792,12 @@ function updateComparisonCharts() {
     const salesPerson2 = $('#salesPerson2').val();
     
     if (!salesPerson1 || !salesPerson2) {
-        showAlert('请选择两个Sales Person进行对比', 'warning');
+        showAlert('[[ t("please_select_two_sales_persons") ]]', 'warning');
         return;
     }
     
     if (salesPerson1 === salesPerson2) {
-        showAlert('请选择不同的Sales Person进行对比', 'warning');
+        showAlert('[[ t("please_select_different_sales_persons") ]]', 'warning');
         return;
     }
     
@@ -4478,27 +4208,27 @@ function displaySalesAnalysis(data) {
             });
             
             if (data.customer_type_trends) {
-                console.log('渲染Customer类型趋势图表');
+                console.log('[[ t("customer_type_count_trend") ]]');
                 renderCustomerTypeAmountTrendChart(data.customer_type_trends);
                 renderCustomerTypeCountTrendChart(data.customer_type_trends);
             } else {
-                console.log('Customer类型趋势数据不存在');
+                console.log('[[ t("customer_type_trend_charts") ]] 数据不存在');
             }
             
             if (data.customer_type_distribution) {
-                console.log('渲染Customer类型分布图表');
+                console.log('[[ t("customer_type_count_distribution") ]]');
                 renderCustomerTypeAmountPieChart(data.customer_type_distribution);
                 renderCustomerTypeCountPieChart(data.customer_type_distribution);
             } else {
-                console.log('Customer类型分布数据不存在');
+                console.log('[[ t("customer_type_distribution_charts") ]] 数据不存在');
             }
             
             if (data.company_type_comparison) {
-                console.log('渲染公司类型对比图表');
+                console.log('[[ t("company_type") ]] 对比');
                 renderRetailWholesaleAmountChart(data.company_type_comparison);
                 renderRetailWholesaleCountChart(data.company_type_comparison);
             } else {
-                console.log('公司类型对比数据不存在');
+                console.log('[[ t("company_type") ]] 对比数据不存在');
             }
         } catch (chartError) {
             console.error('图表显示失败，但不影响其他功能:', chartError);

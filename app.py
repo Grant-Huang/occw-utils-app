@@ -1258,21 +1258,34 @@ def generate_possible_skus(category, product, box_variant, door_variant):
     if not base_sku:
         return possible_skus
     
+    # 添加调试日志
+    print(f"DEBUG: generate_possible_skus - category: '{category}', product: '{product}', box_variant: '{box_variant}', door_variant: '{door_variant}'")
+    
     # 根据产品类别生成不同的SKU格式
-    if category == 'Assm.组合件':  # ✅ 修复类别名称
+    if category == 'Assm.组合件':
         # 组合件格式：{产品代码}-{柜身变体}-{门板颜色}
         if box_variant and door_variant:
             possible_skus.append(f"{base_sku}-{box_variant}-{door_variant}")
+        elif box_variant:
+            possible_skus.append(f"{base_sku}-{box_variant}-WSS")
+        elif door_variant:
+            possible_skus.append(f"{base_sku}-PLY-{door_variant}")
         
-    elif category == 'BOX':  # ✅ 修复类别名称
+    elif category == 'BOX':
         # 柜身格式：{产品代码}-{柜身变体}-BOX
         if box_variant:
-            possible_skus.append(f"{base_sku}-{box_variant}-BOX")
+            possible_skus.append(f"{box_variant}-{base_sku}-BOX")
+        else:
+            # 添加基础版本，以防价格表中有这种格式
+            possible_skus.append(f"PLY-{base_sku}-BOX")
         
-    elif category == 'Door':  # ✅ 修复类别名称
-        # 门板格式：{产品代码}-{门板颜色}-DOOR
+    elif category == 'Door':
+        # 门板格式：{门板颜色}-{产品代码}-DOOR
         if door_variant:
             possible_skus.append(f"{door_variant}-{base_sku}-DOOR")
+        else:
+            # 添加不带DOOR后缀的版本
+            possible_skus.append(f"WSS-{base_sku}-DOOR")
         
     elif category == 'ENDING PANEL':  # ✅ 修复类别名称
         # 端板格式：{门板颜色}-{产品代码}
@@ -1306,7 +1319,11 @@ def generate_possible_skus(category, product, box_variant, door_variant):
             possible_skus.append(f"{base_sku}-{box_variant}-BOX")
         elif door_variant:
             possible_skus.append(f"{door_variant}-{base_sku}")
-        possible_skus.append(base_sku)
+        else:
+            possible_skus.append(base_sku)
+    
+    # 添加调试日志
+    print(f"DEBUG: generated possible_skus: {possible_skus}")
     
     return possible_skus
 
@@ -3643,7 +3660,7 @@ def search_sku_price():
         # 根据产品信息生成可能的SKU
         possible_skus = generate_possible_skus(category, product, box_variant, door_variant)
 
-        #print(f"category: {category}, product: {product}, box_variant: {box_variant}, door_variant: {door_variant}, possible_skus: {possible_skus}")
+        print(f"category: {category}, product: {product}, box_variant: {box_variant}, door_variant: {door_variant}, possible_skus: {possible_skus}")
         
         # 在OCCW价格表中查找匹配的SKU和价格
         found_sku = None

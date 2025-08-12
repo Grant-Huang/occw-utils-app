@@ -13,26 +13,26 @@ function addNewProductShared(containerId, tableBodyId, counterId) {
     row.innerHTML = `
         <td>
             <select class="form-select form-select-sm" onchange="onCategoryChangeShared(${sharedProductCounter})" id="category-${sharedProductCounter}">
-                <option value="">选择类型</option>
+                <option value="">${window.translations.select_type}</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onProductChangeShared(${sharedProductCounter})" id="product-${sharedProductCounter}" disabled>
-                <option value="">选择产品</option>
+                <option value="">${window.translations.select_product}</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeShared(${sharedProductCounter})" id="box-variant-${sharedProductCounter}" disabled>
-                <option value="">选择柜身变体</option>
+                <option value="">${window.translations.select_box_variant}</option>
             </select>
         </td>
         <td>
             <select class="form-select form-select-sm" onchange="onVariantChangeShared(${sharedProductCounter})" id="door-variant-${sharedProductCounter}" disabled>
-                <option value="">选择门板变体</option>
+                <option value="">${window.translations.select_door_variant}</option>
             </select>
         </td>
         <td>
-            <span id="sku-${sharedProductCounter}" class="badge bg-secondary">未选择</span>
+            <span id="sku-${sharedProductCounter}" class="badge bg-secondary">${window.translations.not_selected}</span>
         </td>
         <td>
             <span id="price-${sharedProductCounter}">$0.00</span>
@@ -72,37 +72,17 @@ function loadProductCategoriesShared(rowNum) {
             }
         },
         error: function() {
-            showAlert('加载产品类别失败', 'warning');
+            showAlert(window.translations.load_product_category_failed, 'warning');
         }
     });
 }
 
 function onCategoryChangeShared(rowNum) {
-    // 处理类别选择变化
-    const category = document.getElementById(`category-${rowNum}`).value;
-    const productSelect = document.getElementById(`product-${rowNum}`);
-    const boxVariantSelect = document.getElementById(`box-variant-${rowNum}`);
-    const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
-    
-    // 清空后续选择
-    productSelect.innerHTML = '<option value="">选择产品</option>';
-    boxVariantSelect.innerHTML = '<option value="">选择柜身变体</option>';
-    doorVariantSelect.innerHTML = '<option value="">选择门板变体</option>';
-    
-    // 重置SKU和价格
-    document.getElementById(`sku-${rowNum}`).textContent = '未选择';
-    document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
-    document.getElementById(`price-${rowNum}`).textContent = '$0.00';
-    
-    // 禁用后续选择
-    productSelect.disabled = true;
-    boxVariantSelect.disabled = true;
-    doorVariantSelect.disabled = true;
-    
-    if (category) {
-        // 加载产品
-        loadProductsShared(rowNum, category);
-    }
+    // 委托到通用方法，保持行为一致
+    return onCategoryChangeUniversal(rowNum, {
+        elementPrefix: '',
+        enableVariantLogic: true
+    });
 }
 
 function loadProductsShared(rowNum, category) {
@@ -118,7 +98,7 @@ function loadProductsShared(rowNum, category) {
                 const doorVariantSelect = document.getElementById(`door-variant-${rowNum}`);
                 
                 // 填充产品选择
-                productSelect.innerHTML = '<option value="">选择产品</option>';
+                productSelect.innerHTML = '<option value="">' + window.translations.select_product + '</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
@@ -128,7 +108,7 @@ function loadProductsShared(rowNum, category) {
                 productSelect.disabled = false;
                 
                 // 填充柜身变体选择，确保PLY在第一位
-                boxVariantSelect.innerHTML = '<option value="">选择柜身变体</option>';
+                boxVariantSelect.innerHTML = '<option value="">' + window.translations.select_box_variant + '</option>';
                 
                 // 先添加PLY选项（如果存在）
                 if (response.box_variants.includes('PLY')) {
@@ -149,7 +129,7 @@ function loadProductsShared(rowNum, category) {
                 });
                 
                 // 填充门板变体选择
-                doorVariantSelect.innerHTML = '<option value="">选择门板变体</option>';
+                doorVariantSelect.innerHTML = '<option value="">' + window.translations.select_door_variant + '</option>';
                 response.door_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -174,7 +154,7 @@ function loadProductsShared(rowNum, category) {
             }
         },
         error: function() {
-            showAlert('加载产品列表失败', 'warning');
+            showAlert(window.translations.load_product_list_failed, 'warning');
         }
     });
 }
@@ -219,7 +199,7 @@ function searchSkuAndPriceShared(rowNum) {
                     skuElement.className = 'badge bg-success';
                     priceElement.textContent = `$${response.price.toFixed(2)}`;
                 } else {
-                    skuElement.textContent = '未找到';
+                    skuElement.textContent = window.translations.not_found;
                     skuElement.className = 'badge bg-danger';
                     priceElement.textContent = '$0.00';
                 }
@@ -231,7 +211,7 @@ function searchSkuAndPriceShared(rowNum) {
             }
         },
         error: function() {
-            showAlert('搜索SKU失败', 'warning');
+            showAlert(window.translations.search_sku_failed, 'warning');
         }
     });
 }
@@ -249,17 +229,8 @@ function updateProductTotalShared(rowNum) {
     console.log('updateProductTotalShared called for row:', rowNum);
 }
 
-// 通用提示函数
-function showAlert(message, type = 'info') {
-    // 如果页面有showToast函数，使用它；否则使用alert
-    if (typeof showToast === 'function') {
-        showToast(message, type);
-    } else if (typeof showAlert === 'function' && showAlert !== arguments.callee) {
-        showAlert(message, type);
-    } else {
-        alert(message);
-    }
-}
+// 通用提示函数 - 已统一到 base.html 的 toast 系统
+// 直接调用全局的 showAlert 函数
 
 // ===== 新增：通用产品加载函数 =====
 
@@ -299,7 +270,7 @@ function loadProductsByCategoryUniversal(category, rowNum, options = {}) {
                 }
                 
                 // 填充产品选择
-                productSelect.innerHTML = '<option value="">选择产品</option>';
+                productSelect.innerHTML = '<option value="">' + window.translations.select_product + '</option>';
                 response.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product;
@@ -315,7 +286,7 @@ function loadProductsByCategoryUniversal(category, rowNum, options = {}) {
                 productSelect.disabled = false;
                 
                 // 填充柜身变体选择，确保PLY在第一位
-                boxVariantSelect.innerHTML = '<option value="">选择柜身变体</option>';
+                boxVariantSelect.innerHTML = '<option value="">' + window.translations.select_box_variant + '</option>';
                 
                 // 先添加PLY选项（如果存在）
                 if (response.box_variants.includes('PLY')) {
@@ -346,7 +317,7 @@ function loadProductsByCategoryUniversal(category, rowNum, options = {}) {
                 });
                 
                 // 填充门板变体选择
-                doorVariantSelect.innerHTML = '<option value="">选择门板变体</option>';
+                doorVariantSelect.innerHTML = '<option value="">' + window.translations.select_door_variant + '</option>';
                 response.door_variants.forEach(variant => {
                     const option = document.createElement('option');
                     option.value = variant;
@@ -362,7 +333,7 @@ function loadProductsByCategoryUniversal(category, rowNum, options = {}) {
                 // 根据类别启用/禁用变体选择
                 if (category === 'BOX') {
                     boxVariantSelect.disabled = false;
-                    doorVariantSelect.disabled = false;
+                    doorVariantSelect.disabled = true;
                 } else if (category === 'Door' || category === 'ENDING PANEL' || category === 'MOLDING' || category === 'TOE KICK' || category === 'FILLER') {
                     boxVariantSelect.disabled = true;
                     doorVariantSelect.disabled = false;
@@ -381,7 +352,7 @@ function loadProductsByCategoryUniversal(category, rowNum, options = {}) {
             }
         },
         error: function() {
-            showAlert('加载产品列表失败', 'warning');
+            showAlert('[[ t("load_product_list_failed") ]]', 'warning');
             if (callback && typeof callback === 'function') {
                 callback(null);
             }
@@ -437,13 +408,14 @@ function loadProductCategoriesUniversal(rowNum, options = {}) {
             }
         },
         error: function() {
-            showAlert('加载产品类别失败', 'warning');
+            showAlert('[[ t("load_product_category_failed") ]]', 'warning');
             if (callback && typeof callback === 'function') {
                 callback(null);
             }
         }
     });
 }
+
 function searchSkuAndPriceUniversal(rowNum, elementPrefix = '') {
     const prefix = elementPrefix ? `${elementPrefix}-` : '';
     
@@ -475,7 +447,7 @@ function searchSkuAndPriceUniversal(rowNum, elementPrefix = '') {
                     skuElement.className = 'badge bg-success';
                     priceElement.textContent = `$${response.price.toFixed(2)}`;
                 } else {
-                    skuElement.textContent = '[[ t("not_found") ]]';
+                    skuElement.textContent = window.translations.not_found;
                     skuElement.className = 'badge bg-danger';
                     priceElement.textContent = '$0.00';
                 }
@@ -491,7 +463,7 @@ function searchSkuAndPriceUniversal(rowNum, elementPrefix = '') {
             }
         },
         error: function() {
-            showAlert('[[ t("search_sku_failed") ]]', 'warning');
+            showAlert(window.translations.search_sku_failed, 'warning');
         }
     });
 }
@@ -519,12 +491,12 @@ function onCategoryChangeUniversal(rowNum, options = {}) {
     const doorVariantSelect = document.getElementById(`${prefix}door-variant-${rowNum}`);
     
     // Clear subsequent selections
-    productSelect.innerHTML = '<option value="">[[ t("select_product") ]]</option>';
-    boxVariantSelect.innerHTML = '<option value="">[[ t("select_box_variant") ]]</option>';
-    doorVariantSelect.innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
+    productSelect.innerHTML = '<option value="">' + window.translations.select_product + '</option>';
+    boxVariantSelect.innerHTML = '<option value="">' + window.translations.select_box_variant + '</option>';
+    doorVariantSelect.innerHTML = '<option value="">' + window.translations.select_door_variant + '</option>';
     
     // Reset SKU and price
-    document.getElementById(`${prefix}sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
+                    document.getElementById(`${prefix}sku-${rowNum}`).textContent = window.translations.not_selected;
     document.getElementById(`${prefix}sku-${rowNum}`).className = 'badge bg-secondary';
     document.getElementById(`${prefix}price-${rowNum}`).textContent = '$0.00';
     

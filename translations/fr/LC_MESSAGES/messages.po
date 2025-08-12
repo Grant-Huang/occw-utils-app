@@ -890,3 +890,105 @@ msgstr ""
 #~ msgid "export_sku_mapping_failed"
 #~ msgstr "Échec de l'exportation du mapping SKU"
 
+# Nouvelles clés de traduction
+msgid "load_product_category_failed"
+msgstr "Échec du chargement des catégories de produits"
+
+msgid "load_product_list_failed"
+msgstr "Échec du chargement de la liste des produits"
+
+msgid "search_sku_failed"
+msgstr "Échec de la recherche SKU"
+
+msgid "no_data_to_export"
+msgstr "Aucune donnée à exporter"
+
+msgid "please_enter_date"
+msgstr "Veuillez entrer la date"
+
+msgid "username_cannot_be_empty"
+msgstr "Le nom d'utilisateur ne peut pas être vide"
+
+msgid "please_upload_pdf_first"
+msgstr "Veuillez d'abord télécharger le fichier PDF"
+
+msgid "getting_pdf_text"
+msgstr "Récupération du texte PDF..."
+
+msgid "pdf_text_copied"
+msgstr "Texte PDF copié dans le presse-papiers"
+
+msgid "sku_mapping_saved"
+msgstr "Mapping SKU sauvegardé"
+
+msgid "please_select_complete_product_info"
+msgstr "Veuillez d'abord sélectionner les informations complètes du produit"
+
+msgid "product_added_to_list"
+msgstr "Produit ajouté à la liste"
+
+msgid "product_deleted"
+msgstr "Produit supprimé"
+
+msgid "user_login_disabled_cannot_save"
+msgstr "La fonction de connexion utilisateur est désactivée, impossible de sauvegarder"
+
+msgid "no_data_to_save"
+msgstr "Aucune donnée à sauvegarder"
+
+msgid "no_products_to_save"
+msgstr "Aucun produit à sauvegarder"
+
+msgid "no_products_to_export"
+msgstr "Aucun produit à exporter"
+
+msgid "please_upload_data_first"
+msgstr "Veuillez d'abord télécharger les données"
+
+msgid "no_charts_to_download"
+msgstr "Aucun graphique à télécharger"
+
+msgid "please_select_two_sales_persons"
+msgstr "Veuillez sélectionner deux vendeurs pour la comparaison"
+
+msgid "please_select_different_sales_persons"
+msgstr "Veuillez sélectionner des vendeurs différents pour la comparaison"
+
+msgid "please_enter_original_sku"
+msgstr "Veuillez entrer le SKU original"
+
+msgid "please_enter_or_select_mapped_sku"
+msgstr "Veuillez entrer ou sélectionner le SKU mappé"
+
+msgid "no_data_to_export_sku"
+msgstr "Aucune donnée à exporter"
+
+msgid "please_add_product_row_first"
+msgstr "Veuillez d'abord ajouter une ligne de produit"
+
+msgid "product_added_success"
+msgstr "Produit ajouté avec succès"
+
+msgid "product_list_cleared"
+msgstr "Liste des produits effacée"
+
+msgid "please_select_excel_file"
+msgstr "Veuillez sélectionner le fichier Excel"
+
+msgid "export_feature_developing"
+msgstr "La fonctionnalité d'export est en cours de développement..."
+
+# Messages d'invite avec contenu dynamique
+msgid "row_sku_cannot_be_empty"
+msgstr "La ligne {row_num} SKU ne peut pas être vide"
+
+msgid "row_price_cannot_be_zero"
+msgstr "La ligne {row_num} Prix ne peut pas être 0"
+
+msgid "row_quantity_cannot_be_zero"
+msgstr "La ligne {row_num} quantité ne peut pas être 0"
+
+# Confirmation effacement tous les produits
+msgid "confirm_clear_all_products"
+msgstr "Êtes-vous sûr de vouloir effacer tous les produits ?"
+

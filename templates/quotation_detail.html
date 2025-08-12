@@ -3,6 +3,27 @@
 [% block title %][[ t('quotation_detail') ]][% endblock %]
 
 [% block content %]
+    <!-- 全局翻译对象 -->
+    <script>
+        // 全局翻译对象，供 JavaScript 使用
+        window.translations = {
+            not_selected: '[[ t("not_selected") ]]',
+            not_found: '[[ t("not_found") ]]',
+            select_type: '[[ t("select_type") ]]',
+            select_product: '[[ t("select_product") ]]',
+            select_box_variant: '[[ t("select_box_variant") ]]',
+            select_door_variant: '[[ t("select_door_variant") ]]',
+            load_product_category_failed: '[[ t("load_product_category_failed") ]]',
+            load_product_list_failed: '[[ t("load_product_list_failed") ]]',
+            search_sku_failed: '[[ t("search_sku_failed") ]]',
+            row_sku_cannot_be_empty: '[[ t("row_sku_cannot_be_empty") ]]',
+            row_price_cannot_be_zero: '[[ t("row_price_cannot_be_zero") ]]',
+            product_added_to_list: '[[ t("product_added_to_list") ]]',
+            confirm_remove_product: '[[ t("confirm_remove_product") ]]',
+            product_deleted: '[[ t("product_deleted") ]]',
+            please_select_complete_product_info: '[[ t("please_select_complete_product_info") ]]'
+        };
+    </script>
 <!-- Page Title -->
 <div class="page-header">
     <div class="container-fluid">
@@ -257,7 +278,7 @@
 </div>
 
 <!-- Toast Notification Container -->
-<div id="toastContainer" class="toast-container"></div>
+        <!-- Toast容器已移除，使用base.html中的统一toast系统 -->
 [% endblock %]
 
 [% block extra_css %]
@@ -271,100 +292,15 @@
     max-width: 400px;
 }
 
-.toast-message {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 10px;
-    padding: 12px 16px;
-    font-size: 14px;
-    line-height: 1.4;
-    word-wrap: break-word;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateX(100%);
-    animation: slideIn 0.3s ease forwards;
-}
-
-.toast-message.success {
-    border-left: 4px solid #28a745;
-    background-color: #f8fff9;
-}
-
-.toast-message.warning {
-    border-left: 4px solid #ffc107;
-    background-color: #fffdf8;
-}
-
-.toast-message.error {
-    border-left: 4px solid #dc3545;
-    background-color: #fff8f8;
-}
-
-.toast-message.info {
-    border-left: 4px solid #17a2b8;
-    background-color: #f8fdff;
-}
-
-.toast-message:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-
-@keyframes slideIn {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideOut {
-    to {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-}
-
-.toast-message.removing {
-    animation: slideOut 0.3s ease forwards;
-}
+/* Toast样式已移除，使用base.html中的统一toast系统 */
 </style>
 [% endblock %]
 
 [% block extra_js %]
 <script src="/static/js/shared_product_functions.js"></script>
 <script>
-// Toast notification system
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast-message ${type}`;
-    toast.textContent = message;
-    
-    // Click to close
-    toast.addEventListener('click', function() {
-        removeToast(toast);
-    });
-    
-    container.appendChild(toast);
-    
-    // Auto close after 15 seconds
-    setTimeout(() => {
-        removeToast(toast);
-    }, 15000);
-}
-
-function removeToast(toast) {
-    if (toast && toast.parentNode) {
-        toast.classList.add('removing');
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    }
-}
+// Toast notification system - 使用base.html中的统一showAlert系统
+// showToast函数已移除，统一使用showAlert
 
 function exportQuotation(quotationId) {
     if (confirm('[[ t("confirm_export_quotation") ]]')) {
@@ -427,7 +363,7 @@ function addCurrentProduct() {
     const rows = tbody.getElementsByTagName('tr');
     
     if (rows.length === 0) {
-        showToast('请先添加产品行', 'warning');
+        showAlert('[[ t("please_add_product_row_first") ]]', 'warning');
         return;
     }
     
@@ -441,16 +377,16 @@ function addCurrentProduct() {
         const price = document.getElementById(`price-${rowNum}`).textContent;
         
         // 检查产品信息是否完整
-        if (sku !== '[[ t("not_selected") ]]' && sku !== '[[ t("not_found") ]]' && price !== '$0.00') {
+        if (sku !== window.translations.not_selected && sku !== window.translations.not_found && price !== '$0.00') {
             addToProductList(rowNum);
             addedCount++;
         }
     }
     
     if (addedCount === 0) {
-        showToast('请先选择完整的产品信息', 'warning');
+        showAlert('[[ t("please_select_complete_product_info") ]]', 'warning');
     } else {
-        showToast(`成功添加 ${addedCount} 个产品`, 'success');
+        showAlert('[[ t("product_added_success") ]]', 'success');
         // 清空所有行的选择，但保留第一行
         clearAllRows();
     }
@@ -461,8 +397,8 @@ function addToProductList(rowNum) {
     const price = document.getElementById(`price-${rowNum}`).textContent;
     const qty = parseInt(document.getElementById(`qty-${rowNum}`).value) || 1;
     
-    if (sku === '[[ t("not_selected") ]]' || sku === '[[ t("not_found") ]]' || price === '$0.00') {
-        showToast('请先选择完整的产品信息', 'warning');
+    if (sku === window.translations.not_selected || sku === window.translations.not_found || price === '$0.00') {
+        showAlert('[[ t("please_select_complete_product_info") ]]', 'warning');
         return;
     }
     
@@ -493,8 +429,6 @@ function addToProductList(rowNum) {
     
     // 更新Total
     updateGrandTotal();
-    
-    showToast('产品添加成功', 'success');
 }
 
 function clearCurrentEditRow(rowNum) {
@@ -509,7 +443,7 @@ function clearCurrentEditRow(rowNum) {
         document.getElementById(`box-variant-${rowNum}`).disabled = true;
         document.getElementById(`door-variant-${rowNum}`).innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
         document.getElementById(`door-variant-${rowNum}`).disabled = true;
-        document.getElementById(`sku-${rowNum}`).textContent = '[[ t("not_selected") ]]';
+        document.getElementById(`sku-${rowNum}`).textContent = window.translations.not_selected;
         document.getElementById(`sku-${rowNum}`).className = 'badge bg-secondary';
         document.getElementById(`price-${rowNum}`).textContent = '$0.00';
         document.getElementById(`qty-${rowNum}`).value = '1';
@@ -532,12 +466,12 @@ function updateEditTotal() {
 
  function clearEditProductList() {
      // 清空编辑产品列表
-     if (confirm('确定要清空所有产品吗？')) {
+ if (confirm('[[ t("confirm_clear_all_products") ]]')) {
          $('#addProductTableBody').empty();
          editProductCounter = 1;
          // 添加一个空行并加载产品类别
          addNewProduct();
-         showToast('产品列表已清空', 'success');
+         showAlert('[[ t("product_list_cleared") ]]', 'success');
      }
  }
  
@@ -574,7 +508,7 @@ function clearAllRows() {
         document.getElementById('box-variant-0').disabled = true;
         document.getElementById('door-variant-0').innerHTML = '<option value="">[[ t("select_door_variant") ]]</option>';
         document.getElementById('door-variant-0').disabled = true;
-        document.getElementById('sku-0').textContent = '[[ t("not_selected") ]]';
+        document.getElementById('sku-0').textContent = window.translations.not_selected;
         document.getElementById('sku-0').className = 'badge bg-secondary';
         document.getElementById('price-0').textContent = '$0.00';
         document.getElementById('qty-0').value = '1';
@@ -620,7 +554,7 @@ function removeProduct(productIndex) {
         $(`tr[data-product-index="${productIndex}"]`).remove();
         updateSequenceNumbers();
         updateGrandTotal();
-        showToast('产品已删除', 'success');
+        showAlert('[[ t("product_deleted") ]]', 'success');
     }
 }
 
@@ -664,16 +598,16 @@ function saveChanges() {
         data: JSON.stringify(quotationData),
         success: function(response) {
             if (response.success) {
-                showToast(response.message, 'success');
+                showAlert(response.message, 'success');
                 setTimeout(() => {
                     location.reload();
                 }, 1000);
             } else {
-                showToast(response.error, 'error');
+                showAlert(response.error, 'error');
             }
         },
         error: function() {
-            showToast('[[ t("save_changes_failed") ]]', 'error');
+            showAlert('[[ t("save_changes_failed") ]]', 'error');
         }
     });
 }
@@ -684,18 +618,18 @@ function deleteQuotation(quotationId) {
             url: `/delete_quotation/${quotationId}`,
             type: 'POST',
             success: function(response) {
-                if (response.success) {
-                    showToast(response.message, 'success');
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 1000);
-                } else {
-                    showToast(response.error, 'error');
-                }
-            },
-            error: function() {
-                showToast('[[ t("delete_quotation_failed") ]]', 'error');
+                            if (response.success) {
+                showAlert(response.message, 'success');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } else {
+                showAlert(response.error, 'error');
             }
+        },
+        error: function() {
+            showAlert('[[ t("delete_quotation_failed") ]]', 'error');
+        }
         });
     }
  }

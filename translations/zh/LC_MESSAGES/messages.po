@@ -890,3 +890,105 @@ msgstr ""
 #~ msgid "export_sku_mapping_failed"
 #~ msgstr "导出SKU映射失败"
 
+# 新增的翻译键
+msgid "load_product_category_failed"
+msgstr "加载产品类别失败"
+
+msgid "load_product_list_failed"
+msgstr "加载产品列表失败"
+
+msgid "search_sku_failed"
+msgstr "搜索SKU失败"
+
+msgid "no_data_to_export"
+msgstr "没有可Export的数据"
+
+msgid "please_enter_date"
+msgstr "请输入日期"
+
+msgid "username_cannot_be_empty"
+msgstr "用户名不能为空"
+
+msgid "please_upload_pdf_first"
+msgstr "请先上传PDF文件"
+
+msgid "getting_pdf_text"
+msgstr "正在获取PDF文本..."
+
+msgid "pdf_text_copied"
+msgstr "PDF文本已复制到剪贴板"
+
+msgid "sku_mapping_saved"
+msgstr "SKU映射已保存"
+
+msgid "please_select_complete_product_info"
+msgstr "请先选择完整的产品信息"
+
+msgid "product_added_to_list"
+msgstr "产品已添加到列表"
+
+msgid "product_deleted"
+msgstr "产品已删除"
+
+msgid "user_login_disabled_cannot_save"
+msgstr "用户登录功能已禁用，无法保存"
+
+msgid "no_data_to_save"
+msgstr "没有可保存的数据"
+
+msgid "no_products_to_save"
+msgstr "没有产品可保存"
+
+msgid "no_products_to_export"
+msgstr "没有产品可Export"
+
+msgid "please_upload_data_first"
+msgstr "请先上传数据"
+
+msgid "no_charts_to_download"
+msgstr "没有可下载的图表"
+
+msgid "please_select_two_sales_persons"
+msgstr "请选择两个Sales Person进行对比"
+
+msgid "please_select_different_sales_persons"
+msgstr "请选择不同的Sales Person进行对比"
+
+msgid "please_enter_original_sku"
+msgstr "请输入Original SKU"
+
+msgid "please_enter_or_select_mapped_sku"
+msgstr "请输入或选择Mapped SKU"
+
+msgid "no_data_to_export_sku"
+msgstr "暂No Data可Export"
+
+msgid "please_add_product_row_first"
+msgstr "请先添加产品行"
+
+msgid "product_added_success"
+msgstr "产品添加成功"
+
+msgid "product_list_cleared"
+msgstr "产品列表已清空"
+
+msgid "please_select_excel_file"
+msgstr "请选择Excel文件"
+
+msgid "export_feature_developing"
+msgstr "Export功能开发中..."
+
+# 动态内容提示信息
+msgid "row_sku_cannot_be_empty"
+msgstr "第{row_num}行的SKU不能为空"
+
+msgid "row_price_cannot_be_zero"
+msgstr "第{row_num}行的Price不能为0"
+
+msgid "row_quantity_cannot_be_zero"
+msgstr "第{row_num}行的数量不能为0"
+
+# 询问清空所有产品
+msgid "confirm_clear_all_products"
+msgstr "确定要清空所有产品吗？"
+
